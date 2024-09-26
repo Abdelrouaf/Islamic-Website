@@ -171,7 +171,7 @@ export default function Monotheism() {
                                                 
                                                     <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.cardTitle}><h4>{topic.title}</h4></a>
                                                 
-                                                    <p className={style.paragraph}>July 21, 2024</p>
+                                                    <p className={style.paragraph}>{getDate(topic.createdAt)}</p>
                                                 
                                                 </div>
                                             

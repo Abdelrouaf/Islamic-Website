@@ -109,14 +109,27 @@
         }
     }
 
+    .paragraph {
+        margin-bottom: 0;
+    }
+
+    .topicDesign {
+        margin-top: 50px;
+    }
+
     .shahadah {
         overflow: hidden;
     
+        .topicDesign {
+            margin-top: 0 !important;
+        }
     }
 
     .salah {
     
         .topicDesign {
+            margin-top: 50px;
+        
             .count {
                 background-color: #fc9103;
             
@@ -135,6 +148,8 @@
     .sawm {
     
         .topicDesign {
+            margin-top: 50px;
+        
             .count {
                 background-color: #e80139;
             
@@ -153,6 +168,8 @@
     .zakat {
     
         .topicDesign {
+            margin-top: 50px;
+        
             .count {
                 background-color: #5fb69d;
             
@@ -171,6 +188,8 @@
     .haij {
     
         .topicDesign {
+            margin-top: 50px;
+        
             .count {
                 background-color: #e6b955;
             

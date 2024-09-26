@@ -17,6 +17,33 @@
 .blogSection {
     position: relative;
 
+    .backgroundTitle {
+        background-image: url('../../images/background.jpg');
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 300px;
+        text-align: center;
+        position: relative;
+        margin-top: -34px;
+        z-index: 5;
+    
+        &::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            inset: 0;
+            background-color: $blackColor;
+            opacity: .2;
+            z-index: -1;
+        }
+    
+        .title {
+            color: $whiteColor;
+        }
+    }
+
     .image {
         margin-block: 20px;
         position: relative;
@@ -39,14 +66,60 @@
     
     }
 
-    .shahadah {
-        overflow: hidden;
-    
-    }
+    .topicSection {
+        margin-bottom: 50px;
 
-    .salah {
-    
         .topicDesign {
+            margin-bottom: 15px;
+        }
+    
+        .paragraph {
+            margin-bottom: 10px;
+        }
+
+        .details {
+            margin-bottom: 10px;
+        
+            span {
+                margin-right: 15px;
+                color: #44d7b6;
+                font-size: 14px;
+                text-transform: capitalize;
+                transition: all .3s;
+                -webkit-transition: all .3s;
+                -moz-transition: all .3s;
+                -ms-transition: all .3s;
+                -o-transition: all .3s;
+            
+                i {
+                    color: #44d7b6;
+                    margin-right: 5px;
+                    font-size: 16px;
+                }
+            
+                &:nth-child(2) {
+                    color: #e80139;
+                
+                    i {
+                        color: #e80139;
+                        // font-weight: 700;
+                    }
+                }
+            
+                &:nth-child(3) {
+                    color: #002248;
+                
+                    i {
+                        color: #002248;
+                        // font-weight: 700;
+                    }
+                }
+            
+            }
+        
+        }
+    
+        &:nth-child(2n) {
             .count {
                 background-color: #fc9103;
             
@@ -60,11 +133,7 @@
             }
         }
     
-    }
-
-    .sawm {
-    
-        .topicDesign {
+        &:nth-child(3n) {
             .count {
                 background-color: #e80139;
             
@@ -76,13 +145,10 @@
             .title {
                 background-color: #e80139;
             }
+        
         }
     
-    }
-
-    .zakat {
-    
-        .topicDesign {
+        &:nth-child(4n) {
             .count {
                 background-color: #5fb69d;
             
@@ -93,24 +159,6 @@
         
             .title {
                 background-color: #5fb69d;
-            }
-        }
-    
-    }
-
-    .haij {
-    
-        .topicDesign {
-            .count {
-                background-color: #e6b955;
-            
-                &::before {
-                    border-color: #e6b955;
-                }
-            }
-        
-            .title {
-                background-color: #e6b955;
             }
         }
     

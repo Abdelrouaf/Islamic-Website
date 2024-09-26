@@ -20,16 +20,6 @@ export default function CreateTopicInMonotheism() {
         NumberOfVerse: '' // Match API field name
     });
 
-    // Function to convert file to Base64 string
-    const fileToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    };
-
     // Handle input change for text inputs
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -38,18 +28,6 @@ export default function CreateTopicInMonotheism() {
             [id]: value
         }));
     };
-
-    // Handle image upload
-    // const onImageChange = async (event) => {
-    //     if (event.target.files && event.target.files[0]) {
-    //         const file = event.target.files[0];
-    //         const base64Image = await fileToBase64(file); // Convert to Base64
-    //         setFormData((prevState) => ({
-    //             ...prevState,
-    //             image: base64Image // Save Base64 string in state
-    //         }));
-    //     }
-    // };
 
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -62,8 +40,6 @@ export default function CreateTopicInMonotheism() {
             }));
         }
     };
-    
-    
 
     // Remove the uploaded image
     const onCloseImage = () => {
@@ -72,58 +48,6 @@ export default function CreateTopicInMonotheism() {
             image: ''
         }));
     };
-
-    // const [data, setData] = useState([])
-
-    // Save data to the API
-    // const saveData = async () => {
-    //     const form = new FormData(); // Create a FormData object for file upload
-    
-    //     form.append('title', formData.title);
-    //     form.append('description', formData.description);
-    //     form.append('surah', formData.surah);
-    //     form.append('contentEnglish', formData.contentEnglish);
-    //     form.append('contentArabic', formData.contentArabic);
-    //     form.append('NumberOfVerse', formData.NumberOfVerse);
-        
-    //     if (formData.image) {
-    //         form.append('image', formData.image); // Append the image file
-    //     }
-    
-    //     try {
-    //         const response = await fetch('https://gradproject-e6s8.onrender.com/api/monotheismBlog/', {
-    //             method: 'POST',
-    //             body: form, // Send the FormData object
-    //         });
-    
-    //         const responseData = await response.json();
-    //         // setData(responseData)
-            
-    //         // const titleExist = responseData.some(topic => topic.title === data.title);
-            
-    //         if (response.ok) {
-    //             alert('Topic added successfully to the API!');
-    //         } else {
-    //             console.error('API Response Error:', responseData);
-    //             alert(`Failed to add the topic to the API: ${responseData.message}`);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error during fetch operation:', error);
-    //         alert('An error occurred while adding the topic. Check console for details.');
-    //     }
-    
-    //     // Reset formData
-    //     setFormData({
-    //         id: uuidv4(),
-    //         image: '',
-    //         title: '',
-    //         description: '',
-    //         surah: '',
-    //         contentEnglish: '',
-    //         contentArabic: '',
-    //         NumberOfVerse: ''
-    //     });
-    // };
 
 // Function to check if the title already exists in the API
 const checkTitleExists = async (title) => {
@@ -144,75 +68,6 @@ const checkTitleExists = async (title) => {
         return false;
     }
 };
-
-// Save data to the API with title uniqueness check
-// const saveData = async () => {
-//     const { title, description, surah, contentEnglish, contentArabic, NumberOfVerse, image } = formData;
-
-//     // Validate required fields (optional but recommended)
-//     if (!title || !description || !image) {
-//         alert('Please fill in all required fields.');
-//         return;
-//     }
-
-//     try {
-//         // Step 1: Check if the title already exists
-//         const titleExists = await checkTitleExists(title);
-
-//         if (titleExists) {
-//             alert('A topic with this title already exists. Please choose a different title.');
-//             return; // Stop the function if the title already exists
-//         }
-
-//         // Step 2: Proceed to add the new topic since the title is unique
-//         const form = new FormData(); // Create a FormData object for file upload
-
-//         form.append('title', title);
-//         form.append('description', description);
-//         form.append('surah', surah);
-//         form.append('contentEnglish', contentEnglish);
-//         form.append('contentArabic', contentArabic);
-//         form.append('NumberOfVerse', NumberOfVerse);
-
-//         if (image) {
-//             form.append('image', image); // Append the image file
-//         }
-
-//         const response = await fetch('https://gradproject-e6s8.onrender.com/api/monotheismBlog/', {
-//             method: 'POST',
-//             body: form, // Send the FormData object
-//         });
-
-//         console.log(response);
-        
-
-//         const responseData = await response.json();
-
-//         if (response.ok) {
-//             alert('Topic added successfully to the API!');
-//             // navigate('/en/monotheism/create/topic'); // Navigate to another page after successful addition (optional)
-//             window.location.reload();
-//         } else {
-//             console.error('API Response Error:', responseData);
-//             alert(`Failed to add the topic to the API: ${responseData.message}`);
-//         }
-//     } catch (error) {
-//         console.error('Error during fetch operation:', error);
-//         alert('An error occurred while adding the topic. Check console for details.');
-//     }
-
-//     // Reset formData after attempting to save
-//     setFormData({
-//         image: '',
-//         imageURL: '',
-//         title: '',
-//         description: '',
-//         surah: '',
-//         contentEnglish: '',
-//         contentArabic: '',
-//         NumberOfVerse: ''
-//     });
-// };
 
 // Save data to the API with title uniqueness check
 const saveData = async () => {
@@ -242,10 +97,7 @@ const saveData = async () => {
         form.append('contentEnglish', contentEnglish);
         form.append('contentArabic', contentArabic);
         form.append('NumberOfVerse', NumberOfVerse);
-
-        if (image) {
-            form.append('image', image); // Append the image file
-        }
+        form.append('image', image); // Append the image file
 
         // Using Axios to make the POST request
         const response = await axios.post('http://localhost:8080/api/monotheismBlog/', form, {

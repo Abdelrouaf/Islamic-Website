@@ -106,8 +106,8 @@ export default function ShahadahTopic() {
         
             if (response.status === 200) {
                 alert('Topic updated successfully!');
-                navigate(`/en/pillars/topic/${id}`);
-                // window.location.reload();
+                navigate(`/en/pillars/shahadah/topic/${id}`);
+                window.location.reload();
             }else {
                 console.error('API Error:', response.data);
                 alert(`Failed to update topic: ${response.data.message || 'Unknown error.'}`);
@@ -130,7 +130,7 @@ export default function ShahadahTopic() {
 
                 if (response.ok) {
                     alert('Topic deleted successfully!');
-                    navigate('/en/pillars/create/shahadah'); // Navigate back after deletion
+                    navigate('/en/pillars/shahadah/create'); // Navigate back after deletion
                     window.location.reload();
                 } else {
                     alert('Failed to delete topic.');

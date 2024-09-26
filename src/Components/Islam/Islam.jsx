@@ -1,21 +1,82 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import style from './Islam.module.scss'
 
 export default function Islam() {
+
+    const [topics, setTopics] = useState([])
+    const [loading, setLoading] = useState(true)
+    const mostLikedRef = useRef(null); // Ref to observe the "most liked" section
+
+    // Fetch data from the API when the component mounts
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/lifeBlogs/');
+                const data = await response.json();
+                setTopics(data.LifeBlog || []); 
+                
+            } catch (error) {
+                console.error('Error fetching the topics:', error);
+            } finally {
+                setLoading(false)
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const getDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const day = date.getDate();
+        const monthName = date.toLocaleString('default', { month: 'long' });
+        const year = date.getFullYear();
+        return `${monthName} ${day}, ${year}`; // Return formatted date
+    };
+
+    const handleScrollToTopic = (topicId) => {
+        const element = document.getElementById(topicId);
+        if (element) {
+            const headerOffset = 90; // Adjust this value based on your header height
+            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    };
+
+    // Get the last three topics from the array
+    const recentBlogs = topics.slice(-5);
+
+    if (loading) return <p className='section'> Loading.... </p>
 
     return (
     
         <div className={`${style.blogSection} ${style.section}`}>
         
+        <div className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}>
+        
+            <div className={`text-center mb-5`}>
+            
+                <span className={style.headTitle}>About Islam</span>
+            
+                <h3 className={style.title}>The Purpose Of Life</h3>
+            
+            </div>
+        
+        </div>
+
             <div className="container">
             
-                <div className="text-center mb-5">
+                {/* <div className="text-center mb-5">
                 
                     <span className={style.headTitle}>About Islam</span>
                 
                     <h3 className={style.title}>The Purpose Of Life</h3>
                 
-                </div>
+                </div> */}
             
                 {/* <div className={style.titles}>
                 
@@ -25,11 +86,45 @@ export default function Islam() {
                 
                 </div> */}
             
-                <div className="row">
+                <div className="row mt-5">
                 
                     <div className="col-md-8">
                     
-                        <div className={style.shahadah} id='part1'>
+                        {topics.map( (topic, index) => (
+
+                            <div key={topic._id} className={style.topicSection}>
+                            
+                                <div className={style.topicDesign} id={topic._id}>
+
+                                    <span className={style.count}>{index + 1}</span>
+
+                                    <h3 className={style.title}>{topic.title}</h3>
+
+                                </div> 
+
+                                <div className={style.video}>
+
+                                    <iframe src={topic.video} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+
+                                    <p className={style.paragraph}>{topic.description}</p>
+
+                                    <div className={`${style.details} d-flex gap-3`}>
+
+                                        <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
+
+                                        <span><i className="fa-regular fa-heart"></i>{topic.Likes}</span>
+
+                                        <span><i className="fa-regular fa-eye"></i>{topic.Views}</span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        ) )}
+
+                        <div className={style.topicSection}>
                         
                             <div className={style.topicDesign}>
                             
@@ -47,21 +142,9 @@ export default function Islam() {
                             
                             </div>
                         
-                            <div className={style.ayat}>
-                                
-                                <span className={style.enSurah}> <span className={style.basmala}>In the name of allah, the beneficent, the merciful</span>
-                                    Say: He is Allah, the One! (1) Allah, the eternally Besought of all! (2) He begetteth not nor was begotten. (3) And there is none comparable unto Him. (4) <span className={style.surah}>(Surah AL-IKHLAS)</span> </span>
-                            
-                                <span className={style.arSurah}> <span className={style.basmala}>بِسۡمِ ٱللهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِيمِ</span>
-                                    قُلۡ هُوَ ٱللَّهُ أَحَدٌ (﻿١﻿) ٱللَّهُ ٱلصَّمَدُ (﻿٢﻿) لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ (﻿٣﻿) وَلَمۡ يَكُن لَّهُ ۥ ڪُفُوًا أَحَدٌ (﻿٤﻿) <span className={style.surah}>(سُوۡرَةُ الإخلاص)</span></span>
-                            
-                            </div>
-                        
-                            <p className={style.paragraph}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui eum error dolorum ut natus officiis in quos harum aspernatur laborum. Voluptas asperiores consequuntur et qui necessitatibus, dolores tempora pariatur provident repudiandae rem molestias! Officia a possimus, voluptatem maiores autem similique, quae illum dolorum mollitia laborum tempore reprehenderit accusamus? Ab reiciendis nobis quasi repudiandae, cumque eaque a nulla ipsa commodi non magni odio enim? Maxime impedit dolore possimus reprehenderit ab quisquam iste, neque, exercitationem similique autem consectetur quas nesciunt cum ratione vel, animi expedita cumque mollitia recusandae nobis qui. Neque nemo dolorum tempore assumenda alias, commodi corrupti quisquam maxime omnis quae?</p>
-                        
                         </div>
                     
-                        <div className={style.salah} id='part2'>
+                        <div className={style.topicSection}>
                         
                             <div className={style.topicDesign}>
                             
@@ -83,7 +166,7 @@ export default function Islam() {
                         
                         </div>
                     
-                        <div className={style.sawm} id='part3'>
+                        <div className={style.topicSection}>
                         
                             <div className={style.topicDesign}>
                             
@@ -104,46 +187,6 @@ export default function Islam() {
                             <p className={style.paragraph}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui eum error dolorum ut natus officiis in quos harum aspernatur laborum. Voluptas asperiores consequuntur et qui necessitatibus, dolores tempora pariatur provident repudiandae rem molestias! Officia a possimus, voluptatem maiores autem similique, quae illum dolorum mollitia laborum tempore reprehenderit accusamus? Ab reiciendis nobis quasi repudiandae, cumque eaque a nulla ipsa commodi non magni odio enim? Maxime impedit dolore possimus reprehenderit ab quisquam iste, neque, exercitationem similique autem consectetur quas nesciunt cum ratione vel, animi expedita cumque mollitia recusandae nobis qui. Neque nemo dolorum tempore assumenda alias, commodi corrupti quisquam maxime omnis quae?</p>
                         
                         </div>
-                    
-                        {/* <div className={style.zakat} id='zakat'>
-                        
-                            <div className={style.topicDesign}>
-                            
-                                <span className={style.count}>4</span>
-                            
-                                <h3 className={style.title}>Zakat (Almsigiving)</h3>
-                            
-                            </div> 
-                        
-                            <div className={style.image}>
-                            
-                                <img src={zakat} alt="" />
-                            
-                            </div>
-                        
-                            <p className={style.paragraph}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui eum error dolorum ut natus officiis in quos harum aspernatur laborum. Voluptas asperiores consequuntur et qui necessitatibus, dolores tempora pariatur provident repudiandae rem molestias! Officia a possimus, voluptatem maiores autem similique, quae illum dolorum mollitia laborum tempore reprehenderit accusamus? Ab reiciendis nobis quasi repudiandae, cumque eaque a nulla ipsa commodi non magni odio enim? Maxime impedit dolore possimus reprehenderit ab quisquam iste, neque, exercitationem similique autem consectetur quas nesciunt cum ratione vel, animi expedita cumque mollitia recusandae nobis qui. Neque nemo dolorum tempore assumenda alias, commodi corrupti quisquam maxime omnis quae?</p>
-                        
-                        </div>
-                    
-                        <div className={style.haij} id='haij'>
-                        
-                            <div className={style.topicDesign}>
-                            
-                                <span className={style.count}>5</span>
-                            
-                                <h3 className={style.title}>Haij (Pilgrimage)</h3>
-                            
-                            </div> 
-                        
-                            <div className={style.image}>
-                            
-                                <img src={haij} alt="" />
-                            
-                            </div>
-                        
-                            <p className={style.paragraph}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui eum error dolorum ut natus officiis in quos harum aspernatur laborum. Voluptas asperiores consequuntur et qui necessitatibus, dolores tempora pariatur provident repudiandae rem molestias! Officia a possimus, voluptatem maiores autem similique, quae illum dolorum mollitia laborum tempore reprehenderit accusamus? Ab reiciendis nobis quasi repudiandae, cumque eaque a nulla ipsa commodi non magni odio enim? Maxime impedit dolore possimus reprehenderit ab quisquam iste, neque, exercitationem similique autem consectetur quas nesciunt cum ratione vel, animi expedita cumque mollitia recusandae nobis qui. Neque nemo dolorum tempore assumenda alias, commodi corrupti quisquam maxime omnis quae?</p>
-                        
-                        </div> */}
                     
                     </div>
                 

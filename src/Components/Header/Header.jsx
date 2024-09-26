@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import logo from '../../images/logo-color-removebg-preview (1).png'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import style from './Header.module.scss'
 
 export default function Header() {
@@ -37,23 +37,23 @@ export default function Header() {
                         <ul className="navbar-nav mb-2 mb-lg-0">
                         
                             <li className="nav-item">
-                                <Link className="nav-link" to='/monotheism'>Monotheism</Link>
+                                <NavLink className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='/monotheism'>Monotheism</NavLink>
                             </li>
                         
                             <li className="nav-item">
-                                <Link className="nav-link" to='/islam'>About</Link>
+                                <NavLink className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='/islam'>About</NavLink>
                             </li>
                         
                             <li className="nav-item">
-                                <Link className="nav-link" to='/pillars'>Pillars</Link>
+                                <NavLink className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='/pillars'>Pillars</NavLink>
                             </li>
                         
                             <li className="nav-item">
-                                <Link className="nav-link" to='/faith'>Faith</Link>
+                                <NavLink className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='/faith'>Faith</NavLink>
                             </li>
                         
                             <li className="nav-item">
-                                <a className="nav-link" to='/programs'>Programs</a>
+                                <a className="nav-link"  to='/programs'>Programs</a>
                             </li>
                         
                             {/* <li className="nav-item">

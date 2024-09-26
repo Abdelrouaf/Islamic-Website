@@ -75,6 +75,18 @@ export default function Pillars() {
         }
     };
 
+    // Merge all topics into one array
+    const allTopics = [
+        ...shahadahTopic.map(t => ({ ...t, pillar: 'shahadah' })),
+        ...salahTopic.map(t => ({ ...t, pillar: 'salah' })),
+        ...sawmTopic.map(t => ({ ...t, pillar: 'sawm' })),
+        ...zakatTopic.map(t => ({ ...t, pillar: 'zakat' })),
+        ...haijTopic.map(t => ({ ...t, pillar: 'haij' })),
+    ];
+
+    // Sort topics by Likes in descending order
+    const mostLikedTopics = allTopics.sort((a, b) => b.Likes - a.Likes);
+
     if (loading) return <p className='section'> Loading.... </p>
 
     return (
@@ -119,7 +131,7 @@ export default function Pillars() {
                         
                             <div className={style.shahadah} key={shahadah._id} id='shahadah'>
                         
-                                {shahadahTopic[0].title === shahadah.title ? 
+                                {shahadahTopic[0]._id === shahadah._id ? 
                                 
                                 
                                 
@@ -161,7 +173,7 @@ export default function Pillars() {
                                 
                                 </div> */}
                             
-                                {shahadahTopic[0].title !== shahadah.title ? <h4 className={style.subTitle}>{shahadah.title}</h4> : '' }
+                                {shahadahTopic[0]._id !== shahadah._id ? <h4 className={style.subTitle}>{shahadah.title}</h4> : '' }
                             
                                 <p className={style.paragraph}>{shahadah.description}</p>
                             
@@ -173,7 +185,7 @@ export default function Pillars() {
                         
                             <div className={style.salah} key={salah._id} id='salah'>
                         
-                            {salahTopic[0].title === salah.title ? 
+                            {salahTopic[0]._id === salah._id ? 
                                 
                                 
                                 
@@ -205,7 +217,7 @@ export default function Pillars() {
                                 
                                 </div>
                             
-                                {salahTopic[0].title !== salah.title ? <h4 className={style.subTitle}>{salah.title}</h4> : '' }
+                                {salahTopic[0]._id !== salah._id ? <h4 className={style.subTitle}>{salah.title}</h4> : '' }
                             
                                 <p className={style.paragraph}>{salah.description}</p>
                             
@@ -217,7 +229,7 @@ export default function Pillars() {
                         
                             <div className={style.sawm} key={sawm._id} id='sawm'>
                             
-                            {sawmTopic[0].title === sawm.title ? 
+                            {sawmTopic[0]._id === sawm._id ? 
                                 
                                 
                                 
@@ -249,7 +261,7 @@ export default function Pillars() {
                                 
                                 </div>
                             
-                                {sawmTopic[0].title !== sawm.title ? <h4 className={style.subTitle}>{sawm.title}</h4> : '' }
+                                {sawmTopic[0]._id !== sawm._id ? <h4 className={style.subTitle}>{sawm.title}</h4> : '' }
                             
                                 <p className={style.paragraph}>{sawm.description}</p>
                             
@@ -261,7 +273,7 @@ export default function Pillars() {
                         
                             <div className={style.zakat} key={zakat._id} id='zakat'>
                         
-                            {zakatTopic[0].title === zakat.title ? 
+                            {zakatTopic[0]._id === zakat._id ? 
                                 
                                 
                                 
@@ -293,7 +305,7 @@ export default function Pillars() {
                                 
                                 </div>
                             
-                                {zakatTopic[0].title !== zakat.title ? <h4 className={style.subTitle}>{zakat.title}</h4> : '' }
+                                {zakatTopic[0]._id !== zakat._id ? <h4 className={style.subTitle}>{zakat.title}</h4> : '' }
                             
                                 <p className={style.paragraph}>{zakat.description}</p>
                             
@@ -305,7 +317,7 @@ export default function Pillars() {
                         
                             <div className={style.haij} key={haij._id} id='haij'>
                             
-                            {haijTopic[0].title === haij.title ? 
+                            {haijTopic[0]._id === haij._id ? 
                                 
                                 <div className={style.topicDesign}>
                                 
@@ -333,7 +345,7 @@ export default function Pillars() {
                                 
                                 </div>
                             
-                                {haijTopic[0].title !== haij.title ? <h4 className={style.subTitle}>{haij.title}</h4> : '' }
+                                {haijTopic[0]._id !== haij._id ? <h4 className={style.subTitle}>{haij.title}</h4> : '' }
                             
                                 <p className={style.paragraph}>{haij.description}</p>
                             
@@ -345,87 +357,41 @@ export default function Pillars() {
                 
                     <div className="col-md-4">
                     
-                        {/* <div className={style.box}>
-                        
-                            <h4 className={style.title}>Quick Links</h4>
-                        
-                            <ul>
-                            
-                                <li className={style.quickLink}>
-                                    
-                                    <a href="#shahadah" onClick={(e) => { e.preventDefault(); handleScrollToTopic('shahadah'); }}>Shahadah (Faith)</a>
-                                
-                                </li>
-                            
-                                <li className={style.quickLink}>
-                                
-                                    <a href="#salah" onClick={(e) => { e.preventDefault(); handleScrollToTopic('salah'); }}>Salah (Prayer)</a>
-                                
-                                </li>
-                            
-                                <li className={style.quickLink}>
-                                
-                                    <a href="#sawm" onClick={(e) => { e.preventDefault(); handleScrollToTopic('sawm'); }}>Sawm (Fasting)</a>
-                                
-                                </li>
-                            
-                                <li className={style.quickLink}>
-                                
-                                    <a href="#zakat" onClick={(e) => { e.preventDefault(); handleScrollToTopic('zakat'); }}>Zakat (Almsigiving)</a>
-                                
-                                </li>
-                            
-                                <li className={style.quickLink}>
-                                
-                                    <a href="#haij" onClick={(e) => { e.preventDefault(); handleScrollToTopic('haij'); }}>Haij (Pilgrimage)</a>
-                            
-                                </li>
-                            
-                            </ul>
-                        
-                        </div> */}
-                    
                         <div className={style.box}>
                         
                         <h4 className={style.title}>Blog Categories</h4>
                     
                         <ul>
                         
-                            {/* {
+                            <li className={style.quickLink}>
                             
-                                topics.map( (topic, index) => (  */}
-                                
-                                    <li className={style.quickLink}>
-                                    
-                                        <a href={`#shahadah`} onClick={(e) => { e.preventDefault(); handleScrollToTopic('shahadah'); }} className={style.blogTitle}>shahadah</a>
-                                    
-                                    </li>
-                                
-                                    <li className={style.quickLink}>
-                                    
-                                        <a href="#salah" onClick={(e) => { e.preventDefault(); handleScrollToTopic('salah'); }} className={style.blogTitle}>Salah (Prayer)</a>
-                                    
-                                    </li>
-                                
-                                    <li className={style.quickLink}>
-                                    
-                                        <a href="#sawm" onClick={(e) => { e.preventDefault(); handleScrollToTopic('sawm'); }} className={style.blogTitle}>Sawm (Fasting)</a>
-                                    
-                                    </li>
-                                
-                                    <li className={style.quickLink}>
-                                    
-                                        <a href="#zakat" onClick={(e) => { e.preventDefault(); handleScrollToTopic('zakat'); }} className={style.blogTitle}>Zakat (Almsigiving)</a>
-                                    
-                                    </li>
-                                
-                                    <li className={style.quickLink}>
-                                    
-                                        <a href="#haij" onClick={(e) => { e.preventDefault(); handleScrollToTopic('haij'); }} className={style.blogTitle}>Haij (Pilgrimage)</a>
-                                
-                                    </li>
-                                
-                                {/* ) )} */}
+                                <a href={`#shahadah`} onClick={(e) => { e.preventDefault(); handleScrollToTopic('shahadah'); }} className={style.blogTitle}>shahadah</a>
+                            
+                            </li>
+                        
+                            <li className={style.quickLink}>
+                            
+                                <a href="#salah" onClick={(e) => { e.preventDefault(); handleScrollToTopic('salah'); }} className={style.blogTitle}>Salah (Prayer)</a>
+                            
+                            </li>
+                        
+                            <li className={style.quickLink}>
+                            
+                                <a href="#sawm" onClick={(e) => { e.preventDefault(); handleScrollToTopic('sawm'); }} className={style.blogTitle}>Sawm (Fasting)</a>
+                            
+                            </li>
+                        
+                            <li className={style.quickLink}>
+                            
+                                <a href="#zakat" onClick={(e) => { e.preventDefault(); handleScrollToTopic('zakat'); }} className={style.blogTitle}>Zakat (Almsigiving)</a>
+                            
+                            </li>
+                        
+                            <li className={style.quickLink}>
+                            
+                                <a href="#haij" onClick={(e) => { e.preventDefault(); handleScrollToTopic('haij'); }} className={style.blogTitle}>Haij (Pilgrimage)</a>
+                        
+                            </li>
                         
                         </ul>
                     
@@ -441,7 +407,7 @@ export default function Pillars() {
                             .sort((a, b) => b.Likes - a.Likes) 
                             .map((topic) => ( */}
                                 
-                                    <li className={style.quickLink}>
+                                    {/* <li className={style.quickLink}>
                                     
                                         <a href={`#shahadah`} onClick={(e) => { e.preventDefault(); handleScrollToTopic('shahadah'); }} className={style.mostLiked}>shahadah</a>
                                     
@@ -469,10 +435,18 @@ export default function Pillars() {
                                     
                                         <a href="#haij" onClick={(e) => { e.preventDefault(); handleScrollToTopic('haij'); }} className={style.mostLiked}>Haij (Pilgrimage)</a>
                                 
-                                    </li>
+                                    </li> */}
                                 
                                 {/* ) )} */}
                         
+                                {mostLikedTopics.slice(0, 5).map((topic) => (
+                                    <li className={style.quickLink} key={topic._id}>
+                                        <a href={`#${topic.pillar}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic.pillar); }} className={style.mostLiked}>
+                                            {topic.pillar} ({topic.Likes} Likes)
+                                        </a>
+                                    </li>
+                                ))}
+
                         </ul>
                     
                     </div>

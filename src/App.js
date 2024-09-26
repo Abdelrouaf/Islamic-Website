@@ -12,10 +12,30 @@ import EditMonotheism from './Components/EditMonotheism/EditMonotheism';
 import CreateTopicInMonotheism from './Components/CreateTopicInMonotheism/CreateTopicInMonotheism';
 import MonotheismTopic from './Components/MonotheismTopic/MonotheismTopic';
 import './Components/Style/Base/Base.scss'
-import EditShahadah from './Components/EditShahadah/EditShahadah';
 import ShahadahTopic from './Components/ShahadahTopic/ShahadahTopic';
 import CreateTopicInShahadah from './Components/CreateTopicInShahadah/CreateTopicInShahadah';
-
+import CreateTopicInPrayer from './Components/CreateTopicInPrayer/CreateTopicInPrayer';
+import PrayerTopic from './Components/PrayerTopic/PrayerTopic';
+import EditShahadah from './Components/EditShahadah/EditShahadah';
+import EditPrayer from './Components/EditPrayer/EditPrayer'
+import CreateTopicInSawm from './Components/CreateTopicInSawm/CreateTopicInSawm';
+import SawmTopic from './Components/SawmTopic/SawmTopic';
+import EditSawm from './Components/EditSawm/EditSawm'
+import EditZakat from './Components/EditZakat/EditZakat';
+import CreateTopicInZakat from './Components/CreateTopicInZakat/CreateTopicInZakat';
+import ZakatTopic from './Components/ZakatTopic/ZakatTopic'
+import EditHaij from './Components/EditHaij/EditHaij';
+import CreateTopicInHaij from './Components/CreateTopicInHaij/CreateTopicInHaij';
+import HaijTopic from './Components/HaijTopic/HaijTopic';
+import CreateTopicInFaithBook from './Components/CreateTopicInFaithBook/CreateTopicInFaithBook';
+import FaithBookTopic from './Components/FaithBookTopic/FaithBookTopic';
+import EditFaithBook from './Components/EditFaithBook/EditFaithBook'
+import EditFaithBlog from './Components/EditFaithBlog/EditFaithBlog';
+import CreateTopicInFaithBlog from './Components/CreateTopicInFaithBlog/CreateTopicInFaithBlog';
+import FaithBlogTopic from './Components/FaithBlogTopic/FaithBlogTopic';
+import EditIslam from './Components/EditIslam/EditIslam';
+import CreateTopicInIslam from './Components/CreateTopicInIslam/CreateTopicInIslam';
+import IslamTopic from './Components/IslamTopic/IslamTopic';
 
 function App() {
 
@@ -51,15 +71,69 @@ function App() {
           
           </Route>
         
-          <Route path='pillars/'  element={<EditShahadah />}>
+          <Route path='pillars/shahadah'  element={<EditShahadah />}>
           
-            <Route path='create/shahadah' index element={<CreateTopicInShahadah />} />
+            <Route path='create' index element={<CreateTopicInShahadah />} />
 
             <Route path='topic/:id' element={<ShahadahTopic />} />
 
           </Route>
 
+          <Route path='pillars/prayer'  element={<EditPrayer />}>
           
+            <Route path='create' index element={<CreateTopicInPrayer />} />
+
+            <Route path='topic/:id' element={<PrayerTopic />} />
+
+          </Route>
+
+          <Route path='pillars/sawm'  element={<EditSawm />}>
+          
+            <Route path='create' index element={<CreateTopicInSawm />} />
+
+            <Route path='topic/:id' element={<SawmTopic />} />
+
+          </Route>
+
+          <Route path='pillars/zakat'  element={<EditZakat />}>
+          
+            <Route path='create' index element={<CreateTopicInZakat />} />
+
+            <Route path='topic/:id' element={<ZakatTopic />} />
+
+          </Route>
+
+          <Route path='pillars/haij'  element={<EditHaij />}>
+          
+            <Route path='create' index element={<CreateTopicInHaij />} />
+
+            <Route path='topic/:id' element={<HaijTopic />} />
+
+          </Route>
+
+          <Route path='faith/book'  element={<EditFaithBook />}>
+          
+            <Route path='create' index element={<CreateTopicInFaithBook />} />
+
+            <Route path='topic/:id' element={<FaithBookTopic />} />
+
+          </Route>
+
+          <Route path='faith/blog'  element={<EditFaithBlog />}>
+          
+            <Route path='create' index element={<CreateTopicInFaithBlog />} />
+
+            <Route path='topic/:id' element={<FaithBlogTopic />} />
+
+          </Route>
+
+          <Route path='islam'  element={<EditIslam />}>
+          
+            <Route path='create' index element={<CreateTopicInIslam />} />
+
+            <Route path='topic/:id' element={<IslamTopic />} />
+
+          </Route>
 
         </Route>
       

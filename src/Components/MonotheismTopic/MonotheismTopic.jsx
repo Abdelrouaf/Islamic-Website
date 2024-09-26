@@ -36,8 +36,6 @@ export default function MonotheismTopic() {
             
                 const finalData = data.Blog[0];
             
-                console.log(finalData);
-            
                 if(response.ok) {
                     setFormData({
                         title: finalData.title,
@@ -186,15 +184,10 @@ export default function MonotheismTopic() {
                 payload.append('contentArabic', formData.contentArabic);
                 payload.append('NumberOfVerse', formData.NumberOfVerse);
         
-                const response = await axios.put(`http://localhost:8080/api/monothesimBlog/${id}`, payload);
-        
-                // const responseData = await response.json();
-                // payload.forEach((value, key) => {
-                //     console.log(key, value);
-                // });
-                console.log("response is: ", response.data);
-                console.log("titile", formData.title);
-                
+                const response = await fetch(`http://localhost:8080/api/monotheismBlog/${id}`, {
+                    method: 'PUT',
+                    body: payload
+                });
             
                 if (response.status === 200) {
                     alert('Topic updated successfully!');

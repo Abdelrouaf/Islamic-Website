@@ -212,11 +212,20 @@ export default function Admin() {
 
     const [open4, setOpen4] = useState(false)
     const [openShahadah, setOpenShahadah] = useState(false)
+    const [openPrayer, setOpenPrayer] = useState(false)
+    const [openSawm, setOpenSawm] = useState(false)
+    const [openZakat, setOpenZakat] = useState(false)
+    const [openHaij, setOpenHaij] = useState(false)
+
+    const [open2, setOpen2] = useState(false);
+    const [openFaithBook, setOpenFaithBook] = useState(false)
+    const [openFaithBlog, setOpenFaithBlog] = useState(false)
 
     useEffect(() => {
         const isMonotheismActive = location.pathname.startsWith('/en/monotheism');
         const isEditActive = location.pathname.startsWith('/edit');
-        if (isMonotheismActive || isEditActive) {
+        const isIslamActive = location.pathname.startsWith('/en/islam');
+        if (isMonotheismActive || isEditActive || isIslamActive) {
             setOpen3(true);
         } else {
             setOpen3(false);
@@ -230,8 +239,30 @@ export default function Admin() {
             setOpen4(false);
         }
     
-        const isShahadahActive = location.pathname.startsWith('/en/pillars/') || location.pathname.startsWith('/en/pillars/shahadah');
+        const isFaithActive = location.pathname.startsWith('/en/faith');
+        if (isFaithActive) {
+            setOpen2(true);
+            setOpen3(true)
+        } else {
+            setOpen2(false);
+        }
+
+        const isShahadahActive = location.pathname.startsWith('/en/pillars/shahadah');
         setOpenShahadah(isShahadahActive);
+        const isPrayerActive = location.pathname.startsWith('/en/pillars/prayer');
+        setOpenPrayer(isPrayerActive);
+        const isSawmActive = location.pathname.startsWith('/en/pillars/sawm');
+        setOpenSawm(isSawmActive);
+        const isZakatActive = location.pathname.startsWith('/en/pillars/zakat');
+        setOpenZakat(isZakatActive);
+        const isHaijActive = location.pathname.startsWith('/en/pillars/haij');
+        setOpenHaij(isHaijActive);
+    
+        const isBookFaithActive = location.pathname.startsWith("/en/faith/book");
+        setOpenFaithBook(isBookFaithActive)
+        const isBlogFaithActive = location.pathname.startsWith("/en/faith/blog");
+        setOpenFaithBlog(isBlogFaithActive)
+
     }, [location]);
     
 
@@ -403,25 +434,37 @@ export default function Admin() {
                                         
                                             <h3 onClick={ ()=> {setOpen4(!open4)} } className={`${style.link}`} ><i className="fa-solid fa-building-columns"></i>Pillars <i className={` ${style.menu} ${open4 ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
                                         
-                                            <ul className={`${style.sidebarSubmenu} ${open4 ? `${style.active}`: `${style.inactive}` } `}>
+                                            <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${open4 ? `${style.active}`: `${style.inactive}` } `}>
 
-                                                <li><NavLink to='pillars/create/shahadah' className={({ isActive }) => {const isMonotheismActive = location.pathname.startsWith('/en/monotheism'); return `${style.link} ${isActive || openShahadah ? style.linkHover : style.linkTransparent}`;}}>Shahadah</NavLink></li>
+                                                <li><NavLink to='pillars/shahadah/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `${style.link} ${isActive || openShahadah ? style.linkHover : style.linkTransparent}`;}}>Shahadah</NavLink></li>
 
-                                                <li><NavLink to='pillars/create/prayer' className={({ isActive }) => {const isMonotheismActive = location.pathname.startsWith('/en/monotheism'); return `${style.link} `;}}>Prayer</NavLink></li>
+                                                <li><NavLink to='pillars/prayer/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `${style.link} ${isActive || openPrayer ? style.linkHover : style.linkTransparent}`;}}>Prayer</NavLink></li>
 
-                                                <li><NavLink to='pillars/create/sawm' className={({ isActive }) => {const isMonotheismActive = location.pathname.startsWith('/en/monotheism'); return `${style.link} `;}}>Sawm</NavLink></li>
+                                                <li><NavLink to='pillars/sawm/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `${style.link} ${isActive || openSawm ? style.linkHover : style.linkTransparent}`;}}>Sawm</NavLink></li>
 
-                                                <li><NavLink to='pillars/create/zakat' className={({ isActive }) => {const isMonotheismActive = location.pathname.startsWith('/en/monotheism'); return `${style.link} `;}}>Zakat</NavLink></li>
+                                                <li><NavLink to='pillars/zakat/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `${style.link} ${isActive || openZakat ? style.linkHover : style.linkTransparent}`;}}>Zakat</NavLink></li>
 
-                                                <li><NavLink to='pillars/create/haij' className={({ isActive }) => {const isMonotheismActive = location.pathname.startsWith('/en/monotheism'); return `${style.link} `;}}>Haij</NavLink></li>
+                                                <li><NavLink to='pillars/haij/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `${style.link} ${isActive || openHaij ? style.linkHover : style.linkTransparent}`;}}>Haij</NavLink></li>
 
                                             </ul>
                                         
                                         </li>
                                     
-                                        <li><NavLink to='edit/faith' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}>Faith</NavLink></li>
+                                        <li>
+                                        
+                                            <h3 onClick={ ()=> {setOpen2(!open2)} } className={`${style.link}`} ><i className="fa-solid fa-mosque"></i>Faith <i className={` ${style.menu} ${open4 ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                        
+                                            <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${open2 ? `${style.active}`: `${style.inactive}` } `}>
+
+                                                <li><NavLink to='faith/book/create' className={({ isActive }) => {const isFaithActive = location.pathname.startsWith('/en/faith/book'); return `${style.link} ${isActive || openFaithBook ? style.linkHover : style.linkTransparent}`;}}>Book</NavLink></li>
+
+                                                <li><NavLink to='faith/blog/create' className={({ isActive }) => {const isFaithActive = location.pathname.startsWith('/en/faith/blog'); return `${style.link} ${isActive || openFaithBlog ? style.linkHover : style.linkTransparent}`;}}>Blog</NavLink></li>
+
+                                            </ul>
+                                        
+                                        </li>
                                     
-                                        <li><NavLink to='edit/islam' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}>About Islam</NavLink></li>
+                                        <li><NavLink to='islam/create' className={({isActive}) => {const isIslamActive = location.pathname.startsWith('/en/islam'); return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}>About Islam</NavLink></li>
                                     
                                     </ul>
                                 

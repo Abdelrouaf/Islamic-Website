@@ -12,9 +12,9 @@ export default function EditShahadah() {
             try {
                 const response = await fetch('http://localhost:8080/api/certificateBlog/');
                 const data = await response.json();
-                // If the response has the array inside another object, access it properly
-                setTopics(data.CertificateBlog || []); // Assuming 'monothesimBlog' is the key holding the array
-                console.log("id is: ", data.CertificateBlog);
+
+                setTopics(data.CertificateBlog || []); 
+                // console.log("id is: ", data.CertificateBlog);
                 
             } catch (error) {
                 console.error('Error fetching the topics:', error);
@@ -37,7 +37,7 @@ export default function EditShahadah() {
                 
                 if (response.ok) {
                     alert('All topics deleted successfully!');
-                    navigate('/en/monotheism/main'); // Navigate to the list page after deletion
+                    navigate('/en/pillars/shahadah/create'); // Navigate to the list page after deletion
                 } else {
                     const responseData = await response.json();
                     console.error('API Response Error:', responseData);
@@ -77,7 +77,7 @@ export default function EditShahadah() {
                     
                         <li>
                         
-                            <NavLink to='create/shahadah' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkActive} `: `  ` ) ) } }><i className="fa-solid fa-folder-plus"></i>create</NavLink>
+                            <NavLink to='create' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkActive} `: `  ` ) ) } }><i className="fa-solid fa-folder-plus"></i>create</NavLink>
                         
                         </li>
                     

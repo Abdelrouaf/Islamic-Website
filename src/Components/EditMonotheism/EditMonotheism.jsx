@@ -12,8 +12,8 @@ export default function EditMonotheism() {
             try {
                 const response = await fetch('http://localhost:8080/api/monotheismBlog/');
                 const data = await response.json();
-                // If the response has the array inside another object, access it properly
-                setTopics(data.monothesimBlog || []); // Assuming 'monothesimBlog' is the key holding the array
+                
+                setTopics(data.monothesimBlog || []); 
             } catch (error) {
                 console.error('Error fetching the topics:', error);
             }
