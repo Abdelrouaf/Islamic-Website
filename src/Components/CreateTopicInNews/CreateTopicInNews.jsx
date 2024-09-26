@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid'; // Import UUID for unique ID generation
 import axios from 'axios';
 
-export default function CreateTopicInIslam() {
+export default function CreateTopicInNews() {
     const navigate = useNavigate();
 
     // State for the current form data
@@ -12,6 +12,7 @@ export default function CreateTopicInIslam() {
         id: uuidv4(), // Generate new ID for new topic
         title: '',
         description: '',
+        image: '',
         video: ''
     });
 
@@ -24,14 +25,44 @@ export default function CreateTopicInIslam() {
         }));
     };
 
+    const onImageChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            const imageURL = URL.createObjectURL(event.target.files[0]);
+            setFormData((prevState) => ({
+                ...prevState,
+                image: file,
+                imageURL: imageURL
+            }));
+        }
+    };
+
+    const onVideoFileChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            setFormData((prevState) => ({
+                ...prevState,
+                video: file, 
+            }));
+        }
+    };
+
+    // Remove the uploaded image
+    const onCloseImage = () => {
+        setFormData((prevState) => ({
+            ...prevState,
+            image: ''
+        }));
+    };
+
 // Function to check if the title already exists in the API
 const checkTitleExists = async (title) => {
     try {
-        const response = await fetch('http://localhost:8080/api/lifeBlogs/');
+        const response = await fetch('http://localhost:8080/api/news/');
         const data = await response.json();
 
         // Access the array of topics
-        const existingTopics = data.LifeBlog || [];
+        const existingTopics = data.News || [];
 
         // Check if any topic has the same title (case-insensitive)
         return existingTopics.some(
@@ -46,7 +77,7 @@ const checkTitleExists = async (title) => {
 
 // Save data to the API with title uniqueness check
 const saveData = async () => {
-    const { title, description, video } = formData;
+    const { title, description, video, image } = formData;
 
     // Validate required fields (optional but recommended)
     if (!title || !description) {
@@ -68,20 +99,17 @@ const saveData = async () => {
 
         form.append('title', title);
         form.append('description', description);
+        form.append('image', image)
         form.append('video', video);
 
-        console.log("formData is: ", formData);
-        
-
         // Using Axios to make the POST request
-        const response = await axios.post('http://localhost:8080/api/lifeBlogs/', form, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        const response = await fetch('http://localhost:8080/api/news/', {
+            method: 'POST',
+            body: form
         });
 
         // Handle the response
-        if (response.status === 200 || response.status === 201) {
+        if (response.ok) {
             alert('Topic added successfully to the API!');
             window.location.reload(); // Reload the page after a successful addition (optional)
         } else {
@@ -97,6 +125,7 @@ const saveData = async () => {
     setFormData({
         title: '',
         description: '',
+        image: '',
         video: ''
     });
 };
@@ -106,7 +135,38 @@ const saveData = async () => {
             <div className="container">
                 <form onSubmit={(e) => { e.preventDefault(); saveData(); }}>
                     <div className={layout.inputs}>
-                    
+                    <div className="row align-items-center mb-3">
+                            <div className="col-2">
+                                <div className={layout.inputTitle}>
+                                    <h4>Image</h4>
+                                </div>
+                            </div>
+                            <div className="col-10">
+                                <div className={layout.rightInput}>
+                                    <div className='d-flex gap-4'>
+                                        <div className={layout.uploadImage}>
+                                            <input
+                                                required
+                                                type="file"
+                                                onChange={onImageChange}
+                                                name='storeLogo'
+                                                id='image' // Ensure this ID matches your state
+                                            />
+                                            <i className="fa-solid fa-plus"></i>
+                                        </div>
+                                        {formData.image && (
+                                            <div className={`${layout.uploadImage} p-2`}>
+                                                {/* <i onClick={onCloseImage} className='close fa-solid fa-rectangle-xmark'></i> */}
+                                                <img src={formData.imageURL} alt="Uploaded" />
+                                            </div>
+                                        )}
+                                    </div>
+                                    {/* <p>*upload image size 500px x 500px recommended</p> */}
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div className="mb-4">
                     
                             <div className={layout.inputTitle}>
@@ -153,9 +213,8 @@ const saveData = async () => {
                         
                             <div className={`${layout.rightInput} ${layout.input} w-100`}>
                             
-                                <input required type="text" className='form-control py-2' placeholder='enter video url' id="video"
-                                    value={formData['video']}
-                                    onChange={handleChange} />
+                                <input required type="file" className='form-control py-2' placeholder='enter video file' id="video"
+                                    onChange={onVideoFileChange} />
                             
                             </div>
                             

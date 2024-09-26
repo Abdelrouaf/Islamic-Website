@@ -36,6 +36,10 @@ import FaithBlogTopic from './Components/FaithBlogTopic/FaithBlogTopic';
 import EditIslam from './Components/EditIslam/EditIslam';
 import CreateTopicInIslam from './Components/CreateTopicInIslam/CreateTopicInIslam';
 import IslamTopic from './Components/IslamTopic/IslamTopic';
+import News from './Components/News/News';
+import CreateTopicInNews from './Components/CreateTopicInNews/CreateTopicInNews';
+import NewsTopic from './Components/NewsTopic/NewsTopic';
+import EditNews from './Components/EditNews/EditNews'
 
 function App() {
 
@@ -57,6 +61,8 @@ function App() {
         
           <Route path='faith' element={<Faith />} />
         
+          <Route path='news' element={<News />} />
+
         </Route>
       
         <Route path='en' element={<Admin />} >
@@ -132,6 +138,14 @@ function App() {
             <Route path='create' index element={<CreateTopicInIslam />} />
 
             <Route path='topic/:id' element={<IslamTopic />} />
+
+          </Route>
+
+          <Route path='news'  element={<EditNews />}>
+          
+            <Route path='create' index element={<CreateTopicInNews />} />
+
+            <Route path='topic/:id' element={<NewsTopic />} />
 
           </Route>
 

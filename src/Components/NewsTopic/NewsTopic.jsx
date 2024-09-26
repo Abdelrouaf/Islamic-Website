@@ -3,18 +3,21 @@ import layout from '../Style/Layout/Layout.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-export default function IslamTopic() {
+export default function NewsTopic() {
 
     const navigate = useNavigate();
     const { id } = useParams(); // Get the topic ID from the URL
 
     // State for the current form data
     const [formData, setFormData] = useState({
+        image: '',           // Set to null initially
         title: '',
         description: '',
         video: ''
     });
 
+    const [oldImage, setOldImage] = useState('')
+    const [imageURL, setImageURL] = useState('')
     // Loading state
     const [isLoading, setIsLoading] = useState(true);
 
@@ -22,21 +25,22 @@ export default function IslamTopic() {
     useEffect(() => {
         const fetchTopic = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/lifeBlogs/${id}`);
+                const response = await fetch(`http://localhost:8080/api/news/${id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const topicData = await response.json();
                 const finalData = topicData.Blog;        
                 
-                console.log("final data is: ", finalData);
-                
                 setFormData({
                         // Set ID from the API
+                    image: finalData.image,                  // No new image uploaded initially
                     title: finalData.title,
                     description: finalData.description,
                     video: finalData.video
                 });
+                setOldImage(finalData.image)
+                setImageURL(finalData.image)
                 setIsLoading(false); // Data has been loaded
             } catch (error) {
                 console.error('Error fetching topic data:', error);
@@ -47,10 +51,6 @@ export default function IslamTopic() {
         if (id) fetchTopic();
     }, [id]);
 
-
-    console.log("form data is: ", formData);
-    
-
     // Handle input change for text inputs
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -60,31 +60,60 @@ export default function IslamTopic() {
         }));
     };
 
+    // console.log("handle change: ",handleChange(e));
+    
+
+    // Handle image upload
+    const onImageChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0]; // Get the File object
+            const imageURL = URL.createObjectURL(file); // Create a preview URL
+            setFormData((prevState) => ({
+                ...prevState,
+                image: file,           // Store the File object
+                // imageURL: imageURL     // Store the preview URL
+            }));
+            setImageURL(imageURL)
+        }
+        
+    };
+
+    // Remove the uploaded image
+    const onCloseImage = () => {
+        setFormData((prevState) => ({
+            ...prevState,
+            image: oldImage,          // Reset the File object
+            // imageURL: ''          // Reset the preview URL
+        }));
+        setImageURL(oldImage)
+    };
+
     // Function to handle topic Update
     const handleUpdate = async () => {
         try {
             const payload = new FormData();
             payload.append('title', formData.title);
             payload.append('description', formData.description);
-            payload.append('video', formData.video);
+            // payload.append('image', formData.image);
+            // payload.append('video', formData.video);
     
-            const response = await axios.put(`http://localhost:8080/api/lifeBlogs/${id}`, payload, {
+            const response = await axios.put(`http://localhost:8080/api/news/${id}`, payload, {
                 headers: {
                     "Content-Type": 'application/json'
                 }
             });
     
             // const responseData = await response.json();
-            payload.forEach((value, key) => {
-                console.log(key, value);
-            });
+            // payload.forEach((value, key) => {
+            //     console.log(key, value);
+            // });
             // console.log("response is: ", response.data);
             // console.log("title", formData.title);
             
         
-            if (response.status === 200 || response.status === 201) {
+            if (response.status === 200) {
                 alert('Topic updated successfully!');
-                navigate(`/en/islam/topic/${id}`);
+                navigate(`/en/news/topic/${id}`);
                 window.location.reload();
             }else {
                 console.error('API Error:', response.data);
@@ -102,13 +131,13 @@ export default function IslamTopic() {
         const confirmDelete = window.confirm('Are you sure you want to delete this topic?');
         if (confirmDelete) {
             try {
-                const response = await fetch(`http://localhost:8080/api/lifeBlogs/${id}`, {
+                const response = await fetch(`http://localhost:8080/api/news/${id}`, {
                     method: 'DELETE',
                 });
 
                 if (response.ok) {
                     alert('Topic deleted successfully!');
-                    navigate('/en/islam/create'); // Navigate back after deletion
+                    navigate('/en/news/create'); // Navigate back after deletion
                     window.location.reload();
                 } else {
                     alert('Failed to delete topic.');
@@ -128,16 +157,46 @@ export default function IslamTopic() {
         <div className={` ${layout.box}`}>
             <div className="container">
                 <div className={layout.inputs}>
+                    {/* Image Upload Section */}
+                    <div className="row align-items-center mb-3">
+                        <div className="col-2">
+                            <div className={layout.inputTitle}>
+                                <h4>Image</h4>
+                            </div>
+                        </div>
+                        <div className="col-10">
+                            <div className={layout.rightInput}>
+                                <div className="d-flex gap-4">
+                                    {/* <div className={layout.uploadImage}>
+                                        <input
+                                            required
+                                            type="file"
+                                            onChange={onImageChange}
+                                            name="image"
+                                            accept="image/*"
+                                        />
+                                        <i className="fa-solid fa-plus"></i>
+                                    </div> */}
+                                        <div className={`${layout.uploadImage} p-2`}>
+                                            <img src={imageURL} alt="Uploaded"/>
+                                        </div>
+                                </div>
+                                <p>*Upload image size 500px x 500px recommended</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Input fields for topic details */}
                     <div className="mb-4">
                         <div className={layout.inputTitle}>
-                            <h4>topic Title</h4>
+                            <h4>Topic Title</h4>
                         </div>
                         <div className={`${layout.rightInput} ${layout.input} w-100`}>
                             <input
                                 required
                                 type="text"
                                 className='form-control py-2'
-                                placeholder='Enter blog title'
+                                placeholder='Enter topic title'
                                 id="title" // Matches formData.title
                                 value={formData.title}
                                 onChange={handleChange}
@@ -149,7 +208,7 @@ export default function IslamTopic() {
 
                     <div className="mb-4">
                         <div className={layout.inputTitle}>
-                            <h4>topic Description</h4>
+                            <h4>Topic Description</h4>
                         </div>
                         <div className={`${layout.rightInput} ${layout.input} w-100`}>
                             <textarea
@@ -165,41 +224,22 @@ export default function IslamTopic() {
 
                     <div className="mb-4">
                         <div className={layout.inputTitle}>
-                            <h4>video url</h4>
+                            <h4>Topic Title</h4>
                         </div>
                         <div className={`${layout.rightInput} ${layout.input} w-100`}>
                             <input
-                                required
+                                
                                 type="text"
                                 className='form-control py-2'
-                                placeholder='Enter video url'
+                                // placeholder='Enter topic title'
                                 id="video" // Matches formData.title
                                 value={formData.video}
-                                onChange={handleChange}
-                                
-                            />
-                            
-                        </div>
-                    </div>
-
-                    {/* <div className="mb-4">
-                        <div className={layout.inputTitle}>
-                            <h4>Book file</h4>
-                        </div>
-                        <div className={`${layout.rightInput} ${layout.input} w-100`}>
-                            <input
-                                required
-                                type="file"
-                                className='form-control py-2'
-                                placeholder='Enter book url'
-                                id="bookName" // Matches formData.title
-                                value={formData.bookName}
-                                onChange={handleChange}
+                                // onChange={handleChange}
                                 readOnly
                             />
                             
                         </div>
-                    </div> */}
+                    </div>
 
                     {/* <div className="mb-4">
                         <div className={layout.inputTitle}>

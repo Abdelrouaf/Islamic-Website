@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import style from './Islam.module.scss'
+import style from './News.module.scss'
 
-export default function Islam() {
+export default function News() {
 
     const [topics, setTopics] = useState([])
     const [loading, setLoading] = useState(true)
@@ -11,9 +11,9 @@ export default function Islam() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/lifeBlogs/');
+                const response = await fetch('http://localhost:8080/api/news/');
                 const data = await response.json();
-                setTopics(data.LifeBlog || []); 
+                setTopics(data.News || []); 
                 
             } catch (error) {
                 console.error('Error fetching the topics:', error);
@@ -60,9 +60,9 @@ export default function Islam() {
         
             <div className={`text-center mb-5`}>
             
-                <span className={style.headTitle}>About Islam</span>
+                <span className={style.headTitle}>News</span>
             
-                <h3 className={style.title}>The Purpose Of Life</h3>
+                <h3 className={style.title}>Blogs, News, Events</h3>
             
             </div>
         
@@ -102,21 +102,30 @@ export default function Islam() {
 
                                 </div> 
 
-                                <div className={style.video}>
+                                {topic.video ? (
+                                    <div className={style.videoContainer}>
+                                    <video className={style.videoPlayer}  controls>
+                                        <source src={topic.video} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                                ) : (
+                                    <div className={style.image}>
 
-                                    <iframe src={topic.video} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-
-                                    <p className={style.paragraph}>{topic.description}</p>
-
-                                    <div className={`${style.details} d-flex gap-3`}>
-
-                                        <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
-
-                                        <span><i className="fa-regular fa-heart"></i>{topic.Likes}</span>
-
-                                        <span><i className="fa-regular fa-eye"></i>{topic.Views}</span>
+                                        <img src={topic.image} alt={topic.title} />
 
                                     </div>
+                                ) }
+
+                                <p className={style.paragraph}>{topic.description}</p>
+
+                                <div className={`${style.details} d-flex gap-3`}>
+
+                                    <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
+
+                                    <span><i className="fa-regular fa-heart"></i>{topic.Likes}</span>
+
+                                    <span><i className="fa-regular fa-eye"></i>{topic.Views}</span>
 
                                 </div>
 

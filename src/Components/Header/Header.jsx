@@ -53,6 +53,10 @@ export default function Header() {
                             </li>
                         
                             <li className="nav-item">
+                                <NavLink className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='/news'>News</NavLink>
+                            </li>
+
+                            <li className="nav-item">
                                 <a className="nav-link"  to='/programs'>Programs</a>
                             </li>
                         

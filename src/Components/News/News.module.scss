@@ -1,19 +1,6 @@
 // @import '../Style/Base/Base.scss';
 @import '../Style/Layout/Layout.module.scss';
 
-.video {
-    
-    iframe {
-        width: 100%;
-        height: 400px;
-    }
-
-    .paragraph {
-        margin-block: 25px;
-    }
-
-}
-
 .blogSection {
     position: relative;
 
@@ -162,6 +149,29 @@
             }
         }
     
+    }
+
+    .videoContainer {
+        position: relative;
+        width: 100%; // or set a fixed width if needed
+        max-width: 100%; // max width for the video
+        // margin: 0 auto; // centers the video horizontally
+        overflow: hidden; // ensures content doesn't overflow
+        border-radius: 10px; // rounded corners for the video container
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // adds a subtle shadow
+        margin-block: 10px;
+    
+        .videoPlayer {
+            width: 100%; // makes the video responsive
+            height: auto;
+            display: block; // removes unwanted spaces below the video
+            border-radius: 10px; // apply rounded corners to the video itself
+        }
+
+         // Make sure the controls are visible and not hidden
+         &:focus {
+            outline: none;  // Removes the outline when the video is focused
+        }
     }
 
     .box {
