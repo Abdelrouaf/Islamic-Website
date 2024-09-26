@@ -1,0 +1,531 @@
+// @import '../Style/Base/Base.scss';
+@import '../Style/Layout/Layout.module.scss';
+
+.welcome {
+    background-image: url('../../images/WelcomeCover.jpg');
+    background-position: center 60%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    position: relative;
+    z-index: 2;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $blackColor;
+        opacity: .5;
+        z-index: 1;
+        
+}
+
+}
+
+.services {
+    
+    .box {
+        padding: 40px 21px;
+        box-shadow: 0 25px 35px rgba(68, 162, 255, 0.1);
+        border: #fff;
+        margin-bottom: 25px;
+        position: relative;
+        cursor: pointer;
+    
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 0;
+            background-color: #192839;
+            transition: all .5s;
+            -webkit-transition: all .5s;
+            -moz-transition: all .5s;
+            -ms-transition: all .5s;
+            -o-transition: all .5s;
+            z-index: 1;
+        }
+    
+        &:hover {
+        
+            &::before {
+                height: 100%;
+            }
+        
+            .image {
+                z-index: 20;
+            
+                img {
+                    position: relative;
+                    z-index: 20;
+                }
+            }
+        
+            .srvTitle {
+                color: $whiteColor;
+                position: relative;
+                z-index: 20;
+            }
+        
+            .paragraph {
+                color: $whiteColor;
+                position: relative;
+                z-index: 20;
+            }
+        
+        }
+    
+        .image {
+            width: 40px;
+            margin-block: 20px;
+            z-index: 20;
+        
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 60px;
+                height: 60px;
+                margin-block: 79px;
+                margin-inline: 12px;
+                background-color: rgba(55, 181, 158, 0.658);
+                border-radius: 50px;
+                -webkit-border-radius: 50px;
+                -moz-border-radius: 50px;
+                -ms-border-radius: 50px;
+                -o-border-radius: 50px;
+                z-index: 2;
+            }
+        
+            img {
+                width: 100%;
+            }
+        }
+    
+        .srvTitle {
+            color: #192839;
+            text-transform: capitalize;
+            font-size: 22px;
+        }
+    
+        .paragraph {
+            font-size: 18px;
+            color: #192839;
+            opacity: 1;
+        }
+    
+    }
+}
+
+@keyframes bounceInUp {
+    0% {}
+}
+
+.monotheism {
+
+    .leftBox {
+    
+        iframe {
+            width: 100%;
+            height: 350px;
+        }
+    
+        .image {
+            background-image: url('../../images/surah.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100px;
+        }
+    
+    }
+
+}
+
+.pillars {
+    padding: 100px;
+    position: relative;
+    z-index: 2;
+
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $darkBlue;
+        // opacity: .9;
+        z-index: -1;
+    }
+
+    .subTitle {
+        color: $greenColor;
+        text-align: center;
+        text-transform: capitalize;
+        font-size: 30px;
+        font-weight: 900;
+    
+        span {
+            color: $redColor;
+        }
+    }
+
+    .box {
+        width: 100%;
+        text-align: center;
+    
+        a {
+        
+            &:hover {
+            
+                .image {
+                
+                    img {
+                        transform: scale(1.05);
+                        -webkit-transform: scale(1.05);
+                        -moz-transform: scale(1.05);
+                        -ms-transform: scale(1.05);
+                        -o-transform: scale(1.05);
+                    }
+                
+                }
+            
+                .types {
+                
+                    .pillar {
+                    
+                        // &:hover {
+                    
+                            &::before {
+                                width: 100%;
+                            }
+                        // }
+                    }
+                }
+            
+            }
+        
+            .image {
+                width: 100%;
+                overflow: hidden;
+            
+                img {
+                    width: 100%;
+                    transition: all .5s;
+                    -webkit-transition: all .5s;
+                    -moz-transition: all .5s;
+                    -ms-transition: all .5s;
+                    -o-transition: all .5s;
+                }
+            
+            }
+        
+            .types {
+            
+                .pillar {
+                    font-family: $fontSandBold;
+                    font-weight: 900;
+                    margin-top: 10px;
+                    padding-bottom: 5px;
+                    margin-bottom: 0;
+                    font-size: 20px;
+                    position: relative;
+                
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        height: 1px;
+                        width: 0;
+                        border-bottom: 2px solid rgb(168 212 179);
+                        transition: all .5s;
+                        -webkit-transition: all .5s;
+                        -moz-transition: all .5s;
+                        -ms-transition: all .5s;
+                        -o-transition: all .5s;
+                        z-index: 1;
+                    }
+                
+                }
+            
+                .one {
+                    color: rgb(168, 212, 179);
+                
+                    &::before {
+                        border-color: rgb(168 212 179);
+                    }
+                
+                }
+            
+                .two {
+                    color: rgb(162 218 245);
+                
+                    &::before {
+                        border-color: rgb(162 218 245);
+                    }
+                
+                }
+            
+                .three {
+                    color: rgb(254 234 117);
+                
+                    &::before {
+                        border-color: rgb(254 234 117);
+                    }
+                
+                }
+            
+                .four {
+                    color: rgb(249 172 112);
+                
+                    &::before {
+                        border-color: rgb(249 172 112);
+                    }
+                
+                }
+            
+                .five {
+                    color: rgb(248 150 137);
+                
+                    &::before {
+                        border-color: rgb(248 150 137);
+                    }
+                
+                }
+            
+                .enPillar {
+                    color: $whiteColor;
+                    font-weight: 700;
+                }
+            
+            }
+        
+        }
+    
+    }
+
+    .boxOne {
+        margin-top: 120px;
+    }
+
+    .boxTwo {
+        margin-top: 60px;
+    }
+
+    .boxFour {
+        @extend .boxTwo;
+    }
+
+    .boxFive {
+        @extend .boxOne;
+    }
+
+    .btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .shape1 {
+        position: absolute;
+        top: 420px;
+        right: 80px;
+        z-index: -1;
+    }
+
+    .shape2 {
+        position: absolute;
+        bottom: 100px;
+        left: 100px;
+        z-index: -1;
+    }
+
+    .shape3 {
+        position: absolute;
+        top: 250px;
+        left: 270px;
+        z-index: -1;
+    }
+
+}
+
+.faithSec {
+
+    .card {
+        height: 100%;
+        border: 2px solid $darkBlue;
+        box-shadow: $shadow;
+    
+        &:hover {
+            cursor: pointer;
+        
+            .image {
+            
+                &::before {
+                    opacity: .5;
+                    visibility: visible;
+                }
+            }
+        
+            .celName {
+            
+                &::before {
+                    width: 100%;
+                }
+            }
+        
+        }
+    
+        .image {
+            height: 80%;
+            position: relative;
+            z-index: 2;
+        
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: $blackColor;
+                opacity: 0;
+                visibility: hidden;
+                z-index: 1;
+                transition: all .5s;
+                -webkit-transition: all .5s;
+                -moz-transition: all .5s;
+                -ms-transition: all .5s;
+                -o-transition: all .5s;
+            }
+        
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+        }
+    
+        .celName {
+            color: $redColor;
+            text-transform: capitalize;
+            font-size: 20px;
+            width: fit-content;
+            position: relative;
+        
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 2px;
+                width: 0;
+                background-color: $redColor;
+                transition: all .5s;
+                -webkit-transition: all .5s;
+                -moz-transition: all .5s;
+                -ms-transition: all .5s;
+                -o-transition: all .5s;
+                z-index: 2;
+            }
+        }
+    
+        .description {
+            line-clamp: 2;
+            -webkit-line-clamp: 2; /* Number of lines to show before truncating */
+        }
+    
+    }
+
+    .books {
+        margin-top: 50px;
+    
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        
+            li {
+                margin-bottom: 100px;
+            
+                .left {
+                    
+                
+                    .bookTitle {
+                        font-size: 25px;
+                        font-family: $fontSandBold;
+                    }
+                
+                    .publisher {
+                        font-size: 22px;
+                        font-family: $fontDescriptionMedium;
+                    
+                        span {
+                            position: relative;
+                        
+                            &::before {
+                                content: "";
+                                position: absolute;
+                                left: 0;
+                                bottom: 0;
+                                height: 2px;
+                                width: 100%;
+                                background-color: $blackColor;
+                                
+                            }
+                        }
+                    }
+                
+                    .descriptionBook {
+                        margin-top: 30px;
+                        color: $blackColor;
+                        font-size: 18px;
+                        font-family: $fontDescriptionBlack;
+                        margin-bottom: 50px;
+                        line-height: 2;
+                        opacity: .7;
+                    }
+                
+                }
+            
+                .right {
+                
+                    .image {
+                        box-shadow: $shadow;
+                    }
+                }
+            
+            }
+        }
+    
+    }
+
+}
+
+.aboutIslam {
+
+    .video {
+    
+        iframe {
+            width: 100%;
+            height: 500px;
+        }
+    
+        .paragraph {
+            margin-block: 25px;
+        }
+    
+    }
+}

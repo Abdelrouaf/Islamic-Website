@@ -1,0 +1,286 @@
+// @import '../Style/Base/Base.scss';
+@import '../Style/Layout/Layout.module.scss';
+
+.bookTitle {
+    font-size: 25px;
+    font-family: $fontSandBold;
+}
+
+.publisher {
+    font-size: 22px;
+    font-family: $fontDescriptionMedium;
+
+    span {
+        position: relative;
+    
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 100%;
+            background-color: $blackColor;
+            
+        }
+    }
+}
+
+.descriptionBook {
+    margin-top: 30px;
+    color: $blackColor;
+    font-size: 18px;
+    font-family: $fontDescriptionBlack;
+    margin-bottom: 50px;
+    line-height: 2;
+    opacity: .7;
+}
+
+.blogSection {
+    position: relative;
+
+    .image {
+        margin-block: 20px;
+        position: relative;
+    
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb($blackColor, .5);
+            z-index: 2;
+        }
+    
+        img {
+            width: 100%;
+            height: auto;
+        }
+    
+    }
+
+    .card {
+        height: 100%;
+        border: 2px solid $darkBlue;
+        box-shadow: $shadow;
+    
+        &:hover {
+            cursor: pointer;
+        
+            .image {
+            
+                &::before {
+                    opacity: .5;
+                    visibility: visible;
+                }
+            }
+        
+            .celName {
+            
+                &::before {
+                    width: 100%;
+                }
+            }
+        
+        }
+    
+        .image {
+            height: 80%;
+            position: relative;
+            z-index: 2;
+            margin: 0;
+        
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: $blackColor;
+                opacity: 0;
+                visibility: hidden;
+                z-index: 1;
+                transition: all .5s;
+                -webkit-transition: all .5s;
+                -moz-transition: all .5s;
+                -ms-transition: all .5s;
+                -o-transition: all .5s;
+            }
+        
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+        }
+    
+        .celName {
+            color: $redColor;
+            text-transform: capitalize;
+            font-size: 20px;
+            width: fit-content;
+            position: relative;
+        
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 2px;
+                width: 0;
+                background-color: $redColor;
+                transition: all .5s;
+                -webkit-transition: all .5s;
+                -moz-transition: all .5s;
+                -ms-transition: all .5s;
+                -o-transition: all .5s;
+                z-index: 2;
+            }
+        }
+    
+        .description {
+            line-clamp: 2;
+            -webkit-line-clamp: 2; /* Number of lines to show before truncating */
+        }
+    
+    }
+
+    .shahadah {
+        overflow: hidden;
+    
+    }
+
+    .salah {
+    
+        .topicDesign {
+            .count {
+                background-color: #fc9103;
+            
+                &::before {
+                    border-color: #fc9103;
+                }
+            }
+        
+            .title {
+                background-color: #fc9103;
+            }
+        }
+    
+    }
+
+    .sawm {
+    
+        .topicDesign {
+            .count {
+                background-color: #e80139;
+            
+                &::before {
+                    border-color: #e80139;
+                }
+            }
+        
+            .title {
+                background-color: #e80139;
+            }
+        }
+    
+    }
+
+    .zakat {
+    
+        .topicDesign {
+            .count {
+                background-color: #5fb69d;
+            
+                &::before {
+                    border-color: #5fb69d;
+                }
+            }
+        
+            .title {
+                background-color: #5fb69d;
+            }
+        }
+    
+    }
+
+    .haij {
+    
+        .topicDesign {
+            .count {
+                background-color: #e6b955;
+            
+                &::before {
+                    border-color: #e6b955;
+                }
+            }
+        
+            .title {
+                background-color: #e6b955;
+            }
+        }
+    
+    }
+
+    .box {
+        border-bottom: 1px solid rgb($blackColor, .2);
+        position: sticky;
+        top: 100px;
+        // height: 100vh;
+    
+        .title {
+            font-family: $fontSandMedium;
+            font-size: 25px;
+            text-align: center;
+            font-weight: 900;
+        }
+    
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            margin-block: 20px;
+        
+            li {
+                margin-block: 20px;
+            
+                a {
+                    color: $greenColor;
+                    font-size: 16px;
+                    position: relative;
+                
+                    &:hover {
+                        &::before {
+                            width: 100%;
+                        }
+                    }
+                
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        width: 0;
+                        height: 2px;
+                        background-color: $greenColor;
+                        transition: all .5s;
+                        -webkit-transition: all .5s;
+                        -moz-transition: all .5s;
+                        -ms-transition: all .5s;
+                        -o-transition: all .5s;
+                        z-index: 1;
+                    }
+                
+                    i {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    
+    }
+}

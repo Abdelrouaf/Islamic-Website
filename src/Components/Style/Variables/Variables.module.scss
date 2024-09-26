@@ -1,0 +1,33 @@
+@import '../Fonts/Fonts.module.scss';
+
+// Colors Variables
+$redColor: #be202e;
+$orangeColor: #f74f22;
+$yellowColor: #FFAC00;
+$blueColor: #3F51B5;
+$darkBlue: #0e1133;
+$lightBlue: rgba(68, 162, 255, 0.616);
+$greenColor: rgb(55 181 158);
+$blackColor: #000;
+$lightBlack: #161617;
+$whiteColor: #fff;
+$boxShadow: 11px 10px 38px 0px rgba(0, 0, 0, 0.1);
+$shadow: 0px 20px 20px 1px rgba(0, 0, 0, 0.1);
+
+
+$sectionPadding: 150px;
+
+// Font Variables
+$titleSize: 40px;
+$headTitleSize: 32px;
+$descriptionSize: 14px;
+
+$fontSandBold: sandBold;
+$fontSandSemiBold: sandSemiBold;
+$fontSandMedium: sandMedium;
+$fontSandRegular: sandRegular;
+$fontSandLight: sandLight;
+$fontHeadTitleBold: AmatiBold;
+$fontHeadTitleRegular: AmatiRegular;
+$fontDescriptionBlack: NunBlack;
+$fontDescriptionMedium: NunMedium;

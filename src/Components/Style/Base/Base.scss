@@ -1,0 +1,23 @@
+@import '../Variables/Variables.module.scss';
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-family: $fontDescriptionBlack;
+}
+
+body {
+    font-family: $fontDescriptionBlack;
+}
+
+a {
+    text-decoration: none;
+}
+
+::selection {
+    background-color: $redColor;
+    color: $whiteColor;
+}
