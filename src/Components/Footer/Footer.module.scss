@@ -1,0 +1,170 @@
+@import '../Style/Layout/Layout.module.scss';
+
+.footer {
+    background-color: $lightBlack;
+    padding-block: 40px;
+
+    .upperFooter {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+        .footerBox {
+        
+            .logo {
+                margin-bottom: 15px;
+
+                a {
+                
+                    img {
+                        width: 100px;
+                        height: auto;
+                    }
+                }
+            }
+            
+            .paragraph {
+                margin-block: 10px;
+                color: $whiteColor;
+            }
+
+            .right {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 15px;
+                gap: 15px;
+            
+                span {
+                    font-size: 14px;
+                    color: $whiteColor;
+                }
+            
+                .social {
+                    display: flex;
+                    gap: 8px;
+                
+                    a {
+                        &:nth-child(1) {
+                            color: $blueColor;
+                        }
+                    
+                        &:nth-child(2) {
+                            color: $redColor;
+                        }
+                    
+                        &:nth-child(3) {
+                            color: $orangeColor;
+                        }
+                    }
+                }
+            
+                select {
+                    font-size: 10px;
+                    width: 100px;
+                    display: -webkit-box;
+                    line-clamp: 1;
+                    -webkit-line-clamp: 1; /* Number of lines to show before truncating */
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-height: 100px; /* Adjust according to the line height */
+    
+                    option {
+    
+                        img {
+                            width: 100%;
+                        }
+                    }
+                
+                    &:focus {
+                        border-color: #dee2e6 !important;
+                        outline: none !important;
+                        box-shadow: none !important;
+                    }
+                }
+            }
+        
+            h4 {
+                color: #EAD8B1;
+                margin-bottom: 20px;
+                text-transform: capitalize;
+                margin-left: 0;
+                padding-left: 0;
+                font-size: 16px;
+            }
+        
+            ul {
+            
+                li {
+                    margin-block: 15px;
+                
+                    a {
+                        color: $whiteColor;
+                        font-size: 14px;
+                        text-transform: capitalize;
+                        transition: all .5s;
+                        -webkit-transition: all .5s;
+                        -moz-transition: all .5s;
+                        -ms-transition: all .5s;
+                        -o-transition: all .5s;
+                    
+                        &:hover {
+                            color: $redColor;
+                        }
+                    }
+                }
+            }
+        
+            .inputBox {
+                position: relative;
+            
+                label {
+                    color: $whiteColor;
+                }
+            
+                textarea {
+                    border: none !important;
+                
+                    &:focus {
+                        border: none !important;
+                        box-shadow: none !important;
+                        outline: none !important;
+                    }
+                
+                    &::placeholder {
+                        transition: all .5s;
+                        -webkit-transition: all .5s;
+                        -moz-transition: all .5s;
+                        -ms-transition: all .5s;
+                        -o-transition: all .5s;
+                    }
+                
+                    &:focus::placeholder {
+                        color: transparent;
+                    }
+                }
+            }
+        
+            .btns {
+                margin-block: 10px;
+                margin-right: 0;
+                text-align: end;
+            
+                .downloadBtn {
+                    border: none;
+                    padding: 6px 14px;
+                }
+            }
+        }
+
+    }
+
+    .lowerFooter {
+    
+        .paragraph {
+            margin-top: 15px;
+            color: #dee2e6;
+            margin-bottom: 0;
+        }
+    }
+
+}

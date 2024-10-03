@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import layout from '../Style/Layout/Layout.module.scss';
-import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid'; // Import UUID for unique ID generation
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid'; 
 import axios from 'axios';
 
 export default function CreateTopicInIslam() {
@@ -9,7 +9,7 @@ export default function CreateTopicInIslam() {
 
     // State for the current form data
     const [formData, setFormData] = useState({
-        id: uuidv4(), // Generate new ID for new topic
+        id: uuidv4(), 
         title: '',
         description: '',
         video: ''
@@ -37,29 +37,37 @@ const checkTitleExists = async (title) => {
         return existingTopics.some(
             (topic) => topic.title.trim().toLowerCase() === title.trim().toLowerCase()
         );
-    } catch (error) {
-        console.error('Error fetching existing topics:', error);
-        // In case of error, assume title does not exist to prevent blocking user
+    } catch {
+        showToast("Error fetching existing topics", "error")
         return false;
     }
 };
+
+const [isSubmitting, setIsSubmitting] = useState(false);
+
+const { fetchData } = useOutletContext(); // Get the fetchData function
 
 // Save data to the API with title uniqueness check
 const saveData = async () => {
     const { title, description, video } = formData;
 
     // Validate required fields (optional but recommended)
-    if (!title || !description) {
-        alert('Please fill in all required fields.');
+    if (!title || !description || !video) {
+        showToast('Invalid input, All inputs are required', 'invalid');
         return;
     }
+
+    // Prevent double submissions
+    if (isSubmitting) return;  // <-- Check if submission is in progress
+    setIsSubmitting(true);     // <-- Set submission in progress
 
     try {
         // Step 1: Check if the title already exists
         const titleExists = await checkTitleExists(title);
 
         if (titleExists) {
-            alert('A topic with this title already exists. Please choose a different title.');
+            showToast('A topic with this title already exists', 'error');
+            setIsSubmitting(false)
             return; // Stop the function if the title already exists
         }
 
@@ -82,15 +90,13 @@ const saveData = async () => {
 
         // Handle the response
         if (response.status === 200 || response.status === 201) {
-            alert('Topic added successfully to the API!');
-            window.location.reload(); // Reload the page after a successful addition (optional)
+            showToast('Topic added successfully!', 'success');
+            fetchData();
         } else {
-            console.error('API Response Error:', response.data);
-            alert(`Failed to add the topic to the API: ${response.data.message}`);
+            showToast(`Failed to add the topic: Unexpected error occurred while adding the topic.`, 'error');
         }
-    } catch (error) {
-        console.error('Error during fetch operation:', error);
-        alert('An error occurred while adding the topic. Check console for details.');
+    } catch {
+        showToast('An error occurred while adding the topic', 'error');
     }
 
     // Reset formData after attempting to save
@@ -99,9 +105,28 @@ const saveData = async () => {
         description: '',
         video: ''
     });
+
+    setIsSubmitting(false)
 };
 
+    const [toasts, setToasts] = useState([]);
+
+    // Function to show a new toast notification
+    const showToast = (message, type) => {
+        const newToast = { id: uuidv4(), message, type }; // Create a unique ID for each toast
+
+        // Add the new toast to the list of toasts
+        setToasts((prevToasts) => [...prevToasts, newToast]);
+
+        // Remove the toast after 6 seconds
+        setTimeout(() => {
+            setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
+        }, 6000); // Keep the toast for 6 seconds
+    };
+
     return (
+        <>
+        
         <div className={` ${layout.box}`}>
             <div className="container">
                 <form onSubmit={(e) => { e.preventDefault(); saveData(); }}>
@@ -117,7 +142,7 @@ const saveData = async () => {
                         
                             <div className={`${layout.rightInput} ${layout.input} w-100`}>
                             
-                                <input required type="text" className='form-control py-2' placeholder='enter topic title' id="title"
+                                <input type="text" className='form-control py-2' placeholder='enter topic title' id="title"
                                     value={formData['title']}
                                     onChange={handleChange} />
                             
@@ -153,7 +178,7 @@ const saveData = async () => {
                         
                             <div className={`${layout.rightInput} ${layout.input} w-100`}>
                             
-                                <input required type="text" className='form-control py-2' placeholder='enter video url' id="video"
+                                <input type="text" className='form-control py-2' placeholder='enter video url' id="video"
                                     value={formData['video']}
                                     onChange={handleChange} />
                             
@@ -240,49 +265,24 @@ const saveData = async () => {
                         <button type="reset" className={`btn btn-outline-success ${layout.backBtn}`}>
                             Reset
                         </button>
-                        <button type="submit" className={`btn btn-success ${layout.saveBtn}`}>
-                            Save
+                        <button type="submit" className={`btn btn-success ${layout.saveBtn}`} disabled={isSubmitting}>
+                        {isSubmitting ? 'Saving..' : 'Save'}
                         </button>
                     </div>
                 </form>
             </div>
         </div>
+        
+        <div id="toastBox" className={layout.toastBox}>
+            {toasts.map((toast) => (
+                <div key={toast.id} className={`${layout.tast} ${toast.type} ${layout[toast.type]} ${layout.show}`}>
+                    <i className={`fa ${toast.type === 'success' ? 'fa-check-circle' : toast.type === 'error' ? 'fa-times-circle' : toast.type === 'invalid' ? 'fa-exclamation-circle' : ''}`}></i>
+                    {toast.message}
+                    <div className={layout.progress}></div>
+                </div>
+            ))}
+        </div>
+
+        </>
     );
 }
-
-
-// {[ 
-//     { label: 'Topic Title', id: 'title', type: 'text', placeholder: 'Enter topic title' },
-//     { label: 'Topic Description', id: 'description', type: 'textarea', placeholder: 'Enter topic description' },
-//     { label: 'Surah', id: 'surah', type: 'text', placeholder: 'Enter the name of the surah' },
-//     { label: 'Surah in English', id: 'contentEnglish', type: 'text', placeholder: 'Enter surah in English' },
-//     { label: 'Surah in Arabic', id: 'contentArabic', type: 'text', placeholder: 'Enter surah in Arabic' },
-//     {/* { label: 'Number of the Verse', id: 'NumberOfVerse', type: 'text', placeholder: 'Enter number of the verse' } // Match API field name */}
-// ].map(({ label, id, type, placeholder }) => (
-//     <div key={id} className="mb-4">
-//         <div className='inputTitle'>
-//             <h4>{label}</h4>
-//         </div>
-//         <div className='rightInput input w-100'>
-//             {type === 'textarea' ? (
-//                 <textarea
-//                     className='form-control py-2'
-//                     id={id}
-//                     placeholder={placeholder}
-//                     value={formData[id]}
-//                     onChange={handleChange}
-//                 />
-//             ) : (
-//                 <input
-                    
-//                     type={type}
-//                     className='form-control py-2'
-//                     id={id}
-//                     placeholder={placeholder}
-//                     value={formData[id]}
-//                     onChange={handleChange}
-//                 />
-//             )}
-//         </div>
-//     </div>
-// ))}

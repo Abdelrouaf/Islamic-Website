@@ -1,6 +1,15 @@
 // @import '../Style/Base/Base.scss';
 @import '../Style/Layout/Layout.module.scss';
 
+.liked {
+    font-weight: bold;
+}
+
+.notLiked {
+    font-weight: normal;
+}
+
+
 .bookTitle {
     font-size: 25px;
     font-family: $fontSandBold;
@@ -44,10 +53,11 @@
         background-position: center center;
         background-size: cover;
         background-repeat: no-repeat;
-        height: 300px;
+        // height: 300px;
         text-align: center;
         position: relative;
-        margin-top: -34px;
+        // margin-top: -34px;
+        padding-block: 150px;
         z-index: 5;
     
         &::before {
@@ -556,7 +566,7 @@
         &.mostLikedBox {
             &.sticky {
                 position: sticky;
-                top: 100px; // Adjust based on your layout
+                top: 120px; // Adjust based on your layout
                 z-index: 10;
                 // background-color: white;
                 // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

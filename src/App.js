@@ -11,7 +11,6 @@ import Admin from './Components/Admin/Admin';
 import EditMonotheism from './Components/EditMonotheism/EditMonotheism';
 import CreateTopicInMonotheism from './Components/CreateTopicInMonotheism/CreateTopicInMonotheism';
 import MonotheismTopic from './Components/MonotheismTopic/MonotheismTopic';
-import './Components/Style/Base/Base.scss'
 import ShahadahTopic from './Components/ShahadahTopic/ShahadahTopic';
 import CreateTopicInShahadah from './Components/CreateTopicInShahadah/CreateTopicInShahadah';
 import CreateTopicInPrayer from './Components/CreateTopicInPrayer/CreateTopicInPrayer';
@@ -40,6 +39,9 @@ import News from './Components/News/News';
 import CreateTopicInNews from './Components/CreateTopicInNews/CreateTopicInNews';
 import NewsTopic from './Components/NewsTopic/NewsTopic';
 import EditNews from './Components/EditNews/EditNews'
+import Quran from './Components/Quran/Quran';
+import Azkar from './Components/Azkar/Azkar';
+import './Components/Style/Base/Base.scss'
 
 function App() {
 
@@ -53,6 +55,10 @@ function App() {
         
           <Route index element={<Home />} />
         
+          <Route path='quran' element={<Quran />} />
+
+          <Route path='azkar' element={<Azkar />} />
+
           <Route path='monotheism' element={<Monotheism />} />
         
           <Route path='pillars' element={<Pillars />} />
@@ -141,7 +147,7 @@ function App() {
 
           </Route>
 
-          <Route path='news'  element={<EditNews />}>
+          <Route path='news'  element={<EditNews />} >
           
             <Route path='create' index element={<CreateTopicInNews />} />
 

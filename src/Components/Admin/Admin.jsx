@@ -225,7 +225,7 @@ export default function Admin() {
         const isMonotheismActive = location.pathname.startsWith('/en/monotheism');
         const isEditActive = location.pathname.startsWith('/edit');
         const isIslamActive = location.pathname.startsWith('/en/islam');
-        const isNewsActive = location.pathname.startsWith('./en/news')
+        const isNewsActive = location.pathname.startsWith('/en/news')
         if (isMonotheismActive || isEditActive || isIslamActive || isNewsActive) {
             setOpen3(true);
         } else {
@@ -465,9 +465,9 @@ export default function Admin() {
                                         
                                         </li>
                                     
-                                        <li><NavLink to='islam/create' className={({isActive}) => {const isIslamActive = location.pathname.startsWith('/en/islam'); return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}>About Islam</NavLink></li>
+                                        <li><NavLink to='islam/create' className={({isActive}) => {const isIslamActive = location.pathname.startsWith('/en/islam'); return ( ` ${style.link} ` + (isActive || isIslamActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}>About Islam</NavLink></li>
                                     
-                                        <li><NavLink to='news/create' className={({isActive}) => {const isNewsActive = location.pathname.startsWith('/en/news'); return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}>News</NavLink></li>
+                                        <li><NavLink to='news/create' className={({isActive}) => {const isNewsActive = location.pathname.startsWith('/en/news'); return ( ` ${style.link} ` + (isActive || isNewsActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}>News</NavLink></li>
 
                                     </ul>
                                 

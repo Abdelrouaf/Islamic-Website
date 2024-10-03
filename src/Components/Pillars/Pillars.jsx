@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import style from './Pillars.module.scss'
+import axios from 'axios'
+import { motion } from 'framer-motion'
 
 export default function Pillars() {
 
@@ -8,50 +10,347 @@ export default function Pillars() {
     const [sawmTopic, setSawmTopic] = useState([])
     const [zakatTopic, setZakatTopic] = useState([])
     const [haijTopic, setHaijTopic] = useState([])
-    const [loading, setLoading] = useState(true)
+    const [likesShahadah, setLikesShahadah] = useState([])
+    const [likesPrayer, setLikesPrayer] = useState([])
+    const [likesSawm, setLikesSawm] = useState([])
+    const [likesZakat, setLikesZakat] = useState([])
+    const [likesHaij, setLikesHaij] = useState([])
     const mostLikedRef = useRef(null); // Ref to observe the "most liked" section
 
-    useEffect( () => {
-    
-        const fetchShahadah = async () => {
+    const fetchShahadah = async () => {
         
-            try {
-                const shahadahResponse = await fetch('http://localhost:8080/api/certificateBlog/')
-                const data1 = await shahadahResponse.json();
-            
-                setShahadahTopic(data1.CertificateBlog || [])
-            
-                const salahResponse = await fetch('http://localhost:8080/api/prayerBlog/')
-                const data2 = await salahResponse.json();
-            
-                setSalahTopic(data2.PrayerBlog || [])
-            
-                const sawmResponse = await fetch('http://localhost:8080/api/fastingBlog/')
-                const data3 = await sawmResponse.json();
-            
-                setSawmTopic(data3.FastingBlog || [])
-            
-                const zakatResponse = await fetch('http://localhost:8080/api/zakatBlog/')
-                const data4 = await zakatResponse.json();
-            
-                setZakatTopic(data4.ZakatBlog || [])
-            
-                const haijResponse = await fetch('http://localhost:8080/api/haijBlog/')
-                const data5 = await haijResponse.json();
-            
-                setHaijTopic(data5.HaijBlog || [])
-            
-            } catch(error) {
-                console.error('Error Fetching Shahadah Topic:', error)
-            } finally {
-                setLoading(false)
-            }
+        try {
+            const shahadahResponse = await fetch('http://localhost:8080/api/certificateBlog/')
+            const data1 = await shahadahResponse.json();
         
+            setShahadahTopic(data1.CertificateBlog || [])
+        
+            const initialLikesShahadah = {};
+            data1.CertificateBlog.forEach( (topic) => {
+                initialLikesShahadah[topic._id] = topic.Likes
+            } )
+
+            setLikesShahadah(initialLikesShahadah)
+
+            // ////////////////////////////////////////////////
+            const salahResponse = await fetch('http://localhost:8080/api/prayerBlog/')
+            const data2 = await salahResponse.json();
+        
+            setSalahTopic(data2.PrayerBlog || [])
+        
+            const initialLikesPrayer = {};
+            data2.PrayerBlog.forEach( (topic) => {
+                initialLikesPrayer[topic._id] = topic.Likes
+            } )
+
+            setLikesPrayer(initialLikesPrayer)
+
+            // /////////////////
+            const sawmResponse = await fetch('http://localhost:8080/api/fastingBlog/')
+            const data3 = await sawmResponse.json();
+        
+            setSawmTopic(data3.FastingBlog || [])
+        
+            const initialLikesSawm = {};
+            data3.FastingBlog.forEach( (topic) => {
+                initialLikesSawm[topic._id] = topic.Likes
+            } )
+
+            setLikesSawm(initialLikesSawm)
+
+            // /////////////////////
+            const zakatResponse = await fetch('http://localhost:8080/api/zakatBlog/')
+            const data4 = await zakatResponse.json();
+        
+            setZakatTopic(data4.ZakatBlog || [])
+        
+            const initialLikesZakat = {};
+            data4.ZakatBlog.forEach( (topic) => {
+                initialLikesZakat[topic._id] = topic.Likes
+            } )
+
+            setLikesZakat(initialLikesZakat)
+
+            // ////////////////////////////////////
+            const haijResponse = await fetch('http://localhost:8080/api/haijBlog/')
+            const data5 = await haijResponse.json();
+        
+            setHaijTopic(data5.HaijBlog || [])
+        
+            const initialLikesHaij = {};
+            data5.HaijBlog.forEach( (topic) => {
+                initialLikesHaij[topic._id] = topic.Likes
+            } )
+
+            setLikesHaij(initialLikesHaij)
+
+        } catch {
         }
-    
+    }
+
+    useEffect( () => {
         fetchShahadah();
-    
     }, [])
+
+    // Function to handle like button click
+    const handleLikeClickShahadah = async (topicId) => {
+
+        if (likesShahadah[topicId]) {
+            return;
+        }
+
+        const isLiked = !likesShahadah[topicId]
+
+        const currentLikes = shahadahTopic.map( (topic) => 
+            topic._id === topicId ? { ...topic, Likes: isLiked ? topic.Likes + 1 : topic.Likes } : topic
+        )
+
+        setShahadahTopic(currentLikes)
+
+        setLikesShahadah( (prevLikes) => ({
+            ...prevLikes,
+            [topicId]: isLiked,
+        }) )
+
+        try {
+
+            const topic = shahadahTopic.find( (t) => t._id === topicId )
+
+            const response = await axios.post(`http://localhost:8080/api/certificateBlog/${topicId}`, {
+                ...topic,  // Send the entire blog data
+                Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
+            }, {
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            });
+
+            if(response.status === 200 || response.status === 201) {
+                
+                const updatedLikes = topic.Likes
+
+                // Update the topics with the new like count
+                setShahadahTopic( (prevTopics) => 
+                
+                    prevTopics.map( (t) => t._id === topicId ? {...t, Likes: updatedLikes } : t    )
+
+                )
+
+            }
+
+        } catch  {
+        }
+
+        fetchShahadah()
+    }
+
+    // Function to handle like button click
+    const handleLikeClickPrayer = async (topicId) => {
+
+        if (likesPrayer[topicId]) {
+            return;
+        }
+
+        const isLiked = !likesPrayer[topicId]
+
+        const currentLikes = salahTopic.map( (topic) => 
+            topic._id === topicId ? { ...topic, Likes: isLiked ? topic.Likes + 1 : topic.Likes } : topic
+        )
+
+        setSalahTopic(currentLikes)
+
+        setLikesPrayer( (prevLikes) => ({
+            ...prevLikes,
+            [topicId]: isLiked,
+        }) )
+
+        try {
+
+            const topic = salahTopic.find( (t) => t._id === topicId )
+
+            const response = await axios.post(`http://localhost:8080/api/prayerBlog/${topicId}`, {
+                ...topic,  // Send the entire blog data
+                Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
+            }, {
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            });
+
+            if(response.status === 200 || response.status === 201) {
+                
+                const updatedLikes = topic.Likes
+
+                // Update the topics with the new like count
+                setSalahTopic( (prevTopics) => 
+                
+                    prevTopics.map( (t) => t._id === topicId ? {...t, Likes: updatedLikes } : t    )
+
+                )
+
+            }
+
+        } catch  {
+        }
+
+        fetchShahadah()
+    }
+
+    // Function to handle like button click
+    const handleLikeClickSawm = async (topicId) => {
+
+        if (likesSawm[topicId]) {
+            return;
+        }
+
+        const isLiked = !likesSawm[topicId]
+
+        const currentLikes = sawmTopic.map( (topic) => 
+            topic._id === topicId ? { ...topic, Likes: isLiked ? topic.Likes + 1 : topic.Likes } : topic
+        )
+
+        setSawmTopic(currentLikes)
+
+        setLikesSawm( (prevLikes) => ({
+            ...prevLikes,
+            [topicId]: isLiked,
+        }) )
+
+        try {
+
+            const topic = sawmTopic.find( (t) => t._id === topicId )
+
+            const response = await axios.post(`http://localhost:8080/api/fastingBlog/${topicId}`, {
+                ...topic,  // Send the entire blog data
+                Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
+            }, {
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            });
+
+            if(response.status === 200 || response.status === 201) {
+                
+                const updatedLikes = topic.Likes
+
+                // Update the topics with the new like count
+                setSawmTopic( (prevTopics) => 
+                
+                    prevTopics.map( (t) => t._id === topicId ? {...t, Likes: updatedLikes } : t    )
+
+                )
+
+            }
+
+        } catch  {
+        }
+
+        fetchShahadah()
+    }
+
+    // Function to handle like button click
+    const handleLikeClickZakat = async (topicId) => {
+
+        if (likesZakat[topicId]) {
+            return;
+        }
+
+        const isLiked = !likesZakat[topicId]
+
+        const currentLikes = zakatTopic.map( (topic) => 
+            topic._id === topicId ? { ...topic, Likes: isLiked ? topic.Likes + 1 : topic.Likes } : topic
+        )
+
+        setZakatTopic(currentLikes)
+
+        setLikesZakat( (prevLikes) => ({
+            ...prevLikes,
+            [topicId]: isLiked,
+        }) )
+
+        try {
+
+            const topic = zakatTopic.find( (t) => t._id === topicId )
+
+            const response = await axios.post(`http://localhost:8080/api/zakatBlog/${topicId}`, {
+                ...topic,  // Send the entire blog data
+                Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
+            }, {
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            });
+
+            if(response.status === 200 || response.status === 201) {
+                
+                const updatedLikes = topic.Likes
+
+                // Update the topics with the new like count
+                setZakatTopic( (prevTopics) => 
+                
+                    prevTopics.map( (t) => t._id === topicId ? {...t, Likes: updatedLikes } : t    )
+
+                )
+
+            }
+
+        } catch  {
+        }
+
+        fetchShahadah()
+    }
+
+    // Function to handle like button click
+    const handleLikeClickHaij = async (topicId) => {
+
+        if (likesHaij[topicId]) {
+            return;
+        }
+
+        const isLiked = !likesHaij[topicId]
+
+        const currentLikes = haijTopic.map( (topic) => 
+            topic._id === topicId ? { ...topic, Likes: isLiked ? topic.Likes + 1 : topic.Likes } : topic
+        )
+
+        setHaijTopic(currentLikes)
+
+        setLikesHaij( (prevLikes) => ({
+            ...prevLikes,
+            [topicId]: isLiked,
+        }) )
+
+        try {
+
+            const topic = haijTopic.find( (t) => t._id === topicId )
+
+            const response = await axios.post(`http://localhost:8080/api/haijBlog/${topicId}`, {
+                ...topic,  // Send the entire blog data
+                Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
+            }, {
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            });
+
+            if(response.status === 200 || response.status === 201) {
+                
+                const updatedLikes = topic.Likes
+
+                // Update the topics with the new like count
+                setHaijTopic( (prevTopics) => 
+                
+                    prevTopics.map( (t) => t._id === topicId ? {...t, Likes: updatedLikes } : t    )
+
+                )
+
+            }
+
+        } catch  {
+        }
+
+        fetchShahadah()
+    }
 
     const getDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -64,7 +363,7 @@ export default function Pillars() {
     const handleScrollToTopic = (topicId) => {
         const element = document.getElementById(topicId);
         if (element) {
-            const headerOffset = 90; // Adjust this value based on your header height
+            const headerOffset = 120; // Adjust this value based on your header height
             const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
             const offsetPosition = elementPosition - headerOffset;
 
@@ -87,7 +386,44 @@ export default function Pillars() {
     // Sort topics by Likes in descending order
     const mostLikedTopics = allTopics.sort((a, b) => b.Likes - a.Likes);
 
-    if (loading) return <p className='section'> Loading.... </p>
+    const text = "Five Pillars of Islam"
+
+    const h3Variants = {
+
+        hidden: {
+            opacity: 0
+        },
+
+        visible : {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.05
+            }
+        }
+
+    }
+
+    const spanVariants = {
+
+        hidden: {
+            opacity: 0
+        },
+
+        visible : {
+            opacity: 1
+        }
+
+    }
+
+    const variants = {
+        hidden: { opacity: 0, y: -500 },
+        visible: { opacity: 1, y: 0, transition: { duration: 1.5 } }
+    };
+
+    const toUp = {
+        hidden: { opacity: 0, y: 500 },
+        visible: { opacity: 1, y: 0, transition: { duration: 1 } }
+    };
 
     return (
     
@@ -97,9 +433,17 @@ export default function Pillars() {
             
                 <div className="text-center mb-5">
                 
-                    <span className={style.headTitle}>The pillars of Islam</span>
+                    <motion.span initial='hidden' animate="visible" variants={variants} className={style.headTitle}>The pillars of Islam</motion.span>
                 
-                    <h3 className={style.title}>Five Pillars of Islam</h3>
+                    <motion.h3 className={style.title} initial='hidden' animate='visible' variants={h3Variants}>
+
+                        {text.split('').map( (char, index) => 
+                        
+                            <motion.span key={index} variants={spanVariants}>{char}</motion.span>
+                        
+                        )}
+
+                    </motion.h3>
                 
                 </div>
             
@@ -149,7 +493,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={shahadah.image} alt={shahadah.title} />
+                                    <img src={`http://localhost:8080/uploads/Images/${shahadah.imageName}`} alt={shahadah.title} />
                                 
                                 </div>
                             
@@ -157,7 +501,7 @@ export default function Pillars() {
                                 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(shahadah.createdAt)}</span>
                                 
-                                    <span><i className="fa-regular fa-heart"></i>{shahadah.Likes}</span>
+                                    <span><i className={`fa-regular fa-heart ${likesShahadah[shahadah._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickShahadah(shahadah._id)} style={{ cursor: 'pointer' }}></i> {shahadah.Likes}</span>
                                 
                                     <span><i className="fa-regular fa-eye"></i>{shahadah.Views}</span>
                                 
@@ -203,7 +547,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={salah.image} alt={salah.title} />
+                                    <img src={`http://localhost:8080/uploads/Images/${salah.imageName}`} alt={salah.title} />
                                 
                                 </div>
                             
@@ -211,7 +555,7 @@ export default function Pillars() {
                                 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(salah.createdAt)}</span>
                                 
-                                    <span><i className="fa-regular fa-heart"></i> {salah.Likes}</span>
+                                    <span><i className={`fa-regular fa-heart ${likesPrayer[salah._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickPrayer(salah._id)} style={{ cursor: 'pointer' }}></i> {salah.Likes}</span>
                                 
                                     <span><i className="fa-regular fa-eye"></i> {salah.Views} </span>
                                 
@@ -247,7 +591,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={sawm.image} alt={sawm.title} />
+                                    <img src={`http://localhost:8080/uploads/Images/${sawm.imageName}`} alt={sawm.title} />
                                 
                                 </div>
                             
@@ -255,7 +599,7 @@ export default function Pillars() {
                                 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(sawm.createdAt)}</span>
                                 
-                                    <span><i className="fa-regular fa-heart"></i>{sawm.Likes}</span>
+                                    <span><i className={`fa-regular fa-heart ${likesSawm[sawm._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickSawm(sawm._id)} style={{ cursor: 'pointer' }}></i> {sawm.Likes}</span>
                                 
                                     <span><i className="fa-regular fa-eye"></i>{sawm.Views}</span>
                                 
@@ -291,7 +635,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={zakat.image} alt={zakat.title} />
+                                    <img src={`http://localhost:8080/uploads/Images/${zakat.imageName}`} alt={zakat.title} />
                                 
                                 </div>
                             
@@ -299,7 +643,7 @@ export default function Pillars() {
                                 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(zakat.createdAt)}</span>
                                 
-                                    <span><i className="fa-regular fa-heart"></i>{zakat.Likes}</span>
+                                    <span><i className={`fa-regular fa-heart ${likesZakat[zakat._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickZakat(zakat._id)} style={{ cursor: 'pointer' }}></i> {zakat.Likes}</span>
                                 
                                     <span><i className="fa-regular fa-eye"></i>{zakat.Views}</span>
                                 
@@ -331,7 +675,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={haij.image} alt={haij.title} />
+                                    <img src={`http://localhost:8080/uploads/Images/${haij.imageName}`} alt={haij.title} />
                                 
                                 </div>
                             
@@ -339,7 +683,7 @@ export default function Pillars() {
                                 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(haij.createdAt)}</span>
                                 
-                                    <span><i className="fa-regular fa-heart"></i>{haij.Likes}</span>
+                                    <span><i className={`fa-regular fa-heart ${likesHaij[haij._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickHaij(haij._id)} style={{ cursor: 'pointer' }}></i> {haij.Likes}</span>
                                 
                                     <span><i className="fa-regular fa-eye"></i>{haij.Views}</span>
                                 

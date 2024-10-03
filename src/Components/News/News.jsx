@@ -1,29 +1,88 @@
 import React, { useEffect, useRef, useState } from 'react'
 import style from './News.module.scss'
+import axios from 'axios'
+import { motion } from 'framer-motion'
 
 export default function News() {
 
     const [topics, setTopics] = useState([])
-    const [loading, setLoading] = useState(true)
+    const [likes, setLikes] = useState([])
     const mostLikedRef = useRef(null); // Ref to observe the "most liked" section
 
     // Fetch data from the API when the component mounts
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/api/news/');
-                const data = await response.json();
-                setTopics(data.News || []); 
-                
-            } catch (error) {
-                console.error('Error fetching the topics:', error);
-            } finally {
-                setLoading(false)
-            }
-        };
+    
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/news/');
+            const data = await response.json();
+            setTopics(data.News || []); 
+        
+            const initialLikes = {};
+            data.News.forEach( (topic) => {
+                initialLikes[topic._id] = topic.Likes
+            } )
 
+            setLikes(initialLikes)
+
+        } catch {
+        } 
+    };
+    
+    useEffect(() => {
         fetchData();
     }, []);
+
+    // Function to handle like button click
+    const handleLikeClick = async (topicId) => {
+
+        if (likes[topicId]) {
+            return;
+        }
+
+        const isLiked = !likes[topicId]
+
+        const currentLikes = topics.map( (topic) => 
+            topic._id === topicId ? { ...topic, Likes: isLiked ? topic.Likes + 1 : topic.Likes } : topic
+        )
+
+        setTopics(currentLikes)
+
+        setLikes( (prevLikes) => ({
+            ...prevLikes,
+            [topicId]: isLiked,
+        }) )
+
+        try {
+
+            const topic = topics.find( (t) => t._id === topicId )
+
+            const response = await axios.post(`http://localhost:8080/api/news/${topicId}`, {
+                ...topic,  // Send the entire blog data
+                Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
+            }, {
+                headers: {
+                    "Content-Type": 'application/json'
+                }
+            });
+
+            if(response.status === 200 || response.status === 201) {
+                
+                const updatedLikes = topic.Likes
+
+                // Update the topics with the new like count
+                setTopics( (prevTopics) => 
+                
+                    prevTopics.map( (t) => t._id === topicId ? {...t, Likes: updatedLikes } : t    )
+
+                )
+
+            }
+
+        } catch  {
+        }
+
+        fetchData()
+    }
 
     const getDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -36,7 +95,7 @@ export default function News() {
     const handleScrollToTopic = (topicId) => {
         const element = document.getElementById(topicId);
         if (element) {
-            const headerOffset = 90; // Adjust this value based on your header height
+            const headerOffset = 120; // Adjust this value based on your header height
             const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
             const offsetPosition = elementPosition - headerOffset;
 
@@ -48,9 +107,46 @@ export default function News() {
     };
 
     // Get the last three topics from the array
-    const recentBlogs = topics.slice(-5);
+    const recentBlogs = topics.slice(-5); 
 
-    if (loading) return <p className='section'> Loading.... </p>
+    const text = "Blogs, News, Events"
+
+    const h3Variants = {
+
+        hidden: {
+            opacity: 0
+        },
+
+        visible : {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.05
+            }
+        }
+
+    }
+
+    const spanVariants = {
+
+        hidden: {
+            opacity: 0
+        },
+
+        visible : {
+            opacity: 1
+        }
+
+    }
+
+    const variants = {
+        hidden: { opacity: 0, y: -500 },
+        visible: { opacity: 1, y: 0, transition: { duration: 1.5 } }
+    };
+
+    const toUp = {
+        hidden: { opacity: 0, y: 500 },
+        visible: { opacity: 1, y: 0, transition: { duration: 1 } }
+    };
 
     return (
     
@@ -60,9 +156,17 @@ export default function News() {
         
             <div className={`text-center mb-5`}>
             
-                <span className={style.headTitle}>News</span>
+                <motion.span initial='hidden' animate="visible" variants={variants} className={style.headTitle}>News</motion.span>
             
-                <h3 className={style.title}>Blogs, News, Events</h3>
+                <motion.h3 className={style.title} initial='hidden' animate='visible' variants={h3Variants}>
+
+                        {text.split('').map( (char, index) => 
+                        
+                            <motion.span key={index} variants={spanVariants}>{char}</motion.span>
+                        
+                        )}
+
+                    </motion.h3>
             
             </div>
         
@@ -112,7 +216,7 @@ export default function News() {
                                 ) : (
                                     <div className={style.image}>
 
-                                        <img src={topic.image} alt={topic.title} />
+                                        <img src={`http://localhost:8080/uploads/News/${topic.imageName}`} alt={topic.title} />
 
                                     </div>
                                 ) }
@@ -123,7 +227,7 @@ export default function News() {
 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
 
-                                    <span><i className="fa-regular fa-heart"></i>{topic.Likes}</span>
+                                    <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClick(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span>
 
                                     <span><i className="fa-regular fa-eye"></i>{topic.Views}</span>
 
