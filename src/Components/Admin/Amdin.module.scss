@@ -16,10 +16,15 @@
     width: 5px;
 }
 
+body::-webkit-scrollbar-track {
+    background: #000000;
+}
+
 ::-webkit-scrollbar-thumb {
-    /*background: hsla(0, 0%, 100%, 0.164);
-    */background-color: $blueColor;
-    border-radius: 10px;
+    /*background: hsla(0, 0%, 100%, 0.164);*/
+    background-color: $blueColor;
+    // background-color: $redColor;
+    // border-radius: 10px;
     transition: all .5s;
     -webkit-transition: all .5s;
     -moz-transition: all .5s;

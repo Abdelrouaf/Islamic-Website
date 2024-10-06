@@ -26,7 +26,7 @@ export default function Quran() {
     const [selectedSurah, setSelectedSurah] = useState(null);
     const [filteredTopics, setFilteredTopics] = useState([]); // Surahs filtered by search
     const [searchTerm, setSearchTerm] = useState(''); // Search input state
-    const [defaultLang, setDefaultLang] = useState('quran.json')
+    const [defaultLang, setDefaultLang] = useState('quran_en.json')
     const mostLikedRef = useRef(null); // Ref to observe the "most liked" section
 
     // Fetch data from the API when the component mounts
@@ -202,8 +202,8 @@ export default function Quran() {
                                                 <div className={style.cardBody}>
                                                     <a href="#"
                                                     onClick={(e) => { e.preventDefault(); handleSurahClick(surah); }} className={`${style.cardTitle} d-flex justify-content-between align-items-center`}>
-                                                        <h4 className={`${selectedSurah === surah.id ? style.hover : ''}`}> Surah {surah.transliteration} </h4>
-                                                        <h4 className={`${selectedSurah === surah.id ? style.hover : ''}`}> سورة {surah.name}</h4>
+                                                        <h4 className={`${selectedSurah === surah.id ? style.hover : ''}`}>{index + 1} Surah {surah.transliteration} </h4>
+                                                        <h4 className={`${selectedSurah === surah.id ? style.hover : ''}`}> سورة {surah.name} </h4>
                                                     </a>
                                                     <p className={style.paragraph}>Total Verses: {surah.total_verses}</p>
                                                 </div>
@@ -219,15 +219,15 @@ export default function Quran() {
                     
                         <div className={style.selectLang}>
 
-                            <select className="form-select" onChange={onChangeLang} value={defaultLang} aria-label="Default select example">
+                            <select className="form-select" onChange={onChangeLang} value={Object.keys(surahLang).find(key => surahLang[key].api === defaultLang)} aria-label="Default select example">
                             
+                                <option value="en">English</option>
+
                                 <option value='ar'>Arabic</option>
                             
                                 <option value="bn">Bengali</option>
                             
                                 <option value="zh">Chinese</option>
-                            
-                                <option value="en">English</option>
                             
                                 <option value="es">Spanish</option>
 
@@ -256,7 +256,7 @@ export default function Quran() {
                                 <div className={`${style.verses} ${defaultLang === 'quran.json' ? style.directionRTL : style.directionLTR}`}>
                                     {topic?.verses?.map((verse, index) => (
                                         <p key={verse.id} className={`${style.paragraph}  d-inline`}>
-                                            {defaultLang === 'quran.json' ? verse.text : verse.translation } <span>({verse.id})</span>
+                                            {defaultLang === 'quran.json' ? verse.text : verse.translation } <span className={style.verseNumber}>{verse.id}</span>
                                         </p>
                                     ))}
                                 </div>
@@ -271,7 +271,7 @@ export default function Quran() {
                                         <div className={style.verses}>
                                             {defaultSurah.verses.map((verse, index) => (
                                                 <p key={verse.id} className={`${style.paragraph} d-inline rtl`}>
-                                                    {defaultLang === 'quran.json' ? verse.text : verse.translation } <span>({verse.id})</span>
+                                                    {defaultLang === 'quran.json' ? verse.text : verse.translation } <span className={style.verseNumber}>{verse.id}</span>
                                                 </p>
                                             ))}
                                         </div>
