@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import style from './Quran.module.scss'
+import style from './QuranSurahs.module.scss'
 import { motion } from 'framer-motion'
+import { Quran } from 'islam.js';
+import axios from 'axios';
 
-export default function Quran() {
+export default function QuranSurahs() {
 
     const surahLang = {
 
@@ -28,6 +30,11 @@ export default function Quran() {
     const [searchTerm, setSearchTerm] = useState(''); // Search input state
     const [defaultLang, setDefaultLang] = useState('quran_en.json')
     const mostLikedRef = useRef(null); // Ref to observe the "most liked" section
+
+    const quran = new Quran()
+    // const quranVerse = quran.getVerse(1, 4)
+    // console.log(quranVerse);
+    
 
     // Fetch data from the API when the component mounts
     useEffect(() => {
@@ -83,13 +90,146 @@ export default function Quran() {
         }
     };
 
-    // Get the last three topics from the array
-    const recentBlogs = topics.slice(-5);
-
     const handleSurahClick = (surah) => {
         setTopic(surah);  // Update the topic state to the clicked surah
         setSelectedSurah(surah.id);
     };
+
+    const [surahIndex, setSurahIndex] = useState('');
+    const [verseIndex, setVerseIndex] = useState('');
+
+    let [versesCount, setVersesCount] = useState(0)
+
+    const handleSurahChange = (event) => {
+        let value = parseInt(event.target.value, 10);
+    
+        // Ensure the value stays within the min and max range
+        if (value > 114) {
+            value = 114; // Max surah value
+        } else if (value < 1) {
+            value = 1; // Min surah value
+        }
+    
+        setVersesCount(value)
+        setVerseIndex('');
+        setSurahIndex(value);
+    };
+
+    const handleVerseChange = (event) => {
+    
+        let value = parseInt(event.target.value, 10);
+    
+        // Ensure the value stays within the min and max range
+        if (value > quran.getChapterByIndex(versesCount).numberOfVerses) {
+            value = quran.getChapterByIndex(versesCount).numberOfVerses; // Max surah value
+        } else if (value < 1) {
+            value = 1; // Min surah value
+        }
+
+        setVerseIndex(value);
+    };
+
+    const [verses, setVerses] = useState([]);
+    const [versesTranslation, setVersesTranslation] = useState([]);
+    const verseData = { verse: verses, translation: versesTranslation };
+
+
+    const handleSearch = () => {
+        const surah = parseInt(surahIndex, 10);
+        const verse = parseInt(verseIndex, 10);
+    
+        if (!isNaN(surah) && !isNaN(verse)) {
+            // Fetch the verse using islam.js
+            const verseData = quran.getVerse(surah, verse);
+            const translationData = quran.getMultipleVersesWithTranslation([{ chapterNo: surah, verseNo: verse }]);
+    
+            // Extract and store the translation
+            if (translationData && translationData.length > 0) {
+                const translation = translationData[0]?.translation || '';
+                setVerses([verseData]);
+                setVersesTranslation([translation]);
+            } else {
+                setVerses([verseData]);
+                setVersesTranslation(['Translation not found']);
+            }
+        } 
+    };
+
+    const BASE_URL = 'https://cdn.islamic.network/quran/audio-surah/128/en.misharyrashidalafasyenglishtranslationsaheehibrahimwalk/'; // Base URL for audio
+    const INITIAL_SURAH_INDEX = 1; // Starting Surah index
+    const [nameSurahPlay, setNameSurahPlay] = useState('Al-Fatihah')
+    const [surahPlayIndex, setSurahPlayIndex] = useState(INITIAL_SURAH_INDEX);
+    const [currentSurahPlay, setCurrentSurahPlay] = useState(`${BASE_URL}${surahIndex}.mp3`);
+    const [progress, setProgress] = useState(0);
+    const [play, setPlay] = useState(false)
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const audioRef = useRef(null);
+  
+  
+    const formatTime = (time) => {
+      const minutes = Math.floor(time / 60);
+      const seconds = Math.floor(time % 60).toString().padStart(2, '0');
+      return `${minutes}:${seconds}`;
+    };
+  
+    const togglePlayStop = () => {
+      if (audioRef.current) {
+        if (play) {
+          // Pause the audio
+          audioRef.current.pause();
+        } else {
+          // Play the audio
+          audioRef.current.play();
+        }
+        setPlay(!play); // Toggle play/pause state
+      }
+    };
+  
+    const handleAudioReset = () => {
+      audioRef.current.currentTime = 0;
+      audioRef.current.pause();
+      setPlay(!play);
+      setProgress(0); // Reset progress
+        setCurrentTime(0); // Reset current time
+    };
+  
+    useEffect(() => {
+      const audio = audioRef.current;
+  
+      const updateDuration = () => {
+        if (audio) {
+          setDuration(audio.duration);
+        }
+      };
+      
+      const handleTimeUpdate = () => {
+        setCurrentTime(audio.currentTime);
+        setProgress((audio.currentTime / audio.duration) * 100); // Update progress here
+      };
+      
+      if (audio) {
+        audio.addEventListener('timeupdate', handleTimeUpdate);
+        audio.addEventListener('loadedmetadata', updateDuration);
+      }
+      return () => {
+        if (audio) {
+          audio.removeEventListener('timeupdate', handleTimeUpdate);
+          audio.removeEventListener('loadedmetadata', updateDuration);
+        }
+      };
+    }, [currentSurahPlay]);  
+  
+    // Reset progress and currentTime when the surah changes
+    useEffect(() => {
+        setCurrentSurahPlay(`${BASE_URL}${surahPlayIndex}.mp3`);
+        setNameSurahPlay(quran.getChapterByIndex(surahPlayIndex).englishName)
+        setProgress(0);
+        setCurrentTime(0);
+        if (audioRef.current) {
+            audioRef.current.currentTime = 0;
+        }
+    }, [surahPlayIndex]);
 
     const text = 'Surah'
 
@@ -176,18 +316,71 @@ export default function Quran() {
                 
                     <div className="col-md-4">
                     
+                        <div className={style.box}>
+
+                            <h4 className={style.title}>Listen to the Quran</h4>
+
+                            <div className={style.quranPlayer}>
+                                
+                                <div className="d-block justify-content-between align-items-center position-relative z-2">
+                                
+                                    <h4 className={style.title}>{nameSurahPlay}</h4>
+
+                                    <audio ref={audioRef} src={currentSurahPlay}></audio>
+                                    
+                                    <div className={style.progressBar}>
+                                    
+                                        <div className={style.customAudioBar}>
+                                        
+                                        <div
+                                        className={style.progress}
+                                        style={{ width: `${progress}%` }}
+                                        ></div>
+                                        
+                                        {/* <span>{time}</span> */}
+                                        
+                                        </div>
+                                    
+                                        <div className="d-flex justify-content-between">
+                                        
+                                        <span>{formatTime(currentTime)}</span>
+                                    
+                                        <span>{formatTime(duration)}</span>
+                                        
+                                        </div>
+                                    
+                                    </div>
+                                
+                                    <div className='text-center'>
+                                    
+                                        <button onClick={() => { if (surahPlayIndex > 1) { setSurahPlayIndex(surahPlayIndex - 1); } } }><i className="fa-solid fa-backward"></i></button>
+                                    
+                                        <button onClick={togglePlayStop}>{play ? <i className="fa-solid fa-pause"></i> : <i className="fa-solid fa-play"></i>}</button>
+                                    
+                                        <button onClick={handleAudioReset}><i className="fa-solid fa-stop"></i></button>
+                                    
+                                        <button onClick={() => setSurahPlayIndex(surahPlayIndex + 1)}><i className="fa-solid fa-forward"></i></button>
+                                    
+                                    </div>
+
+                                </div>
+                            
+                            </div>
+
+                        </div>
+
                         <motion.div initial='hidden' animate='visible' variants={toUp} className={style.search}>
 
                             <div className={style.inputGroup}>
 
                                 <div className='form-outline'>
 
-                                    <input type="search" className='form-control' placeholder='Search...' name="search" id="search" alue={searchTerm}
+                                    <input type="search" className='form-control' placeholder='Search...' name="search" id="search" value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)} />
 
                                 </div>
 
-                                <button type="button" className='btn btn-primary'><i className="fa-solid fa-magnifying-glass"></i></button>
+                                <button type="button" aria-label='search by surah name' className='btn btn-primary'><i className="fa-solid fa-magnifying-glass"></i></button>
 
                             </div>
 
@@ -278,75 +471,44 @@ export default function Quran() {
                                     </div>
                                 )
                             )}
-
-                        {/* <div className={style.topicSection}>
-                        
-                            <div className={style.topicDesign}>
-                            
-                                <span className={style.count}>1</span>
-                            
-                                <h3 className={style.title}>The Purpose of Life</h3>
-                            
-                            </div> 
-                        
-                            <div className={style.video}>
-                            
-                                <iframe src="https://www.youtube.com/embed/Zor1et-rT8c?si=Z9ZqFmGY27DUDk1R" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-                            
-                                <p className={style.paragraph}>Khalid Yasin delivered this lecture in Saudi Arabia in 1994, which resulted in 43 persons accepting Islam on that very night. What Is The Purpose of Life? Why are we here and where are we going? Through the verses of the Holy Qur'an, Shaykh Khalid Yasin expounds upon the creation of the universe and this amazing world we live in -- and how it came to be. With his logical style of argument, the Shaykh answers these questions with much wisdom.</p>
-                            
-                            </div>
-                        
-                        </div>
-                    
-                        <div className={style.topicSection}>
-                        
-                            <div className={style.topicDesign}>
-                            
-                                <span className={style.count}>2</span>
-                            
-                                <h3 className={style.title}>The Purpose of Life</h3>
-                            
-                            </div> 
-                        
-                            <div className={style.video}>
-                            
-                                <iframe src="https://www.youtube.com/embed/Y5W1dkXv05Q?si=JsO18Tonf0__mlop" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-                            
-                                <p className={style.paragraph}>Khalid Yasin delivered this lecture in Saudi Arabia in 1994, which resulted in 43 persons accepting Islam on that very night. What Is The Purpose of Life? Why are we here and where are we going? Through the verses of the Holy Qur'an, Shaykh Khalid Yasin expounds upon the creation of the universe and this amazing world we live in -- and how it came to be. With his logical style of argument, the Shaykh answers these questions with much wisdom.</p>
-                            
-                            </div>
-                        
-                            <p className={style.paragraph}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui eum error dolorum ut natus officiis in quos harum aspernatur laborum. Voluptas asperiores consequuntur et qui necessitatibus, dolores tempora pariatur provident repudiandae rem molestias! Officia a possimus, voluptatem maiores autem similique, quae illum dolorum mollitia laborum tempore reprehenderit accusamus? Ab reiciendis nobis quasi repudiandae, cumque eaque a nulla ipsa commodi non magni odio enim? Maxime impedit dolore possimus reprehenderit ab quisquam iste, neque, exercitationem similique autem consectetur quas nesciunt cum ratione vel, animi expedita cumque mollitia recusandae nobis qui. Neque nemo dolorum tempore assumenda alias, commodi corrupti quisquam maxime omnis quae?</p>
-                        
-                        </div>
-                    
-                        <div className={style.topicSection}>
-                        
-                            <div className={style.topicDesign}>
-                            
-                                <span className={style.count}>3</span>
-                            
-                                <h3 className={style.title}>The Purpose of Life</h3>
-                            
-                            </div> 
-                        
-                            <div className={style.video}>
-                            
-                                <iframe src="https://www.youtube.com/embed/NQbnt5ZLRu8?si=c7MbzlcF228s_9nZ" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-                            
-                                <p className={style.paragraph}>Khalid Yasin delivered this lecture in Saudi Arabia in 1994, which resulted in 43 persons accepting Islam on that very night. What Is The Purpose of Life? Why are we here and where are we going? Through the verses of the Holy Qur'an, Shaykh Khalid Yasin expounds upon the creation of the universe and this amazing world we live in -- and how it came to be. With his logical style of argument, the Shaykh answers these questions with much wisdom.</p>
-                            
-                            </div>
-                        
-                            <p className={style.paragraph}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui eum error dolorum ut natus officiis in quos harum aspernatur laborum. Voluptas asperiores consequuntur et qui necessitatibus, dolores tempora pariatur provident repudiandae rem molestias! Officia a possimus, voluptatem maiores autem similique, quae illum dolorum mollitia laborum tempore reprehenderit accusamus? Ab reiciendis nobis quasi repudiandae, cumque eaque a nulla ipsa commodi non magni odio enim? Maxime impedit dolore possimus reprehenderit ab quisquam iste, neque, exercitationem similique autem consectetur quas nesciunt cum ratione vel, animi expedita cumque mollitia recusandae nobis qui. Neque nemo dolorum tempore assumenda alias, commodi corrupti quisquam maxime omnis quae?</p>
-                        
-                        </div> */}
                     
                     </div>
                 
                 </div>
             
+                <div className={`${style.searchVersesBox} text-center`}>
+                    <h4 className='mb-3'>Search for Quran Verses</h4>
+                    <div className={style.inputs}>
+                        <input
+                        type="number"
+                        value={surahIndex}
+                        onChange={handleSurahChange}
+                        placeholder="Surah Index"
+                        min='1'
+                        max='114'
+                        />
+                        <input
+                        type="number"
+                        value={verseIndex}
+                        onChange={handleVerseChange}
+                        placeholder="Verse Index"
+                        min='1'
+                        max={quran.getChapterByIndex(versesCount)}
+                        disabled={!surahIndex || isNaN(surahIndex)} 
+                        />
+                        <button onClick={handleSearch} aria-label='search by surah number and verse number' className='btn btn-primary'><i className="fa-solid fa-magnifying-glass"></i></button>
+                    
+                    </div>
+                
+                    <div className={`${style.searchVerses} mt-3`}>
+
+                        <p>{verseData.verse}</p>
+                        <p>{verseData.translation}</p>
+
+                    </div>
+
+                </div>
+
             </div>
         
         </div>

@@ -20,7 +20,7 @@ export default function Pillars() {
     const fetchShahadah = async () => {
         
         try {
-            const shahadahResponse = await fetch('http://localhost:8080/api/certificateBlog/')
+            const shahadahResponse = await fetch('http://147.79.101.225:2859/api/certificateBlog/')
             const data1 = await shahadahResponse.json();
         
             setShahadahTopic(data1.CertificateBlog || [])
@@ -33,7 +33,7 @@ export default function Pillars() {
             setLikesShahadah(initialLikesShahadah)
 
             // ////////////////////////////////////////////////
-            const salahResponse = await fetch('http://localhost:8080/api/prayerBlog/')
+            const salahResponse = await fetch('http://147.79.101.225:2859/api/prayerBlog/')
             const data2 = await salahResponse.json();
         
             setSalahTopic(data2.PrayerBlog || [])
@@ -46,7 +46,7 @@ export default function Pillars() {
             setLikesPrayer(initialLikesPrayer)
 
             // /////////////////
-            const sawmResponse = await fetch('http://localhost:8080/api/fastingBlog/')
+            const sawmResponse = await fetch('http://147.79.101.225:2859/api/fastingBlog/')
             const data3 = await sawmResponse.json();
         
             setSawmTopic(data3.FastingBlog || [])
@@ -59,7 +59,7 @@ export default function Pillars() {
             setLikesSawm(initialLikesSawm)
 
             // /////////////////////
-            const zakatResponse = await fetch('http://localhost:8080/api/zakatBlog/')
+            const zakatResponse = await fetch('http://147.79.101.225:2859/api/zakatBlog/')
             const data4 = await zakatResponse.json();
         
             setZakatTopic(data4.ZakatBlog || [])
@@ -72,7 +72,7 @@ export default function Pillars() {
             setLikesZakat(initialLikesZakat)
 
             // ////////////////////////////////////
-            const haijResponse = await fetch('http://localhost:8080/api/haijBlog/')
+            const haijResponse = await fetch('http://147.79.101.225:2859/api/haijBlog/')
             const data5 = await haijResponse.json();
         
             setHaijTopic(data5.HaijBlog || [])
@@ -116,7 +116,7 @@ export default function Pillars() {
 
             const topic = shahadahTopic.find( (t) => t._id === topicId )
 
-            const response = await axios.post(`http://localhost:8080/api/certificateBlog/${topicId}`, {
+            const response = await axios.post(`http://147.79.101.225:2859/api/certificateBlog/${topicId}`, {
                 ...topic,  // Send the entire blog data
                 Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
             }, {
@@ -168,7 +168,7 @@ export default function Pillars() {
 
             const topic = salahTopic.find( (t) => t._id === topicId )
 
-            const response = await axios.post(`http://localhost:8080/api/prayerBlog/${topicId}`, {
+            const response = await axios.post(`http://147.79.101.225:2859/api/prayerBlog/${topicId}`, {
                 ...topic,  // Send the entire blog data
                 Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
             }, {
@@ -220,7 +220,7 @@ export default function Pillars() {
 
             const topic = sawmTopic.find( (t) => t._id === topicId )
 
-            const response = await axios.post(`http://localhost:8080/api/fastingBlog/${topicId}`, {
+            const response = await axios.post(`http://147.79.101.225:2859/api/fastingBlog/${topicId}`, {
                 ...topic,  // Send the entire blog data
                 Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
             }, {
@@ -272,7 +272,7 @@ export default function Pillars() {
 
             const topic = zakatTopic.find( (t) => t._id === topicId )
 
-            const response = await axios.post(`http://localhost:8080/api/zakatBlog/${topicId}`, {
+            const response = await axios.post(`http://147.79.101.225:2859/api/zakatBlog/${topicId}`, {
                 ...topic,  // Send the entire blog data
                 Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
             }, {
@@ -324,7 +324,7 @@ export default function Pillars() {
 
             const topic = haijTopic.find( (t) => t._id === topicId )
 
-            const response = await axios.post(`http://localhost:8080/api/haijBlog/${topicId}`, {
+            const response = await axios.post(`http://147.79.101.225:2859/api/haijBlog/${topicId}`, {
                 ...topic,  // Send the entire blog data
                 Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
             }, {
@@ -363,7 +363,7 @@ export default function Pillars() {
     const handleScrollToTopic = (topicId) => {
         const element = document.getElementById(topicId);
         if (element) {
-            const headerOffset = 120; // Adjust this value based on your header height
+            const headerOffset = 150; // Adjust this value based on your header height
             const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
             const offsetPosition = elementPosition - headerOffset;
 
@@ -493,7 +493,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={`http://localhost:8080/uploads/Images/${shahadah.imageName}`} alt={shahadah.title} />
+                                    <img src={`http://147.79.101.225:2859/uploads/Images/${shahadah.imageName}`} alt={shahadah.title} />
                                 
                                 </div>
                             
@@ -501,9 +501,9 @@ export default function Pillars() {
                                 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(shahadah.createdAt)}</span>
                                 
-                                    <span><i className={`fa-regular fa-heart ${likesShahadah[shahadah._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickShahadah(shahadah._id)} style={{ cursor: 'pointer' }}></i> {shahadah.Likes}</span>
+                                    {/* <span><i className={`fa-regular fa-heart ${likesShahadah[shahadah._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickShahadah(shahadah._id)} style={{ cursor: 'pointer' }}></i> {shahadah.Likes}</span> */}
                                 
-                                    <span><i className="fa-regular fa-eye"></i>{shahadah.Views}</span>
+                                    {/* <span><i className="fa-regular fa-eye"></i>{shahadah.Views}</span> */}
                                 
                                 </div>
                             
@@ -547,7 +547,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={`http://localhost:8080/uploads/Images/${salah.imageName}`} alt={salah.title} />
+                                    <img src={`http://147.79.101.225:2859/uploads/Images/${salah.imageName}`} alt={salah.title} />
                                 
                                 </div>
                             
@@ -555,9 +555,9 @@ export default function Pillars() {
                                 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(salah.createdAt)}</span>
                                 
-                                    <span><i className={`fa-regular fa-heart ${likesPrayer[salah._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickPrayer(salah._id)} style={{ cursor: 'pointer' }}></i> {salah.Likes}</span>
+                                    {/* <span><i className={`fa-regular fa-heart ${likesPrayer[salah._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickPrayer(salah._id)} style={{ cursor: 'pointer' }}></i> {salah.Likes}</span> */}
                                 
-                                    <span><i className="fa-regular fa-eye"></i> {salah.Views} </span>
+                                    {/* <span><i className="fa-regular fa-eye"></i> {salah.Views} </span> */}
                                 
                                 </div>
                             
@@ -591,7 +591,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={`http://localhost:8080/uploads/Images/${sawm.imageName}`} alt={sawm.title} />
+                                    <img src={`http://147.79.101.225:2859/uploads/Images/${sawm.imageName}`} alt={sawm.title} />
                                 
                                 </div>
                             
@@ -599,9 +599,9 @@ export default function Pillars() {
                                 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(sawm.createdAt)}</span>
                                 
-                                    <span><i className={`fa-regular fa-heart ${likesSawm[sawm._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickSawm(sawm._id)} style={{ cursor: 'pointer' }}></i> {sawm.Likes}</span>
+                                    {/* <span><i className={`fa-regular fa-heart ${likesSawm[sawm._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickSawm(sawm._id)} style={{ cursor: 'pointer' }}></i> {sawm.Likes}</span> */}
                                 
-                                    <span><i className="fa-regular fa-eye"></i>{sawm.Views}</span>
+                                    {/* <span><i className="fa-regular fa-eye"></i>{sawm.Views}</span> */}
                                 
                                 </div>
                             
@@ -635,7 +635,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={`http://localhost:8080/uploads/Images/${zakat.imageName}`} alt={zakat.title} />
+                                    <img src={`http://147.79.101.225:2859/uploads/Images/${zakat.imageName}`} alt={zakat.title} />
                                 
                                 </div>
                             
@@ -643,9 +643,9 @@ export default function Pillars() {
                                 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(zakat.createdAt)}</span>
                                 
-                                    <span><i className={`fa-regular fa-heart ${likesZakat[zakat._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickZakat(zakat._id)} style={{ cursor: 'pointer' }}></i> {zakat.Likes}</span>
+                                    {/* <span><i className={`fa-regular fa-heart ${likesZakat[zakat._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickZakat(zakat._id)} style={{ cursor: 'pointer' }}></i> {zakat.Likes}</span> */}
                                 
-                                    <span><i className="fa-regular fa-eye"></i>{zakat.Views}</span>
+                                    {/* <span><i className="fa-regular fa-eye"></i>{zakat.Views}</span> */}
                                 
                                 </div>
                             
@@ -675,7 +675,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={`http://localhost:8080/uploads/Images/${haij.imageName}`} alt={haij.title} />
+                                    <img src={`http://147.79.101.225:2859/uploads/Images/${haij.imageName}`} alt={haij.title} />
                                 
                                 </div>
                             
@@ -683,9 +683,9 @@ export default function Pillars() {
                                 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(haij.createdAt)}</span>
                                 
-                                    <span><i className={`fa-regular fa-heart ${likesHaij[haij._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickHaij(haij._id)} style={{ cursor: 'pointer' }}></i> {haij.Likes}</span>
+                                    {/* <span><i className={`fa-regular fa-heart ${likesHaij[haij._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickHaij(haij._id)} style={{ cursor: 'pointer' }}></i> {haij.Likes}</span> */}
                                 
-                                    <span><i className="fa-regular fa-eye"></i>{haij.Views}</span>
+                                    {/* <span><i className="fa-regular fa-eye"></i>{haij.Views}</span> */}
                                 
                                 </div>
                             

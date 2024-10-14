@@ -1,0 +1,294 @@
+@import '../Style/Layout/Layout.module.scss';
+
+img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .welcome {
+      background-image: url('../../images/mosque-cover2.jpg');
+      background-position: center 80%;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 100vh;
+      position: relative;
+  
+      &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          width: 100%;
+          height: 100%;
+          background-color: $blackColor;
+          opacity: .4;
+          z-index: 1;
+      }
+  
+      .titles {
+          color: $whiteColor;
+          position: relative;
+          z-index: 2;
+      
+          h3 {
+              font-size: 30px;
+          }
+      
+          h4 {
+              font-size: 40px;
+              text-align: center;
+            //   color: $lightOrange;
+            //   font-family: $AraBlack;
+          }
+      
+      }
+  
+  }
+  
+  .quran-player {
+    // display: flex;
+    // justify-content: space-between;
+    // align-items: center;
+    background-image: url('../../images/audioCover.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 50px 20px;
+    max-width: 100%;
+    margin: 0 auto;
+    // margin-top: -50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+  
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      top: 0;
+      right: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: $blackColor;
+      opacity: .7;
+      z-index: 1;
+    }
+  
+    h2{
+      font-size: 24px;
+      color: $whiteColor;
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+    }
+  
+    .progressBar {
+      width: 50%;
+    
+      .custom-audio-bar {
+        width: 100%;
+        height: 10px;
+        background-color: #ddd;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        overflow: hidden;
+    
+        .progress {
+          height: 100%;
+          background-color: #006400;
+          border-radius: 5px 0 0 5px;
+        }
+      }
+    
+      span {
+        font-size: 12px;
+        color: $whiteColor;
+      }
+    
+    }
+  
+    button {
+      background-color: #006400;
+      color: white;
+      border: none;
+      padding: 5px 7px;
+      margin: 5px;
+      cursor: pointer;
+      font-size: 10px;
+      transition: background-color 0.3s;
+      border-radius:50px;
+      -webkit-border-radius:50px;
+      -moz-border-radius:50px;
+      -ms-border-radius:50px;
+      -o-border-radius:50px;
+    
+      &:hover {
+        background-color: #004d00;
+      }
+    }
+  
+    h3 {
+      font-size: 18px;
+      color: #333;
+      margin-top: 20px;
+    }
+  }
+  
+  .info {
+    margin-block: 50px;
+    background-image: url('../../images/infoCover2.jpg');
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-size: contain;
+    overflow: hidden;
+  
+    .boxLeft {
+      background-image: url('../../images/prayerTimesCover2.jpg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      padding: 30px 20px;  
+      text-align: center;
+      margin-left: -24px;
+  
+      .cityTime {
+        font-size: 20px
+      }
+  
+      .date {
+        // color: $whiteLowOpacity;
+        font-weight: 700
+      }
+  
+      .prayDetails {
+        // border-bottom: 1px solid $blackLowOpacity;
+        margin-bottom: 20px;
+      
+        .pray {
+          font-size: 18px;
+          color: $blackColor;
+          opacity: .7;
+        
+        }
+      
+        .time {
+        //   color: $whiteLowOpacity;
+          font-weight: 500;
+        
+        }
+      
+      }
+  
+    }
+  
+    .boxRight {
+      @extend .boxLeft;
+      background: none;
+      text-align: start;
+      margin-left: 0;
+    
+      .title {
+        color: $blackColor;
+      }
+    
+      a {
+        text-transform: capitalize;
+        color: $whiteColor;
+      }
+    
+    }
+  
+  }
+  
+  .aboutUs {
+  
+    .title {
+      color: $blackColor;
+      font-size: 35px;
+      text-transform: none;
+    
+    }
+  
+    .description {
+      width: 100%;
+    }
+  
+    .box {
+    
+      .btns {
+      
+        a {
+        
+          &:first-child {
+            // background-color: $darkOrange !important;
+            border: none !important;
+          }
+        
+          &:last-child {
+            font-size: 18px;
+            text-transform: capitalize;
+            font-weight: 800;
+          
+            i {
+              padding: 15px;
+              background-color: #0a81a20e;
+              border: 1px solid #0a81a21e;
+              border-radius: 50px;
+              -webkit-border-radius: 50px;
+              -moz-border-radius: 50px;
+              -ms-border-radius: 50px;
+              -o-border-radius: 50px;
+  }
+          }
+        
+        }
+      
+      }
+    }
+  
+  }
+  
+  .pillars {
+  
+    .titles {
+      text-align: center;
+      margin-bottom: 50px;
+    
+      .title {
+        color: $blackColor;
+      }
+    
+    }
+  
+    .box{
+        text-align: center;
+      
+        .image {
+          height: 100px;
+          width: 100px;
+        
+          img {
+            width: 100% !important;
+          
+          }
+        
+        }
+      
+      .name {
+        font-size: 18px;
+        margin-block: 10px;
+        color: $blueColor;
+      
+      }
+    
+      .en {
+        font-size: 14px;
+        font-weight: 700;
+      }
+    
+    }
+  
+  }

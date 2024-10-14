@@ -12,7 +12,7 @@ export default function FaithBookTopic() {
     // State for the current form data
     const [formData, setFormData] = useState({
         title: '',
-        image: '',
+        imageName: '',
         author: '',
         description: '',
         bookName: ''
@@ -21,7 +21,7 @@ export default function FaithBookTopic() {
     const [checkData, setCheckData] = useState({
         id: '',
         title: '',
-        image: '',
+        imageName: '',
         author: '',
         description: '',
         bookName: ''
@@ -51,7 +51,7 @@ export default function FaithBookTopic() {
     useEffect(() => {
         const fetchTopic = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/faithBook/${id}`);
+                const response = await fetch(`http://147.79.101.225:2859/api/faithBook/${id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -59,7 +59,7 @@ export default function FaithBookTopic() {
                 const finalData = topicData.book;        
                 
                 setFormData({
-                    image: finalData.image,
+                    imageName: finalData.imageName,
                     title: finalData.title,
                     description: finalData.description,
                     author: finalData.author,
@@ -68,15 +68,15 @@ export default function FaithBookTopic() {
             
                 setCheckData({
                     id: finalData._id,
-                    image: finalData.image,
+                    imageName: finalData.imageName,
                     title: finalData.title,
                     description: finalData.description,
                     author: finalData.author,
                     bookName: finalData.bookName
                 });
 
-                setOldImage(finalData.image)
-                setImageURL(finalData.image)
+                setOldImage(finalData.imageName)
+                setImageURL(finalData.imageName)
                 setIsLoading(false); // Data has been loaded
             } catch {
                 showToast('Failed to fetch topic data. Please try again', 'error')
@@ -106,7 +106,7 @@ export default function FaithBookTopic() {
             const imageURL = URL.createObjectURL(file); // Create a preview URL
             setFormData((prevState) => ({
                 ...prevState,
-                image: file,           // Store the File object
+                imageName: file,           // Store the File object
                 // imageURL: imageURL     // Store the preview URL
             }));
             setImageURL(imageURL)
@@ -118,7 +118,7 @@ export default function FaithBookTopic() {
     const onCloseImage = () => {
         setFormData((prevState) => ({
             ...prevState,
-            image: oldImage,                   
+            imageName: oldImage,                   
         }));
         setImageURL(oldImage)
     };
@@ -132,7 +132,7 @@ export default function FaithBookTopic() {
     // Function to check if the title already exists in the API
     const checkTitleExists = async (title, idToExclude) => {
         try {
-            const response = await fetch('http://localhost:8080/api/faithBook/');
+            const response = await fetch('http://147.79.101.225:2859/api/faithBook/');
             const data = await response.json();
 
             // Access the array of topics
@@ -190,7 +190,7 @@ export default function FaithBookTopic() {
     
             
             if(isPayloadChanged) {
-                const response = await axios.put(`http://localhost:8080/api/faithBook/${id}`, payload, {
+                const response = await axios.put(`http://147.79.101.225:2859/api/faithBook/${id}`, payload, {
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -222,7 +222,7 @@ export default function FaithBookTopic() {
         setIsDeleting(true)
 
         try {
-            const response = await fetch(`http://localhost:8080/api/faithBook/${id}`, {
+            const response = await fetch(`http://147.79.101.225:2859/api/faithBook/${id}`, {
                 method: 'DELETE',
             });
 

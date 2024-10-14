@@ -116,6 +116,7 @@
                 border: 2px solid #ca784e; 
                 border-radius: 50%; 
                 padding: 2px 5px;
+                margin-inline: 10px;
                 text-align: center;
                 line-height: 30px;
                 font-weight: bold;
@@ -272,6 +273,18 @@
                 -o-transition: all .3s ease-out;
             }
         }
+    }
+
+    input {
+        background-color: transparent;
+        color: var(--paragraph-color);
+        border: none !important;
+        box-shadow: none;
+        transition: all .3s ease-out;
+        -webkit-transition: all .3s ease-out;
+        -moz-transition: all .3s ease-out;
+        -ms-transition: all .3s ease-out;
+        -o-transition: all .3s ease-out;
     }
 
     .box {
@@ -438,53 +451,194 @@
         }
     }
 
-    .box:nth-child(3) {
-        border: none;
-        padding: 0;
+    // .box:nth-child(3) {
+    //     border: none;
+    //     padding: 0;
     
-        &.mostLikedBox {
-            &.sticky {
-                position: sticky;
-                top: 120px; // Adjust based on your layout
-                z-index: 10;
-                // background-color: white;
-                // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                transition: all 0.3s ease;
-            }
-        }
+    //     &.mostLikedBox {
+    //         &.sticky {
+    //             position: sticky;
+    //             top: 150px; // Adjust based on your layout
+    //             z-index: 10;
+    //             // background-color: white;
+    //             // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    //             transition: all 0.3s ease;
+    //         }
+    //     }
     
-        ul {
+    //     ul {
         
-            .quickLink {
-                display: inline-block;
-                margin-right: 8px;
-                margin-bottom: 15px;
+    //         .quickLink {
+    //             display: inline-block;
+    //             margin-right: 8px;
+    //             margin-bottom: 15px;
             
-                .mostLiked {
-                    font-size: 14px;
-                    color: #969ba1;
-                    padding: 5px;
-                    text-transform: capitalize;
-                    border: 1px solid #eaeaea;
-                    transition: all .3s;
-                    border-radius: 4px;
-                    -webkit-border-radius: 4px;
-                    -moz-border-radius: 4px;
-                    -ms-border-radius: 4px;
-                    -o-border-radius: 4px;
-                    -webkit-transition: all .3s;
-                    -moz-transition: all .3s;
-                    -ms-transition: all .3s;
-                    -o-transition: all .3s;
+    //             .mostLiked {
+    //                 font-size: 14px;
+    //                 color: #969ba1;
+    //                 padding: 5px;
+    //                 text-transform: capitalize;
+    //                 border: 1px solid #eaeaea;
+    //                 transition: all .3s;
+    //                 border-radius: 4px;
+    //                 -webkit-border-radius: 4px;
+    //                 -moz-border-radius: 4px;
+    //                 -ms-border-radius: 4px;
+    //                 -o-border-radius: 4px;
+    //                 -webkit-transition: all .3s;
+    //                 -moz-transition: all .3s;
+    //                 -ms-transition: all .3s;
+    //                 -o-transition: all .3s;
                 
-                    &:hover {
-                        background-color: #44d7b6;
-                        color: $whiteColor;
-                        border-color: #44d7b6;
-                    }
-                }
+    //                 &:hover {
+    //                     background-color: #44d7b6;
+    //                     color: $whiteColor;
+    //                     border-color: #44d7b6;
+    //                 }
+    //             }
+    //         }
+    //     }
+    
+    // } 
+
+    .inputs {
+        display: flex;
+        justify-content: center ;
+        align-items: center;
+        gap: 20px;
+    
+        input {
+            width: 120px !important;
+            //border: 1px solid rgb($blackColor, .5) !important;
+            background-color: #ca774e34;
+            padding: 5px 10px;
+            border-radius: 10px;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            -ms-border-radius: 10px;
+            -o-border-radius: 10px;
+        
+            &::placeholder {
+                transition: all .5s;
+                -webkit-transition: all .5s;
+                -moz-transition: all .5s;
+                -ms-transition: all .5s;
+                -o-transition: all .5s;
+            }
+        
+            &:focus::placeholder {
+                color: transparent;
+            }
+        
+            &:focus {
+                border: none !important;
+                outline: none !important;
+                box-shadow: none !important;
             }
         }
     
-    } 
+        button {
+            background-color: transparent !important;
+            color: #3685fb !important;
+        }
+    }
+
+    .searchVerses {
+    
+        p {
+            font-weight: bold;
+            font-size: 18px;
+        }
+    }
+
+    .quranPlayer {
+        padding: 10px 20px;
+        max-width: 100%;
+        margin: 0 auto;
+        // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+    
+        // &::before {
+        // content: '';
+        // position: absolute;
+        // bottom: 0;
+        // top: 0;
+        // right: 0;
+        // left: 0;
+        // width: 100%;
+        // height: 100%;
+        // background-color: $blackColor;
+        // opacity: .7;
+        // z-index: 1;
+        // }
+    
+        h2{
+        font-size: 24px;
+        color: $whiteColor;
+        text-align: center;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 2;
+        }
+    
+        .progressBar {
+        
+        .customAudioBar {
+            width: 100%;
+            height: 10px;
+            background-color: $blackColor;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        
+            .progress {
+            height: 100%;
+            background-color: $redColor;
+            border-radius: 5px 0 0 5px;
+            }
+        }
+        
+        span {
+            font-size: 12px;
+            color: $redColor;
+        }
+        
+        }
+    
+        button {
+        background-color: $orangeColor;
+        color: white;
+        border: none;
+        padding: 5px 7px;
+        margin: 5px;
+        cursor: pointer;
+        font-size: 10px;
+        transition: background-color 0.3s;
+        border-radius:50px;
+        -webkit-border-radius:50px;
+        -moz-border-radius:50px;
+        -ms-border-radius:50px;
+        -o-border-radius:50px;
+        
+        &:hover {
+            opacity: .9;
+        }
+        }
+    
+        h3 {
+        font-size: 18px;
+        color: #333;
+        margin-top: 20px;
+        }
+    }
+
+    .searchVersesBox {
+        padding: 20px;
+        border: 1px solid $blackColor;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+}
 }

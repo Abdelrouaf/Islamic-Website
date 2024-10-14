@@ -47,7 +47,7 @@ export default function SawmTopic() {
     useEffect(() => {
         const fetchTopic = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/fastingBlog/${id}`);
+                const response = await fetch(`http://147.79.101.225:2859/api/fastingBlog/${id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -122,7 +122,7 @@ export default function SawmTopic() {
     // Function to check if the title already exists in the API
     const checkTitleExists = async (title, idToExclude) => {
         try {
-            const response = await fetch('http://localhost:8080/api/fastingBlog/');
+            const response = await fetch('http://147.79.101.225:2859/api/fastingBlog/');
             const data = await response.json();
 
             // Access the array of topics
@@ -175,7 +175,7 @@ export default function SawmTopic() {
             }
     
             if(isPayloadChanged) {
-                const response = await axios.put(`http://localhost:8080/api/fastingBlog/${id}`, payload);
+                const response = await axios.put(`http://147.79.101.225:2859/api/fastingBlog/${id}`, payload);
         
                 if (response.status === 200 || response.status === 201) {
                     showToast('Topic updated successfully!', 'success')
@@ -204,7 +204,7 @@ export default function SawmTopic() {
         setIsDeleting(true)
 
         try {
-            const response = await fetch(`http://localhost:8080/api/fastingBlog/${id}`, {
+            const response = await fetch(`http://147.79.101.225:2859/api/fastingBlog/${id}`, {
                 method: 'DELETE',
             });
 

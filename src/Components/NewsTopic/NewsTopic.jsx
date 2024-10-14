@@ -50,7 +50,7 @@ export default function NewsTopic() {
     useEffect(() => {
         const fetchTopic = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/news/${id}`);
+                const response = await fetch(`http://147.79.101.225:2859/api/news/${id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -137,7 +137,7 @@ export default function NewsTopic() {
     // Function to check if the title already exists in the API
     const checkTitleExists = async (title, idToExclude) => {
         try {
-            const response = await fetch('http://localhost:8080/api/news/');
+            const response = await fetch('http://147.79.101.225:2859/api/news/');
             const data = await response.json();
 
             // Access the array of topics
@@ -188,7 +188,7 @@ export default function NewsTopic() {
             // payload.append('video', formData.video);
     
             if(isPayloadChanged) {
-                const response = await axios.put(`http://localhost:8080/api/news/${id}`, payload, {
+                const response = await axios.put(`http://147.79.101.225:2859/api/news/${id}`, payload, {
                     headers: {
                         "Content-Type": 'application/json'
                     }
@@ -220,7 +220,7 @@ export default function NewsTopic() {
         setIsDeleting(true)
 
         try {
-            const response = await fetch(`http://localhost:8080/api/news/${id}`, {
+            const response = await fetch(`http://147.79.101.225:2859/api/news/${id}`, {
                 method: 'DELETE',
             });
 

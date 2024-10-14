@@ -12,7 +12,7 @@ export default function EditMonotheism() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/monotheismBlog/');
+            const response = await fetch('http://147.79.101.225:2859/api/monotheismBlog/');
             const data = await response.json();
             
             setTopics(data.monothesimBlog || []); 

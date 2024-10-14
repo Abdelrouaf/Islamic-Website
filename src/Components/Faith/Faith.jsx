@@ -22,7 +22,7 @@ export default function Faith() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/faithBook/');
+            const response = await fetch('http://147.79.101.225:2859/api/faithBook/');
             const data = await response.json();
             setTopics(data.bookBlog || []); 
 
@@ -33,7 +33,7 @@ export default function Faith() {
 
             setLikes2(initialLikes2)
 
-            const blogResponse = await fetch('http://localhost:8080/api/faithVideo');
+            const blogResponse = await fetch('http://147.79.101.225:2859/api/faithVideo');
             const blogData = await blogResponse.json();
             setBlogTopics(blogData.VideoBlog || []);
         
@@ -76,7 +76,7 @@ export default function Faith() {
 
             const topic = blogTopics.find( (t) => t._id === topicId )
 
-            const response = await axios.post(`http://localhost:8080/api/faithVideo/${topicId}`, {
+            const response = await axios.post(`http://147.79.101.225:2859/api/faithVideo/${topicId}`, {
                 ...topic,  // Send the entire blog data
                 Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
             }, {
@@ -128,7 +128,7 @@ export default function Faith() {
 
             const topic = topics.find( (t) => t._id === topicId )
 
-            const response = await axios.post(`http://localhost:8080/api/faithBook/${topicId}`, {
+            const response = await axios.post(`http://147.79.101.225:2859/api/faithBook/${topicId}`, {
                 ...topic,  // Send the entire blog data
                 Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
             }, {
@@ -167,7 +167,7 @@ export default function Faith() {
     const handleScrollToTopic = (topicId) => {
         const element = document.getElementById(topicId);
         if (element) {
-            const headerOffset = 120; // Adjust this value based on your header height
+            const headerOffset = 150; // Adjust this value based on your header height
             const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
             const offsetPosition = elementPosition - headerOffset;
 
@@ -474,9 +474,9 @@ export default function Faith() {
                                     
                                             <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
                                         
-                                            <span><i className={`fa-regular fa-heart ${likes2[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickBook(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span>
+                                            {/* <span><i className={`fa-regular fa-heart ${likes2[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickBook(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span> */}
                                         
-                                            <span><i className="fa-regular fa-eye"></i> {topic.Views} </span>
+                                            {/* <span><i className="fa-regular fa-eye"></i> {topic.Views} </span> */}
                                         
                                         </div>
 
@@ -486,13 +486,13 @@ export default function Faith() {
 
                                         <div className={style.image}>
                                             
-                                            <img src={`http://localhost:8080/uploads/Books/${topic.imageName}`} alt={topic.title} />
+                                            <img src={`http://147.79.101.225:2859/uploads/books/${topic.imageName}`} alt={topic.title} />
                                         
                                         </div>
                                         
                                         <div className={`${style.btn} overflow-hidden text-center`}>
                                         
-                                            <a href={`http://localhost:8080/uploads/Books/${topic.book}`} target='_blank' className={style.downloadBtn} download={`http://localhost:8080/uploads/Books/${topic.book}`}><i className="fa-solid fa-cloud-arrow-down"></i>Download</a>
+                                            <a href={`http://147.79.101.225:2859/uploads/books/${topic.book}`} target='_blank' className={style.downloadBtn} download={`http://147.79.101.225:2859/uploads/Books/${topic.book}`}><i className="fa-solid fa-cloud-arrow-down"></i>Download</a>
                                         
                                         </div>
                                     
@@ -524,7 +524,7 @@ export default function Faith() {
 
                                 <div className={style.videoContainer}>
                                     <video className={style.videoPlayer}  controls>
-                                        <source src={`http://localhost:8080/uploads/Videos/${topic.video}`} type="video/mp4" />
+                                        <source src={`http://147.79.101.225:2859/uploads/Videos/${topic.video}`} type="video/mp4" />
                                         Your browser does not support the video tag.
                                     </video>
                                 </div>
@@ -535,9 +535,9 @@ export default function Faith() {
 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
 
-                                    <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickVideo(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span>
+                                    {/* <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickVideo(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span> */}
 
-                                    <span><i className="fa-regular fa-eye"></i>{topic.Views}</span>
+                                    {/* <span><i className="fa-regular fa-eye"></i>{topic.Views}</span> */}
 
                                 </div>
 
@@ -618,7 +618,7 @@ export default function Faith() {
                                         
                                             <div className={style.img}>
                                             
-                                                <a href={`#${topic._id}`}><img src={`http://localhost:8080/uploads/Books/${topic.imageName}`} alt={topic.title} /></a>
+                                                <a href={`#${topic.title}`}><img src={`http://147.79.101.225:2859/uploads/Books/${topic.imageName}`} alt={topic.title} /></a>
                                             
                                             </div>
                                         
@@ -652,7 +652,7 @@ export default function Faith() {
                                 
                                     <li className={style.quickLink} key={topic._id}>
                                     
-                                        <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.blogTitle}>{topic.title}</a>
+                                        <a href={`#${topic.title}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.blogTitle}>{topic.title}</a>
                                     
                                     </li>
                                 
@@ -674,7 +674,7 @@ export default function Faith() {
                                 
                                     <li className={style.quickLink} key={topic._id}>
                                     
-                                        <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.mostLiked}>{topic.title}</a>
+                                        <a href={`#${topic.title}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.mostLiked}>{topic.title}</a>
                                     
                                     </li>
                                 

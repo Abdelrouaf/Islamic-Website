@@ -48,7 +48,7 @@ export default function PrayerTopic() {
     useEffect(() => {
         const fetchTopic = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/prayerBlog/${id}`);
+                const response = await fetch(`http://147.79.101.225:2859/api/prayerBlog/${id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -126,7 +126,7 @@ export default function PrayerTopic() {
     // Function to check if the title already exists in the API
     const checkTitleExists = async (title, idToExclude) => {
         try {
-            const response = await fetch('http://localhost:8080/api/prayerBlog/');
+            const response = await fetch('http://147.79.101.225:2859/api/prayerBlog/');
             const data = await response.json();
 
             // Access the array of topics
@@ -179,7 +179,7 @@ export default function PrayerTopic() {
             }
     
             if(isPayloadChanged) {
-                const response = await axios.put(`http://localhost:8080/api/prayerBlog/${id}`, payload);
+                const response = await axios.put(`http://147.79.101.225:2859/api/prayerBlog/${id}`, payload);
         
                 if (response.status === 200 || response.status === 201) {
                     showToast('Topic updated successfully!', 'success')
@@ -207,7 +207,7 @@ export default function PrayerTopic() {
         setIsDeleting(true)
 
         try {
-            const response = await fetch(`http://localhost:8080/api/prayerBlog/${id}`, {
+            const response = await fetch(`http://147.79.101.225:2859/api/prayerBlog/${id}`, {
                 method: 'DELETE',
             });
 

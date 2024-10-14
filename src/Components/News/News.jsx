@@ -13,7 +13,7 @@ export default function News() {
     
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/news/');
+            const response = await fetch('http://147.79.101.225:2859/api/news/');
             const data = await response.json();
             setTopics(data.News || []); 
         
@@ -56,7 +56,7 @@ export default function News() {
 
             const topic = topics.find( (t) => t._id === topicId )
 
-            const response = await axios.post(`http://localhost:8080/api/news/${topicId}`, {
+            const response = await axios.post(`http://147.79.101.225:2859/api/news/${topicId}`, {
                 ...topic,  // Send the entire blog data
                 Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
             }, {
@@ -95,7 +95,7 @@ export default function News() {
     const handleScrollToTopic = (topicId) => {
         const element = document.getElementById(topicId);
         if (element) {
-            const headerOffset = 120; // Adjust this value based on your header height
+            const headerOffset = 150; // Adjust this value based on your header height
             const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
             const offsetPosition = elementPosition - headerOffset;
 
@@ -216,7 +216,7 @@ export default function News() {
                                 ) : (
                                     <div className={style.image}>
 
-                                        <img src={`http://localhost:8080/uploads/News/${topic.imageName}`} alt={topic.title} />
+                                        <img src={`http://147.79.101.225:2859/uploads/News/${topic.imageName}`} alt={topic.title} />
 
                                     </div>
                                 ) }
@@ -227,9 +227,9 @@ export default function News() {
 
                                     <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
 
-                                    <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClick(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span>
+                                    {/* <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClick(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span> */}
 
-                                    <span><i className="fa-regular fa-eye"></i>{topic.Views}</span>
+                                    {/* <span><i className="fa-regular fa-eye"></i>{topic.Views}</span> */}
 
                                 </div>
 

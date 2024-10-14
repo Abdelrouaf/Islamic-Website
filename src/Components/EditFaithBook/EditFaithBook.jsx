@@ -12,7 +12,7 @@ export default function EditFaithBook() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/faithBook/');
+            const response = await fetch('http://147.79.101.225:2859/api/faithBook/');
             const data = await response.json();
             
             setTopics(data.bookBlog || []); 

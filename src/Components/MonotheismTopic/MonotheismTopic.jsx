@@ -11,7 +11,7 @@ export default function MonotheismTopic() {
 
     // State for the current form data
     const [formData, setFormData] = useState({
-        image: '',           // Set to null initially   
+        imageName: '',           // Set to null initially   
         title: '',
         description: '',
         surah: '',
@@ -22,7 +22,7 @@ export default function MonotheismTopic() {
 
     const [checkData, setCheckData] = useState({
         id: '',
-        image: '',           // Set to null initially   
+        imageName: '',           // Set to null initially   
         title: '',
         description: '',
         surah: '',
@@ -58,7 +58,7 @@ export default function MonotheismTopic() {
         const fetchTopic = async () => {
         
             try {
-                const response = await fetch(`http://localhost:8080/api/monotheismBlog/${id}`)
+                const response = await fetch(`http://147.79.101.225:2859/api/monotheismBlog/${id}`)
                 const data = await response.json()
             
                 const finalData = data.Blog[0];
@@ -67,7 +67,7 @@ export default function MonotheismTopic() {
                     setFormData({
                         title: finalData.title,
                         description: finalData.description,
-                        image: finalData.image,
+                        imageName: finalData.imageName,
                         surah: finalData.surah,
                         contentEnglish: finalData.contentEnglish,
                         contentArabic: finalData.contentArabic,
@@ -78,14 +78,14 @@ export default function MonotheismTopic() {
                         id: finalData._id,
                         title: finalData.title,
                         description: finalData.description,
-                        image: finalData.image,
+                        imageName: finalData.imageName,
                         surah: finalData.surah,
                         contentEnglish: finalData.contentEnglish,
                         contentArabic: finalData.contentArabic,
                         NumberOfVerse: finalData.NumberOfVerse
                     })
 
-                    setImageURL(finalData.image)
+                    setImageURL(finalData.imageName)
                     setIsLoading(false)
                 
                 }
@@ -110,6 +110,8 @@ export default function MonotheismTopic() {
         }));
     };
 
+    const [flag, setFlag] = useState(false)
+
     // Handle image upload
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -117,10 +119,11 @@ export default function MonotheismTopic() {
             const imageURL = URL.createObjectURL(file); // Create a preview URL
             setFormData((prevState) => ({
                 ...prevState,
-                image: file,           // Store the File object
+                imageName: file,           // Store the File object
                 // imageURL: imageURL     // Store the preview URL
             }));
             setImageURL(imageURL)
+            setFlag(true)
         }
         
     };
@@ -129,7 +132,7 @@ export default function MonotheismTopic() {
     const onCloseImage = () => {
         setFormData((prevState) => ({
             ...prevState,
-            image: oldImage,          // Reset the File object
+            imageName: oldImage,          // Reset the File object
             // imageURL: ''          // Reset the preview URL
         }));
         setImageURL(oldImage)
@@ -144,7 +147,7 @@ export default function MonotheismTopic() {
     // Function to check if the title already exists in the API
     const checkTitleExists = async (title, idToExclude) => {
         try {
-            const response = await fetch('http://localhost:8080/api/monotheismBlog/');
+            const response = await fetch('http://147.79.101.225:2859/api/monotheismBlog/');
             const data = await response.json();
 
             // Access the array of topics
@@ -191,8 +194,8 @@ export default function MonotheismTopic() {
                 isPayloadChanged = true
             }
             
-            if(checkData.image !== formData.image) {
-                payload.append('image', formData.image);
+            if(checkData.imageName !== formData.imageName) {
+                payload.append('imageName', formData.imageName);
                 isPayloadChanged = true
             }
             
@@ -217,7 +220,7 @@ export default function MonotheismTopic() {
             }
 
             if(isPayloadChanged) {
-                const response = await fetch(`http://localhost:8080/api/monotheismBlog/${id}`, {
+                const response = await fetch(`http://147.79.101.225:2859/api/monotheismBlog/${id}`, {
                     method: 'PUT',
                     body: payload
                 });
@@ -248,7 +251,7 @@ export default function MonotheismTopic() {
         setIsDeleting(true)
 
         try {
-            const response = await fetch(`http://localhost:8080/api/monotheismBlog/${id}`, {
+            const response = await fetch(`http://147.79.101.225:2859/api/monotheismBlog/${id}`, {
                 method: 'DELETE',
             });
 
@@ -305,7 +308,7 @@ export default function MonotheismTopic() {
                                         <input
                                             type="file"
                                             onChange={onImageChange}
-                                            name="image"
+                                            name="imageName"
                                             accept="image/*"
                                         />
                                         <i className="fa-solid fa-plus"></i>
@@ -317,7 +320,7 @@ export default function MonotheismTopic() {
                                                 className="close fa-solid fa-rectangle-xmark"
                                                 style={{ cursor: 'pointer' }}
                                             ></i> */}
-                                            <img src={imageURL} alt={formData.imageName}/>
+                                            <img src={ flag ? imageURL : `http://147.79.101.225:2859/uploads/Images/${imageURL}`} alt={formData.imageName}/>
                                         </div>
                                     {/* )} */}
                                 </div>

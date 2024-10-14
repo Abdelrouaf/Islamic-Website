@@ -17,7 +17,7 @@ export default function Monotheism() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/monotheismBlog/');
+            const response = await fetch('http://147.79.101.225:2859/api/monotheismBlog/');
             const data = await response.json();
             // If the response has the array inside another object, access it properly
             setTopics(data.monothesimBlog || []); // Assuming 'monothesimBlog' is the key holding the array
@@ -63,7 +63,7 @@ export default function Monotheism() {
 
             const topic = topics.find( (t) => t._id === topicId )
 
-            const response = await axios.post(`http://localhost:8080/api/monotheismBlog/${topicId}`, {
+            const response = await axios.post(`http://147.79.101.225:2859/api/monotheismBlog/${topicId}`, {
                 ...topic,  // Send the entire blog data
                 Likes: isLiked ? topic.Likes + 1 : topic.Likes // Update just the Likes field
             }, {
@@ -103,7 +103,7 @@ export default function Monotheism() {
     const handleScrollToTopic = (topicId) => {
         const element = document.getElementById(topicId);
         if (element) {
-            const headerOffset = 120; // Adjust this value based on your header height
+            const headerOffset = 150; // Adjust this value based on your header height
             const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
             const offsetPosition = elementPosition - headerOffset;
 
@@ -222,7 +222,7 @@ export default function Monotheism() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={`http://localhost:8080/uploads/Images/${topic.imageName}`} alt={topic.title} />
+                                        <img src={`http://147.79.101.225:2859/uploads/Images/${topic.imageName}`} alt={topic.title} />
                                     
                                     </div>
                                 
@@ -230,9 +230,9 @@ export default function Monotheism() {
                                     
                                         <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
                                     
-                                        <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClick(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span>
+                                        {/* <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClick(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span> */}
                                     
-                                        <span><i className="fa-regular fa-eye"></i> {topic.Views} </span>
+                                        {/* <span><i className="fa-regular fa-eye"></i> {topic.Views} </span> */}
                                     
                                     </div>
                                 
@@ -276,13 +276,13 @@ export default function Monotheism() {
                                             
                                                 <div className={style.image}>
                                                 
-                                                    <a href={`#${topic._id}`}><img src={`http://localhost:8080/uploads/Images/${topic.imageName}`} alt={topic.title} /></a>
+                                                    <a href={`#${topic.title}`}><img src={`http://147.79.101.225:2859/uploads/Images/${topic.imageName}`} alt={topic.title} /></a>
                                                 
                                                 </div>
                                             
                                                 <div className={style.cardBody}>
                                                 
-                                                    <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.cardTitle}><h4>{topic.title}</h4></a>
+                                                    <a href={`#${topic.title}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.cardTitle}><h4>{topic.title}</h4></a>
                                                 
                                                     <p className={style.paragraph}>{getDate(topic.createdAt)}</p>
                                                 
@@ -310,7 +310,7 @@ export default function Monotheism() {
                                     
                                         <li className={style.quickLink} key={topic._id}>
                                         
-                                            <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.blogTitle}>{topic.title}</a>
+                                            <a href={`#${topic.title}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.blogTitle}>{topic.title}</a>
                                         
                                         </li>
                                     
@@ -332,7 +332,7 @@ export default function Monotheism() {
                                     
                                         <li className={style.quickLink} key={topic._id}>
                                         
-                                            <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.mostLiked}>{topic.title}</a>
+                                            <a href={`#${topic.title}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.mostLiked}>{topic.title}</a>
                                         
                                         </li>
                                     

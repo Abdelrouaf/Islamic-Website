@@ -49,7 +49,7 @@ export default function FaithBlogTopic() {
     useEffect(() => {
         const fetchTopic = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/faithVideo/${id}`);
+                const response = await fetch(`http://147.79.101.225:2859/api/faithVideo/${id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -107,7 +107,7 @@ export default function FaithBlogTopic() {
     // Function to check if the title already exists in the API
     const checkTitleExists = async (title, idToExclude) => {
         try {
-            const response = await fetch('http://localhost:8080/api/faithVideo/');
+            const response = await fetch('http://147.79.101.225:2859/api/faithVideo/');
             const data = await response.json();
 
             // Access the array of topics
@@ -166,7 +166,7 @@ export default function FaithBlogTopic() {
             }
     
             if(isPayloadChanged) {
-                const response = await fetch(`http://localhost:8080/api/faithVideo/${id}`, {
+                const response = await fetch(`http://147.79.101.225:2859/api/faithVideo/${id}`, {
                     method: 'PUT',
                     body: payload
                 });
@@ -199,7 +199,7 @@ export default function FaithBlogTopic() {
         setIsDeleting(true)
 
         try {
-            const response = await fetch(`http://localhost:8080/api/faithVideo/${id}`, {
+            const response = await fetch(`http://147.79.101.225:2859/api/faithVideo/${id}`, {
                 method: 'DELETE',
             });
             if (response.ok) {

@@ -12,7 +12,7 @@ export default function EditIslam() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/lifeBlogs/');
+            const response = await fetch('http://147.79.101.225:2859/api/lifeBlogs/');
             const data = await response.json();
             
             setTopics(data.LifeBlog || []); 

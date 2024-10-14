@@ -12,7 +12,7 @@ export default function EditSawm() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/fastingBlog/');
+            const response = await fetch('http://147.79.101.225:2859/api/fastingBlog/');
             const data = await response.json();
 
             setTopics(data.FastingBlog || []); 

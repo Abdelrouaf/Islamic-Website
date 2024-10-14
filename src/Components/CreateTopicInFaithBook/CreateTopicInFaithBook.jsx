@@ -13,8 +13,8 @@ export default function CreateTopicInFaithBook() {
     // State for the current form data
     const [formData, setFormData] = useState({
         id: uuidv4(),
-        bookName: '',
-        image: '',
+        book: '',
+        imageName: '',
         imageURL:'',
         title: '',
         author: '',
@@ -36,7 +36,7 @@ export default function CreateTopicInFaithBook() {
             const imageURL = URL.createObjectURL(event.target.files[0]);
             setFormData((prevState) => ({
                 ...prevState,
-                image: file, // Save the file object in the formData
+                imageName: file, // Save the file object in the formData
                 imageURL: imageURL
             }));
         }
@@ -48,7 +48,7 @@ export default function CreateTopicInFaithBook() {
             // const imageURL = URL.createObjectURL(event.target.files[0]);
             setFormData((prevState) => ({
                 ...prevState,
-                bookName: file, // Save the file object in the formData
+                book: file, // Save the file object in the formData
                 // imageURL: imageURL
             }));
         }
@@ -65,7 +65,7 @@ export default function CreateTopicInFaithBook() {
 // Function to check if the title already exists in the API
 const checkTitleExists = async (title) => {
     try {
-        const response = await fetch('http://localhost:8080/api/faithBook/');
+        const response = await fetch('http://147.79.101.225:2859/api/faithBook/');
         const data = await response.json();
 
         // Access the array of topics
@@ -87,10 +87,10 @@ const { fetchData } = useOutletContext(); // Get the fetchData function
 
 // Save data to the API with title uniqueness check
 const saveData = async () => {
-    const { title, description, image, bookName, author } = formData;
+    const { title, description, imageName, book, author } = formData;
 
     // Validate required fields (optional but recommended)
-    if (!title || !description || !image || !bookName || (image && !(image instanceof File)) || (bookName && !(bookName instanceof File)) || !author) {
+    if (!title || !description || !imageName || !book || (imageName && !(imageName instanceof File)) || (book && !(book instanceof File)) || !author) {
         showToast('Invalid input, All inputs are required', 'invalid');
         return;
     }
@@ -114,12 +114,12 @@ const saveData = async () => {
 
         form.append('title', title);
         form.append('description', description);
-        form.append('bookName', bookName);
-        form.append('image', image);
+        form.append('book', book);
+        form.append('imageName', imageName);
         form.append('author', author);
 
         // Using Axios to make the POST request
-        const response = await axios.post('http://localhost:8080/api/faithBook/', form, {
+        const response = await axios.post('http://147.79.101.225:2859/api/faithBook/', form, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -139,10 +139,10 @@ const saveData = async () => {
     // Reset formData after attempting to save
     setFormData({
         title: '',
-        image: '',
+        imageName: '',
         author: '',
         description: '',
-        bookName: ''
+        book: ''
     });
 
     if(fileInputRef1) fileInputRef1.current.value = ''
@@ -193,7 +193,7 @@ const saveData = async () => {
                                             />
                                             <i className="fa-solid fa-plus"></i>
                                         </div>
-                                        {formData.image && (
+                                        {formData.imageURL && (
                                             <div className={`${layout.uploadImage} p-2`}>
                                                 <img src={formData.imageURL} alt="Uploaded" />
                                             </div>
@@ -267,7 +267,7 @@ const saveData = async () => {
                         
                             <div className={`${layout.rightInput} ${layout.input} w-100`}>
                             
-                                <input type="file" accept="application/pdf" className='form-control py-2' placeholder='enter book url' id="bookName"
+                                <input type="file" accept="application/pdf" className='form-control py-2' placeholder='enter book url' id="book"
                                     onChange={onFileChange} 
                                     ref={fileInputRef2} />
                             

@@ -11,16 +11,16 @@ export default function Layout() {
     useEffect(() => {
       // Array of all API requests
       const apiRequests = [
-        fetch('http://localhost:8080/api/faithBook/'),
-        fetch('http://localhost:8080/api/faithVideo'),
-        fetch('http://localhost:8080/api/lifeBlogs/'),
-        fetch('http://localhost:8080/api/monotheismBlog/'),
-        fetch('http://localhost:8080/api/news/'),
-        fetch('http://localhost:8080/api/certificateBlog/'),
-        fetch('http://localhost:8080/api/prayerBlog/'),
-        fetch('http://localhost:8080/api/fastingBlog/'),
-        fetch('http://localhost:8080/api/zakatBlog/'),
-        fetch('http://localhost:8080/api/haijBlog/'),
+        fetch('http://147.79.101.225:2859/api/faithBook/'),
+        fetch('http://147.79.101.225:2859/api/faithVideo'),
+        fetch('http://147.79.101.225:2859/api/lifeBlogs/'),
+        fetch('http://147.79.101.225:2859/api/monotheismBlog/'),
+        fetch('http://147.79.101.225:2859/api/news/'),
+        fetch('http://147.79.101.225:2859/api/certificateBlog/'),
+        fetch('http://147.79.101.225:2859/api/prayerBlog/'),
+        fetch('http://147.79.101.225:2859/api/fastingBlog/'),
+        fetch('http://147.79.101.225:2859/api/zakatBlog/'),
+        fetch('http://147.79.101.225:2859/api/haijBlog/'),
         fetch('https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/quran.json'),
         fetch('https://ahegazy.github.io/muslimKit/json/azkar_sabah.json')
         ];

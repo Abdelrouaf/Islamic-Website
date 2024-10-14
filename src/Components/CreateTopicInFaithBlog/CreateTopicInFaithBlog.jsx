@@ -40,7 +40,7 @@ export default function CreateTopicInFaithBlog() {
 // Function to check if the title already exists in the API
 const checkTitleExists = async (title) => {
     try {
-        const response = await fetch('http://localhost:8080/api/faithVideo/');
+        const response = await fetch('http://147.79.101.225:2859/api/faithVideo/');
         const data = await response.json();
 
         // Access the array of topics
@@ -93,7 +93,7 @@ const saveData = async () => {
         form.append('videoName', videoName);
 
         // Using Axios to make the POST request
-        const response = await axios.post('http://localhost:8080/api/faithVideo/', form, {
+        const response = await axios.post('http://147.79.101.225:2859/api/faithVideo/', form, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

@@ -47,7 +47,7 @@ export default function ShahadahTopic() {
     useEffect(() => {
         const fetchTopic = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/certificateBlog/${id}`);
+                const response = await fetch(`http://147.79.101.225:2859/api/certificateBlog/${id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -122,7 +122,7 @@ export default function ShahadahTopic() {
     // Function to check if the title already exists in the API
     const checkTitleExists = async (title, idToExclude) => {
         try {
-            const response = await fetch('http://localhost:8080/api/certificateBlog/');
+            const response = await fetch('http://147.79.101.225:2859/api/certificateBlog/');
             const data = await response.json();
 
             // Access the array of topics
@@ -175,7 +175,7 @@ export default function ShahadahTopic() {
             }
     
             if(isPayloadChanged) {
-                const response = await axios.put(`http://localhost:8080/api/certificateBlog/${id}`, payload);
+                const response = await axios.put(`http://147.79.101.225:2859/api/certificateBlog/${id}`, payload);
         
                 if (response.status === 200 || response.status === 201) {
                     showToast('Topic updated successfully!', 'success')
@@ -204,7 +204,7 @@ export default function ShahadahTopic() {
         setIsDeleting(true)
 
         try {
-            const response = await fetch(`http://localhost:8080/api/certificateBlog/${id}`, {
+            const response = await fetch(`http://147.79.101.225:2859/api/certificateBlog/${id}`, {
                 method: 'DELETE',
             });
 

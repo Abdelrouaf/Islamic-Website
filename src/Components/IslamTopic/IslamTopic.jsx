@@ -45,7 +45,7 @@ export default function IslamTopic() {
     useEffect(() => {
         const fetchTopic = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/lifeBlogs/${id}`);
+                const response = await fetch(`http://147.79.101.225:2859/api/lifeBlogs/${id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -93,7 +93,7 @@ export default function IslamTopic() {
     // Function to check if the title already exists in the API
     const checkTitleExists = async (title, idToExclude) => {
         try {
-            const response = await fetch('http://localhost:8080/api/lifeBlogs/');
+            const response = await fetch('http://147.79.101.225:2859/api/lifeBlogs/');
             const data = await response.json();
 
             // Access the array of topics
@@ -146,7 +146,7 @@ export default function IslamTopic() {
             }
     
             if(isPayloadChanged) {
-                const response = await axios.put(`http://localhost:8080/api/lifeBlogs/${id}`, payload, {
+                const response = await axios.put(`http://147.79.101.225:2859/api/lifeBlogs/${id}`, payload, {
                     headers: {
                         "Content-Type": 'application/json'
                     }
@@ -179,7 +179,7 @@ export default function IslamTopic() {
         setIsDeleting(true)
 
         try {
-            const response = await fetch(`http://localhost:8080/api/lifeBlogs/${id}`, {
+            const response = await fetch(`http://147.79.101.225:2859/api/lifeBlogs/${id}`, {
                 method: 'DELETE',
             });
 

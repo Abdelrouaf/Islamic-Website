@@ -12,7 +12,7 @@ export default function EditHaij() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/haijBlog/');
+            const response = await fetch('http://147.79.101.225:2859/api/haijBlog/');
             const data = await response.json();
             
             setTopics(data.HaijBlog || []); 

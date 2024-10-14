@@ -12,7 +12,7 @@ export default function EditFaithBlog() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/faithVideo/');
+            const response = await fetch('http://147.79.101.225:2859/api/faithVideo/');
             const data = await response.json();
             
             setTopics(data.VideoBlog || []); 

@@ -39,9 +39,10 @@ import News from './Components/News/News';
 import CreateTopicInNews from './Components/CreateTopicInNews/CreateTopicInNews';
 import NewsTopic from './Components/NewsTopic/NewsTopic';
 import EditNews from './Components/EditNews/EditNews'
-import Quran from './Components/Quran/Quran';
-import Azkar from './Components/Azkar/Azkar';
+import QuranSurahs from './Components/QuranSurahs/QuranSurahs';
 import './Components/Style/Base/Base.scss'
+import AzkarCatagories from './Components/AzkarCatagories/AzkarCatagories';
+import AzkarDetails from './Components/AzkarDetails/AzkarDetails';
 
 function App() {
 
@@ -55,9 +56,11 @@ function App() {
         
           <Route index element={<Home />} />
         
-          <Route path='quran' element={<Quran />} />
+          <Route path='quran' element={<QuranSurahs />} />
 
-          <Route path='azkar' element={<Azkar />} />
+          <Route path='azkarCatagories/:category' element={<AzkarDetails />} />
+
+          <Route path='azkarCatagories' element={<AzkarCatagories />} />
 
           <Route path='monotheism' element={<Monotheism />} />
         
