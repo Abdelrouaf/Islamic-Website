@@ -429,11 +429,11 @@
       .shareButtons {
         direction: ltr;
         position: absolute;
-        left: 70px;
+        left: 50px;
         top: -30px;
         display: flex;
         background: white;
-        width: 200px;
+        width: 150px;
         justify-content: space-between;
         padding: 10px;
         border-radius: 10px;
@@ -455,7 +455,7 @@
           }
         
           i {
-            font-size: 35px;
+            font-size: 30px;
           }
         
         }
