@@ -239,19 +239,22 @@ export default function Admin() {
 
     useEffect(() => {
         const isMonotheismActive = location.pathname.startsWith('/en/monotheism');
+        setOpenMonotheism(isMonotheismActive)
         const isEditActive = location.pathname.startsWith('/edit');
         const isIslamActive = location.pathname.startsWith('/en/islam');
+        setOpenIslam(isIslamActive)
         const isNewsActive = location.pathname.startsWith('/en/news')
+        setOpenNews(isNewsActive)
         if (isMonotheismActive || isEditActive || isIslamActive || isNewsActive) {
             setOpen3(true);
-            setOpenMonotheism(true)
-            setOpenIslam(true)
-            setOpenNews(true)
+            // setOpenMonotheism(true)
+            // setOpenIslam(true)
+            // setOpenNews(true)
         } else {
             setOpen3(false);
-            setOpenMonotheism(false)
-            setOpenIslam(false)
-            setOpenNews(false)
+            // setOpenMonotheism(false)
+            // setOpenIslam(false)
+            // setOpenNews(false)
         }
     
         const isPillarsActive = location.pathname.startsWith('/en/pillars');
