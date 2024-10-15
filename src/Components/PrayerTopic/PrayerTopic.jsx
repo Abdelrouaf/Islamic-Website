@@ -250,15 +250,15 @@ export default function PrayerTopic() {
             <div className="container">
                 <div className={layout.inputs}>
                     {/* Image Upload Section */}
-                    <div className="row align-items-center mb-3">
+                    <div className="row align-items-center justify-content-between mb-3">
                         <div className="col-2">
                             <div className={layout.inputTitle}>
                                 <h4>Image</h4>
                             </div>
                         </div>
-                        <div className="col-10">
+                        <div className="col-sm-12 col-md-10">
                             <div className={layout.rightInput}>
-                                <div className="d-flex gap-4">
+                                <div className="d-flex flex-wrap gap-4">
                                     <div className={layout.uploadImage}>
                                         <input
                                             type="file"

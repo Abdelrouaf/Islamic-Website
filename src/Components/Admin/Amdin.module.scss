@@ -448,7 +448,7 @@ ul {
 }
 
 .link i {
-    margin-right: 8px;
+    margin-right: 15px;
     font-size: 18px;
 }
 
@@ -493,12 +493,17 @@ ul {
 .sidebarSubmenu .topicIcon img {
     width: 25px;
     height: 25px;
-    margin-left: 5px;
+    // margin-left: 5px;
+    // margin-top: 10px;
+    margin-right: 10px;
 }
 
 .sidebarSubmenu .topicIcon a {
     // margin: 10px 0;
-    padding-left: 15px;
+    // padding-left: 15px;
+    display: block;
+    width: 100%;
+    margin-left: -3px;
 }
 
 @keyframes sidebar-menu-open {
@@ -613,7 +618,15 @@ ul {
 
     .SidebarWrapper {
         display: none;
-        width: 40px;
+        width: 42px;
+    }
+
+    .search {
+        width: 100% !important;
+    }
+
+    .sidebarSubmenu .topicIcon a span {
+        display: none;
     }
 
     .sidebarLogo {

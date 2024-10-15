@@ -153,13 +153,13 @@ const saveData = async () => {
             <div className="container">
                 <form onSubmit={(e) => { e.preventDefault(); saveData(); }}>
                     <div className={layout.inputs}>
-                        <div className="row align-items-center mb-3">
+                        <div className="row align-items-center justify-content-between mb-3">
                             <div className="col-2">
                                 <div className={layout.inputTitle}>
                                     <h4>Image</h4>
                                 </div>
                             </div>
-                            <div className="col-10">
+                            <div className="col-sm-12 col-md-10">
                                 <div className={layout.rightInput}>
                                     <div className='d-flex gap-4'>
                                         <div className={layout.uploadImage}>

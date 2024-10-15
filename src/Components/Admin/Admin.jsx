@@ -221,6 +221,9 @@ export default function Admin() {
     const location = useLocation();
 
     const [open4, setOpen4] = useState(false)
+
+    const [openMonotheism, setOpenMonotheism] = useState(false)
+
     const [openShahadah, setOpenShahadah] = useState(false)
     const [openPrayer, setOpenPrayer] = useState(false)
     const [openSawm, setOpenSawm] = useState(false)
@@ -231,6 +234,9 @@ export default function Admin() {
     const [openFaithBook, setOpenFaithBook] = useState(false)
     const [openFaithBlog, setOpenFaithBlog] = useState(false)
 
+    const [openIslam, setOpenIslam] = useState(false)
+    const [openNews, setOpenNews] = useState(false)
+
     useEffect(() => {
         const isMonotheismActive = location.pathname.startsWith('/en/monotheism');
         const isEditActive = location.pathname.startsWith('/edit');
@@ -238,8 +244,14 @@ export default function Admin() {
         const isNewsActive = location.pathname.startsWith('/en/news')
         if (isMonotheismActive || isEditActive || isIslamActive || isNewsActive) {
             setOpen3(true);
+            setOpenMonotheism(true)
+            setOpenIslam(true)
+            setOpenNews(true)
         } else {
             setOpen3(false);
+            setOpenMonotheism(false)
+            setOpenIslam(false)
+            setOpenNews(false)
         }
     
         const isPillarsActive = location.pathname.startsWith('/en/pillars');
@@ -295,11 +307,11 @@ export default function Admin() {
                             
                             </div> */}
                         
-                            <div className={`${style.headerLogo}`}>
+                            {/* <div className={`${style.headerLogo}`}>
                             
                                 <Link to='/en/dashboard' className='text-decoration-none d-flex justify-content-between align-items-center' ><img src={logoWithoutName} alt="" width={50} /></Link>
                             
-                            </div>
+                            </div> */}
                         
                             <div className={`d-flex w-75 ${style.search} ${style.input}`}>
                             
@@ -330,11 +342,11 @@ export default function Admin() {
                     
                         <div className={`d-flex align-items-center gap-3 fs-5 mx-3 ${style.quickIcons}`}>
                         
-                            <div className={`fs-4 ${style.language}`}>
+                            {/* <div className={`fs-4 ${style.language}`}>
                             
                                 <i className="fa-solid fa-language"></i>
                             
-                            </div>
+                            </div> */}
                         
                             {/* <div className={`${style.notifications}`}>
                             
@@ -439,7 +451,7 @@ export default function Admin() {
                                 
                                     <ul className={`${style.sidebarSubmenu} ${open3 ? `${style.active}`: `${style.inactive}` } `}>
                                     
-                                        <li className={style.topicIcon}><img src={monothesismIcon} alt="" /><NavLink to='monotheism/create/topic' className={({ isActive }) => {const isMonotheismActive = location.pathname.startsWith('/en/monotheism'); return `${style.link} ${isActive || isMonotheismActive ? style.linkHover : style.linkTransparent}`;}}>Monotheism</NavLink></li>
+                                        <li className={`${style.topicIcon} ${style.link} ${openMonotheism ? style.linkHover : style.linkTransparent}`}><NavLink to='monotheism/create/topic' className={({ isActive }) => {const isMonotheismActive = location.pathname.startsWith('/en/monotheism'); return `text-white`;}}><img src={monothesismIcon} alt="" /><span>Monotheism</span></NavLink></li>
                                     
                                         <li>
                                         
@@ -447,15 +459,15 @@ export default function Admin() {
                                         
                                             <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${open4 ? `${style.active}`: `${style.inactive}` } `}>
 
-                                                <li className={style.topicIcon}><img src={shahadahIcon} alt="" /><NavLink to='pillars/shahadah/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `${style.link} ${isActive || openShahadah ? style.linkHover : style.linkTransparent}`;}}>Shahadah</NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${openShahadah ? style.linkHover : style.linkTransparent}`}><NavLink to='pillars/shahadah/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `text-white`;}}><img src={shahadahIcon} alt="" /><span>Shahadah</span></NavLink></li>
 
-                                                <li className={style.topicIcon}><img src={prayerIcon} alt="" /><NavLink to='pillars/prayer/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `${style.link} ${isActive || openPrayer ? style.linkHover : style.linkTransparent}`;}}>Prayer</NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${openPrayer ? style.linkHover : style.linkTransparent}`}><NavLink to='pillars/prayer/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `text-white`;}}><img src={prayerIcon} alt="" /><span>Prayer</span></NavLink></li>
 
-                                                <li className={style.topicIcon}><img src={sawmIcon} alt="" /><NavLink to='pillars/sawm/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `${style.link} ${isActive || openSawm ? style.linkHover : style.linkTransparent}`;}}>Sawm</NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${openSawm ? style.linkHover : style.linkTransparent}`}><NavLink to='pillars/sawm/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `text-white`;}}><img src={sawmIcon} alt="" /><span>Sawm</span></NavLink></li>
 
-                                                <li className={style.topicIcon}><img src={zakatIcon} alt="" /><NavLink to='pillars/zakat/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `${style.link} ${isActive || openZakat ? style.linkHover : style.linkTransparent}`;}}>Zakat</NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${openZakat ? style.linkHover : style.linkTransparent}`}><NavLink to='pillars/zakat/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `text-white`;}}><img src={zakatIcon} alt="" /><span>Zakat</span></NavLink></li>
 
-                                                <li className={style.topicIcon}><img src={haijIcon} alt="" /><NavLink to='pillars/haij/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `${style.link} ${isActive || openHaij ? style.linkHover : style.linkTransparent}`;}}>Haij</NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${openHaij ? style.linkHover : style.linkTransparent}`}><NavLink to='pillars/haij/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/pillars'); return `text-white`;}}><img src={haijIcon} alt="" /><span>Haij</span></NavLink></li>
 
                                             </ul>
                                         
@@ -467,17 +479,17 @@ export default function Admin() {
                                         
                                             <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${open2 ? `${style.active}`: `${style.inactive}` } `}>
 
-                                                <li className={style.topicIcon}><img src={book} alt="" /><NavLink to='faith/book/create' className={({ isActive }) => {const isFaithActive = location.pathname.startsWith('/en/faith/book'); return `${style.link} ${isActive || openFaithBook ? style.linkHover : style.linkTransparent}`;}}>Book</NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${openFaithBook ? style.linkHover : style.linkTransparent}`}><NavLink to='faith/book/create' className={({ isActive }) => {const isFaithActive = location.pathname.startsWith('/en/faith/book'); return `text-white`;}}><img src={book} alt="" /><span>Book</span></NavLink></li>
 
-                                                <li className={style.topicIcon}><img src={blog} alt="" /><NavLink to='faith/blog/create' className={({ isActive }) => {const isFaithActive = location.pathname.startsWith('/en/faith/blog'); return `${style.link} ${isActive || openFaithBlog ? style.linkHover : style.linkTransparent}`;}}>Blog</NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${openFaithBlog ? style.linkHover : style.linkTransparent}`}><NavLink to='faith/blog/create' className={({ isActive }) => {const isFaithActive = location.pathname.startsWith('/en/faith/blog'); return `text-white`;}}><img src={blog} alt="" /><span>Blog</span></NavLink></li>
 
                                             </ul>
                                         
                                         </li>
                                     
-                                        <li className={style.topicIcon}><img src={islamIcon} alt="" /><NavLink to='islam/create' className={({isActive}) => {const isIslamActive = location.pathname.startsWith('/en/islam'); return ( ` ${style.link} ` + (isActive || isIslamActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}>About Islam</NavLink></li>
+                                        <li className={`${style.topicIcon} ${style.link} ${openIslam ? style.linkHover : style.linkTransparent}`}><NavLink to='islam/create' className={({isActive}) => {const isIslamActive = location.pathname.startsWith('/en/islam'); return ( ` text-white `) }}><img src={islamIcon} alt="" /><span>About Islam</span></NavLink></li>
                                     
-                                        <li className={style.topicIcon}><img src={news} alt="" /><NavLink to='news/create' className={({isActive}) => {const isNewsActive = location.pathname.startsWith('/en/news'); return ( ` ${style.link} ` + (isActive || isNewsActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}>News</NavLink></li>
+                                        <li className={`${style.topicIcon} ${style.link} ${openNews ? style.linkHover : style.linkTransparent}`}><NavLink to='news/create' className={({isActive}) => {const isNewsActive = location.pathname.startsWith('/en/news'); return ( ` text-white `) }}><img src={news} alt="" /><span>News</span></NavLink></li>
 
                                     </ul>
                                 
