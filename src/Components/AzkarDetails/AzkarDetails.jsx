@@ -366,7 +366,7 @@ export default function AzkarDetails() {
                                             
                                                 <p className={style.zikrDescription}>{zkarItem.zikr}</p>
                                             
-                                                { zkarItem.reference.length > 0 && !zkarItem.reference.includes('سورة') ? <span className={style.reference}>[ رواه: {zkarItem.reference} ]</span> : '' }
+                                                { zkarItem.reference.length > 0 && !zkarItem.reference.includes('سورة') && !zkarItem.reference.includes('البقرة') ? <span className={style.reference}>[ رواه: {zkarItem.reference} ]</span> : '' }
                                             
                                             </div>
                                         
