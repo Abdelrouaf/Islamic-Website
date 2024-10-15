@@ -306,7 +306,7 @@ export default function Home() {
                                 
                                     <div className={style.types}>
                                     
-                                        <h4 className={`${style.pillar} ${style.three}`}>Sawm</h4>
+                                        <h4 className={`${style.pillar} ${style.three}`}>Zakat</h4>
                                     
                                         <span className={style.enPillar}>(Fasting)</span>
                                     
@@ -332,7 +332,7 @@ export default function Home() {
                                 
                                     <div className={style.types}>
                                     
-                                        <h4 className={`${style.pillar} ${style.four}`}>Zakat</h4>
+                                        <h4 className={`${style.pillar} ${style.four}`}>Sawm</h4>
                                     
                                         <span className={style.enPillar}>(Almsgiving)</span>
                                     

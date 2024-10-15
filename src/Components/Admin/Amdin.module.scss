@@ -484,9 +484,21 @@ ul {
     -webkit-animation: sidebar-menu-open .3s alternate forwards;
 }
 
-.sidebarSubmenu li a {
-    margin: 10px 0;
-    padding-left: 25px;
+.sidebarSubmenu .topicIcon {
+    display: flex;
+    align-content: center;
+    flex-wrap: nowrap;
+}
+
+.sidebarSubmenu .topicIcon img {
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
+}
+
+.sidebarSubmenu .topicIcon a {
+    // margin: 10px 0;
+    padding-left: 15px;
 }
 
 @keyframes sidebar-menu-open {
