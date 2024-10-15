@@ -411,7 +411,7 @@ export default function Admin() {
         
                 <div className={` ${style.pageBodyWrapper}`}>
                 
-                    <div className={`${!openMenu ? ` ${style.SidebarWrapper} ` : `${style.SidebarWrapperWidth}`}  ${theme === 'dark' ?  ` ${style.SidebarWrapperDarkMode} ` : ` ${style.SidebarWrapper} `}  `}>
+                    <div className={`${!openMenu ? ` ${style.SidebarWrapper} ` : `${style.SidebarWrapper}`}  ${theme === 'dark' ?  ` ${style.SidebarWrapperDarkMode} ` : ` ${style.SidebarWrapper} `}  `}>
                     
                         <div className={`${style.sidebarLogo}`}>
                         
