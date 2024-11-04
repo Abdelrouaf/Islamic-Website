@@ -4,12 +4,34 @@
     color: $redColor !important;
 }
 
+
+
+// .notSelection {
+//     background-color: transparent !important;
+//     color: $blackColor !important;
+// }
+
 .directionRTL {
     direction: rtl !important;
 }
 
 .directionLTR {
     direction: ltr !important;
+}
+
+.verseNumber {
+    background-color: #f9f3d3; 
+    border: 2px solid #ca784e; 
+    border-radius: 50%; 
+    padding: 10px 15px;
+    margin-inline: 10px;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #ca784e; 
+    margin-right: 10px;
+    font-family: 'Amiri', serif;
 }
 
 .blogSection {
@@ -109,8 +131,24 @@
                 font-size: 18px;
                 font-weight: bold;
                 direction: rtl;
+                position: relative;
+            
+                button {
+                    position: absolute;
+                    background: #000000;
+                    top: -45px;
+                    left: 5px;
+                    border: none;
+                    color: white;
+                    z-index: 100;
+                }
             }
         
+            .selection {
+                background-color: beige !important;
+                color: $blackColor !important;
+            }
+
             .verseNumber {
                 background-color: #f9f3d3; 
                 border: 2px solid #ca784e; 
@@ -634,11 +672,49 @@
 
     .searchVersesBox {
         padding: 20px;
-        border: 1px solid $blackColor;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        background-image: url('../../images/backgroundSearch.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        // background-attachment: fixed;
         border-radius: 10px;
         -webkit-border-radius: 10px;
         -moz-border-radius: 10px;
         -ms-border-radius: 10px;
         -o-border-radius: 10px;
-}
+    
+        select {
+            width: 20%;
+        }
+    
+        .verseInArabic {
+            direction: rtl;
+            font-weight: bolder;
+            font-size: 25px;
+        }
+
+        .verseInEnglish {
+            @extend .verseInArabic;
+            direction: ltr;
+        }
+
+        .surahBottomDetails {
+            direction: rtl;
+        
+            .typeSurah {
+                color: #e80139;
+                margin-right: 5px;
+            }
+        
+            .nameSurahInSearchBox {
+                color: #e80139;
+            }
+        }
+    }
+
+    ::selection {
+        background-color: beige !important;
+        color: $blackColor !important;
+    }
 }

@@ -1,56 +1,76 @@
 import React, { useEffect, useRef, useState } from 'react'
 import style from './AzkarDetails.module.scss'
-import { motion, stagger } from 'framer-motion'
-import { useParams } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { Link, useParams } from 'react-router-dom'
 import { Azkar } from 'islam.js'
 import { v4 as uuidv4 } from 'uuid';
+import image1 from '../../images/morning.png'
+import image2 from '../../images/nightZkar.png'
+import image3 from '../../images/wearing.png'
+import image4 from '../../images/sleepingZkar.png'
 import '@splidejs/splide/dist/css/splide.min.css';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 
 export default function AzkarDetails() {
 
-    const azkarItems = [
-        "Azkar paragraph 1",
-        "Azkar paragraph 2",
-        "Azkar paragraph 3"
-      ];
+    const images = [
+        image1,
+        image2,
+        image4,
+        image3
+    ];
 
-    const [title, setTitle] = useState(null)
     const [topics, setTopics] = useState([])
-    const mostLikedRef = useRef(null); // Ref to observe the "most liked" section
     const { category } = useParams();
     const azkar = new Azkar()
-    const [categoryContent, setCategoryContent] = useState([]); // State to store the Azkar content
-    // Track the current active slide index
+    const allAzkar = azkar.getAll()
+    const [categoryContent, setCategoryContent] = useState([]); 
     const [currentIndex, setCurrentIndex] = useState(0);
-    
-    useEffect(() => {
-      // Fetch the Azkar content for the selected category
-      const content = azkar.getByCategory(category); // Assuming `getCategoryContent` exists
-      setCategoryContent(content); // Store the content in state
-    }, []);
-    // Fetch data from the API when the component mounts
+    const splideRef = useRef();
 
     const fetchData = async (url) => {
         try {
-            // const response = await fetch(`https://ahegazy.github.io/muslimKit/json/${'azkar_sabah'}.json`);
             const response = await fetch(url);
             const data = await response.json();
 
             if (data && data.content) {
                 setTopics(data.content);
-                setTitle(data.title);
             }             
 
-        } catch (error) {
-            console.error("error is ", error)
+        } catch {
         } 
     };
 
     useEffect(() => {
+        if (category) {
+            const content = azkar.getByCategory(category);
+            setCategoryContent(content);
+        }
 
-        fetchData(`https://ahegazy.github.io/muslimKit/json/${'azkar_sabah'}.json`);
-    }, []);
+    }, [category]);
+
+    useEffect(() => {
+    
+        if ( category && categoryContent.length > 0 ) {
+            if ( categoryContent[0].category === 'أذكار الصباح' ) {
+                fetchData(`https://ahegazy.github.io/muslimKit/json/azkar_sabah.json`);
+            } else if ( categoryContent[0].category === 'أذكار المساء' ) {
+                fetchData('https://ahegazy.github.io/muslimKit/json/azkar_massa.json')
+            } else {
+                setTopics([])
+            }
+        }
+
+    }, [category, categoryContent]);
+
+    const handleZikrClick = (zkarName) => {
+        const content = azkar.getByCategory(zkarName);
+        setCategoryContent(content);
+        setCurrentIndex(0); 
+        if (splideRef.current) {
+            splideRef.current.go(0);
+        }
+    };
 
     const handleCopy = (text) => {
         navigator.clipboard.writeText(text).then(() => {
@@ -64,15 +84,13 @@ export default function AzkarDetails() {
 
     // Function to show a new toast notification
     const showToast = (message, type) => {
-        const newToast = { id: uuidv4(), message, type }; // Create a unique ID for each toast
+        const newToast = { id: uuidv4(), message, type }; 
 
-        // Add the new toast to the list of toasts
         setToasts((prevToasts) => [...prevToasts, newToast]);
 
-        // Remove the toast after 6 seconds
         setTimeout(() => {
             setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
-        }, 6000); // Keep the toast for 6 seconds
+        }, 6000); 
     };
 
     const siteName = "Shared by Taw3ya"; 
@@ -109,7 +127,7 @@ export default function AzkarDetails() {
     };
 
     const handleShareClick = () => {
-        setShowShareButtons((prev) => !prev); // Toggle share button visibility
+        setShowShareButtons((prev) => !prev); 
     };
 
     const text = "Morning, Evening & After Pray"
@@ -151,6 +169,10 @@ export default function AzkarDetails() {
         visible: { opacity: 1, y: 0, transition: { duration: 1 } }
     };
 
+    if (!category) {
+        return <div>Loading...</div>; // Handle loading state
+    }
+
     return (
     
         <>
@@ -179,175 +201,20 @@ export default function AzkarDetails() {
 
                 <div className="container">
                 
-                    {/* <div className="text-center mb-5">
-                    
-                        <span className={style.headTitle}>About Islam</span>
-                    
-                        <h3 className={style.title}>The Purpose Of Life</h3>
-                    
-                    </div> */}
-                
-                    {/* <div className={style.titles}>
-                    
-                        <span className={style.headTitle2}>About Islam</span>
-                    
-                        <h3 className={style.title2}>The Purpose Of Life</h3>
-                    
-                    </div> */}
-                
                     <div className="row mt-5">
                     
-                        {/*<div className="col-md-4">
-                        
-                            <motion.div initial='hidden' animate='visible' variants={toUp} className={`${style.box} ${style.mostLikedBox} ${style.sticky}`} ref={mostLikedRef}>
-
-                                    <h4 className={style.title}>All Azkar</h4>
-
-                                    <ul>
-                                            <li className={style.quickLink}>
-                                            
-                                                <div className={`${style.cardBox}`}>
-                                                
-                                                    <div className={style.cardBody}>
-                                                    
-                                                        <a href="#"
-                                                            onClick={(e) => { e.preventDefault(); handleRemembranceClick('morning') }} className={`${style.cardTitle} d-flex justify-content-between align-items-center`}>
-                                                        
-                                                            <h4>Morning remembrances</h4>
-                                                        
-                                                            <h4> اذكار الصباح </h4>
-                                                        
-                                                        </a>
-                                                    
-                                                    </div>
-                                                
-                                                </div>
-                                            
-                                            </li>
-                                        
-                                            <li className={style.quickLink}>
-                                            
-                                                <div className={`${style.cardBox}`}>
-                                                
-                                                    <div className={style.cardBody}>
-                                                    
-                                                        <a href="#"
-                                                            onClick={(e) => { e.preventDefault(); handleRemembranceClick('evening') }} className={`${style.cardTitle} d-flex justify-content-between align-items-center`}>
-                                                        
-                                                            <h4>Evening prayers</h4>
-                                                        
-                                                            <h4> اذكار المساء </h4>
-                                                        
-                                                        </a>
-                                                    
-                                                    </div>
-                                                
-                                                </div>
-                                            
-                                            </li>
-                                        
-                                            <li className={style.quickLink}>
-                                            
-                                                <div className={`${style.cardBox}`}>
-                                                
-                                                    <div className={style.cardBody}>
-                                                    
-                                                        <a href="#"
-                                                            onClick={(e) => { e.preventDefault(); handleRemembranceClick('afterPrayer') }} className={`${style.cardTitle} d-flex justify-content-between align-items-center`}>
-                                                        
-                                                            <h4>Remembrances after prayer</h4>
-                                                        
-                                                            <h4> اذكار بعد الصلاة </h4>
-                                                        
-                                                        </a>
-                                                    
-                                                    </div>
-                                                
-                                                </div>
-                                            
-                                            </li>
-                                        
-                                            <li className={style.quickLink}>
-                                            
-                                                <div className={`${style.cardBox}`}>
-                                                
-                                                    <div className={style.cardBody}>
-                                                    
-                                                        <a href="#"
-                                                            onClick={(e) => { e.preventDefault(); handleRemembranceClick('afterPrayer') }} className={`${style.cardTitle} d-flex justify-content-between align-items-center`}>
-                                                        
-                                                            <h4>{category}</h4>
-                                                                                                            
-                                                        </a>
-                                                    
-                                                    </div>
-                                                
-                                                </div>
-                                            
-                                            </li>
-                                        
-                                    </ul>
-                                
-                            </motion.div>
-
-                        </div> */}
-
-                        {/* <motion.div initial='hidden' animate='visible' variants={toUp} className="col-md-8">
-
-                            <div className={style.azkarBox}>
-
-                                <div className={style.topicDesign}>
-                                    
-                                    <h3 className={style.title}> {title ? title : "اذكار الصباح"}</h3>
-                                
-                                </div>
-
-                                {topics.length > 0 ? 
-
-                                    topics.map((azkar, index) => (
-
-                                        <div key={index} className={style.topicSection}>
-
-                                            <div className={style.azkar}>
-
-                                                    <p key={index} className={`${style.paragraph} d-inline rtl`}>
-                                                    
-                                                        {azkar.zekr}
-                                                    
-                                                    </p>
-                                                
-                                                    <div className={style.btns}>
-
-                                                        <button className={style.downloadBtn}>{azkar.repeat}</button>
-
-                                                    </div>
-
-                                            </div>
-                                        
-                                        </div>
-                                    
-                                    )) 
-                                
-                                : (
-                                
-                                    <p>No topics available.</p>
-                                
-                                )}
-
-                            </div>
-                        
-                        </motion.div> */}
                         <h1 className='text-center'>{category}</h1>
                         
                         <div className='col-lg-12' >
                         
-                            <Splide
+                            <Splide ref={splideRef}
                                 options={{
                                     type: 'loop',
                                     perPage: 1,
                                     arrows: true,
                                     pagination: false,
                                     drag: true,
+                                    height: '210px'
                                 }}
                             
                                 onMove={(splide) => {
@@ -356,48 +223,34 @@ export default function AzkarDetails() {
                                 }}
                             >
                         
-                                {categoryContent.map((zkarItem, index) => (
-                                
+                                { topics.length > 0 ? topics.map( (zikr, index) => (
+
                                     <SplideSlide key={index} style={{ height: '400px' }}>
                                     
-                                        <div className={`text-center d-flex justify-content-center align-items-center ${style.box}`}>
-                                        
-                                            <div>
-                                            
-                                                <p className={style.zikrDescription}>{zkarItem.zikr}</p>
-                                            
-                                                { zkarItem.reference.length > 0 && !zkarItem.reference.includes('سورة') && !zkarItem.reference.includes('البقرة') ? <span className={style.reference}>[ رواه: {zkarItem.reference} ]</span> : '' }
-                                            
+                                        <div className={style.bigBox}>
+
+                                            <div className={`text-center d-flex justify-content-center align-items-center ${style.box2}`}>
+
+                                                <div className=''>
+
+                                                    <p className={style.zikrDescription}>{zikr.zekr}</p>
+
+                                                </div>
+
                                             </div>
-                                        
+
                                             <div className={style.counter}>
-                                            
-                                                { zkarItem.count.length > 0 ? <span className={style.count}> التكرار : <span> {zkarItem.count} </span> | </span>  : '' }
-                                            
-                                                {/* <span className={style.share}>
-                                                
-                                                    مشاركة <i className="fa-solid fa-share-nodes"></i>
-                                                
-                                                    <div className={style.shareButtons}>
-                                                    
-                                                        <span className={style.copy} title='copy' onClick={ () => {handleCopy(zkarItem.zikr)} }>  <i className="fa-regular fa-copy"></i> </span>
-                                                    
-                                                        <span onClick={() => handleShareTelegram(zkarItem.zikr)} ><i class="fa-brands fa-telegram"></i> </span>
-                                                    
-                                                        <span onClick={() => handleShareWhatsApp(zkarItem.zikr)} ><i class="fa-brands fa-whatsapp"></i> </span>
-                                                    
-                                                    </div>
-                                                
-                                                </span> */}
-                                            
+
+                                                { zikr.repeat > 1 ? <span className={style.count}> التكرار : <span> {zikr.repeat} </span> | </span>  : '' }
+
                                                 <span className={style.share} onClick={handleShareClick}>
-                                            مشاركة <i className="fa-solid fa-share-nodes"></i>
-                                            {showShareButtons && (
+                                                مشاركة <i className="fa-solid fa-share-nodes"></i>
+                                                {showShareButtons && (
                                                 <div className={style.shareButtons}>
                                                     <motion.span
                                                         className={style.copy}
                                                         title='copy'
-                                                        onClick={() => { handleCopy(zkarItem.zikr); }}
+                                                        onClick={() => { handleCopy(zikr.zekr); }}
                                                         initial="hidden"
                                                         animate="visible"
                                                         custom={0}
@@ -406,7 +259,7 @@ export default function AzkarDetails() {
                                                         <i className="fa-regular fa-copy"></i>
                                                     </motion.span>
                                                     <motion.span
-                                                        onClick={() => handleShareTelegram(zkarItem.zikr)}
+                                                        onClick={() => handleShareTelegram(zikr.zekr)}
                                                         initial="hidden"
                                                         animate="visible"
                                                         custom={1}
@@ -415,7 +268,7 @@ export default function AzkarDetails() {
                                                         <i className="fa-brands fa-telegram"></i>
                                                     </motion.span>
                                                     <motion.span
-                                                        onClick={() => handleShareWhatsApp(zkarItem.zikr)}
+                                                        onClick={() => handleShareWhatsApp(zikr.zekr)}
                                                         initial="hidden"
                                                         animate="visible"
                                                         custom={2}
@@ -424,16 +277,100 @@ export default function AzkarDetails() {
                                                         <i className="fa-brands fa-whatsapp"></i>
                                                     </motion.span>
                                                 </div>
-                                            )}
-                                        </span>
+                                                )}
+                                                </span>
+
+                                                </div>
+
+                                        </div>
+                                        
+                                    </SplideSlide>
+
+                                ) ) 
+                                
+                                
+                                : categoryContent.map((zkarItem, index) => (
+                                
+                                <SplideSlide key={index} style={{ height: '400px' }}>
+                                
+                                    <div className={style.bigBox}>
+
+                                        <div className={`text-center d-flex justify-content-center align-items-center ${style.box2}`}>
+                                        
+                                            <div className=''>
+                                            
+                                                <p className={style.zikrDescription}>{zkarItem.zikr}</p>
+                                            
+                                                { zkarItem.reference.length > 0 && !zkarItem.reference.includes('سورة') && !zkarItem.reference.includes('البقرة') ? <span className={style.reference}>[ رواه: {zkarItem.reference} ]</span> : '' }
                                             
                                             </div>
+                                    
+                                        </div>
+
+                                        <div className={style.counter}>
+                                            
+                                            { zkarItem.count.length > 0 ? <span className={style.count}> التكرار : <span> {zkarItem.count} </span> | </span>  : '' }
+                                        
+                                            {/* <span className={style.share}>
+                                            
+                                                مشاركة <i className="fa-solid fa-share-nodes"></i>
+                                            
+                                                <div className={style.shareButtons}>
+                                                
+                                                    <span className={style.copy} title='copy' onClick={ () => {handleCopy(zkarItem.zikr)} }>  <i className="fa-regular fa-copy"></i> </span>
+                                                
+                                                    <span onClick={() => handleShareTelegram(zkarItem.zikr)} ><i class="fa-brands fa-telegram"></i> </span>
+                                                
+                                                    <span onClick={() => handleShareWhatsApp(zkarItem.zikr)} ><i class="fa-brands fa-whatsapp"></i> </span>
+                                                
+                                                </div>
+                                            
+                                            </span> */}
+                                        
+                                            <span className={style.share} onClick={handleShareClick}>
+                                        مشاركة <i className="fa-solid fa-share-nodes"></i>
+                                        {showShareButtons && (
+                                            <div className={style.shareButtons}>
+                                                <motion.span
+                                                    className={style.copy}
+                                                    title='copy'
+                                                    onClick={() => { handleCopy(zkarItem.zikr); }}
+                                                    initial="hidden"
+                                                    animate="visible"
+                                                    custom={0}
+                                                    variants={buttonVariants}
+                                                >
+                                                    <i className="fa-regular fa-copy"></i>
+                                                </motion.span>
+                                                <motion.span
+                                                    onClick={() => handleShareTelegram(zkarItem.zikr)}
+                                                    initial="hidden"
+                                                    animate="visible"
+                                                    custom={1}
+                                                    variants={buttonVariants}
+                                                >
+                                                    <i className="fa-brands fa-telegram"></i>
+                                                </motion.span>
+                                                <motion.span
+                                                    onClick={() => handleShareWhatsApp(zkarItem.zikr)}
+                                                    initial="hidden"
+                                                    animate="visible"
+                                                    custom={2}
+                                                    variants={buttonVariants}
+                                                >
+                                                    <i className="fa-brands fa-whatsapp"></i>
+                                                </motion.span>
+                                            </div>
+                                        )}
+                                    </span>
                                         
                                         </div>
-                                    
-                                    </SplideSlide>
+
+                                    </div>
                                 
-                                ))}
+                                </SplideSlide>
+                            
+                            )) } 
                         
                             </Splide>
                         
@@ -443,6 +380,34 @@ export default function AzkarDetails() {
                     
                     </div>
                 
+                    <div className="row mt-5">
+                
+                        {Array.from(allAzkar.entries()).map( ([zkar], index) => (
+                        
+                            <div className="col-md-6 col-lg-4" key={index}>
+                        
+                                <Link to={`/azkarCatagories/${encodeURIComponent(zkar)}`} onClick={() => {handleZikrClick(zkar); window.scrollTo({top: 300, behavior: 'smooth'})}}>
+                                
+                                    <div className={style.box}>
+                                    
+                                        <div className={style.image}>
+                                        
+                                            <img src={images[index % images.length]} alt={`Azkar images ${index + 1}`} />
+                                        
+                                        </div>
+                                    
+                                        <h4>{zkar}</h4>
+                                    
+                                    </div>
+                                
+                                </Link>
+                            
+                            </div>
+                        
+                        ) )}
+                    
+                    </div>
+
                 </div>
             
             </div>

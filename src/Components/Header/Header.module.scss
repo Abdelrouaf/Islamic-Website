@@ -5,6 +5,19 @@ h4 {
     margin-bottom: 0;
 }
 
+.timing {
+    color: $lightBlueColor;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -ms-transition: all .5s;
+    -o-transition: all .5s;
+
+    &:hover {
+        opacity: .7;
+    }
+}
+
 .header {
     position: fixed;
     top: 0;

@@ -351,26 +351,44 @@
     
     // }
 
-  .box {
-    height: 100%;
+  .bigBox {
     background-color: rgb(222, 184, 135);
-    // background: rgb($blueColor, .3);
-    border-radius: 15px;
-    padding: 40px 60px;
-    text-align: center;
+    padding: 30px 20px;
+    // height: 250px;
+    // overflow-y: scroll;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    height: 100%;
 
-    p {
-      direction: rtl;
-      font-weight: bold;
-    }
-  
-    .reference {
-      display: block;
-      font-weight: 800;
-      position: absolute;
-      left: 10%;
-      bottom: 10%;
+    .box2 {
+      height: 150px;
+      overflow-y: scroll;
+      background-color: rgb(222, 184, 135);
+      //background: rgb($blueColor, .3);
+      //padding: 20px;
+      text-align: center;
+      position: relative;
+      display: block !important;
+    
+      p {
+        direction: rtl;
+        font-weight: bold;
+      }
+    
+      .reference {
+        display: block;
+        font-weight: 800;
+        position: absolute;
+        left: 10%;
+        bottom: 10%;
+      }
     }
   
     .counter {
@@ -480,6 +498,60 @@
 
   .zikrDescription{
     font-size: 25px;
+    height: 100%;
+    // display: flex;
+    align-items: center;
+    justify-content: center;
   }
+
+  .box{
+    background-color: $darkBlue;
+    padding: 50px 25px;
+    margin-top: 25px;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -ms-transition: all .5s;
+    -o-transition: all .5s;
+
+    &:hover {
+        transform: scale(1.05);
+        -webkit-transform: scale(1.05);
+        -moz-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        -o-transform: scale(1.05);
+        cursor: pointer;
+    }
+
+    .image {
+        width: 70px;
+        height: 70px;
+        border-radius: 50px;
+        -webkit-border-radius: 50px;
+        -moz-border-radius: 50px;
+        -ms-border-radius: 50px;
+        -o-border-radius: 50px;
+    
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    h4 {
+        text-transform: capitalize;
+        color: $whiteColor;
+    }
+}
 
 }

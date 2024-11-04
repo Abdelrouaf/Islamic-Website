@@ -526,7 +526,7 @@ export default function Home() {
                         
                             <li>
                             
-                                <div className="d-flex justify-content-between">
+                                <div className="d-block d-md-flex justify-content-between">
                                 
                                     <div className={style.left}>
                                     
@@ -536,7 +536,7 @@ export default function Home() {
                                     
                                         <p className={style.descriptionBook}>No religion in the modern world is as feared and misunderstood as Islam. It haunts the popular imagination as an extreme faith that promotes terrorism, authoritarian government, female oppression, and civil war. In a vital revision of this narrow view of Islam and a distillation of years of thinking and writing about the subject, Karen Armstrong’s short history demonstrates that the world’s fastest-growing faith is a much more complex phenomenon than its modern fundamentalist strain might suggest.</p>
                                     
-                                        <div className={style.btns}>
+                                        <div className={`mb-5 ${style.btns}`}>
                                         
                                             <a href="faith" className={style.readBtn}>Learn more</a>
                                         
@@ -560,7 +560,7 @@ export default function Home() {
                         
                             <li>
                             
-                                <div className="d-flex justify-content-between">
+                                <div className="d-block d-md-flex justify-content-between">
                                 
                                     <div className={style.left}>
                                     
@@ -570,7 +570,7 @@ export default function Home() {
                                     
                                         <p className={style.descriptionBook}>In No god but God, internationally acclaimed scholar Reza Aslan explains Islam — the origins and evolution of the faith — in all its beauty and complexity. Timely and persuasive, No god but God is an elegantly written account that explains this magnificent yet misunderstood faith.</p>
                                     
-                                        <div className={style.btns}>
+                                        <div className={`mb-5 ${style.btns}`}>
                                         
                                             <a href="faith" className={style.readBtn}>Learn more</a>
                                         

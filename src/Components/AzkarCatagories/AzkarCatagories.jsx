@@ -13,7 +13,7 @@ export default function AzkarCatagories() {
 
     const azkar = new Azkar()
     const allAzkar = azkar.getAll()
-    
+
      // Array of images (replace with the actual image paths)
         const images = [
         image1,
@@ -109,7 +109,7 @@ export default function AzkarCatagories() {
                     
                         <div className="col-md-6 col-lg-4" key={index}>
                     
-                            <Link to={`/azkarCatagories/${encodeURIComponent(zkar)}`}>
+                            <a href={`/azkarCatagories/${encodeURIComponent(zkar)}`}>
                             
                                 <div className={style.box}>
                                 
@@ -123,7 +123,7 @@ export default function AzkarCatagories() {
                                 
                                 </div>
                             
-                            </Link>
+                            </a>
                         
                         </div>
                     

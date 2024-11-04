@@ -4,17 +4,29 @@
     margin-block: 100px;
 }
 
+.selection {
+    background-color: beige !important;
+    color: $blackColor !important;
+}
+
+.notSelection {
+    background-color: transparent !important;
+    color: $blackColor !important;
+}
+
 .paddingTop {
     padding-top: 100px;
 }
 
 .downloadBtn {
-    color: $whiteColor;
-    background-color: #19a4bf;
+    color: $whiteColor !important;
+    background-color: #19a4bf !important;
     font-weight: 500;
-    padding: 15px 25px;
-    margin-bottom: 25px;
-    display: inline-block;
+    font-size: 16px;
+    padding: 10px 15px;
+    display: block;
+    cursor: pointer;
+    border: none !important;
     border-radius: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -27,12 +39,12 @@
     -o-transition: all .5s;
 
     &:hover {
-        background-color: #e25931;
+        background-color: #e25931 !important;
     
     }
 
     i {
-        margin-right: 10px;
+        margin-left: 10px;
     }
 }
 

@@ -221,6 +221,7 @@ import QuranSurahs from './Components/QuranSurahs/QuranSurahs';
 import './Components/Style/Base/Base.scss';
 import AzkarCatagories from './Components/AzkarCatagories/AzkarCatagories';
 import AzkarDetails from './Components/AzkarDetails/AzkarDetails';
+import AzanTiming from './Components/AzanTiming/AzanTiming';
 
 function App() {
   return (
@@ -228,6 +229,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout />} errorElement={<NotFound />}>
           <Route index element={<Home />} />
+          <Route path='azanTiming' element={< AzanTiming />} />
           <Route path='quran' element={<QuranSurahs />} />
           <Route path='azkarCatagories/:category' element={<AzkarDetails />} />
           <Route path='azkarCatagories' element={<AzkarCatagories />} />

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import logo from '../../images/logo-color-removebg-preview (1).png'
 import { Link, NavLink } from 'react-router-dom'
 import style from './Header.module.scss'
-import { error } from '@splidejs/splide/src/js/utils'
 import { motion } from 'framer-motion'
 
 export default function Header() {
@@ -125,7 +124,7 @@ export default function Header() {
     // Function to find the next prayer time
     const findNextPrayer = (azan) => {
         const now = new Date();
-        const prayerNames = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+        const prayerNames = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
         let foundNextPrayer = false;
 
         for (let i = 0; i < prayerNames.length; i++) {
@@ -196,6 +195,8 @@ export default function Header() {
 
                                     <li><h4 className={style.azan}>Fajr <span>{prayersTime.Fajr}</span> </h4></li>
 
+                                    <li><h4 className={style.azan}>Sunrise <span>{prayersTime.Sunrise}</span> </h4></li>
+
                                     <li><h4 className={style.azan}>Dhuhr <span>{prayersTime.Dhuhr}</span> </h4></li>
 
                                     <li><h4 className={style.azan}>Asr <span>{prayersTime.Asr}</span> </h4></li>
@@ -214,27 +215,29 @@ export default function Header() {
 
                             <div className={style.right}>
 
-                            <motion.div initial='hidden' animate='visible' variants={selectVariants} >
-                            
-                                <select className="form-select my-2" onChange={handleCountryChange} value={selectedCountry} aria-label="Default select example">
-                                    <option value='EG'>Egypt</option>
-                                    <option value="US">United States</option>
-                                    <option value="SA">Saudi Arabia</option>
-                                    <option value="AE">United Arab Emirates</option>
-                                    <option value="GB">United Kingdom</option>
-                                    <option value="FR">France</option>
-                                    <option value="CA">Canada</option>
-                                    <option value="DE">Germany</option>
-                                    <option value="IN">India</option>
-                                    <option value="PK">Pakistan</option>
-                                    <option value="ID">Indonesia</option>
-                                    <option value="TR">Turkey</option>
-                                    <option value="DZ">Algeria</option>
-                                    <option value="MA">Morocco</option>
-                                    <option value="QA">Qatar</option>
-                                </select>
-                            
-                            </motion.div>
+                                <motion.div initial='hidden' animate='visible' variants={selectVariants} className='d-flex align-items-center gap-1'>
+                                
+                                    <Link to='/azanTiming' className={style.timing}>Timing: </Link>
+                                
+                                    <select className="form-select my-2" onChange={handleCountryChange} value={selectedCountry} aria-label="Default select example">
+                                        <option value='EG'>Egypt</option>
+                                        <option value="US">United States</option>
+                                        <option value="SA">Saudi Arabia</option>
+                                        <option value="AE">United Arab Emirates</option>
+                                        <option value="GB">United Kingdom</option>
+                                        <option value="FR">France</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="DE">Germany</option>
+                                        <option value="IN">India</option>
+                                        <option value="PK">Pakistan</option>
+                                        <option value="ID">Indonesia</option>
+                                        <option value="TR">Turkey</option>
+                                        <option value="DZ">Algeria</option>
+                                        <option value="MA">Morocco</option>
+                                        <option value="QA">Qatar</option>
+                                    </select>
+                                
+                                </motion.div>
 
                             </div>
 

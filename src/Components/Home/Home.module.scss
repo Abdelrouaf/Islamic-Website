@@ -148,6 +148,11 @@
     
     }
 
+    .readBtn {
+        display: inline-block;
+        margin-bottom: 50px;
+    }
+
 }
 
 .pillars {
@@ -366,6 +371,7 @@
         height: 100%;
         border: 2px solid $darkBlue;
         box-shadow: $shadow;
+        overflow: hidden;
     
         &:hover {
             cursor: pointer;
@@ -504,6 +510,8 @@
                 
                     .image {
                         box-shadow: $shadow;
+                        text-align: center;
+                        // padding: 20px;
                     }
                 }
             
@@ -527,5 +535,26 @@
             margin-block: 25px;
         }
     
+    }
+}
+
+// Media Query
+@media (max-width: 450px) {
+    .faithSec {
+    
+        .card {
+        
+            .celName {
+                font-size: 14px;
+                -webkit-line-clamp: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-height: 15px;
+            }
+        
+            p {
+                display: none;
+            }
+        }
     }
 }
