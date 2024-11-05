@@ -390,4 +390,86 @@
         }
     
     } 
+
+    .zikrScroll {
+        display: flex;
+        direction: rtl;
+        white-space: nowrap;
+        background-color: rgba($color: #000000, $alpha: .5);
+        padding: 20px;
+        // margin: 0 10px;
+        overflow: hidden;
+        position: fixed;
+        bottom: 0;
+        height: auto;
+        width: 100%;
+        z-index: 50;
+        
+        .scrollContent {
+            display: flex;
+            animation: movingZikr 10000s 0s linear infinite;
+            -webkit-animation: movingZikr 10000s 0s linear infinite;
+        }
+        
+        .box {
+            margin-bottom: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+        
+            h4 {
+                display: inline;
+                padding: 10px 20px;
+                margin: 0 5px;
+                background-color: rgb(44, 67, 79);
+                color: $whiteColor;
+                text-align: center;
+                border-radius: 5px;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                -ms-border-radius: 5px;
+                -o-border-radius: 5px;
+                width: fit-content;
+            }
+        }
+    
+        ul {
+        
+            li {
+                display: inline;
+            
+                p {
+                    display: inline;
+                    background-color: $whiteColor;
+                    color: $blackColor;
+                    text-align: center;
+                    font-size: 25px;
+                    border-radius: 5px;
+                    -webkit-border-radius: 5px;
+                    -moz-border-radius: 5px;
+                    -ms-border-radius: 5px;
+                    -o-border-radius: 5px;
+                    padding: 10px 20px;
+                    margin: 5px;
+                }
+            }
+        }
+    }
+}
+
+@keyframes movingZikr {
+    0% {
+        transform: translateX(0);
+        -webkit-transform: translateX(0);
+        -moz-transform: translateX(0);
+        -ms-transform: translateX(0);
+        -o-transform: translateX(0);
+}
+
+    100% {
+        transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+        -moz-transform: translateX(100%);
+        -ms-transform: translateX(100%);
+        -o-transform: translateX(100%);
+}
 }

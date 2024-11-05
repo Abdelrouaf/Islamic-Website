@@ -3,8 +3,19 @@ import style from './Monotheism.module.scss'
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion'
+import { Azkar } from 'islam.js'
 
 export default function Monotheism() {
+
+    const azkar = new Azkar()
+
+    const [dataZikr, setDataZikr] = useState([]);
+    const movingZikrRef = useRef(null);
+
+    useEffect(() => {
+        const allAzkar = azkar.getAll()
+        setDataZikr(allAzkar);
+    }, []);
 
     const [topics, setTopics] = useState([]);
     const [isSticky, setIsSticky] = useState(false); // State to track if the box should be sticky
@@ -350,6 +361,39 @@ export default function Monotheism() {
             
             </div>
         
+            <div className={style.zikrScroll}>
+                
+                <div className={style.scrollContent}>
+
+                    {Array.from(dataZikr.entries()).map( ([zkar, items], index) => (
+
+                            <div key={index} className={style.box}>
+
+                                <ul>
+
+                                    {items.map((item, key) => (
+                                    
+                                        <span key={key}>
+                                            
+                                            <li>
+                                            <h4 >{zkar}</h4>
+                                                <p>{item.zikr}</p>
+                                                
+                                            </li>
+                                        
+                                        </span>
+                                    ))}
+
+                                </ul>
+
+                            </div>
+                    
+                    ) )}
+
+                </div>
+            
+            </div>
+
         </div>
     
     )

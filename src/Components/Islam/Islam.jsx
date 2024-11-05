@@ -2,8 +2,19 @@ import React, { useEffect, useRef, useState } from 'react'
 import style from './Islam.module.scss'
 import axios from 'axios'
 import { motion } from 'framer-motion'
+import { Azkar } from 'islam.js'
 
 export default function Islam() {
+
+    const azkar = new Azkar()
+
+    const [dataZikr, setDataZikr] = useState([]);
+    const movingZikrRef = useRef(null);
+
+    useEffect(() => {
+        const allAzkar = azkar.getAll()
+        setDataZikr(allAzkar);
+    }, []);
 
     const [topics, setTopics] = useState([])
     const [likes, setLikes] = useState([])
@@ -152,25 +163,25 @@ export default function Islam() {
     
         <div className={`${style.blogSection} ${style.section}`}>
         
-        <div className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}>
-        
-            <div className={`text-center mb-5`}>
+            <div className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}>
             
-                <motion.span initial='hidden' animate="visible" variants={variants} className={style.headTitle}>About Islam</motion.span>
-            
-                <motion.h3 className={style.title} initial='hidden' animate='visible' variants={h3Variants}>
+                <div className={`text-center mb-5`}>
+                
+                    <motion.span initial='hidden' animate="visible" variants={variants} className={style.headTitle}>About Islam</motion.span>
+                
+                    <motion.h3 className={style.title} initial='hidden' animate='visible' variants={h3Variants}>
 
-                        {text.split('').map( (char, index) => 
-                        
-                            <motion.span key={index} variants={spanVariants}>{char}</motion.span>
-                        
-                        )}
+                            {text.split('').map( (char, index) => 
+                            
+                                <motion.span key={index} variants={spanVariants}>{char}</motion.span>
+                            
+                            )}
 
-                    </motion.h3>
+                        </motion.h3>
+                
+                </div>
             
             </div>
-        
-        </div>
 
             <div className="container">
             
@@ -406,6 +417,39 @@ export default function Islam() {
             
             </div>
         
+            <div className={style.zikrScroll}>
+                
+                <div className={style.scrollContent}>
+
+                    {Array.from(dataZikr.entries()).map( ([zkar, items], index) => (
+
+                            <div key={index} className={style.box}>
+
+                                <ul>
+
+                                    {items.map((item, key) => (
+                                    
+                                        <span key={key}>
+                                            
+                                            <li>
+                                            <h4 >{zkar}</h4>
+                                                <p>{item.zikr}</p>
+                                                
+                                            </li>
+                                        
+                                        </span>
+                                    ))}
+
+                                </ul>
+
+                            </div>
+                    
+                    ) )}
+
+                </div>
+            
+            </div>
+
         </div>
     
     )

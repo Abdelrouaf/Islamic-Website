@@ -9,8 +9,19 @@ import style from './Faith.module.scss'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { motion } from 'framer-motion'
+import { Azkar } from 'islam.js'
 
 export default function Faith() {
+
+    const azkar = new Azkar()
+
+    const [dataZikr, setDataZikr] = useState([]);
+    const movingZikrRef = useRef(null);
+
+    useEffect(() => {
+        const allAzkar = azkar.getAll()
+        setDataZikr(allAzkar);
+    }, []);
 
     const [topics, setTopics] = useState([])
     const [blogTopics, setBlogTopics] = useState([])
@@ -690,6 +701,39 @@ export default function Faith() {
             
             </div>
         
+            <div className={style.zikrScroll}>
+                
+                <div className={style.scrollContent}>
+
+                    {Array.from(dataZikr.entries()).map( ([zkar, items], index) => (
+
+                            <div key={index} className={style.box}>
+
+                                <ul>
+
+                                    {items.map((item, key) => (
+                                    
+                                        <span key={key}>
+                                            
+                                            <li>
+                                            <h4 >{zkar}</h4>
+                                                <p>{item.zikr}</p>
+                                                
+                                            </li>
+                                        
+                                        </span>
+                                    ))}
+
+                                </ul>
+
+                            </div>
+                    
+                    ) )}
+
+                </div>
+            
+            </div>
+
         </div>
     
     )

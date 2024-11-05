@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import shahadh from '../../images/shahadh.png'
 import salah from '../../images/salah.png'
 import sawm from '../../images/sawm.png'
@@ -18,9 +18,20 @@ import kabah from '../../images/kabah.png'
 // import donate from '../../images/donate.png'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/splide/css'
+import { Azkar } from 'islam.js'
 import style from './Home.module.scss'
 
 export default function Home() {
+
+    const azkar = new Azkar()
+
+    const [dataZikr, setDataZikr] = useState([]);
+    const movingZikrRef = useRef(null);
+
+    useEffect(() => {
+        const allAzkar = azkar.getAll()
+        setDataZikr(allAzkar);
+    }, []);
 
     return (
     
@@ -644,6 +655,39 @@ export default function Home() {
             
             </section>
         
+            <div className={style.zikrScroll}>
+                
+                <div className={style.scrollContent}>
+
+                    {Array.from(dataZikr.entries()).map( ([zkar, items], index) => (
+
+                            <div key={index} className={style.box}>
+
+                                <ul>
+
+                                    {items.map((item, key) => (
+                                    
+                                        <span key={key}>
+                                            
+                                            <li>
+                                            <h4 >{zkar}</h4>
+                                                <p>{item.zikr}</p>
+                                                
+                                            </li>
+                                        
+                                        </span>
+                                    ))}
+
+                                </ul>
+
+                            </div>
+                    
+                    ) )}
+
+                </div>
+            
+            </div>
+
         </>
     
     )
