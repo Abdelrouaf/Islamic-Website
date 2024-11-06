@@ -447,8 +447,10 @@ export default function AzanTiming() {
                     </div>
                 </div>
 
-                <table className="table table-dark table-striped table-hover  mt-3 text-center">
-                
+                <div className="table-responsive">
+
+                    <table className="table table-dark table-striped table-hover  mt-3 text-center">
+                    
                     <thead>
 
                         <tr>
@@ -510,7 +512,9 @@ export default function AzanTiming() {
 
                     </tbody>
                 
-                </table>
+                    </table>
+
+                </div>
 
             </div>
         

@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import style from '../Style/Layout/Layout.module.scss'
 
 export default function Layout() {
+
+    const location = useLocation();
+
+    // Check if the current path is '/sign'
+    const isSignPage = location.pathname === '/sign';
 
     const [loading, setLoading] = useState(true)
 
@@ -45,11 +50,11 @@ export default function Layout() {
     
         <>
         
-            <Header/> 
+            { !isSignPage && <Header/> }
         
             <Outlet></Outlet>
         
-            <Footer />
+            { !isSignPage && <Footer />}
         
         </>
     

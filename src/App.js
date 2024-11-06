@@ -222,6 +222,7 @@ import './Components/Style/Base/Base.scss';
 import AzkarCatagories from './Components/AzkarCatagories/AzkarCatagories';
 import AzkarDetails from './Components/AzkarDetails/AzkarDetails';
 import AzanTiming from './Components/AzanTiming/AzanTiming';
+import Sign from './Components/Sign/Sign';
 
 function App() {
   return (
@@ -238,6 +239,7 @@ function App() {
           <Route path='islam' element={<Islam />} />
           <Route path='faith' element={<Faith />} />
           <Route path='news' element={<News />} />
+          <Route path='sign' element={<Sign />} />
         </Route>
 
         <Route path='en' element={<Admin />}>

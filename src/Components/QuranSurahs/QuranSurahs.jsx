@@ -104,10 +104,12 @@ export default function QuranSurahs() {
         }
     };
 
-    const surahs = Array.from({ length: 114 }, (_, index) => ({
-        value: index + 1,
-        label: `Surah ${index + 1}`,
-    }));
+    const surahs = topics.length > 0 ? Array.from({ length: 114 }, (_, index) => {
+        return {
+            value: index + 1,
+            label: `${topics[index].transliteration} ${index + 1}`,
+        };
+    }) : [];
 
     // Function to get verses count from Quran
     const getNumberOfVerses = (surahIndex) => {
@@ -124,19 +126,22 @@ export default function QuranSurahs() {
     const [surahSearchIndexName, setSurahSearchIndexName] = useState('')
     const [surahSearchIndexType, setSurahSearchIndexType] = useState('')
 
+    const [showAudios, setShowAudios] = useState(false);
+
     const surahChange = (selectedOption) => {
         if (selectedOption) {
             setSurahIndex(selectedOption.value);
             setSurahIndexNumber(selectedOption.value)
-            setVerseIndex(''); // Reset verse index when surah changes
-            setStartVerseIndex(null); // Reset start verse index
-            setEndVerseIndex(null); // Reset end verse index
+            setVerseIndex('');
+            setStartVerseIndex(null); 
+            setEndVerseIndex(null); 
             setVerses([])
             setVersesTranslation([])
             setAudiosSearchAr([])
             setAudiosSearchEn([])
             setSurahSearchIndexType('')
             setSurahSearchIndexName('')
+            setFlag(false)
         } 
     };
 
@@ -241,17 +246,15 @@ export default function QuranSurahs() {
         }
     }
 
-    const [showAudios, setShowAudios] = useState(false);
-
     const showAudio = () => {
         setShowAudios(prev => !prev);
     }
 
     const resetSearch = () => {
         setSurahIndex('')
-        setVerseIndex(''); // Reset verse index when surah changes
-        setStartVerseIndex(null); // Reset start verse index
-        setEndVerseIndex(null); // Reset end verse index
+        setVerseIndex(''); 
+        setStartVerseIndex(null); 
+        setEndVerseIndex(null); 
         setVerses([])
         setVersesTranslation([])
         setAudiosSearchAr([])
@@ -263,6 +266,7 @@ export default function QuranSurahs() {
 
     const handleSurahClick = (surah) => {
         setTopic(surah);  
+        setPlay(false)
         setVerseIndexOnRead(surah.id)
         audioOnReadClick()
         setSelectedSurah(surah.id);
@@ -725,7 +729,7 @@ export default function QuranSurahs() {
                         <div className='d-md-flex gap-3 d-block'>
 
                             <Select
-                                value={surahIndex ? { value: surahIndex, label: `Surah ${surahIndex}` } : null}
+                                value={surahIndex ? { value: surahIndex, label: `${topics[surahIndex - 1].transliteration} ${surahIndex}` } : null}
                                 onChange={surahChange}
                                 options={surahs}
                                 placeholder="Select Surah Index"
@@ -791,11 +795,19 @@ export default function QuranSurahs() {
 
                             <div key={index}>
 
-                                <p className={style.verseInEnglish}>{quranSearch.translation[index]} <span className={style.verseNumber}>{index + verseIndexNumber}</span></p>
+                                <div className={style.divVerseLang}>
+
+                                    <p className={style.verseInEnglish}>{quranSearch.translation[index]} <span className={style.verseNumber}>{index + verseIndexNumber}</span></p>
+
+                                </div>
 
                                 {showAudios ? <audio style={{display: 'inline'}} src={audiosSearchEn[index + verseIndexNumber - 1]} controls></audio> : <audio style={{display: 'none'}} src={audiosSearchEn[index + verseIndexNumber - 1]} controls></audio> }
                                 
-                                <p className={style.verseInArabic}> {quranSearch.verse[index]} <span className={style.verseNumber}>{index + verseIndexNumber}</span></p>
+                                <div className={style.divVerseLang}>
+
+                                    <p className={style.verseInArabic}> {quranSearch.verse[index]} <span className={style.verseNumber}>{index + verseIndexNumber}</span></p>
+
+                                </div>
         
                                 {showAudios ? <audio style={{display: 'inline'}} src={audiosSearchAr[index + verseIndexNumber - 1]} controls></audio> : <audio style={{display: 'none'}} src={audiosSearchAr[index + verseIndexNumber - 1]} controls></audio>}
 

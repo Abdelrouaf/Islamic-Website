@@ -52,6 +52,11 @@
         }
     }
 
+    td {
+        word-wrap: break-word;
+        white-space: normal;
+    }
+
     .zikrScroll {
         display: flex;
         direction: rtl;

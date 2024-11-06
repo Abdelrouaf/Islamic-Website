@@ -683,20 +683,28 @@
         -moz-border-radius: 10px;
         -ms-border-radius: 10px;
         -o-border-radius: 10px;
+        position: relative;
+        z-index: 1110;
     
         select {
             width: 20%;
         }
     
-        .verseInArabic {
-            direction: rtl;
-            font-weight: bolder;
-            font-size: 25px;
-        }
-
-        .verseInEnglish {
-            @extend .verseInArabic;
-            direction: ltr;
+        .divVerseLang {
+            margin-block: 20px;
+        
+            .verseInArabic {
+                direction: rtl;
+                font-weight: bolder;
+                font-size: 25px;
+                background-color: beige;
+                display: inline
+            }
+        
+            .verseInEnglish {
+                @extend .verseInArabic;
+                direction: ltr;
+            }
         }
 
         .surahBottomDetails {
