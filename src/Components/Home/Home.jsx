@@ -33,6 +33,12 @@ export default function Home() {
         setDataZikr(allAzkar);
     }, []);
 
+    const [zikrScrollVisible, setZikrScrollVisible] = useState(false)
+
+    const toggleZikrScroll = () => {
+        setZikrScrollVisible(!zikrScrollVisible)
+    }
+
     return (
     
         <>
@@ -655,7 +661,10 @@ export default function Home() {
             
             </section>
         
-            <div className={style.zikrScroll}>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+
+        <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+            <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
                 
             <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';

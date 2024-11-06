@@ -16,6 +16,12 @@ export default function Pillars() {
         setDataZikr(allAzkar);
     }, []);
 
+    const [zikrScrollVisible, setZikrScrollVisible] = useState(false)
+
+    const toggleZikrScroll = () => {
+        setZikrScrollVisible(!zikrScrollVisible)
+    }
+
     const [shahadahTopic, setShahadahTopic] = useState([])
     const [salahTopic, setSalahTopic] = useState([])
     const [sawmTopic, setSawmTopic] = useState([])
@@ -812,7 +818,10 @@ export default function Pillars() {
             
             </div>
         
-            <div className={style.zikrScroll}>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+
+<div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
                 
             <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';

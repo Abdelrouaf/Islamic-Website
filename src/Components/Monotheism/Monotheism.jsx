@@ -17,6 +17,12 @@ export default function Monotheism() {
         setDataZikr(allAzkar);
     }, []);
 
+    const [zikrScrollVisible, setZikrScrollVisible] = useState(false)
+
+    const toggleZikrScroll = () => {
+        setZikrScrollVisible(!zikrScrollVisible)
+    }
+
     const [topics, setTopics] = useState([]);
     const [isSticky, setIsSticky] = useState(false); // State to track if the box should be sticky
     const [likes, setLikes] = useState([])
@@ -361,7 +367,10 @@ export default function Monotheism() {
             
             </div>
         
-            <div className={style.zikrScroll}>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+
+<div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
                 
             <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';

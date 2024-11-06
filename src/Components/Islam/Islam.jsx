@@ -16,6 +16,12 @@ export default function Islam() {
         setDataZikr(allAzkar);
     }, []);
 
+    const [zikrScrollVisible, setZikrScrollVisible] = useState(false)
+
+    const toggleZikrScroll = () => {
+        setZikrScrollVisible(!zikrScrollVisible)
+    }
+
     const [topics, setTopics] = useState([])
     const [likes, setLikes] = useState([])
     const mostLikedRef = useRef(null); // Ref to observe the "most liked" section
@@ -417,7 +423,10 @@ export default function Islam() {
             
             </div>
         
-            <div className={style.zikrScroll}>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+
+<div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
                 
             <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';
