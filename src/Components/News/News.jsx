@@ -428,7 +428,12 @@ export default function News() {
         
             <div className={style.zikrScroll}>
                 
-                <div className={style.scrollContent}>
+            <div className={style.scrollContent} onMouseEnter={(e) => {
+                        e.currentTarget.style.animationPlayState = 'paused';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.animationPlayState = 'running';
+                    }}>
 
                     {Array.from(dataZikr.entries()).map( ([zkar, items], index) => (
 

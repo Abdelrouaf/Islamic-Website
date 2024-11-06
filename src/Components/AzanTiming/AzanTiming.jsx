@@ -18,6 +18,12 @@ export default function AzanTiming() {
         setDataZikr(allAzkar);
     }, []);
     
+    const [zikrScrollVisible, setZikrScrollVisible] = useState(false)
+
+    const toggleZikrScroll = () => {
+        setZikrScrollVisible(!zikrScrollVisible)
+    }
+
     // Calculate and set animation duration based on content width
     const calculateAnimationDuration = () => {
         if (movingZikrRef.current) {
@@ -518,9 +524,16 @@ export default function AzanTiming() {
 
             </div>
         
-            <div className={style.zikrScroll}>
-                
-                    <div className={style.scrollContent}>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+
+            <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+                    <div className={style.scrollContent} onMouseEnter={(e) => {
+                        e.currentTarget.style.animationPlayState = 'paused';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.animationPlayState = 'running';
+                    }}>
 
                         {Array.from(dataZikr.entries()).map( ([zkar, items], index) => (
 
