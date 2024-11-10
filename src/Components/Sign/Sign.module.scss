@@ -8,6 +8,11 @@
 
 .btns {
     margin-block: 20px;
+    margin-right: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 20px;
 }
 
 .signBtn {
@@ -32,6 +37,33 @@
     }
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+        -webkit-transform: translateX(-100px);
+        -moz-transform: translateX(-100px);
+        -ms-transform: translateX(-100px);
+        -o-transform: translateX(-100px);
+}
+    to {
+        opacity: 1;
+        transform: translateX(0);
+        -webkit-transform: translateX(0);
+        -moz-transform: translateX(0);
+        -ms-transform: translateX(0);
+        -o-transform: translateX(0);
+}
+}
+
+.isValid {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.isInvalid {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
 .formContainer {
     height: 100vh;
     position: relative;
@@ -46,7 +78,7 @@
         width: 500px;
         height: 500px;
         background-color: indianred;
-        clip-path: polygon(49% 0, 0% 100%, 100% 53%);
+        clip-path: polygon(49% 0, 0% 100%, 100% 70%);
         z-index: -1;
     }
 
@@ -71,20 +103,58 @@
         justify-content: center;
         align-items: center;
         position: relative;
-        background-color: rgb(255, 255, 255, .8);
-        width: 100%;
+        background-color: #fffffff0;
+        box-shadow: 11px 10px 38px 20px rgba(0, 0, 0, 0.1);
+        width: 85%;
+        height: 600px;
+        overflow: hidden;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
         z-index: 10;
     
+        &::before {
+            // content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: red;
+            width: 50px;
+            height: 50px;
+            border-radius: 0 0 50px 0;
+            -webkit-border-radius: 0 0 50px 0;
+            -moz-border-radius: 0 0 50px 0;
+            -ms-border-radius: 0 0 50px 0;
+            -o-border-radius: 0 0 50px 0;
+            z-index: 10;
+    }
+
+        &::after {
+            // content: "";
+            position: absolute;
+            right: 0;
+            top: 0;
+            background-color: red;
+            width: 50px;
+            height: 50px;
+            border-radius: 0 0 0 50px;
+            -webkit-border-radius: 0 0 0 50px;
+            -moz-border-radius: 0 0 0 50px;
+            -ms-border-radius: 0 0 0 50px;
+            -o-border-radius: 0 0 0 50px;
+            z-index: 10;
+}
+
         .signInBox{
             position: absolute;
-            width: fit-content;
-            height: 480px;
-            // margin-top: 100px;
-            box-shadow: $boxShadow;
-            display: flex;
+            width: 100%;
+            height: 100%;
+            // display: flex;
             align-items: center;
-            justify-content: center;
-            background-color: #ffffffd4;
+            justify-content: space-between;
+            // background-color: #ffffffd4;
             opacity: 0;
             transform: translateX(0);
             transition: opacity 0.5s ease, transform 0.5s ease;
@@ -96,7 +166,12 @@
             -moz-transition: opacity 0.5s ease, transform 0.5s ease;
             -ms-transition: opacity 0.5s ease, transform 0.5s ease;
             -o-transition: opacity 0.5s ease, transform 0.5s ease;
-        }
+            border-radius: 8px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            -ms-border-radius: 8px;
+            -o-border-radius: 8px;
+}
     
         .signUpBox {
             @extend .signInBox ;
@@ -107,7 +182,7 @@
         .signUpBox.active {
             opacity: 1;
             transform: translateX(0);
-            display: flex;
+            // display: flex;
             -webkit-transform: translateX(0);
             -moz-transform: translateX(0);
             -ms-transform: translateX(0);
@@ -161,6 +236,7 @@
                 gap: 15px;
                 width: 70%;
                 margin: 0 auto;
+                overflow: hidden;
                 border: 1px solid rgb(0, 0, 0, .2);
                 margin-bottom: 15px;
                 padding: 5px 15px;
@@ -205,6 +281,15 @@
                 text-transform: capitalize;
                 color: $blackColor;
                 font-weight: 700;
+                transition: all .5s;
+                -webkit-transition: all .5s;
+                -moz-transition: all .5s;
+                -ms-transition: all .5s;
+                -o-transition: all .5s;
+            
+                &:hover {
+                    opacity: .7;
+                }
             }
         
             .btns {
@@ -239,18 +324,53 @@
                 }
             }
         }
-    
-        /* .signUpBox {
-            display: none;
-        } */
     }
 }
 
 /* Media Query */
 @media (max-width: 450px) {
-    .signInBox,
-    .signUpBox {
-        background-color: $whiteColor !important;
+
+    .formContainer {
+    
+        &::after {
+            right: -380px;
+            top: -280px;
+            clip-path: polygon(20% 0, 0% 100%, 100% 70%);
+        }
+    
+        &::before {
+            left: -300px;
+            bottom: -300px;
+        }
+    }
+
+    .formContent {
+        height: 600px !important;
+        width: 95% !important;
+        // border: 2px solid crimson;
+    }
+
+    .inputField {
+        width: 100% !important;
+    }
+
+    .signBtn {
+        padding: 10px 20px;
+    
+        &:nth-child(2) {
+            background-color: $lightBlueColor;
+        }
+    }
+}
+
+@media (max-width: 320px) { 
+    .formContent {
         height: 650px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1020px) {
+    .inputField {
+        width: 100% !important;
     }
 }

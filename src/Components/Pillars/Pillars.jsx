@@ -510,7 +510,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={`http://147.79.101.225:2859/uploads/Images/${shahadah.imageName}`} alt={shahadah.title} />
+                                    <img src={`http://147.79.101.225:2859/uploads/Images/${shahadah.imageName}`} alt={shahadah.title} loading='lazy' />
                                 
                                 </div>
                             
@@ -564,7 +564,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={`http://147.79.101.225:2859/uploads/Images/${salah.imageName}`} alt={salah.title} />
+                                    <img src={`http://147.79.101.225:2859/uploads/Images/${salah.imageName}`} alt={salah.title} loading='lazy' />
                                 
                                 </div>
                             
@@ -608,7 +608,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={`http://147.79.101.225:2859/uploads/Images/${sawm.imageName}`} alt={sawm.title} />
+                                    <img src={`http://147.79.101.225:2859/uploads/Images/${sawm.imageName}`} alt={sawm.title} loading='lazy' />
                                 
                                 </div>
                             
@@ -652,7 +652,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={`http://147.79.101.225:2859/uploads/Images/${zakat.imageName}`} alt={zakat.title} />
+                                    <img src={`http://147.79.101.225:2859/uploads/Images/${zakat.imageName}`} alt={zakat.title} loading='lazy' />
                                 
                                 </div>
                             
@@ -692,7 +692,7 @@ export default function Pillars() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={`http://147.79.101.225:2859/uploads/Images/${haij.imageName}`} alt={haij.title} />
+                                    <img src={`http://147.79.101.225:2859/uploads/Images/${haij.imageName}`} alt={haij.title} loading='lazy' />
                                 
                                 </div>
                             

@@ -1,8 +1,8 @@
 @import '../Variables/Variables.module.scss';
 
-.section {
-    margin-block: 100px;
-}
+// .section {
+//     margin-block: 100px;
+// }
 
 .selection {
     background-color: beige !important;
@@ -95,6 +95,27 @@
         color: red;
         animation: resize 1s infinite alternate;
         -webkit-animation: resize 1s infinite alternate;
+    }
+}
+
+.confirmBtn {
+    border: none !important;
+    background-color: $mauveColor !important;
+    color: $whiteColor;
+    padding: 10px 30px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -ms-transition: all .5s;
+    -o-transition: all .5s;
+
+    &:hover {
+        opacity: .8;
     }
 }
 
@@ -1049,6 +1070,7 @@ input:checked + .slider:before {
     overflow: hidden;
     padding: 20px;
     z-index: 9000;
+    width: 100%;
 }
 
 .tast {
@@ -1165,5 +1187,15 @@ input:checked + .slider:before {
         .title {
             font-size: 20px;
         }
+    }
+}
+
+@media (max-width: 450px) {
+    .toastBox {
+        right: 0 !important;
+    }
+    
+    .tast {
+        width: 280px !important;
     }
 }

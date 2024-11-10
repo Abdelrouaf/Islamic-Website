@@ -3,22 +3,26 @@ import logo from '../../images/logo-color-removebg-preview (1).png'
 import { Link, NavLink } from 'react-router-dom'
 import style from './Header.module.scss'
 import { motion } from 'framer-motion'
+import axios from 'axios'
 
 export default function Header() {
 
     // change Navbar color when scrolling down
     const [navbarColor, setNavbarColor] = useState(false)
     const [isNavbarOpen, setIsNavbarOpen] = useState(false); // State for toggling navbar
+    const [headerPosition, setHeaderPosition] = useState(false)
 
     const toggleNavbar = () => {
         setIsNavbarOpen(prevState => !prevState); // Toggle navbar state
     };
 
     function changeNavbarColor() {
-        if(window.scrollY >= 90) {
+        if(window.scrollY >= 45) {
             setNavbarColor(true)
+            setHeaderPosition(true)
         } else {
             setNavbarColor(false)
+            setHeaderPosition(false)
         }
     }
 
@@ -167,9 +171,30 @@ export default function Header() {
         visible: { opacity: 1, scale: 1, transition: { duration: 1 } }
     };
 
+    // Logout User 
+    const logoutUser = async (e) => {
+        e.preventDefault();
+    
+        try {
+
+            const response = await axios.post('http://147.79.101.225:2859/api/auth/logout')
+
+            if (response.status === 200 || response.status === 201) {
+                localStorage.removeItem('userIn');
+                localStorage.removeItem('loggedInUser');
+                // setTimeout(() => {
+                    window.location.href = '../sign'
+                // }, 2000);
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
     
-        <header className={style.header}>
+        <header className={`${style.header} ${headerPosition ? 'position-fixed' : 'position-static'}`}>
         
             <div className={style.upperHeader}>
 
@@ -332,6 +357,10 @@ export default function Header() {
                             <a href="#"><i className="fa-brands fa-youtube"></i></a>
 
                             <a href="#"><i className="fa-brands fa-instagram"></i></a>
+
+                            <button type='submit' onClick={logoutUser} className='border-0 bg-transparent text-white'><i className="fa-solid fa-arrow-right-from-bracket"></i></button>
+
+                            <Link to='/sign' className='text-white'><i className="fa-regular fa-user"></i></Link>
 
                         </div>
 

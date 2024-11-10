@@ -239,7 +239,7 @@ export default function Monotheism() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={`http://147.79.101.225:2859/uploads/Images/${topic.imageName}`} alt={topic.title} />
+                                        <img src={`http://147.79.101.225:2859/uploads/Images/${topic.imageName}`} alt={topic.title} loading='lazy' />
                                     
                                     </div>
                                 
@@ -293,7 +293,7 @@ export default function Monotheism() {
                                             
                                                 <div className={style.image}>
                                                 
-                                                    <a href={`#${topic.title}`}><img src={`http://147.79.101.225:2859/uploads/Images/${topic.imageName}`} alt={topic.title} /></a>
+                                                    <a href={`#${topic.title}`}><img src={`http://147.79.101.225:2859/uploads/Images/${topic.imageName}`} alt={topic.title} loading='lazy' /></a>
                                                 
                                                 </div>
                                             

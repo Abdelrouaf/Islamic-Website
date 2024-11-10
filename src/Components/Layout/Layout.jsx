@@ -11,6 +11,15 @@ export default function Layout() {
     // Check if the current path is '/sign'
     const isSignPage = location.pathname === '/sign';
 
+    // Check if the current path is '/verify-account'
+    const isVerifyPage = location.pathname === '/verify-account'
+
+    // Check if the current path is '/forget-password'
+    const isForgetPasswordPage = location.pathname === '/forget-password'
+
+    // Check if the current path is '/change-password'
+    const isChangePasswordPage = location.pathname === '/reset-password'
+
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -50,11 +59,11 @@ export default function Layout() {
     
         <>
         
-            { !isSignPage && <Header/> }
+            { !isSignPage && !isVerifyPage && !isForgetPasswordPage && !isChangePasswordPage && <Header/> }
         
             <Outlet></Outlet>
         
-            { !isSignPage && <Footer />}
+            { !isSignPage && !isVerifyPage && !isForgetPasswordPage && !isChangePasswordPage && <Footer />}
         
         </>
     

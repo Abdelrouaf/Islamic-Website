@@ -301,7 +301,7 @@ export default function Faith() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={Malcolm} alt="" />
+                                        <img src={Malcolm} alt="Malcolm" loading='lazy' />
                                     
                                     </div>
                                 
@@ -327,7 +327,7 @@ export default function Faith() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={kilay} alt="" />
+                                        <img src={kilay} alt="kilay" loading='lazy' />
                                     
                                     </div>
                                 
@@ -353,7 +353,7 @@ export default function Faith() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={Malcolm} alt="" />
+                                        <img src={Malcolm} alt="Malcolm" loading='lazy' />
                                     
                                     </div>
                                 
@@ -503,7 +503,7 @@ export default function Faith() {
 
                                         <div className={style.image}>
                                             
-                                            <img src={`http://147.79.101.225:2859/uploads/books/${topic.imageName}`} alt={topic.title} />
+                                            <img src={`http://147.79.101.225:2859/uploads/books/${topic.imageName}`} alt={topic.title} loading='lazy' />
                                         
                                         </div>
                                         
@@ -635,7 +635,7 @@ export default function Faith() {
                                         
                                             <div className={style.img}>
                                             
-                                                <a href={`#${topic.title}`}><img src={`http://147.79.101.225:2859/uploads/Books/${topic.imageName}`} alt={topic.title} /></a>
+                                                <a href={`#${topic.title}`}><img src={`http://147.79.101.225:2859/uploads/Books/${topic.imageName}`} alt={topic.title} loading='lazy' /></a>
                                             
                                             </div>
                                         

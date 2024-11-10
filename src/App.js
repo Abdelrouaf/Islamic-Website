@@ -223,6 +223,10 @@ import AzkarCatagories from './Components/AzkarCatagories/AzkarCatagories';
 import AzkarDetails from './Components/AzkarDetails/AzkarDetails';
 import AzanTiming from './Components/AzanTiming/AzanTiming';
 import Sign from './Components/Sign/Sign';
+import VerifyAccount from './Components/VerifyAccount/VerifyAccount';
+import ForgetPassword from './Components/ForgetPassword/ForgetPassword';
+import ChangePassword from './Components/ChangePassword/ChangePassword';
+import Program from './Components/Program/Program';
 
 function App() {
   return (
@@ -240,6 +244,10 @@ function App() {
           <Route path='faith' element={<Faith />} />
           <Route path='news' element={<News />} />
           <Route path='sign' element={<Sign />} />
+          <Route path='verify-account' element={<VerifyAccount />} />
+          <Route path='forget-password' element={<ForgetPassword />} />
+          <Route path='reset-password' element={<ChangePassword />} />
+          <Route path='program' element={<Program />} />
         </Route>
 
         <Route path='en' element={<Admin />}>

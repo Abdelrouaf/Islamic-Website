@@ -392,7 +392,7 @@ export default function AzkarDetails() {
                                     
                                         <div className={style.image}>
                                         
-                                            <img src={images[index % images.length]} alt={`Azkar images ${index + 1}`} />
+                                            <img src={images[index % images.length]} alt={`Azkar images ${index + 1}`} loading='lazy' />
                                         
                                         </div>
                                     

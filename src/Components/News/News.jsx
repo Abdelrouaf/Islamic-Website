@@ -233,7 +233,7 @@ export default function News() {
                                 ) : (
                                     <div className={style.image}>
 
-                                        <img src={`http://147.79.101.225:2859/uploads/News/${topic.imageName}`} alt={topic.title} />
+                                        <img src={`http://147.79.101.225:2859/uploads/News/${topic.imageName}`} alt={topic.title} loading='lazy' />
 
                                     </div>
                                 ) }

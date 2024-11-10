@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid';
 import style from './Sign.module.scss'
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Sign() {
 
@@ -16,50 +19,297 @@ export default function Sign() {
 
     const [changePasswordSignInType, setChangePasswordSignInType] = useState(false)
     const [changePasswordSignUpType, setChangePasswordSignUpType] = useState(false)
+    const [changePasswordSignUpSecType, setChangePasswordSignUpSecType] = useState(false)
+
+    const [isSubmittingSignUp, setIsSubmittingSignUp] = useState(false)
+    const [isSubmittingSignIn, setIsSubmittingSignIn] = useState(false)
 
     // Validate Password
-
     const [passwordFeedback, setPasswordFeedback] = useState('')
     const [passwordFeedbackColor, setPasswordFeedbackColor] = useState('');
 
-    const validatePassword = (e) => {
-        const password = e.target.value
-
-        const len = 8;
-        const lowChar = /[a-z]/.test(password);
-        const uppChar = /[A-Z]/.test(password);
-        const nums = /[1-9]/.test(password)
-        const specChar = /[!@#$%^&*]/.test(password)
-
-        if ( password.length < len ) {
-            setPasswordFeedback(`Password must be at least ${len} characters `)
-            setPasswordFeedbackColor('red');
-        } else if ( !lowChar || ! uppChar || !nums || !specChar ) {
-            setPasswordFeedback(`Password must has lower, upper, numbers and special characters `)
-            setPasswordFeedbackColor('red');
-        } else {
-            setUserData({'password': password})
-            setPasswordFeedback(`Password is strong!`)
-            setPasswordFeedbackColor('green');
-        }
-    }
-
+    // Data of Sign up
     const [userData, setUserData] = useState({
-        name: '',
-        email: '',
-        password: ''
+        registerName: '',
+        registerEmail: '',
+        registerPassword: '',
+        registerPasswordSec: ''
     })
 
+    const [isTouched, setIsTouched] = useState({
+        registerName: false,
+        registerEmail: false,
+        registerPassword: false,
+        registerPasswordSec: false,
+    });
+
+    // Password match feedback state
+    const [passwordMatchFeedback, setPasswordMatchFeedback] = useState('');
+
+    // On change Sign Up Form
     const onChange = (e) => {
         const {id, value} = e.target;
+
+        setIsTouched((prevTouched) => ({
+            ...prevTouched,
+            [id]: true
+        }));
+
         setUserData( (prevState) => ({
+            ...prevState,
+            [id]: value
+        }) )
+
+        if (id === 'registerPassword') {
+            // Validate the password directly
+            const len = 8;
+            const lowChar = /[a-z]/.test(value);
+            const uppChar = /[A-Z]/.test(value);
+            const nums = /[1-9]/.test(value);
+            const specChar = /[!@#$%^&*]/.test(value);
+    
+            if (value.length < len) {
+                setPasswordFeedback(`Password must be at least ${len} characters `);
+                setPasswordFeedbackColor('red');
+            } else if (!lowChar || !uppChar || !nums || !specChar) {
+                setPasswordFeedback(`Password must have lower, upper, numbers, and special characters`);
+                setPasswordFeedbackColor('red');
+            } else {
+                setPasswordFeedback(`Password is strong!`);
+                setPasswordFeedbackColor('green');
+            }
+            setUserData((prevState) => ({
+                ...prevState,
+                [id]: value
+            }));
+        } 
+        // else {
+        //     setUserData( (prevState) => ({
+        //         ...prevState,
+        //         [id]: value
+        //     }) )
+        // }
+    
+       // Check if passwords match
+    if ((id === 'registerPassword' || id === 'registerPasswordSec') && isTouched.registerPasswordSec) {
+        const firstPassword = id === 'registerPassword' ? value : userData.registerPassword;
+        const secondPassword = id === 'registerPasswordSec' ? value : userData.registerPasswordSec;
+
+        if (firstPassword !== secondPassword) {
+            setPasswordMatchFeedback('Passwords do not match');
+        } else {
+            setPasswordMatchFeedback('Passwords match');
+        }
+    }
+    }
+
+    // Form validation states
+    const isNameValid = userData.registerName.length >= 3;
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.registerEmail);
+    const isPasswordValid = userData.registerPassword.length >= 8 && 
+                            /[a-z]/.test(userData.registerPassword) &&
+                            /[A-Z]/.test(userData.registerPassword) &&
+                            /[0-9]/.test(userData.registerPassword) &&
+                            /[!@#$%^&*]/.test(userData.registerPassword);
+    const isPasswordMatch = userData.registerPassword === userData.registerPasswordSec;
+
+
+    // Handle Sign Up Form
+    const saveData = async (e) => {
+    
+        e.preventDefault();
+    
+        if (userData.registerName.length < 3) {
+            showToast('Name must be at least 3 characters long', 'invalid');
+            setIsSubmittingSignUp(false)
+            return;
+        }
+
+        if (!userData.registerEmail || !userData.registerPassword) {
+            showToast('Invalid input, All inputs are required', 'invalid');
+            setIsSubmittingSignUp(false)
+            return
+        }
+
+        // Password validation
+        const len = 8;
+        const lowChar = /[a-z]/.test(userData.registerPassword);
+        const uppChar = /[A-Z]/.test(userData.registerPassword);
+        const nums = /[1-9]/.test(userData.registerPassword);
+        const specChar = /[!@#$%^&*]/.test(userData.registerPassword);
+
+        if (userData.registerPassword.length < len) {
+            setPasswordFeedback(`Password must be at least ${len} characters.`);
+            setPasswordFeedbackColor('red');
+            showToast('Password is too short.', 'invalid');
+            return;
+        } else if (!lowChar || !uppChar || !nums || !specChar) {
+            setPasswordFeedback(`Password must include lowercase, uppercase, numbers, and special characters.`);
+            setPasswordFeedbackColor('red');
+            showToast('Password is weak.', 'invalid');
+            return;
+        }
+
+        if (!isPasswordMatch) {
+            showToast('Passwords do not match', 'invalid');
+            setIsSubmittingSignUp(false);
+            return;
+        }
+
+        if (isSubmittingSignUp) return;  // <-- Check if submission is in progress
+        setIsSubmittingSignUp(true);
+
+        const users = JSON.parse(localStorage.getItem('userData')) || []
+
+        try {
+            const response = await axios.post('http://147.79.101.225:2859/api/auth/register', {
+                name: userData.registerName,
+                email: userData.registerEmail,
+                password: userData.registerPassword,
+                city: 'few'
+            });
+
+            if (response.status === 400 || response.status === 401 || response.data.message === 'Sorry this Email is used before' ) {
+                showToast('User already exist!', 'error');
+            } else if (response.status === 200 || response.status === 201) {
+                showToast('Sign up successfully!', 'success');
+                const { registerPasswordSec, ...userDataToSave } = userData;
+                users.push(userDataToSave)
+                localStorage.setItem('userData', JSON.stringify(users))
+                localStorage.setItem('verifyUser', JSON.stringify(userData))
+                setTimeout(() => {
+                    window.location.href = '../verify-account'
+                }, 2000);
+                resetForm();
+                setIsSubmittingSignUp(true);
+                console.log("message error ", response.data.message);
+            } else {
+                showToast('Error during sign up', 'error');
+            }
+
+        } catch {
+            showToast('An error occurred while processing the request', 'error');
+        } finally {
+            setIsSubmittingSignUp(false);
+        }
+    
+        setIsSubmittingSignUp(false)
+    } 
+
+    // Clear Data after submission
+    const resetForm = () => {
+        setUserData({
+            registerName: '',
+            registerEmail: '',
+            registerPassword: '',
+            registerPasswordSec: ''
+        });
+        setPasswordFeedback('');
+    };
+
+    // Data of Sign In
+    const [user, setUser] = useState({
+        userEmail: '',
+        userPassword: ''
+    })
+
+    const onChangeSignIn = (e) => {
+        const {id, value} = e.target
+        setUser( (prevState) => ({
             ...prevState,
             [id]: value
         }) )
     }
 
-    console.log("wfe ", userData);
-    
+    const checkData = async (e) => {
+        if (e) e.preventDefault();
+
+        const users = JSON.parse(localStorage.getItem('userData')) || []
+        const emailExist = users.find(existingEmail => existingEmail.registerEmail === user.userEmail)
+
+        if (isSubmittingSignIn) return;  // <-- Check if submission is in progress
+        setIsSubmittingSignIn(true);
+
+        if (user.userEmail === '' || user.userPassword === '') {
+            showToast("Invalid input", 'invalid')
+            setIsSubmittingSignIn(false);
+        } 
+        // else if (emailExist) {
+        //     if (emailExist.registerPassword === user.userPassword) {
+        //         showToast('Sign in successfully!', 'success')
+        //         localStorage.setItem('loggedInUser', JSON.stringify(emailExist))
+        //         localStorage.setItem('userIn', true);
+        //         setTimeout(() => {
+        //             window.location.href = '../'
+        //         }, 2000);
+        //     } else {
+        //         showToast('Email or Password incorrect!', 'error')
+        //         setIsSubmittingSignIn(false);
+        //     }
+        // } else {
+        //     showToast('User not found', 'error')
+        //     setIsSubmittingSignIn(false);
+        // }
+        
+        try {
+            const response = await axios.post('http://147.79.101.225:2859/api/auth/login', {
+                email: user.userEmail,
+                password: user.userPassword,
+            });
+
+            if (response.status === 200) {
+                showToast('Sign in successfully!', 'success');
+                localStorage.setItem('loggedInUser', JSON.stringify(response.data));
+                localStorage.setItem('userIn', true);
+                setTimeout(() => {
+                    window.location.href = '../program'
+                }, 2000);
+            } else if (response.status === 404) {
+                showToast('User not found', 'error');
+            }
+        } catch {
+            showToast('An error occurred while logging in', 'error');
+            setIsSubmittingSignIn(false);
+        } finally {
+            setIsSubmittingSignIn(false);
+        }
+
+        ResetSignIn()
+        setIsSubmittingSignIn(false);
+    }
+
+    // Reset Sign In Form
+    const ResetSignIn = () => {
+        setUser({
+            userEmail: '',
+            userPassword: ''
+        })
+    } 
+
+    useEffect(() => {
+        const verifyUser = JSON.parse(localStorage.getItem('verifyUser'));
+        if (verifyUser) {
+            setUser({
+                userEmail: verifyUser.registerEmail,
+                userPassword: verifyUser.registerPassword
+            });
+            checkData();  
+            localStorage.removeItem('verifyUser');
+        }
+    }, []);
+
+    // Function to show a new toast notification
+    const [toasts, setToasts] = useState([]);
+
+    const showToast = (message, type) => {
+        const newToast = { id: uuidv4(), message, type };
+
+        setToasts((prevToasts) => [...prevToasts, newToast]);
+
+        setTimeout(() => {
+            setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
+        }, 6000); 
+    };
 
     return (
     
@@ -99,7 +349,7 @@ export default function Sign() {
 
                                                 <i className="fa-regular fa-envelope"></i>
 
-                                                <input type="email" placeholder="Email" className="form-control p-2" id="userEmail" name="userEmail" />
+                                                <input type="email" placeholder="Email" className="form-control p-2" id="userEmail" name="userEmail" onChange={onChangeSignIn} value={user.userEmail}/>
 
                                             </div>
 
@@ -107,17 +357,19 @@ export default function Sign() {
 
                                                 <i className="fa-solid fa-lock"></i>
 
-                                                <input type={changePasswordSignInType ? 'text' : 'password'} placeholder="Password" className="form-control p-2" name="userPassword" />
+                                                <input type={changePasswordSignInType ? 'text' : 'password'} placeholder="Password" className="form-control p-2" id="userPassword" onChange={onChangeSignIn} value={user.userPassword} />
 
                                                 { changePasswordSignInType ? <i onClick={ () => setChangePasswordSignInType(!changePasswordSignInType) } className="fa-regular fa-eye-slash"></i> : <i onClick={ () => setChangePasswordSignInType(!changePasswordSignInType) } className="fa-regular fa-eye"></i> }
 
                                             </div>
 
-                                            <a href="#" className={style.forgetPassword}>forget your password</a>
+                                            <Link to='../forget-password' className={style.forgetPassword}>forget your password</Link>
 
-                                            <div className={style.btns}>
+                                            <div className={`${style.btns} d-flex d-md-block mt-5 mt-md-4`}>
 
-                                                <button className={style.signBtn}>sign in</button>
+                                                <button type='submit' onClick={checkData} className={style.signBtn} disabled={isSubmittingSignIn}>{ isSubmittingSignIn ? 'signing in...' : 'sign in'}</button>
+
+                                                <button type='button' onClick={(e) => { e.preventDefault(); handleSignUpClick(e); }}  className={`${style.signBtn} d-block d-md-none`}>sign up</button>
 
                                             </div>
 
@@ -125,7 +377,7 @@ export default function Sign() {
 
                                     </div>
 
-                                    <div className="d-sm-none d-md-block col-md-5">
+                                    <div className="d-none d-md-block col-md-5">
 
                                         <div className={style.signDesign}>
 
@@ -135,7 +387,7 @@ export default function Sign() {
 
                                                 <p className={style.paragraph}>Enter your personal details and start journey with us</p>
 
-                                                <button onClick={handleSignUpClick} className={style.signBtn}>sign up</button>
+                                                <button type='button' onClick={(e) => { e.preventDefault(); handleSignUpClick(e); }}  className={style.signBtn}>sign up</button>
 
                                             </div>
 
@@ -151,7 +403,7 @@ export default function Sign() {
 
                                 <div className="row h-100">
 
-                                    <div className="d-sm-none d-md-block col-md-5">
+                                    <div className="d-none d-md-block col-md-5">
 
                                         <div className={style.signDesign}>
 
@@ -161,7 +413,7 @@ export default function Sign() {
 
                                                 <p className={style.paragraph}>To keep connected with us please login with your personal info</p>
 
-                                                <button onClick={handleSignInClick} className={style.signBtn}>sign in</button>
+                                                <button type='button' onClick={(e) => { e.preventDefault(); handleSignInClick(e); }}  className={style.signBtn}>sign in</button>
 
                                             </div>
 
@@ -191,7 +443,7 @@ export default function Sign() {
 
                                                 <i className="fa-regular fa-user"></i>
 
-                                                <input type="text" placeholder="Name" className="form-control p-2" id="registerName" value={userData['name']} onChange={onChange} />
+                                                <input type="text" placeholder="Name" className={`form-control p-2 ${isTouched.registerName && (isNameValid ? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} id="registerName" value={userData.registerName} onChange={onChange} />
 
                                             </div>
 
@@ -199,7 +451,7 @@ export default function Sign() {
 
                                                 <i className="fa-regular fa-envelope"></i>
 
-                                                <input type="email" placeholder="Email" className="form-control p-2" id="registerEmail" name="userEmail" value={userData['email']} onChange={onChange} />
+                                                <input type="email" placeholder="Email" className={`form-control p-2 ${isTouched.registerEmail && (isEmailValid ? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} id="registerEmail" value={userData.registerEmail} onChange={onChange} />
 
                                             </div>
 
@@ -207,19 +459,35 @@ export default function Sign() {
 
                                                 <i className="fa-solid fa-lock"></i>
 
-                                                <input type={changePasswordSignUpType ? 'text' : 'password'} placeholder="Password" className="form-control p-2" onChange={validatePassword} onInput={validatePassword} id="registerPassword" name="userPassword" />
+                                                <input type={changePasswordSignUpType ? 'text' : 'password'} placeholder="Password" className={`form-control p-2 ${isTouched.registerPassword && (isPasswordValid? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} value={userData.registerPassword} onChange={onChange} id="registerPassword" />
 
                                                 { changePasswordSignUpType ? <i onClick={ () => setChangePasswordSignUpType(!changePasswordSignUpType) } className="fa-regular fa-eye-slash"></i> : <i onClick={ () => setChangePasswordSignUpType(!changePasswordSignUpType) } className="fa-regular fa-eye"></i> }
 
                                             </div>
-                                        
-                                            { passwordFeedback.length > 0 && ( 
-                                                <div style={{ color: passwordFeedbackColor }}> {passwordFeedback} </div>
-                                            )  }
+                                    
+                                            {/* { passwordFeedback.length > 0 && ( 
+                                                <div style={{ color: passwordFeedbackColor }}> <p>{passwordFeedback}</p> </div>
+                                            )  } */}
 
-                                            <div className={style.btns}>
+                                            <div className={style.inputField}>
 
-                                                <button className={style.signBtn}>sign up</button>    
+                                                <i className="fa-solid fa-lock"></i>
+
+                                                <input type={changePasswordSignUpSecType ? 'text' : 'password'} placeholder="Confirm Password" className={`form-control p-2 ${isTouched.registerPasswordSec && (isPasswordMatch? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} value={userData.registerPasswordSec} onChange={onChange} id="registerPasswordSec" />
+
+                                                { changePasswordSignUpSecType ? <i onClick={ () => setChangePasswordSignUpSecType(!changePasswordSignUpSecType) } className="fa-regular fa-eye-slash"></i> : <i onClick={ () => setChangePasswordSignUpSecType(!changePasswordSignUpSecType) } className="fa-regular fa-eye"></i> }
+
+                                            </div>
+
+                                            {/* <small style={{ color: passwordMatchFeedback === 'Passwords match' ? 'green' : 'red' }}>
+                                                {passwordMatchFeedback}
+                                            </small> */}
+
+                                            <div className={`${style.btns} d-flex d-md-block`}>
+
+                                                <button type='submit' onClick={saveData} className={style.signBtn} disabled={isSubmittingSignUp}>{ isSubmittingSignUp ? 'signing up...' : 'sign up'}</button>    
+
+                                                <button type='button' onClick={(e) => { e.preventDefault(); handleSignInClick(e); }}  className={`${style.signBtn} d-block d-md-none`}>sign in</button>
 
                                             </div>
 
@@ -239,6 +507,16 @@ export default function Sign() {
 
             </section>
         
+            <div id="toastBox" className={style.toastBox}>
+                {toasts.map((toast) => (
+                    <div key={toast.id} className={`${style.tast} ${toast.type} ${style[toast.type]} ${style.show}`}>
+                        <i className={`fa ${toast.type === 'success' ? 'fa-check-circle' : toast.type === 'error' ? 'fa-times-circle' : toast.type === 'invalid' ? 'fa-exclamation-circle' : ''}`}></i>
+                        {toast.message}
+                        <div className={style.progress}></div>
+                    </div>
+                ))}
+            </div>
+
         </>
     
     )

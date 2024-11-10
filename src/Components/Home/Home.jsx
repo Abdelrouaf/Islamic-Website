@@ -79,7 +79,7 @@ export default function Home() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={kabah} alt="" />
+                                    <img src={kabah} alt="kabah" loading='lazy' />
                                 
                                 </div>
                             
@@ -97,7 +97,7 @@ export default function Home() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={pillarServ} alt="" />
+                                    <img src={pillarServ} alt="pillars of Islam" loading='lazy' />
                                 
                                 </div>
                             
@@ -115,7 +115,7 @@ export default function Home() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={quran} alt="" />
+                                    <img src={quran} alt="quran-image" loading='lazy' />
                                 
                                 </div>
                             
@@ -133,7 +133,7 @@ export default function Home() {
                             
                                 <div className={style.image}>
                                 
-                                    <img src={mosque} alt="" />
+                                    <img src={mosque} alt="mosque" loading='lazy' />
                                 
                                 </div>
                             
@@ -265,7 +265,7 @@ export default function Home() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={shahadh} alt="" />
+                                        <img src={shahadh} alt="shahadh" loading='lazy' />
                                     
                                     </div>
                                 
@@ -291,7 +291,7 @@ export default function Home() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={salah} alt="" />
+                                        <img src={salah} alt="salah" loading='lazy' />
                                     
                                     </div>
                                 
@@ -317,7 +317,7 @@ export default function Home() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={zakat} alt="" />
+                                        <img src={zakat} alt="zakat" loading='lazy' />
                                     
                                     </div>
                                 
@@ -343,7 +343,7 @@ export default function Home() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={sawm} alt="" />
+                                        <img src={sawm} alt="sawm" loading='lazy' />
                                     
                                     </div>
                                 
@@ -369,7 +369,7 @@ export default function Home() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={haij} alt="" />
+                                        <img src={haij} alt="haij" loading='lazy' />
                                     
                                     </div>
                                 
@@ -399,19 +399,19 @@ export default function Home() {
             
                 <div className={style.shape1}>
                 
-                    <img src={shapeOne} alt="" />
+                    <img src={shapeOne} alt="shape-One" loading='lazy' />
                 
                 </div>
             
                 <div className={style.shape2}>
                 
-                    <img src={shapeTwo} alt="" />
+                    <img src={shapeTwo} alt="shape-Two" loading='lazy' />
                 
                 </div>
             
                 <div className={style.shape3}>
                 
-                    <img src={shapeThree} alt="" />
+                    <img src={shapeThree} alt="shapeThree" loading='lazy' />
                 
                 </div>
             
@@ -459,7 +459,7 @@ export default function Home() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={Malcolm} alt="" />
+                                        <img src={Malcolm} alt="Malcolm" loading='lazy' />
                                     
                                     </div>
                                 
@@ -485,7 +485,7 @@ export default function Home() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={kilay} alt="" />
+                                        <img src={kilay} alt="kilay" loading='lazy' />
                                     
                                     </div>
                                 
@@ -511,7 +511,7 @@ export default function Home() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={Malcolm} alt="" />
+                                        <img src={Malcolm} alt="Malcolm" loading='lazy' />
                                     
                                     </div>
                                 
@@ -565,7 +565,7 @@ export default function Home() {
                                     
                                         <div className={style.image}>
                                         
-                                            <img src={IslamBook} alt="" /> 
+                                            <img src={IslamBook} alt="Islam-Book" loading='lazy' /> 
                                         
                                         </div>
                                     
@@ -599,7 +599,7 @@ export default function Home() {
                                     
                                         <div className={style.image}>
                                         
-                                            <img src={notgodButGodBook} alt="" /> 
+                                            <img src={notgodButGodBook} alt="not-god-But-God-Book" loading='lazy' /> 
                                         
                                         </div>
                                     

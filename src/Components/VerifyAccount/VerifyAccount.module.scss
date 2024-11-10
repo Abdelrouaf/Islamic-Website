@@ -1,0 +1,227 @@
+@import '../Style/Layout/Layout.module.scss';
+
+input[type="number"] {
+    -moz-appearance: textfield; 
+
+    &::-webkit-outer-spin-button {
+        -webkit-appearance: none; 
+        margin: 0;
+    }
+
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none; 
+        margin: 0;
+    }
+}
+
+.verifyAccountSec {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0;
+
+    &::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        background-color: $mauveColor;
+        z-index: -1;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50%;
+        height: 100%;
+        background-color: rgb(230 242 255);
+        z-index: 1;
+    }
+
+    .formContent {
+        position: relative;
+        background-color: $whiteColor;
+        box-shadow: 11px 10px 38px 20px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        height: 75%;
+        overflow: hidden;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+        z-index: 10;
+    
+        .verifyAcc {
+            height: 100%;
+        
+            .image {
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+                // height: 200px;
+                height: 30%;
+            
+                &::before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 200%;
+                    background-color: #f2f9ff;
+                    border-radius: 50%;
+                    -webkit-border-radius: 50%;
+                    -moz-border-radius: 50%;
+                    -ms-border-radius: 50%;
+                    -o-border-radius: 50%;
+                    transform: translate(0, -50%);
+                    -webkit-transform: translate(0, -50%);
+                    -moz-transform: translate(0, -50%);
+                    -ms-transform: translate(0, -50%);
+                    -o-transform: translate(0, -50%);
+                    z-index: -1;
+                }
+
+                img {
+                    width: 150px;
+                    height: 150px;
+                    position: absolute;
+                    bottom: -20%;
+                    transform: translate(-50%);
+                    -webkit-transform: translate(-50%);
+                    -moz-transform: translate(-50%);
+                    -ms-transform: translate(-50%);
+                    -o-transform: translate(-50%);
+                }
+            }
+        
+            .formContainer {
+                height: 70%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            
+                .emailTitles {
+                    text-align: center;
+                    padding: 20px 50px;
+                
+                    .title {
+                        font-size: $titleSize;
+                        font-family: $fontSandBold;
+                        margin-bottom: 20px;
+                    }
+    
+                    .description {
+                        width: 70%;
+                        opacity: .5;
+                        margin-bottom: 20px;
+                    }
+    
+                    .verifyReg {
+                    
+                        .inputField {
+                            display: flex;
+                            justify-content: center;
+                            align-content: center;
+                            gap: 10px;
+                        
+                            input {
+                                width: 50px;
+                                height: 80px;
+                                text-align: center;
+                                caret-color: $mauveColor;
+                                font-size: 40px;
+                                font-family: 'Source Code Pro', monospace;
+                            
+                                &:focus {
+                                    border: 2px solid $mauveColor;
+                                    outline: none !important;
+                                    box-shadow: none !important;
+                                }
+                            
+                                &.focusInput {
+                                    caret-color: $mauveColor;
+                                    border: 2px solid $mauveColor;
+                                }
+                            }
+                        }
+                    
+                        .btns {
+                            margin-top: 20px;
+                            margin-right: 0 !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+// Media Query 
+@media (max-width: 450px) {
+    .image {
+        height: 20% !important;
+    
+        img {
+            width: 100px !important;
+            height: 100px !important;
+        }
+    }
+
+    .formContainer {
+        height: 75% !important;
+    
+        .title {
+            font-size: 25px !important;
+        }
+    
+        .description {
+            width: 100% !important;
+        }
+    
+        .inputField {
+    
+            input {
+                width: 40px !important;
+                height: 60px !important;
+                font-size: 35px !important;
+            }
+        }
+    
+        .btns {
+        
+            .confirmBtn {
+                padding: 10px 20px !important;
+            }
+        }
+    }
+
+}
+
+@media (max-width: 380px) {
+    .image {
+    
+        img {
+            width: 80px !important;
+            height: 80px !important;
+        }
+    }
+
+    .formContainer {
+    
+        .title {
+            font-size: 22px !important;
+        }
+    
+        .description {
+            font-size: 13px !important;
+        }
+    }
+}

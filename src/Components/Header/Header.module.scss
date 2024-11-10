@@ -31,6 +31,11 @@ h4 {
     -ms-transition: all .5s;
     -o-transition: all .5s;
     box-shadow: $boxShadow;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -ms-transition: all .5s;
+    -o-transition: all .5s;
 
     .upperHeader {
         background-color: $whiteColor;
