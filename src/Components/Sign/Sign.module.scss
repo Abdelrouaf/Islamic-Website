@@ -37,6 +37,31 @@
     }
 }
 
+.icon,
+.iconHover {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    // position: absolute;
+}
+
+.icon {
+    opacity: 1;
+}
+
+.iconHover {
+    opacity: 0;
+    transform: translateX(10px); /* Adds a slight shift */
+}
+
+.signBtn:hover .icon {
+    opacity: 0;
+    transform: translateX(-10px); /* Moves out of view */
+}
+
+.signBtn:hover .iconHover {
+    opacity: 1;
+    transform: translateX(0); /* Moves into view */
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -64,10 +89,24 @@
     animation: fadeIn 0.3s ease-in-out;
 }
 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Higher than the main page */
+}
+
 .formContainer {
+    width: 100%;
     height: 100vh;
     position: relative;
-    overflow: hidden;
+    // overflow: hidden;
     margin-top: 0;
 
     &::after {
@@ -234,7 +273,7 @@
                 display: flex;
                 align-items: center;
                 gap: 15px;
-                width: 70%;
+                width: 80%;
                 margin: 0 auto;
                 overflow: hidden;
                 border: 1px solid rgb(0, 0, 0, .2);
@@ -278,8 +317,11 @@
             }
         
             .forgetPassword {
+                display: block;
                 text-transform: capitalize;
-                color: $blackColor;
+                color: #2196F3;
+                white-space: nowrap;
+                font-size: 14px;
                 font-weight: 700;
                 transition: all .5s;
                 -webkit-transition: all .5s;
@@ -292,6 +334,11 @@
                 }
             }
         
+            .activateAccount {
+                @extend .forgetPassword ;
+                color: #009688;
+            }
+
             .btns {
                 margin-block: 15px;
             }
@@ -347,7 +394,10 @@
     .formContent {
         height: 600px !important;
         width: 95% !important;
-        // border: 2px solid crimson;
+    
+        .forgetPassword {
+            white-space: wrap !important;
+        }
     }
 
     .inputField {

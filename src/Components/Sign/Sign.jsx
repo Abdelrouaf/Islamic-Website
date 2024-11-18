@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
+import ProgramsLayout from '../ProgramsLayout/ProgramsLayout'
 import style from './Sign.module.scss'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-export default function Sign() {
+export default function Sign({ onClose }) {
+
+    // Hover button
+    const [buttonHover, setButtonHover] = useState(false)
 
     // Toggle between Sign Form
     const [isSignUpActive, setIsSignUpActive] = useState(false);
@@ -175,7 +179,7 @@ export default function Sign() {
                 showToast('Sign up successfully!', 'success');
                 const { registerPasswordSec, ...userDataToSave } = userData;
                 users.push(userDataToSave)
-                localStorage.setItem('userData', JSON.stringify(users))
+                // localStorage.setItem('userData', JSON.stringify(users))
                 localStorage.setItem('verifyUser', JSON.stringify(userData))
                 setTimeout(() => {
                     window.location.href = '../verify-account'
@@ -221,51 +225,56 @@ export default function Sign() {
         }) )
     }
 
+    const [userToken, setUserToken] = useState('')
+
+    const navigate = useNavigate();
+
     const checkData = async (e) => {
         if (e) e.preventDefault();
 
         const users = JSON.parse(localStorage.getItem('userData')) || []
         const emailExist = users.find(existingEmail => existingEmail.registerEmail === user.userEmail)
 
-        if (isSubmittingSignIn) return;  // <-- Check if submission is in progress
+        if (isSubmittingSignIn) return;
         setIsSubmittingSignIn(true);
 
-        if (user.userEmail === '' || user.userPassword === '') {
-            showToast("Invalid input", 'invalid')
-            setIsSubmittingSignIn(false);
-        } 
-        // else if (emailExist) {
-        //     if (emailExist.registerPassword === user.userPassword) {
-        //         showToast('Sign in successfully!', 'success')
-        //         localStorage.setItem('loggedInUser', JSON.stringify(emailExist))
-        //         localStorage.setItem('userIn', true);
-        //         setTimeout(() => {
-        //             window.location.href = '../'
-        //         }, 2000);
-        //     } else {
-        //         showToast('Email or Password incorrect!', 'error')
-        //         setIsSubmittingSignIn(false);
-        //     }
-        // } else {
-        //     showToast('User not found', 'error')
-        //     setIsSubmittingSignIn(false);
-        // }
-        
         try {
+
+            if (user.userEmail === '' || user.userPassword === '') {
+                showToast("Invalid input", 'invalid')
+                setIsSubmittingSignIn(false);
+            } 
+
             const response = await axios.post('http://147.79.101.225:2859/api/auth/login', {
                 email: user.userEmail,
                 password: user.userPassword,
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true
             });
 
             if (response.status === 200) {
+                const token = response.data.token;
+                setUserToken(token)
+                // window.localStorage.setItem('accessToken', token);
+                // document.cookie = `accessToken = ${token}`
                 showToast('Sign in successfully!', 'success');
-                localStorage.setItem('loggedInUser', JSON.stringify(response.data));
+                // localStorage.setItem('loggedInUser', JSON.stringify(response.data));
                 localStorage.setItem('userIn', true);
                 setTimeout(() => {
-                    window.location.href = '../program'
+                    // window.location.href = '../programs'
+                    navigate('../programs', { state: { token } });
                 }, 2000);
-            } else if (response.status === 404) {
-                showToast('User not found', 'error');
+            } else if(response.status === 403) {
+                showToast(`You should active your account first`, 'error')
+                setTimeout(() => {
+                    window.location.href = '../verify-account'
+                }, 2000);
+            } else if (response.status === 401) {
+                showToast('Email or Password is incorrect', 'error');
+                return
             }
         } catch {
             showToast('An error occurred while logging in', 'error');
@@ -315,79 +324,89 @@ export default function Sign() {
     
         <>
         
-            <section className={style.formContainer}>
+            <div className={style.overlay}>
 
-                <div className="container h-100">
+                <section className={style.formContainer}>
 
-                    <div className="h-100 d-flex justify-content-center align-items-center">
+                    <div className="container h-100">
 
-                        <div className={style.formContent} id="formContent">
+                        <div className="h-100 d-flex justify-content-center align-items-center">
 
-                            <div className={`${style.signInBox} ${!isSignUpActive ? style.active : ''}`}>
+                            <div className={style.formContent} id="formContent">
 
-                                <div className="row h-100">
+                                <div className={`${style.signInBox} ${!isSignUpActive ? style.active : ''}`}>
 
-                                    <div className="col-sm-12 col-md-7 align-self-center">
+                                    <div className="row h-100">
 
-                                        <form id="signInForm">
+                                        <div className="col-sm-12 col-md-7 align-self-center">
 
-                                            <h4 className={style.title}>Sign in to EzBuyHub</h4>
+                                            <form id="signInForm">
 
-                                            <div className={style.social}>
+                                                <h4 className={style.title}>Sign in to Nextgen Knowledge</h4>
 
-                                                <span><i className="fa-brands fa-facebook-f"></i></span>
+                                                <div className={style.social}>
 
-                                                <span><i className="fa-brands fa-google-plus-g"></i></span>
-                                            
-                                                <span><i className="fa-brands fa-linkedin-in"></i></span>
+                                                    <span><i className="fa-brands fa-facebook-f"></i></span>
 
-                                            </div>
+                                                    <span><i className="fa-brands fa-google-plus-g"></i></span>
+                                                
+                                                    <span><i className="fa-brands fa-linkedin-in"></i></span>
 
-                                            <p className={style.paragraph}>or use your email account</p>
+                                                </div>
 
-                                            <div className={style.inputField}>
+                                                <p className={style.paragraph}>or use your email account</p>
 
-                                                <i className="fa-regular fa-envelope"></i>
+                                                <div className={style.inputField}>
 
-                                                <input type="email" placeholder="Email" className="form-control p-2" id="userEmail" name="userEmail" onChange={onChangeSignIn} value={user.userEmail}/>
+                                                    <i className="fa-regular fa-envelope"></i>
 
-                                            </div>
+                                                    <input type="email" placeholder="Email" className="form-control p-2" id="userEmail" name="userEmail" onChange={onChangeSignIn} value={user.userEmail}/>
 
-                                            <div className={style.inputField}>
+                                                </div>
 
-                                                <i className="fa-solid fa-lock"></i>
+                                                <div className={style.inputField}>
 
-                                                <input type={changePasswordSignInType ? 'text' : 'password'} placeholder="Password" className="form-control p-2" id="userPassword" onChange={onChangeSignIn} value={user.userPassword} />
+                                                    <i className="fa-solid fa-lock"></i>
 
-                                                { changePasswordSignInType ? <i onClick={ () => setChangePasswordSignInType(!changePasswordSignInType) } className="fa-regular fa-eye-slash"></i> : <i onClick={ () => setChangePasswordSignInType(!changePasswordSignInType) } className="fa-regular fa-eye"></i> }
+                                                    <input type={changePasswordSignInType ? 'text' : 'password'} placeholder="Password" className="form-control p-2" id="userPassword" onChange={onChangeSignIn} value={user.userPassword} />
 
-                                            </div>
+                                                    { changePasswordSignInType ? <i onClick={ () => setChangePasswordSignInType(!changePasswordSignInType) } className="fa-regular fa-eye-slash"></i> : <i onClick={ () => setChangePasswordSignInType(!changePasswordSignInType) } className="fa-regular fa-eye"></i> }
 
-                                            <Link to='../forget-password' className={style.forgetPassword}>forget your password</Link>
+                                                </div>
 
-                                            <div className={`${style.btns} d-flex d-md-block mt-5 mt-md-4`}>
+                                                <div className="d-flex justify-content-evenly align-items-center gap-3">
 
-                                                <button type='submit' onClick={checkData} className={style.signBtn} disabled={isSubmittingSignIn}>{ isSubmittingSignIn ? 'signing in...' : 'sign in'}</button>
+                                                    <Link to='../forget-password' className={style.forgetPassword}>forget your password?</Link>
 
-                                                <button type='button' onClick={(e) => { e.preventDefault(); handleSignUpClick(e); }}  className={`${style.signBtn} d-block d-md-none`}>sign up</button>
+                                                    <Link to='../verify-account' className={style.activateAccount}>Activate your account</Link>
 
-                                            </div>
+                                                </div>
 
-                                        </form>
+                                                <div className={`${style.btns} d-flex d-md-block mt-5 mt-md-4`}>
 
-                                    </div>
+                                                    <button type='submit' onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)} onClick={checkData} className={style.signBtn} disabled={isSubmittingSignIn}>{ isSubmittingSignIn ? 'signing in...' : 'sign in'} <span className={buttonHover ? style.iconHover : style.icon}>{buttonHover ? ( <i className="fa-solid fa-arrow-right"></i> ) : ( <i className="fa-solid fa-chevron-right"></i> ) }</span></button>
 
-                                    <div className="d-none d-md-block col-md-5">
+                                                    <button type='button' onClick={(e) => { e.preventDefault(); handleSignUpClick(e); }}  className={`${style.signBtn} d-block d-md-none`}>sign up</button>
 
-                                        <div className={style.signDesign}>
+                                                </div>
 
-                                            <div className={style.box}>
-                                            
-                                                <h4 className={style.title}>Hello, Friend!</h4>
+                                            </form>
 
-                                                <p className={style.paragraph}>Enter your personal details and start journey with us</p>
+                                        </div>
 
-                                                <button type='button' onClick={(e) => { e.preventDefault(); handleSignUpClick(e); }}  className={style.signBtn}>sign up</button>
+                                        <div className="d-none d-md-block col-md-5">
+
+                                            <div className={style.signDesign}>
+
+                                                <div className={style.box}>
+                                                
+                                                    <h4 className={style.title}>Hello, Friend!</h4>
+
+                                                    <p className={style.paragraph}>Enter your personal details and start journey with us</p>
+
+                                                    <button type='button' onClick={(e) => { e.preventDefault(); handleSignUpClick(e); }}  className={style.signBtn}>sign up</button>
+
+                                                </div>
 
                                             </div>
 
@@ -397,101 +416,101 @@ export default function Sign() {
 
                                 </div>
 
-                            </div>
+                                <div className={`${style.signUpBox} ${isSignUpActive ? style.active : ''}`}>
 
-                            <div className={`${style.signUpBox} ${isSignUpActive ? style.active : ''}`}>
+                                    <div className="row h-100">
 
-                                <div className="row h-100">
+                                        <div className="d-none d-md-block col-md-5">
 
-                                    <div className="d-none d-md-block col-md-5">
+                                            <div className={style.signDesign}>
 
-                                        <div className={style.signDesign}>
+                                                <div className={style.box}>
 
-                                            <div className={style.box}>
+                                                    <h4 className={style.title}>Welcome Back!</h4>
 
-                                                <h4 className={style.title}>Welcome Back!</h4>
+                                                    <p className={style.paragraph}>To keep connected with us please login with your personal info</p>
 
-                                                <p className={style.paragraph}>To keep connected with us please login with your personal info</p>
+                                                    <button type='button' onClick={(e) => { e.preventDefault(); handleSignInClick(e); }}  className={style.signBtn}>sign in</button>
 
-                                                <button type='button' onClick={(e) => { e.preventDefault(); handleSignInClick(e); }}  className={style.signBtn}>sign in</button>
+                                                </div>
 
                                             </div>
 
                                         </div>
 
-                                    </div>
+                                        <div className="col-sm-12 col-md-7 align-self-center">
 
-                                    <div className="col-sm-12 col-md-7 align-self-center">
+                                            <form id="signUpForm">
 
-                                        <form id="signUpForm">
+                                                <h4 className={style.title}>Create Account</h4>
 
-                                            <h4 className={style.title}>Create Account</h4>
+                                                <div className={style.social}>
 
-                                            <div className={style.social}>
+                                                    <span><i className="fa-brands fa-facebook-f"></i></span>
 
-                                                <span><i className="fa-brands fa-facebook-f"></i></span>
+                                                    <span><i className="fa-brands fa-google-plus-g"></i></span>
+                                                
+                                                    <span><i className="fa-brands fa-linkedin-in"></i></span>
 
-                                                <span><i className="fa-brands fa-google-plus-g"></i></span>
-                                            
-                                                <span><i className="fa-brands fa-linkedin-in"></i></span>
+                                                </div>
 
-                                            </div>
+                                                <p className={style.paragraph}>or use your email registration</p>
 
-                                            <p className={style.paragraph}>or use your email registration</p>
+                                                <div className={style.inputField}>
 
-                                            <div className={style.inputField}>
+                                                    <i className="fa-regular fa-user"></i>
 
-                                                <i className="fa-regular fa-user"></i>
+                                                    <input type="text" placeholder="Name" className={`form-control p-2 ${isTouched.registerName && (isNameValid ? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} id="registerName" value={userData.registerName} onChange={onChange} />
 
-                                                <input type="text" placeholder="Name" className={`form-control p-2 ${isTouched.registerName && (isNameValid ? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} id="registerName" value={userData.registerName} onChange={onChange} />
+                                                </div>
 
-                                            </div>
+                                                <div className={style.inputField}>
 
-                                            <div className={style.inputField}>
+                                                    <i className="fa-regular fa-envelope"></i>
 
-                                                <i className="fa-regular fa-envelope"></i>
+                                                    <input type="email" placeholder="Email" className={`form-control p-2 ${isTouched.registerEmail && (isEmailValid ? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} id="registerEmail" value={userData.registerEmail} onChange={onChange} />
 
-                                                <input type="email" placeholder="Email" className={`form-control p-2 ${isTouched.registerEmail && (isEmailValid ? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} id="registerEmail" value={userData.registerEmail} onChange={onChange} />
+                                                </div>
 
-                                            </div>
+                                                <div className={style.inputField}>
 
-                                            <div className={style.inputField}>
+                                                    <i className="fa-solid fa-lock"></i>
 
-                                                <i className="fa-solid fa-lock"></i>
+                                                    <input type={changePasswordSignUpType ? 'text' : 'password'} placeholder="Password" className={`form-control p-2 ${isTouched.registerPassword && (isPasswordValid? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} value={userData.registerPassword} onChange={onChange} id="registerPassword" />
 
-                                                <input type={changePasswordSignUpType ? 'text' : 'password'} placeholder="Password" className={`form-control p-2 ${isTouched.registerPassword && (isPasswordValid? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} value={userData.registerPassword} onChange={onChange} id="registerPassword" />
+                                                    { changePasswordSignUpType ? <i onClick={ () => setChangePasswordSignUpType(!changePasswordSignUpType) } className="fa-regular fa-eye-slash"></i> : <i onClick={ () => setChangePasswordSignUpType(!changePasswordSignUpType) } className="fa-regular fa-eye"></i> }
 
-                                                { changePasswordSignUpType ? <i onClick={ () => setChangePasswordSignUpType(!changePasswordSignUpType) } className="fa-regular fa-eye-slash"></i> : <i onClick={ () => setChangePasswordSignUpType(!changePasswordSignUpType) } className="fa-regular fa-eye"></i> }
+                                                </div>
+                                        
+                                                {/* { passwordFeedback.length > 0 && ( 
+                                                    <div style={{ color: passwordFeedbackColor }}> <p>{passwordFeedback}</p> </div>
+                                                )  } */}
 
-                                            </div>
-                                    
-                                            {/* { passwordFeedback.length > 0 && ( 
-                                                <div style={{ color: passwordFeedbackColor }}> <p>{passwordFeedback}</p> </div>
-                                            )  } */}
+                                                <div className={style.inputField}>
 
-                                            <div className={style.inputField}>
+                                                    <i className="fa-solid fa-lock"></i>
 
-                                                <i className="fa-solid fa-lock"></i>
+                                                    <input type={changePasswordSignUpSecType ? 'text' : 'password'} placeholder="Confirm Password" className={`form-control p-2 ${isTouched.registerPasswordSec && (isPasswordMatch? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} value={userData.registerPasswordSec} onChange={onChange} id="registerPasswordSec" />
 
-                                                <input type={changePasswordSignUpSecType ? 'text' : 'password'} placeholder="Confirm Password" className={`form-control p-2 ${isTouched.registerPasswordSec && (isPasswordMatch? `is-valid ${style.isValid}` : `is-invalid ${style.isInvalid}`)}`} value={userData.registerPasswordSec} onChange={onChange} id="registerPasswordSec" />
+                                                    { changePasswordSignUpSecType ? <i onClick={ () => setChangePasswordSignUpSecType(!changePasswordSignUpSecType) } className="fa-regular fa-eye-slash"></i> : <i onClick={ () => setChangePasswordSignUpSecType(!changePasswordSignUpSecType) } className="fa-regular fa-eye"></i> }
 
-                                                { changePasswordSignUpSecType ? <i onClick={ () => setChangePasswordSignUpSecType(!changePasswordSignUpSecType) } className="fa-regular fa-eye-slash"></i> : <i onClick={ () => setChangePasswordSignUpSecType(!changePasswordSignUpSecType) } className="fa-regular fa-eye"></i> }
+                                                </div>
 
-                                            </div>
+                                                {/* <small style={{ color: passwordMatchFeedback === 'Passwords match' ? 'green' : 'red' }}>
+                                                    {passwordMatchFeedback}
+                                                </small> */}
 
-                                            {/* <small style={{ color: passwordMatchFeedback === 'Passwords match' ? 'green' : 'red' }}>
-                                                {passwordMatchFeedback}
-                                            </small> */}
+                                                <div className={`${style.btns} d-flex d-md-block`}>
 
-                                            <div className={`${style.btns} d-flex d-md-block`}>
+                                                    <button type='submit' onMouseEnter={() => setButtonHover(true)} onMouseLeave={() => setButtonHover(false)} onClick={saveData} className={style.signBtn} disabled={isSubmittingSignUp}>{ isSubmittingSignUp ? 'signing up...' : 'sign up'} <span className={buttonHover ? style.iconHover : style.icon}>{buttonHover ? ( <i className="fa-solid fa-arrow-right"></i> ) : ( <i className="fa-solid fa-chevron-right"></i> ) }</span></button>    
 
-                                                <button type='submit' onClick={saveData} className={style.signBtn} disabled={isSubmittingSignUp}>{ isSubmittingSignUp ? 'signing up...' : 'sign up'}</button>    
+                                                    <button type='button' onClick={(e) => { e.preventDefault(); handleSignInClick(e); }}  className={`${style.signBtn} d-block d-md-none`}>sign in</button>
 
-                                                <button type='button' onClick={(e) => { e.preventDefault(); handleSignInClick(e); }}  className={`${style.signBtn} d-block d-md-none`}>sign in</button>
+                                                </div>
 
-                                            </div>
+                                            </form>
 
-                                        </form>
+                                        </div>
 
                                     </div>
 
@@ -503,9 +522,11 @@ export default function Sign() {
 
                     </div>
 
-                </div>
+                </section>
 
-            </section>
+                {/* <button onClick={onClose}>Close</button> */}
+
+            </div>
         
             <div id="toastBox" className={style.toastBox}>
                 {toasts.map((toast) => (
@@ -516,6 +537,8 @@ export default function Sign() {
                     </div>
                 ))}
             </div>
+
+            {/* <ProgramsLayout token={localStorage.getItem('accessToken')} /> */}
 
         </>
     

@@ -171,3 +171,103 @@
     }
 
 }
+
+
+.socialLoginIcons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    -webkit-box-reflect: below 5px linear-gradient(transparent, #00000055);
+  }
+  .socialLoginIcons svg {
+    width: 40px;
+  }
+  
+  .socialIcon1,
+  .socialIcon11,
+  .socialIcon2,
+  .socialIcon22,
+  .socialIcon3,
+  .socialIcon33,
+  .socialIcon4,
+  .socialIcon44 {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    margin: 20px 0 0px 0;
+  }
+  
+  .icon svg {
+    fill: #ffffff;
+  }
+  
+  .socialContainer {
+    height: 80px;
+    overflow: hidden;
+  }
+  .socialIcon1 {
+    transition-duration: 0.4s;
+    background-color: rgb(0, 0, 0);
+    transition-timing-function: cubic-bezier(0.46, -0.78, 0.5, 1.56);
+  }
+  .socialIcon1 svg,
+  .socialIcon2 svg,
+  .socialIcon3 svg,
+  .socialIcon4 svg {
+    opacity: 0;
+    transition-duration: 0.5s;
+    transition-delay: 0.2s;
+  }
+  .socialIcon11 {
+    transition-duration: 0.4s;
+    background-color: rgb(0, 0, 0, 0);
+  }
+  .socialContainer:hover .socialIcon1 {
+    transform: translateY(-70px);
+  }
+  .socialContainer:hover .socialIcon1 svg,
+  .socialContainer:hover .socialIcon2 svg,
+  .socialContainer:hover .socialIcon3 svg,
+  .socialContainer:hover .socialIcon4 svg {
+    opacity: 1;
+  }
+  .socialIcon2 {
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.46, -0.78, 0.5, 1.56);
+    background: linear-gradient(
+      72.44deg,
+      #ff7a00 11.92%,
+      #ff0169 51.56%,
+      #d300c5 85.69%
+    );
+  }
+  .socialContainer:hover .socialIcon2 {
+    transform: translateY(-70px);
+  }
+  .socialIcon3 {
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.46, -0.78, 0.5, 1.56);
+    background: #316ff6;
+  }
+  
+  .socialContainer:hover .socialIcon3 {
+    transform: translateY(-70px);
+  }
+  .socialIcon4 {
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.46, -0.78, 0.5, 1.56);
+  
+    background: linear-gradient(
+      180deg,
+      rgba(129, 34, 144, 1) 0%,
+      rgba(77, 34, 124, 1) 91%
+    );
+  }
+  
+  .socialContainer:hover .socialIcon4 {
+    transform: translateY(-70px);
+  }
+  
