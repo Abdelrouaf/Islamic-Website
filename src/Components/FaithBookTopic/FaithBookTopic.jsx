@@ -285,7 +285,7 @@ export default function FaithBookTopic() {
                                         <i className="fa-solid fa-plus"></i>
                                     </div> */}
                                         <div className={`${layout.uploadImage} p-2`}>
-                                            <img src={imageURL} alt="Uploaded"/>
+                                            <img src={`http://147.79.101.225:2859/uploads/books/${imageURL}`} alt="Uploaded"/>
                                         </div>
                                 </div>
                             </div>

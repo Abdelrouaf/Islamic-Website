@@ -56,20 +56,20 @@ export default function PrayerTopic() {
                 
                 setFormData({
                         // Set ID from the API
-                    image: finalData.image,                  // No new image uploaded initially
+                    image: finalData.imageName,                  // No new image uploaded initially
                     title: finalData.title,
                     description: finalData.description,
                 });
             
                 setCheckData({
                     id: finalData._id,
-                    image: finalData.image,                  // No new image uploaded initially
+                    image: finalData.imageName,                  // No new image uploaded initially
                     title: finalData.title,
                     description: finalData.description,
                 });
 
-                setOldImage(finalData.image)
-                setImageURL(finalData.image)
+                setOldImage(finalData.imageName)
+                setImageURL(finalData.imageName)
                 setIsLoading(false); // Data has been loaded
             } catch {
                 showToast('Failed to fetch topic data. Please try again', 'error')
@@ -272,7 +272,7 @@ export default function PrayerTopic() {
                                                 className="close fa-solid fa-rectangle-xmark"
                                                 style={{ cursor: 'pointer' }}
                                             ></i> */}
-                                            <img src={imageURL} alt="Uploaded"/>
+                                            <img src={`http://147.79.101.225:2859/uploads/Images/${imageURL}`} alt="Uploaded"/>
                                         </div>
                                     {/* )} */}
                                 </div>

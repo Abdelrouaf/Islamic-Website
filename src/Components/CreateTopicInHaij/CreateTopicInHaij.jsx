@@ -50,7 +50,10 @@ export default function CreateTopicInHaij() {
 // Function to check if the title already exists in the API
 const checkTitleExists = async (title) => {
     try {
-        const response = await fetch('http://147.79.101.225:2859/api/haijBlog/');
+        const response = await fetch('http://147.79.101.225:2859/api/haijBlog/', {
+            method: 'GET',
+            credentials: 'include', // Ensures cookies or credentials are sent with the request
+        });
         const data = await response.json();
 
         // Access the array of topics
@@ -102,11 +105,15 @@ const saveData = async () => {
         form.append('image', image);
 
         // Using Axios to make the POST request
-        const response = await axios.post('http://147.79.101.225:2859/api/haijBlog/', form, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axios.post('http://147.79.101.225:2859/api/haijBlog/', 
+            form, 
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    withCredentials: true
+                }
+        );
 
         // Handle the response
         if (response.status === 200 || response.status === 201) {

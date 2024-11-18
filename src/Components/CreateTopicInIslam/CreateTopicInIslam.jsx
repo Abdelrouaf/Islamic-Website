@@ -27,7 +27,10 @@ export default function CreateTopicInIslam() {
 // Function to check if the title already exists in the API
 const checkTitleExists = async (title) => {
     try {
-        const response = await fetch('http://147.79.101.225:2859/api/lifeBlogs/');
+        const response = await fetch('http://147.79.101.225:2859/api/lifeBlogs/', {
+            method: 'GET',
+            credentials: 'include', // Ensures cookies or credentials are sent with the request
+        });
         const data = await response.json();
 
         // Access the array of topics
@@ -82,11 +85,15 @@ const saveData = async () => {
         
 
         // Using Axios to make the POST request
-        const response = await axios.post('http://147.79.101.225:2859/api/lifeBlogs/', form, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await axios.post('http://147.79.101.225:2859/api/lifeBlogs/', 
+            form, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    withCredentials: true,
+                }
+        );
 
         // Handle the response
         if (response.status === 200 || response.status === 201) {

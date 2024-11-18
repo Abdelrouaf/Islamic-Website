@@ -12,7 +12,13 @@ export default function EditZakat() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://147.79.101.225:2859/api/zakatBlog/');
+            const response = await fetch('http://147.79.101.225:2859/api/zakatBlog/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include', // Or 'same-origin' based on server config
+            });
             const data = await response.json();
             
             setTopics(data.ZakatBlog || []); 

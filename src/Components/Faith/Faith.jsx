@@ -635,7 +635,7 @@ export default function Faith() {
                                         
                                             <div className={style.img}>
                                             
-                                                <a href={`#${topic.title}`}><img src={`http://147.79.101.225:2859/uploads/Books/${topic.imageName}`} alt={topic.title} loading='lazy' /></a>
+                                                <a href={`#${topic.title}`}><img src={`http://147.79.101.225:2859/uploads/books/${topic.imageName}`} alt={topic.title} loading='lazy' /></a>
                                             
                                             </div>
                                         

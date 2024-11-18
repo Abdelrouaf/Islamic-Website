@@ -112,12 +112,12 @@ const saveData = async () => {
         const response = await axios.post(
             'http://147.79.101.225:2859/api/certificateBlog/',
             form,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                withCredentials: true, // If the server requires credentials like cookies
-            }
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    withCredentials: true, // If the server requires credentials like cookies
+                }
         );
 
         // Handle the response

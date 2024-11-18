@@ -74,7 +74,7 @@ export default function NewsTopic() {
                 });
 
                 setOldImage(finalData.image)
-                setImageURL(finalData.image)
+                setImageURL(finalData.imageName)
                 setIsLoading(false); // Data has been loaded
             } catch {
                 showToast('Failed to fetch topic data. Please try again', 'error')
@@ -283,7 +283,7 @@ export default function NewsTopic() {
                                         <i className="fa-solid fa-plus"></i>
                                     </div> */}
                                         <div className={`${layout.uploadImage} p-2`}>
-                                            <img src={imageURL} alt="Uploaded"/>
+                                            <img src={`http://147.79.101.225:2859/uploads/News/${imageURL}`} alt="Uploaded"/>
                                         </div>
                                 </div>
                                 <p>*Upload image size 500px x 500px recommended</p>
