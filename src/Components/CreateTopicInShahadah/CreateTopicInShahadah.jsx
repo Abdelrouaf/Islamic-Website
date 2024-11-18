@@ -54,7 +54,10 @@ export default function CreateTopicInShahadah() {
 // Function to check if the title already exists in the API
 const checkTitleExists = async (title) => {
     try {
-        const response = await fetch('http://147.79.101.225:2859/api/certificateBlog/');
+        const response = await fetch('http://147.79.101.225:2859/api/certificateBlog/', {
+            method: 'GET',
+            credentials: 'include', // Ensures cookies or credentials are sent with the request
+        });
         const data = await response.json();
 
         // Access the array of topics
@@ -106,11 +109,16 @@ const saveData = async () => {
         form.append('image', image);
 
         // Using Axios to make the POST request
-        const response = await axios.post('http://147.79.101.225:2859/api/certificateBlog/', form, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axios.post(
+            'http://147.79.101.225:2859/api/certificateBlog/',
+            form,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                withCredentials: true, // If the server requires credentials like cookies
+            }
+        );
 
         // Handle the response
         if (response.status === 200 || response.status === 201) {
@@ -222,78 +230,6 @@ const saveData = async () => {
                             </div>
                         
                         </div>
-                    
-                        {/* <div className="mb-4">
-                        
-                            <div className={layout.inputTitle}>
-                            
-                                <h4>surah</h4>
-                            
-                            </div>
-                        
-                            <div className={`${layout.rightInput} ${layout.input} w-100`}>
-                            
-                                <input type="text" className='form-control py-2' placeholder='enter the name of the surah' id="surah"
-                                    value={formData['surah']}
-                                    onChange={handleChange} />
-                            
-                            </div>
-                        
-                        </div>
-                    
-                        <div className="mb-4">
-                        
-                            <div className={layout.inputTitle}>
-                            
-                                <h4>surah in english</h4>
-                            
-                            </div>
-                        
-                            <div className={`${layout.rightInput} ${layout.input} w-100`}>
-                            
-                                <input type="text" className='form-control py-2' placeholder='enter surah in english' id="contentEnglish"
-                                    value={formData['contentEnglish']}
-                                    onChange={handleChange} />
-                            
-                            </div>
-                        
-                        </div>
-                    
-                        <div className="mb-4">
-                        
-                            <div className={layout.inputTitle}>
-                            
-                                <h4>surah in arabic</h4>
-                            
-                            </div>
-                        
-                            <div className={`${layout.rightInput} ${layout.input} w-100`}>
-                            
-                                <input type="text" className='form-control py-2' placeholder='enter surah in arabic' id="contentArabic"
-                                    value={formData['contentArabic']}
-                                    onChange={handleChange}/>
-                            
-                            </div>
-                        
-                        </div>
-                        
-                        <div className="mb-4">
-                        
-                            <div className={layout.inputTitle}>
-                            
-                                <h4>numbere of vesrse</h4>
-                            
-                            </div>
-                        
-                            <div className={`${layout.rightInput} ${layout.input} w-100`}>
-                            
-                                <input type="text" className='form-control py-2' placeholder='enter number of verse' id="NumberOfVerse"
-                                    value={formData['NumberOfVerse']}
-                                    onChange={handleChange}/>
-                            
-                            </div>
-                        
-                        </div> */}
                 
                     </div>
                     
