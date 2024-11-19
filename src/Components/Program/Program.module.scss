@@ -40,6 +40,43 @@
         }
     }
 
+    .programOverview {
+    
+        .programTitle {
+            font-size: 35px;
+            font-family: $blackOpsFont;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+        }
+    
+        .overview {
+        
+            .overviewTitle {
+                text-transform: capitalize;
+                color: $greenColor;
+                margin-bottom: 10px;
+            }
+        
+            ul {
+            
+                li {
+                    margin-left: 30px;
+                
+                    p {
+                        font-size: 18px;
+                        opacity: .6;
+                    
+                        i {
+                            color: $blackColor;
+                            font-size: 18px;
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     .programDetails {
         margin-block: 50px;
     
@@ -47,13 +84,104 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            // border-bottom: 1px solid black;
         
             li {
             
                 button {
                     text-transform: capitalize;
-                    color: $lightBlueColor;
+                    color: #9E9E9E;
+                }
+            }
+        }
+    
+        .detailsBox {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        
+            .details {
+            
+                .detailsTitle {
+                    text-transform: capitalize;
+                    font-size: 22px;
+                    color: $yellowColor;
+                    margin-bottom: 10px;
+                }
+            
+                .keyFeatures {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 20px;
+                    
+                    .keyFeaturesTitle {
+                        color: $blackColor;
+                        font-size: 20px;
+                        margin-left: 15px;
+                    }
+                
+                    .keyFeaturesDesc {
+                        margin-bottom: 0;
+                        margin-left: 10px;
+                    }
+                }
+            
+                .useCases {
+                
+                    .useCasesTitle {
+                        @extend .detailsTitle ;
+                    }
+                
+                    ul {
+                        display: block;
+                        list-style: disc;
+                        margin-left: 25px;
+                    
+                        li {
+                        
+                            .description {
+                                font-size: 18px;
+                                margin-bottom: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        
+            .systemRequirements {
+            
+                .systemRequirementsTitle {
+                    text-transform: capitalize;
+                    color: $greenColor;
+                    margin-bottom: 10px;
+                    font-size: 22px;
+                }
+            
+                .requirements {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 15px;
+                
+                    .requirementsTitle {
+                        margin-left: 15px;
+                        color: $blackColor;
+                        font-size: 20px;
+                    }
+                
+                    .requirementsDesc {
+                        color: #1a1a1a;
+                        margin-left: 10px;
+                        font-family: 'Roboto', 'sans-serif';
+                        font-size: 16px;
+                        font-weight: 300;
+                    }
+                }
+            }
+        
+            .installationSteps {
+            
+                .installationTitle {
+                    color: $orangeColor;
+                    font-size: 22px;
+                    margin-bottom: 10px;
                 }
             }
         }
@@ -61,7 +189,7 @@
 }
 
 .downloadProgram {
-    margin-block: 70px;
+    margin-block: 40px;
 
     &:hover {
     

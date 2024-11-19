@@ -67,6 +67,8 @@ export default function ProgramsHome() {
     
         getData();
     }, [run]);
+
+    console.log("home ", token);
     
 
     return (
