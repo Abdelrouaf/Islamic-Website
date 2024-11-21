@@ -216,7 +216,14 @@ export default function AddProgram() {
 
         try {
 
-            const response = await axios.post('http://147.79.101.225:2859/api/programs/', form)
+            const response = await axios.post('http://147.79.101.225:2859/api/programs/', 
+                programData ,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }
+            )
 
             console.log("res ", response);
             
