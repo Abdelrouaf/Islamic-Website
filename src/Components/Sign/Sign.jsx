@@ -264,7 +264,7 @@ export default function Sign({ onClose }) {
                 // localStorage.setItem('loggedInUser', JSON.stringify(response.data));
                 localStorage.setItem('userIn', true);
                 setTimeout(() => {
-                    // window.location.href = '../programs'                    
+                
                     navigate('../programs', { state: { token } });
                 }, 2000);
             } else if(response.status === 403) {

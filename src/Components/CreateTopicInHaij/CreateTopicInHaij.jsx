@@ -36,8 +36,6 @@ export default function CreateTopicInHaij() {
             }));
         }
     };
-    
-    
 
     // Remove the uploaded image
     const onCloseImage = () => {
@@ -182,7 +180,7 @@ const saveData = async () => {
                                         {formData.image && (
                                             <div className={`${layout.uploadImage} p-2`}>
                                                 {/* <i onClick={onCloseImage} className='close fa-solid fa-rectangle-xmark'></i> */}
-                                                <img src={formData.imageURL} alt="Uploaded" />
+                                                <img src={formData.imageURL} alt="Uploaded" loading='lazy' />
                                             </div>
                                         )}
                                     </div>
@@ -226,78 +224,6 @@ const saveData = async () => {
                             </div>
                         
                         </div>
-                    
-                        {/* <div className="mb-4">
-                        
-                            <div className={layout.inputTitle}>
-                            
-                                <h4>surah</h4>
-                            
-                            </div>
-                        
-                            <div className={`${layout.rightInput} ${layout.input} w-100`}>
-                            
-                                <input type="text" className='form-control py-2' placeholder='enter the name of the surah' id="surah"
-                                    value={formData['surah']}
-                                    onChange={handleChange} />
-                            
-                            </div>
-                        
-                        </div>
-                    
-                        <div className="mb-4">
-                        
-                            <div className={layout.inputTitle}>
-                            
-                                <h4>surah in english</h4>
-                            
-                            </div>
-                        
-                            <div className={`${layout.rightInput} ${layout.input} w-100`}>
-                            
-                                <input type="text" className='form-control py-2' placeholder='enter surah in english' id="contentEnglish"
-                                    value={formData['contentEnglish']}
-                                    onChange={handleChange} />
-                            
-                            </div>
-                        
-                        </div>
-                    
-                        <div className="mb-4">
-                        
-                            <div className={layout.inputTitle}>
-                            
-                                <h4>surah in arabic</h4>
-                            
-                            </div>
-                        
-                            <div className={`${layout.rightInput} ${layout.input} w-100`}>
-                            
-                                <input type="text" className='form-control py-2' placeholder='enter surah in arabic' id="contentArabic"
-                                    value={formData['contentArabic']}
-                                    onChange={handleChange}/>
-                            
-                            </div>
-                        
-                        </div>
-                        
-                        <div className="mb-4">
-                        
-                            <div className={layout.inputTitle}>
-                            
-                                <h4>numbere of vesrse</h4>
-                            
-                            </div>
-                        
-                            <div className={`${layout.rightInput} ${layout.input} w-100`}>
-                            
-                                <input type="text" className='form-control py-2' placeholder='enter number of verse' id="NumberOfVerse"
-                                    value={formData['NumberOfVerse']}
-                                    onChange={handleChange}/>
-                            
-                            </div>
-                        
-                        </div> */}
                 
                     </div>
                     

@@ -1,0 +1,18 @@
+@import '../Style/Layout/Layout.module.scss';
+
+.multiUse {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: -5px;
+        height: 35%;
+        width: calc(100% + 10px);
+        background: $lightBlueColor;
+        // z-index: -1;
+        opacity: .2;
+        border-radius: 4px;
+    }
+}

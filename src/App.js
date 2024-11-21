@@ -53,6 +53,8 @@ import ProgramsLayout from './Components/ProgramsLayout/ProgramsLayout';
 import ProgramsHome from './Components/ProgramsHome/ProgramsHome';
 import Category from './Components/Category/Category';
 import ScrollToTop from './Components/ScrollToTop/ScrollToTop';
+import AddCategory from './Components/AddCateogry/AddCategory';
+import AddProgram from './Components/AddProgram/AddProgram';
 
 function App() {
   return (
@@ -138,6 +140,11 @@ function App() {
             <Route path='create' index element={<CreateTopicInNews />} />
             <Route path='topic/:id' element={<NewsTopic />} />
           </Route>
+        
+          <Route path='add-programs/categories/create' element={<AddCategory />} />
+
+          <Route path='add-programs/program/create' element={<AddProgram />} />
+
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
