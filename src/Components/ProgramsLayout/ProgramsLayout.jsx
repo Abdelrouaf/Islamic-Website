@@ -11,6 +11,8 @@ export default function ProgramsLayout( ) {
 
     const token = location.state ? location.state.token : null;
 
+    
+
     // console.log('Token received in Programs:', token);
 
     function checkUserIn() {

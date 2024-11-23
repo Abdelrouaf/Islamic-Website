@@ -55,6 +55,7 @@ import Category from './Components/Category/Category';
 import ScrollToTop from './Components/ScrollToTop/ScrollToTop';
 import AddCategory from './Components/AddCateogry/AddCategory';
 import AddProgram from './Components/AddProgram/AddProgram';
+import UpdateProgram from './Components/UpdateProgram/UpdateProgram';
 
 function App() {
   return (
@@ -144,6 +145,8 @@ function App() {
           <Route path='add-programs/categories/create' element={<AddCategory />} />
 
           <Route path='add-programs/program/create' element={<AddProgram />} />
+
+          <Route path='programs/:category/:id' element={<UpdateProgram />} />
 
         </Route>
         <Route path="*" element={<NotFound />} />

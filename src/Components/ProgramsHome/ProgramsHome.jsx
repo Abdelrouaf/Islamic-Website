@@ -38,6 +38,8 @@ export default function ProgramsHome() {
     //     getData();
     // }, [run]);
 
+    const userToken = localStorage.getItem('accessToken')
+
     useEffect(() => {
         async function getData() {
             try {
@@ -46,7 +48,7 @@ export default function ProgramsHome() {
                 const response = await fetch('http://147.79.101.225:2859/api/programs/', {
                     method: "GET",
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${userToken}`
                     },
                     credentials: "include"
                 });
@@ -59,7 +61,7 @@ export default function ProgramsHome() {
                 }
     
                 const data = await response.json();
-                console.log('Data received from API:', data); // Log parsed data
+                console.log('Data received from API:', data.Programs); // Log parsed data
             } catch (error) {
                 console.error("Error occurred during the fetch:", error.message); // Properly log error
             }

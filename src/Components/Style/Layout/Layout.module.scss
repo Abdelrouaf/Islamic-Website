@@ -875,7 +875,7 @@
     
         &:-webkit-autofill {
             transition: background-color 5000s ease-in-out 0s;
-            -webkit-text-fill-color: #fffbfb !important;
+            -webkit-text-fill-color: #000000 !important;
             -webkit-transition: background-color 5000s ease-in-out 0s;
             -moz-transition: background-color 5000s ease-in-out 0s;
             -ms-transition: background-color 5000s ease-in-out 0s;
@@ -883,7 +883,7 @@
         
             &:active {
                 transition: background-color 5000s ease-in-out 0s;
-                -webkit-text-fill-color: #fffbfb !important;
+                -webkit-text-fill-color: #000000 !important;
                 -webkit-transition: background-color 5000s ease-in-out 0s;
                 -moz-transition: background-color 5000s ease-in-out 0s;
                 -ms-transition: background-color 5000s ease-in-out 0s;
@@ -892,7 +892,7 @@
         
             &:hover {
                 transition: background-color 5000s ease-in-out 0s;
-                -webkit-text-fill-color: #fffbfb !important;
+                -webkit-text-fill-color: #000000 !important;
                 -webkit-transition: background-color 5000s ease-in-out 0s;
                 -moz-transition: background-color 5000s ease-in-out 0s;
                 -ms-transition: background-color 5000s ease-in-out 0s;
@@ -901,7 +901,7 @@
         
             &:focus {
                 transition: background-color 5000s ease-in-out 0s;
-                -webkit-text-fill-color: #fffbfb !important;
+                -webkit-text-fill-color: #000000 !important;
                 -webkit-transition: background-color 5000s ease-in-out 0s;
                 -moz-transition: background-color 5000s ease-in-out 0s;
                 -ms-transition: background-color 5000s ease-in-out 0s;

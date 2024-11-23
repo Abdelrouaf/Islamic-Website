@@ -7,6 +7,7 @@ import group from '../../images/group.png'
 import islamicImg from '../../images/ramadan.png'
 import mediaImg from '../../images/social-media.png'
 import settingImg from '../../images/settings.png'
+import { v4 as uuid } from 'uuid'
 import style from './Admin.module.scss'
 
 export const ThemeContext = createContext(null)
@@ -45,13 +46,28 @@ export default function Admin() {
 
     const [openPrograms, setOpenPrograms] = useState(false)
     const [addProgramsOpen, setAddProgramsOpen] = useState(false)
-    const [addCategoryOpen, setAddCategoryOpen] = useState(false)
     const [addProgramOpen, setAddProgramOpen] = useState(false)
     const [categoriesOpen, setCategoriesOpen] = useState(false)
 
     const [isProgramsOpen, setIsProgramsOpen] = useState(false)
 
-    const [openProgram, setOpenProgram] = useState(false)
+    const [architectureOpen, setArchitectureOpen] = useState(false)
+
+    const [structureOpen, setStructureOpen] = useState(false)
+
+    const [dentalOpen, setDentalOpen] = useState(false)
+
+    const [englishMaterialOpen, setEnglishMaterialOpen] = useState(false)
+
+    const [englishSoftwareOpen, setEnglishSoftwareOpen] = useState(false)
+
+    const [englishCDSOpen, setEnglishCDSOpen] = useState(false)
+
+    const [islamicCDSOpen, setIslamicCDSOpen] = useState(false)
+
+    const [islamicMaterialOpen, setIslamicMaterialOpen] = useState(false)
+
+    const [differentOpen, setDifferentOpen] = useState(false)
 
     useEffect(() => {
         const isMonotheismActive = location.pathname.startsWith('/en/monotheism');
@@ -63,6 +79,8 @@ export default function Admin() {
         setOpenNews(isNewsActive)
         if (isMonotheismActive || isEditActive || isIslamActive || isNewsActive) {
             setOpen3(true);
+            setOpen(false);
+            setOpenPrograms(false)
         } else {
             setOpen3(false);
         }
@@ -70,7 +88,8 @@ export default function Admin() {
         const isPillarsActive = location.pathname.startsWith('/en/pillars');
         if (isPillarsActive) {
             setOpen4(true);
-            setOpen3(true)
+            setOpen3(true);
+            setOpen2(false)
         } else {
             setOpen4(false);
         }
@@ -78,7 +97,8 @@ export default function Admin() {
         const isFaithActive = location.pathname.startsWith('/en/faith');
         if (isFaithActive) {
             setOpen2(true);
-            setOpen3(true)
+            setOpen3(true);
+            setOpen4(false)
         } else {
             setOpen2(false);
         }
@@ -101,47 +121,76 @@ export default function Admin() {
 
         const isAddProgramsOpen = location.pathname.startsWith("/en/add-programs")
 
-        if ( isAddProgramsOpen ) {
-            setIsProgramsOpen(true)
-        } else {
-            setIsProgramsOpen(false)
-        }
-
-        const isAddCategoryActive = location.pathname.startsWith("/en/add-programs/categories/create")
-
-        const isAddProgramActive = location.pathname.startsWith("/en/add-programs/program/create")
-
-        if ( isAddCategoryActive || isAddProgramActive ) {
-            setOpenPrograms(true)
-            setAddProgramsOpen(true)
-        } else {
-            setOpenPrograms(false)
-            setAddProgramsOpen(false)
-        }
-
-        if ( isAddCategoryActive ) {
-            setAddCategoryOpen(true)
-        } else {
-            setAddCategoryOpen(false)
-        }
-
-        if ( isAddProgramActive ) {
-            setAddProgramOpen(true)
-        } else {
-            setAddProgramOpen(false)
-        }
-
         const isProgramOpen = location.pathname.startsWith("/en/programs/")
 
-        if ( isProgramOpen ) {
-            setOpenProgram(true)
+        if ( isAddProgramsOpen || isProgramOpen ) {
+            setIsProgramsOpen(true)
+            setOpenPrograms(true)
+            setOpen3(false);
+            setOpen(false);
         } else {
-            setOpenProgram(false)
+            setIsProgramsOpen(false)
+            setOpenPrograms(false)
+        }
+
+        if (isAddProgramsOpen) {
+            setCategoriesOpen(false)
+        } else if (isProgramOpen) {
+            setAddProgramsOpen(false)
         }
 
     }, [location]);
 
-    const programCategories = JSON.parse(localStorage.getItem('programData')) || []
+    // const programCategories = JSON.parse(localStorage.getItem('programData')) || []
+
+    const [programs, setPrograms] = useState([])
+
+    const userToken = localStorage.getItem('accessToken')
+
+    useEffect( () => {
+
+        const fetchPrograms = async () => {
+            try {
+            
+                const response = await fetch('http://147.79.101.225:2859/api/programs/', {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`,
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include"
+                })
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            
+                const data = await response.json()
+
+                setPrograms(data.Programs)
+                console.log("programs ", data.Programs);
+            
+            } catch {
+                showToast("Error in fetching programs.", 'error')
+            }
+        }
+
+        fetchPrograms()
+
+    }, [] )
+
+    const [toasts, setToasts] = useState([]);
+
+    // Function to show a new toast notification
+    const showToast = (message, type) => {
+        const newToast = { id: uuid(), message, type };
+    
+        setToasts((prevToasts) => [...prevToasts, newToast]);
+    
+        setTimeout(() => {
+            setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
+        }, 6000);
+    };
 
     return (
         <ThemeContext.Provider value={{theme, toggleTheme}}>
@@ -315,13 +364,13 @@ export default function Admin() {
                                 
                                     <li>
                                     
-                                        <h3 onClick={ ()=> {setAddProgramsOpen(!addProgramsOpen)} } className={`${style.link} ${ isProgramsOpen ? style.linkHover : '' } `} >Add <i className={` fa-solid fa-angle-right ${style.menu} ${ addProgramsOpen ? style.rotateArrow : '' }`}></i></h3>
+                                        <h3 onClick={ ()=> {setAddProgramsOpen(!addProgramsOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/add-programs/') ? style.linkHover : '' } `} >Add <i className={` fa-solid fa-angle-right ${style.menu} ${ addProgramsOpen ? style.rotateArrow : '' }`}></i></h3>
                                     
                                         <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${addProgramsOpen ? `${style.active}`: `${style.inactive}` } `}>
 
-                                            <li className={`${style.topicIcon} ${style.link} ${addCategoryOpen ? style.linkHover : style.linkTransparent}`}><NavLink to='add-programs/categories/create' className={({ isActive }) => {const isAddCategoryActive = location.pathname.startsWith('/en/add-programs/categories/create'); return `text-white`;}}><span> - Add Category</span></NavLink></li>
+                                            {/* <li className={`${style.topicIcon} ${style.link} ${addCategoryOpen ? style.linkHover : style.linkTransparent}`}><NavLink to='add-programs/categories/create' className={({ isActive }) => {const isAddCategoryActive = location.pathname.startsWith('/en/add-programs/categories/create'); return `text-white`;}}><span> - Add Category</span></NavLink></li> */}
 
-                                            <li className={`${style.topicIcon} ${style.link} ${addProgramOpen ? style.linkHover : style.linkTransparent}`}><NavLink to='add-programs/program/create' className={({ isActive }) => {const isAddProgramActive = location.pathname.startsWith('/en/add-programs/program/create'); return `text-white`;}}><span> - Add Program</span></NavLink></li>
+                                            <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith('/en/add-programs/program/create') ? style.linkHover : style.linkTransparent}`}><NavLink to='add-programs/program/create' className={({ isActive }) => {const isAddProgramActive = location.pathname.startsWith('/en/add-programs/program/create'); return `text-white`;}}><span> - Add Program</span></NavLink></li>
 
                                         </ul>
                                     
@@ -329,19 +378,177 @@ export default function Admin() {
 
                                     <li>
                                     
-                                        <h3 onClick={ ()=> {setCategoriesOpen(!categoriesOpen)} } className={`${style.link}`} >Categories <i className={` ${style.menu} ${categoriesOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                        <h3 onClick={ ()=> {setCategoriesOpen(!categoriesOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/') ? style.linkHover : '' } `}>Categories <i className={` ${style.menu} ${categoriesOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
                                     
                                         <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${categoriesOpen ? `${style.active}`: `${style.inactive}` } `}>
 
-                                            { programCategories.length > 1 ? programCategories.map( (data, index) => (
-                                            
-                                            // <>
+                                            <li>
+
+                                                <h3 onClick={ ()=> {setArchitectureOpen(!architectureOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Architecture-Software') ? style.linkHover : '' } `} >Architecture software <i className={` ${style.menu} ${architectureOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+
+                                                <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${architectureOpen ? `${style.active}`: `${style.inactive}` } `}>
+
+                                                    { programs.length > 1 ? programs.map( (data, index) => (
+                                                
+                                                        data.programCategory === 'Architecture-Software' ? (
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data.programName}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                        ) : '' 
+                                                    
+                                                    )) : '' }
+
+                                                </ul>
+
+                                            </li>
+
+                                            <li>
+
+                                                <h3 onClick={ ()=> {setStructureOpen(!structureOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Structure-software') ? style.linkHover : '' } `} >Structure software <i className={` ${style.menu} ${structureOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+
+                                                <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${structureOpen ? `${style.active}`: `${style.inactive}` } `}>
+
+                                                    { programs.length > 1 ? programs.map( (data, index) => (
+                                                
+                                                        data.programCategory === 'Structure-Software' ? (
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data.programName}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                        ) : '' 
+                                                    
+                                                    )) : '' }
+
+                                                </ul>
+
+                                            </li>
+
+                                            <li>
+
+                                                <h3 onClick={ ()=> {setDentalOpen(!dentalOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Dental-software') ? style.linkHover : '' } `} >Dental software <i className={` ${style.menu} ${dentalOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+
+                                                <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${dentalOpen ? `${style.active}`: `${style.inactive}` } `}>
+
+                                                    { programs.length > 1 ? programs.map( (data, index) => (
+                                                
+                                                        data.programCategory === 'Dental-Software' ? (
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data.programName}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                        ) : '' 
+                                                    
+                                                    )) : '' }
+
+                                                </ul>
+
+                                            </li>
+
+                                            <li>
+
+                                                <h3 onClick={ ()=> {setEnglishMaterialOpen(!englishMaterialOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/English-Material') ? style.linkHover : '' } `} >English Material <i className={` ${style.menu} ${englishMaterialOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+
+                                                <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${englishMaterialOpen ? `${style.active}`: `${style.inactive}` } `}>
+
+                                                    { programs.length > 1 ? programs.map( (data, index) => (
+                                                
+                                                        data.programCategory === 'English-Material' ? (
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data.programName}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                        ) : '' 
+                                                    
+                                                    )) : '' }
+
+                                                </ul>
+
+                                            </li>
+
+                                            <li>
+
+                                                <h3 onClick={ ()=> {setEnglishSoftwareOpen(!englishSoftwareOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/English-Software') ? style.linkHover : '' } `} >English Software <i className={` ${style.menu} ${englishSoftwareOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+
+                                                <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${englishSoftwareOpen ? `${style.active}`: `${style.inactive}` } `}>
+
+                                                    { programs.length > 1 ? programs.map( (data, index) => (
+                                                
+                                                        data.programCategory === 'English-Software' ? (
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data.programName}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                        ) : '' 
+                                                    
+                                                    )) : '' }
+
+                                                </ul>
+
+                                            </li>
+
+                                            <li>
+
+                                                <h3 onClick={ ()=> {setEnglishCDSOpen(!englishCDSOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/English-CDS') ? style.linkHover : '' } `} >English CDS <i className={` ${style.menu} ${englishCDSOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+
+                                                <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${englishCDSOpen ? `${style.active}`: `${style.inactive}` } `}>
+
+                                                    { programs.length > 1 ? programs.map( (data, index) => (
+
+                                                        data.programCategory === 'English-CDS' ? (
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data.programName}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                        ) : '' 
+                                                    
+                                                    )) : '' }
+
+                                                </ul>
+
+                                            </li>
+
+                                            <li>
+
+                                                <h3 onClick={ ()=> {setIslamicCDSOpen(!islamicCDSOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Islamic-CDS') ? style.linkHover : '' } `} >Islamic CDS <i className={` ${style.menu} ${islamicCDSOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+
+                                                <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${islamicCDSOpen ? `${style.active}`: `${style.inactive}` } `}>
+
+                                                    { programs.length > 1 ? programs.map( (data, index) => (
+
+                                                        data.programCategory === 'Islamic-CDS' ? (
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data.programName}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                        ) : '' 
+                                                    
+                                                    )) : '' }
+
+                                                </ul>
+
+                                            </li>
+
+                                            <li>
+
+                                                <h3 onClick={ ()=> {setIslamicMaterialOpen(!islamicMaterialOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Islamic-Material') ? style.linkHover : '' } `} >Islamic Material <i className={` ${style.menu} ${islamicMaterialOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+
+                                                <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${islamicMaterialOpen ? `${style.active}`: `${style.inactive}` } `}>
+
+                                                    { programs.length > 1 ? programs.map( (data, index) => (
+                                                
+                                                        data.programCategory === 'Islamic-Material' ? (
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data.programName}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                        ) : '' 
+                                                    
+                                                    )) : '' }
+
+                                                </ul>
+
+                                            </li>
+
+                                            <li>
+
+                                                <h3 onClick={ ()=> {setDifferentOpen(!differentOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Different') ? style.linkHover : '' } `} >Different <i className={` ${style.menu} ${differentOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+
+                                                <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${differentOpen ? `${style.active}`: `${style.inactive}` } `}>
+
+                                                    { programs.length > 1 ? programs.map( (data, index) => (
+                                                
+                                                        data.programCategory === 'Different' ? (
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data.programName}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data.programName}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                        ) : '' 
+                                                    
+                                                    )) : '' }
+
+                                                </ul>
+
+                                            </li>
+
+                                            {/* { programCategories.length > 1 ? programCategories.map( (data, index) => (
                                             
                                                 <li key={index} className={`${style.topicIcon} ${style.link} ${openProgram ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.title}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.title}`); return `text-white`;}}><span> - {data.title}</span></NavLink></li>
                                             
-                                            // </>
-                                        
-                                        )) : '' }
+                                            )) : '' } */}
 
                                         </ul>
                                     

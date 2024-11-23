@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import style from './AddProgram.module.scss'
 import axios from 'axios';
@@ -179,6 +179,40 @@ export default function AddProgram() {
         }
     }
 
+    const fileInputRef = useRef(null);
+    const imageInputRef = useRef(null)
+
+    const deleteFile = () => {
+        setProgramData( (prevState) => ({
+            ...prevState,
+            programFile: ''
+        }) )
+    
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    }
+
+// Function to check if the title already exists in the API
+const checkTitleExists = async (programName) => {
+    try {
+        const response = await fetch('http://147.79.101.225:2859/api/programs/', {
+            method: 'GET',
+            credentials: 'include',
+        });
+        const data = await response.json();
+
+        const existingTopics = data.Programs || [];
+
+        return existingTopics.some(
+            (topic) => topic.programName.trim().toLowerCase() === programName.trim().toLowerCase()
+        );
+    } catch {
+        showToast("Error fetching existing topics", "error")
+        return false;
+    }
+};
+
     // Save Data 
     const saveData = async () => {
     
@@ -201,20 +235,18 @@ export default function AddProgram() {
             return;
         }
 
-        const form = new FormData();
-
-        form.append('programCategory', programData.programCategory)
-        form.append('programImage', programData.programImage)
-        form.append('programFile', programData.programFile)
-        form.append('programName', programData.programName)
-        form.append('description', programData.description)
-        form.append('KeyFeatures', programData.KeyFeatures)
-        form.append('useCase', programData.useCase)
-        form.append('MinimumRequirements', programData.MinimumRequirements)
-        form.append('MaximumRequirements', programData.MaximumRequirements)
-        form.append('Installation', programData.Installation)
+        if (isSubmitting) return;
+            setIsSubmitting(true);
 
         try {
+
+            const titleExists = await checkTitleExists(programData.programName);
+
+            if (titleExists) {
+                showToast('A Program with this title already exists', 'error');
+                setIsSubmitting(false)
+                return;
+            }
 
             const response = await axios.post('http://147.79.101.225:2859/api/programs/', 
                 programData ,
@@ -225,32 +257,31 @@ export default function AddProgram() {
                 }
             )
 
-            console.log("res ", response);
-            
+            if ( response.status === 200 || response.status === 201 ) {
+                showToast("Program added successfully!", 'success')
+                resetData();
+            } else {
+                showToast(`Failed to add the program: Unexpected error occurred while adding the program.`, 'error');
+            }
 
-        } catch (error) {
-            console.error("error is ", error);
-            console.log("error ", error)
-            showToast('error ', 'error')
+        } catch {
+            showToast('An error occurred while adding the program', 'error');
         }
 
-        const data = JSON.parse(localStorage.getItem('programData')) || []
+        // const data = JSON.parse(localStorage.getItem('programData')) || []
 
-        const existTitle = data.some((existingTitle) => existingTitle.programName === programData.programName )
+        // const existTitle = data.some((existingTitle) => existingTitle.programName === programData.programName )
 
-        if ( existTitle ) {
-            showToast('Title already exist', 'error')
-            return;
-        }
+        // if ( existTitle ) {
+        //     showToast('Title already exist', 'error')
+        //     return;
+        // }
 
-        setIsSubmitting(true)
+        // data.push(programData)
 
-        data.push(programData)
+        // localStorage.setItem('programData', JSON.stringify(data))
 
-        localStorage.setItem('programData', JSON.stringify(data))
-        showToast("Program added successfully!", 'success')
-
-        resetData();
+        setIsSubmitting(false)
 
     }
 
@@ -302,6 +333,15 @@ export default function AddProgram() {
             MaximumRequirements: maxRequirements,
             Installation: installationStep,
         });
+    
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+
+        if (imageInputRef.current) {
+            imageInputRef.current.value = '';
+        }
+
         setIsSubmitting(false);
     };
 
@@ -325,538 +365,587 @@ export default function AddProgram() {
     return (
     
         <>
-        
-            { dataInLocalStorage.length > 1 ? (
 
-                <div className={style.box}>
+            <div className={style.box}>
 
-                    <div className={style.HeadingTitle}>
+                <div className={style.HeadingTitle}>
 
-                        <h4>Add Program</h4>
+                    <h4>Add Program</h4>
 
-                    </div>
+                </div>
 
-                    <div className="container">
+                <div className="container">
 
-                        <div className={` ${style.box}`}>
+                    <div className={` ${style.box}`}>
+                    
+                        <div className="container">
                         
-                            <div className="container">
+                            <form onSubmit={(e) => { e.preventDefault(); saveData() }}>
                             
-                                <form onSubmit={(e) => { e.preventDefault(); saveData() }}>
+                                <div className={style.inputs}>
                                 
-                                    <div className={style.inputs}>
+                                    <div className="mb-4 d-flex align-items-center gap-3">
                                     
-                                        <div className="mb-4 d-flex align-items-center gap-3">
+                                        <div className={style.inputTitle}>
+                                        
+                                            <h4>Select Program Category:</h4>
+                                        
+                                        </div>
+                                    
+                                        <div className={` ${style.rightInput} ${style.input}`}>
+                                        
+                                            <select className={`form-select w-auto py-2`} id='programCategory' value={programData['programCategory']} onChange={onChange}>
+                                            
+                                                <option value="" disabled>
+                                                    choose a category
+                                                </option>
+
+                                                <option value="Architecture-Software">
+                                                    Architecture software
+                                                </option>
+
+                                                <option value="Structure-Software">
+                                                    Structure software
+                                                </option>
+
+                                                <option value="Dental-Software">
+                                                    Dental software
+                                                </option>
+
+                                                <option value="English-Material">
+                                                    English Material
+                                                </option>
+
+                                                <option value="English-Software">
+                                                    English software
+                                                </option>
+
+                                                <option value="English-CDS">
+                                                    English CDS
+                                                </option>
+
+                                                <option value="Islamic-CDS">
+                                                    Islamic CDS
+                                                </option>
+
+                                                <option value="Islamic-Material">
+                                                    Islamic Material
+                                                </option>
+                                            
+                                                {/* {dataInLocalStorage.map((category, index) => ( */}
+                                                
+                                                    <option value="Different">
+                                                        Different
+                                                    </option>
+                                                
+                                                {/* ))} */}
+                                            
+                                            </select>
+                                        
+                                        </div>
+                                        
+                                    </div>
+                                
+                                    <div className="row align-items-center justify-content-between mb-3">
+                                    
+                                        <div className="col-2">
                                         
                                             <div className={style.inputTitle}>
                                             
-                                                <h4>Select Program Category:</h4>
+                                                <h4>Image</h4>
                                             
                                             </div>
                                         
-                                            <div className={` ${style.rightInput} ${style.input}`}>
-                                            
-                                                <select className={`form-select w-auto py-2`} id='programCategory' value={programData['programCategory']} onChange={onChange}>
-                                                
-                                                    <option value="" disabled>
-                                                        Select a category
-                                                    </option>
-                                                
-                                                    {dataInLocalStorage.map((category, index) => (
-                                                    
-                                                        <option key={index} value={category.title}>
-                                                        {category.title}
-                                                        </option>
-                                                    
-                                                    ))}
-                                                
-                                                </select>
-                                            
-                                            </div>
-                                            
                                         </div>
                                     
-                                        <div className="row align-items-center justify-content-between mb-3">
+                                        <div className="col-sm-12 col-md-10">
                                         
-                                            <div className="col-2">
+                                            <div className={style.rightInput}>
                                             
-                                                <div className={style.inputTitle}>
+                                                <div className='d-flex gap-4'>
                                                 
-                                                    <h4>Image</h4>
-                                                
-                                                </div>
-                                            
-                                            </div>
-                                        
-                                            <div className="col-sm-12 col-md-10">
-                                            
-                                                <div className={style.rightInput}>
-                                                
-                                                    <div className='d-flex gap-4'>
+                                                    <div className={style.uploadImage}>
                                                     
-                                                        <div className={style.uploadImage}>
-                                                        
-                                                            <input
-                                                                type="file"
-                                                                onChange={onImageChange}
-                                                                name='storeLogo'
-                                                                accept="image/*"
-                                                                id='programImage' 
-                                                            />
-                                                        
-                                                            <i className="fa-solid fa-plus"></i>
-                                                        
-                                                        </div>
+                                                        <input
+                                                            type="file"
+                                                            onChange={onImageChange}
+                                                            name='storeLogo'
+                                                            accept="image/*"
+                                                            id='programImage' 
+                                                            ref={imageInputRef}
+                                                        />
                                                     
-                                                        { programData.programImage && (
-                                                        
-                                                            <div className={`${style.uploadImage} p-2`}>
-                                                            
-                                                                <img src={imageURL} alt="Uploaded" loading='lazy' />
-                                                            
-                                                            </div>
-                                                        
-                                                        ) } 
+                                                        <i className="fa-solid fa-plus"></i>
                                                     
                                                     </div>
                                                 
+                                                    { programData.programImage && (
+                                                    
+                                                        <div className={`${style.uploadImage} p-2`}>
+                                                        
+                                                            <img src={imageURL} alt="Uploaded" loading='lazy' />
+                                                        
+                                                        </div>
+                                                    
+                                                    ) } 
+                                                
                                                 </div>
                                             
                                             </div>
                                         
-                                            <div className="col-2">
-                                            
+                                        </div>
+                                    
+                                        <div className="col-2">
+                                        
                                             <div className={style.inputTitle}>
                                             
                                                 <h4>File</h4>
                                             
                                             </div>
-                                        
-                                            </div>
-                                        
-                                            <div className="col-sm-12 col-md-10">
-                                            
-                                                <div className={style.rightInput}>
-                                                
-                                                    <div className='d-flex gap-4'>
-                                                    
-                                                        <div className={style.uploadImage}>
-                                                        
-                                                            <input
-                                                                type="file"
-                                                                onChange={onFileChange}
-                                                                // name='storeLogo'
-                                                                // accept="image/*"
-                                                                id='programFile' 
-                                                            />
-                                                        
-                                                            <i className="fa-solid fa-plus"></i>
-                                                        
-                                                        </div>
-                                                    
-                                                    </div>
-                                                
-                                                </div>
-                                            
-                                            </div>
-
+                                    
                                         </div>
                                     
-                                        <div className="mb-4">
-                                    
-                                            <div className={style.inputTitle}>
-                                            
-                                                <h4>Program title</h4>
-                                            
-                                            </div>
+                                        <div className="col-sm-12 col-md-10">
                                         
-                                            <div className={`${style.rightInput} ${style.input} w-100`}>
+                                            <div className={`mt-5 ${style.rightInput}`}>
                                             
-                                                <input type="text" className='form-control py-2' placeholder='enter Program title' id="programName"
-                                                    value={programData['programName']}
-                                                    onChange={onChange} 
-                                                    />
-                                            
-                                            </div>
-                                            
-                                        </div>
-                                    
-                                        <div className="mb-4">
-                                        
-                                            <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
-                                            
-                                                <h4 className={style.multiUse}>Program overview</h4>
-                                            
-                                            </div>
-                                        
-                                            <div className={`${style.rightInput} ${style.input} w-100`}>
-                                            
-                                                {overviews.map((overview, index) => (
+                                                {/* <div className='d-flex gap-4'>
                                                 
-                                                    <div key={index}>
+                                                    <div className={style.uploadImage}>
                                                     
-                                                        <label htmlFor={`Overview ${index + 1}`}>{`Overview ${index + 1}`}</label>
-
                                                         <input
-                                                            key={index}
-                                                            type="text"
-                                                            value={overview}
-                                                            onChange={(e) => handleInputChange(index, e.target.value)}
-                                                            placeholder={`Overview ${index + 1}`}
-                                                            className='form-control py-2 my-2'
-                                                            id={`Overview ${index + 1}`}
+                                                            type="file"
+                                                            onChange={onFileChange}
+                                                            // accept="image/*"
+                                                            id='programFile' 
                                                         />
                                                     
-                                                    </div>
-                                                
-                                                ))}
-                                            
-                                            </div>
-                                        
-                                        </div>
-                                
-                                        <div className="mb-4">
-                                        
-                                            <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
-                                            
-                                                <h4 className={style.multiUse}>Key Features</h4>
-                                            
-                                            </div>
-                                        
-                                            <div className={`${style.rightInput} ${style.input} w-100`}>
-                                            
-                                                <div>
-
-                                                    <label htmlFor="precisionDrafting">Precision Drafting</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Precision Drafting' id="precisionDrafting"
-                                                    value={keyFeatures['precisionDrafting']}
-                                                    onChange={onKeyFeaturesChange} 
-                                                    />
-
-                                                </div>
-                                            
-                                                <div>
-
-                                                    <label htmlFor="modelingVisualization">3D Modeling and Visualization</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Modeling and Visualization' id="modelingVisualization"
-                                                    value={keyFeatures['modelingVisualization']}
-                                                    onChange={onKeyFeaturesChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="extensiveLibraries">Extensive Libraries</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Extensive Libraries' id="extensiveLibraries"
-                                                    value={keyFeatures['extensiveLibraries']}
-                                                    onChange={onKeyFeaturesChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="collaboration">Collaboration</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Collaboration' id="collaboration"
-                                                    value={keyFeatures['collaboration']}
-                                                    onChange={onKeyFeaturesChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="customAutomation">Custom Automation</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Custom Automation' id="customAutomation"
-                                                    value={keyFeatures['customAutomation']}
-                                                    onChange={onKeyFeaturesChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="integration">Integration</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Integration' id="integration"
-                                                    value={keyFeatures['integration']}
-                                                    onChange={onKeyFeaturesChange} 
-                                                    />
-
-                                                </div>
-
-                                            </div>
-                                        
-                                        </div>
-                                    
-                                        <div className="mb-4">
-                                        
-                                            <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
-                                            
-                                                <h4 className={style.multiUse}>Program use cases</h4>
-                                            
-                                            </div>
-                                        
-                                            <div className={`${style.rightInput} ${style.input} w-100`}>
-                                            
-                                                {useCases.map((useCase, index) => (
-                                                
-                                                    <div key={index}>
-                                                    
-                                                        <label htmlFor={`useCase ${index + 1}`}>{`Use Case ${index + 1}`}</label>
-
-                                                        <input
-                                                            key={index}
-                                                            type="text"
-                                                            value={useCase}
-                                                            onChange={(e) => handleUseCase(index, e.target.value)}
-                                                            placeholder={`Use Case ${index + 1}`}
-                                                            className='form-control py-2 my-2'
-                                                            id={`useCase ${index + 1}`}
-                                                        />
+                                                        <i className="fa-solid fa-plus"></i>
                                                     
                                                     </div>
                                                 
-                                                ))}
+                                                </div> */}
                                             
-                                            </div>
-                                        
-                                        </div>
-
-                                        <div className="mb-4">
-                                        
-                                            <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
-                                            
-                                                <h4 className={style.multiUse}>Minimum System Requirements</h4>
-                                            
-                                            </div>
-                                        
-                                            <div className={`${style.rightInput} ${style.input} w-100`}>
-                                            
-                                                <div>
-
-                                                    <label htmlFor="minOperatingSystem">Operating System</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Operating System' id="minOperatingSystem"
-                                                    value={minRequirements['minOperatingSystem']}
-                                                    onChange={onMinRequirementsChange} 
-                                                    />
-
-                                                </div>
-                                            
-                                                <div>
-
-                                                    <label htmlFor="minProcessor">Processor</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Processor' id="minProcessor"
-                                                    value={minRequirements['minProcessor']}
-                                                    onChange={onMinRequirementsChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="minRAM">RAM</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter RAM' id="minRAM"
-                                                    value={minRequirements['minRAM']}
-                                                    onChange={onMinRequirementsChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="minGPU">GPU</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter GPU' id="minGPU"
-                                                    value={minRequirements['minGPU']}
-                                                    onChange={onMinRequirementsChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="minStorage">Storage</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Storage' id="minStorage"
-                                                    value={minRequirements['minStorage']}
-                                                    onChange={onMinRequirementsChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="minDisplay">Display</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Display' id="minDisplay"
-                                                    value={minRequirements['minDisplay']}
-                                                    onChange={onMinRequirementsChange} 
-                                                    />
-
-                                                </div>
-
-                                            </div>
-                                        
-                                        </div>
-
-                                        <div className="mb-4">
-                                        
-                                            <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
-                                            
-                                                <h4 className={style.multiUse}>Recommended System Requirements</h4>
-                                            
-                                            </div>
-                                        
-                                            <div className={`${style.rightInput} ${style.input} w-100`}>
-                                            
-                                                <div>
-
-                                                    <label htmlFor="maxOperatingSystem">Operating System</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Operating System' id="maxOperatingSystem"
-                                                    value={maxRequirements['maxOperatingSystem']}
-                                                    onChange={onMaxRequirementsChange} 
-                                                    />
-
-                                                </div>
-                                            
-                                                <div>
-
-                                                    <label htmlFor="maxProcessor">Processor</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Processor' id="maxProcessor"
-                                                    value={maxRequirements['maxProcessor']}
-                                                    onChange={onMaxRequirementsChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="maxRAM">RAM</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter RAM' id="maxRAM"
-                                                    value={maxRequirements['maxRAM']}
-                                                    onChange={onMaxRequirementsChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="maxGPU">GPU</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter GPU' id="maxGPU"
-                                                    value={maxRequirements['maxGPU']}
-                                                    onChange={onMaxRequirementsChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="maxStorage">Storage</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Storage' id="maxStorage"
-                                                    value={maxRequirements['maxStorage']}
-                                                    onChange={onMaxRequirementsChange} 
-                                                    />
-
-                                                </div>
-
-                                                <div>
-
-                                                    <label htmlFor="maxDisplay">Display</label>
-
-                                                    <input type="text" className='form-control py-2 my-2' placeholder='enter Display' id="maxDisplay"
-                                                    value={maxRequirements['maxDisplay']}
-                                                    onChange={onMaxRequirementsChange} 
-                                                    />
-
-                                                </div>
-
-                                            </div>
-                                        
-                                        </div>
-
-                                        <div className="mb-4">
-                                        
-                                            <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
-                                            
-                                                <h4 className={style.multiUse}>Program Installation Steps</h4>
-                                            
-                                            </div>
-                                        
-                                            <div className={`${style.rightInput} ${style.input} w-100`}>
-                                            
-                                                {installationStep.map((step, index) => (
+                                                <div className={style.fileContainer}> 
                                                 
-                                                    <div key={index}>
+                                                    <div className={style.fileHeader}> 
                                                     
-                                                        <label htmlFor={`installationStep ${index + 1}`}>{`Installation Step ${index + 1}`}</label>
-
-                                                        <input
-                                                            key={index}
-                                                            type="text"
-                                                            value={step}
-                                                            onChange={(e) => handleInstallationStep(index, e.target.value)}
-                                                            placeholder={`Installation Step ${index + 1}`}
-                                                            className='form-control py-2 my-2'
-                                                            id={`installationStep ${index + 1}`}
-                                                        />
+                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth={0} /><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" /><g id="SVGRepo_iconCarrier"> 
+                                                        
+                                                            <path d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /> </g>
+                                                        
+                                                        </svg> 
+                                                        
+                                                        <p>{ programData.programFile === '' ? 'Browse File to upload!' : 'File added' }</p>
                                                     
-                                                    </div>
+                                                        <input type="file" onChange={onFileChange} id={style['programFile']} ref={fileInputRef} /> 
+                                                    
+                                                    </div> 
                                                 
-                                                ))}
-                                            
+                                                    <label htmlFor="file" className={style.fileFooter}> 
+                                                    
+                                                    <svg fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth={0} /><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" /><g id="SVGRepo_iconCarrier"><path d="M15.331 6H8.5v20h15V14.154h-8.169z" /><path d="M18.153 6h-.009v5.342H23.5v-.002z" /></g></svg> 
+                                                
+                                                    <p>{ programData.programFile === '' ? "Not selected file" : programData.programFile.name }</p> 
+                                                
+                                                    <svg onClick={deleteFile} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth={0} /><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" /><g id="SVGRepo_iconCarrier"> <path d="M5.16565 10.1534C5.07629 8.99181 5.99473 8 7.15975 8H16.8402C18.0053 8 18.9237 8.9918 18.8344 10.1534L18.142 19.1534C18.0619 20.1954 17.193 21 16.1479 21H7.85206C6.80699 21 5.93811 20.1954 5.85795 19.1534L5.16565 10.1534Z" stroke="#000000" strokeWidth={2} /> <path d="M19.5 5H4.5" stroke="#000000" strokeWidth={2} strokeLinecap="round" /> <path d="M10 3C10 2.44772 10.4477 2 11 2H13C13.5523 2 14 2.44772 14 3V5H10V3Z" stroke="#000000" strokeWidth={2} /> </g></svg>
+                                                
+                                                    </label> 
+                                                
+                                                    
+                                                
+                                                </div>
+
                                             </div>
                                         
                                         </div>
 
                                     </div>
+                                
+                                    <div className="mb-4">
+                                
+                                        <div className={style.inputTitle}>
+                                        
+                                            <h4>Program title</h4>
+                                        
+                                        </div>
                                     
-                                    <div className={`d-flex justify-content-end align-items-center gap-3 ${style.btns}`}>
-                                    
-                                        <button type="reset" onClick={resetData} className={`btn btn-outline-success ${style.backBtn}`}>
-                                            Reset
-                                        </button>
-                                    
-                                        <button type="submit" className={`btn btn-success ${style.saveBtn}`} disabled={isSubmitting}>
-                                        {isSubmitting ? 'Saving..' : 'Save'}
-                                        </button>
-                                    
+                                        <div className={`${style.rightInput} ${style.input} w-100`}>
+                                        
+                                            <input type="text" className='form-control py-2' placeholder='enter Program title' id="programName"
+                                                value={programData['programName']}
+                                                onChange={onChange} 
+                                                />
+                                        
+                                        </div>
+                                        
                                     </div>
                                 
-                                </form>
+                                    <div className="mb-4">
+                                    
+                                        <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
+                                        
+                                            <h4 className={style.multiUse}>Program overview</h4>
+                                        
+                                        </div>
+                                    
+                                        <div className={`${style.rightInput} ${style.input} w-100`}>
+                                        
+                                            {overviews.map((overview, index) => (
+                                            
+                                                <div key={index}>
+                                                
+                                                    <label htmlFor={`Overview ${index + 1}`}>{`Overview ${index + 1}`}</label>
+
+                                                    <input
+                                                        key={index}
+                                                        type="text"
+                                                        value={overview}
+                                                        onChange={(e) => handleInputChange(index, e.target.value)}
+                                                        placeholder={`Overview ${index + 1}`}
+                                                        className='form-control py-2 my-2'
+                                                        id={`Overview ${index + 1}`}
+                                                    />
+                                                
+                                                </div>
+                                            
+                                            ))}
+                                        
+                                        </div>
+                                    
+                                    </div>
                             
-                            </div>
+                                    <div className="mb-4">
+                                    
+                                        <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
+                                        
+                                            <h4 className={style.multiUse}>Key Features</h4>
+                                        
+                                        </div>
+                                    
+                                        <div className={`${style.rightInput} ${style.input} w-100`}>
+                                        
+                                            <div>
+
+                                                <label htmlFor="precisionDrafting">Precision Drafting</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Precision Drafting' id="precisionDrafting"
+                                                value={keyFeatures['precisionDrafting']}
+                                                onChange={onKeyFeaturesChange} 
+                                                />
+
+                                            </div>
+                                        
+                                            <div>
+
+                                                <label htmlFor="modelingVisualization">3D Modeling and Visualization</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Modeling and Visualization' id="modelingVisualization"
+                                                value={keyFeatures['modelingVisualization']}
+                                                onChange={onKeyFeaturesChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="extensiveLibraries">Extensive Libraries</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Extensive Libraries' id="extensiveLibraries"
+                                                value={keyFeatures['extensiveLibraries']}
+                                                onChange={onKeyFeaturesChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="collaboration">Collaboration</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Collaboration' id="collaboration"
+                                                value={keyFeatures['collaboration']}
+                                                onChange={onKeyFeaturesChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="customAutomation">Custom Automation</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Custom Automation' id="customAutomation"
+                                                value={keyFeatures['customAutomation']}
+                                                onChange={onKeyFeaturesChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="integration">Integration</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Integration' id="integration"
+                                                value={keyFeatures['integration']}
+                                                onChange={onKeyFeaturesChange} 
+                                                />
+
+                                            </div>
+
+                                        </div>
+                                    
+                                    </div>
+                                
+                                    <div className="mb-4">
+                                    
+                                        <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
+                                        
+                                            <h4 className={style.multiUse}>Program use cases</h4>
+                                        
+                                        </div>
+                                    
+                                        <div className={`${style.rightInput} ${style.input} w-100`}>
+                                        
+                                            {useCases.map((useCase, index) => (
+                                            
+                                                <div key={index}>
+                                                
+                                                    <label htmlFor={`useCase ${index + 1}`}>{`Use Case ${index + 1}`}</label>
+
+                                                    <input
+                                                        key={index}
+                                                        type="text"
+                                                        value={useCase}
+                                                        onChange={(e) => handleUseCase(index, e.target.value)}
+                                                        placeholder={`Use Case ${index + 1}`}
+                                                        className='form-control py-2 my-2'
+                                                        id={`useCase ${index + 1}`}
+                                                    />
+                                                
+                                                </div>
+                                            
+                                            ))}
+                                        
+                                        </div>
+                                    
+                                    </div>
+
+                                    <div className="mb-4">
+                                    
+                                        <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
+                                        
+                                            <h4 className={style.multiUse}>Minimum System Requirements</h4>
+                                        
+                                        </div>
+                                    
+                                        <div className={`${style.rightInput} ${style.input} w-100`}>
+                                        
+                                            <div>
+
+                                                <label htmlFor="minOperatingSystem">Operating System</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Operating System' id="minOperatingSystem"
+                                                value={minRequirements['minOperatingSystem']}
+                                                onChange={onMinRequirementsChange} 
+                                                />
+
+                                            </div>
+                                        
+                                            <div>
+
+                                                <label htmlFor="minProcessor">Processor</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Processor' id="minProcessor"
+                                                value={minRequirements['minProcessor']}
+                                                onChange={onMinRequirementsChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="minRAM">RAM</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter RAM' id="minRAM"
+                                                value={minRequirements['minRAM']}
+                                                onChange={onMinRequirementsChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="minGPU">GPU</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter GPU' id="minGPU"
+                                                value={minRequirements['minGPU']}
+                                                onChange={onMinRequirementsChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="minStorage">Storage</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Storage' id="minStorage"
+                                                value={minRequirements['minStorage']}
+                                                onChange={onMinRequirementsChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="minDisplay">Display</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Display' id="minDisplay"
+                                                value={minRequirements['minDisplay']}
+                                                onChange={onMinRequirementsChange} 
+                                                />
+
+                                            </div>
+
+                                        </div>
+                                    
+                                    </div>
+
+                                    <div className="mb-4">
+                                    
+                                        <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
+                                        
+                                            <h4 className={style.multiUse}>Recommended System Requirements</h4>
+                                        
+                                        </div>
+                                    
+                                        <div className={`${style.rightInput} ${style.input} w-100`}>
+                                        
+                                            <div>
+
+                                                <label htmlFor="maxOperatingSystem">Operating System</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Operating System' id="maxOperatingSystem"
+                                                value={maxRequirements['maxOperatingSystem']}
+                                                onChange={onMaxRequirementsChange} 
+                                                />
+
+                                            </div>
+                                        
+                                            <div>
+
+                                                <label htmlFor="maxProcessor">Processor</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Processor' id="maxProcessor"
+                                                value={maxRequirements['maxProcessor']}
+                                                onChange={onMaxRequirementsChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="maxRAM">RAM</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter RAM' id="maxRAM"
+                                                value={maxRequirements['maxRAM']}
+                                                onChange={onMaxRequirementsChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="maxGPU">GPU</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter GPU' id="maxGPU"
+                                                value={maxRequirements['maxGPU']}
+                                                onChange={onMaxRequirementsChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="maxStorage">Storage</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Storage' id="maxStorage"
+                                                value={maxRequirements['maxStorage']}
+                                                onChange={onMaxRequirementsChange} 
+                                                />
+
+                                            </div>
+
+                                            <div>
+
+                                                <label htmlFor="maxDisplay">Display</label>
+
+                                                <input type="text" className='form-control py-2 my-2' placeholder='enter Display' id="maxDisplay"
+                                                value={maxRequirements['maxDisplay']}
+                                                onChange={onMaxRequirementsChange} 
+                                                />
+
+                                            </div>
+
+                                        </div>
+                                    
+                                    </div>
+
+                                    <div className="mb-4">
+                                    
+                                        <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
+                                        
+                                            <h4 className={style.multiUse}>Program Installation Steps</h4>
+                                        
+                                        </div>
+                                    
+                                        <div className={`${style.rightInput} ${style.input} w-100`}>
+                                        
+                                            {installationStep.map((step, index) => (
+                                            
+                                                <div key={index}>
+                                                
+                                                    <label htmlFor={`installationStep ${index + 1}`}>{`Installation Step ${index + 1}`}</label>
+
+                                                    <input
+                                                        key={index}
+                                                        type="text"
+                                                        value={step}
+                                                        onChange={(e) => handleInstallationStep(index, e.target.value)}
+                                                        placeholder={`Installation Step ${index + 1}`}
+                                                        className='form-control py-2 my-2'
+                                                        id={`installationStep ${index + 1}`}
+                                                    />
+                                                
+                                                </div>
+                                            
+                                            ))}
+                                        
+                                        </div>
+                                    
+                                    </div>
+
+                                </div>
+                                
+                                <div className={`d-flex justify-content-end align-items-center gap-3 ${style.btns}`}>
+                                
+                                    <button type="reset" onClick={resetData} className={`btn btn-outline-success ${style.backBtn}`}>
+                                        Reset
+                                    </button>
+                                
+                                    <button type="submit" className={`btn btn-success ${style.saveBtn}`} disabled={isSubmitting}>
+                                    {isSubmitting ? 'Saving..' : 'Save'}
+                                    </button>
+                                
+                                </div>
+                            
+                            </form>
                         
                         </div>
-
+                    
                     </div>
 
                 </div>
 
-            ) : (
-
-                <>
-                
-                    <p className={`${style.loading} text-danger`}>You have to add Category First.</p>
-                
-                </>
-
-            ) }
-        
+            </div>
         
             <div id="toastBox" className={style.toastBox}>
             

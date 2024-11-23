@@ -258,8 +258,8 @@ export default function Sign({ onClose }) {
             if (response.status === 200) {
                 const token = response.data.token;
                 setUserToken(token)
-                // window.localStorage.setItem('accessToken', token);
-                // document.cookie = `accessToken = ${token}`
+                window.localStorage.setItem('accessToken', token);
+                document.cookie = `accessToken = ${token}`
                 showToast('Sign in successfully!', 'success');
                 // localStorage.setItem('loggedInUser', JSON.stringify(response.data));
                 localStorage.setItem('userIn', true);

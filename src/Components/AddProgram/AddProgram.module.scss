@@ -16,3 +16,100 @@
         border-radius: 4px;
     }
 }
+
+.fileContainer {
+    height: 200px;
+    width: 200px;
+    border-radius: 10px;
+    box-shadow: 4px 4px 30px rgba(0, 0, 0, .2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    gap: 5px;
+    background-color: rgba(0, 110, 255, 0.041);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+
+    .fileHeader {
+        position: relative;
+        flex: 1;
+        width: 100%;
+        cursor: pointer;
+        border: 2px dashed royalblue;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+    
+        svg {
+            height: 30px;
+        }
+    
+        p {
+            text-align: center;
+            color: black;
+            margin-block: 0;
+            font-size: 12px;
+        }
+    }
+
+    .fileFooter {
+        background-color: rgba(0, 110, 255, 0.075);
+        width: 100%;
+        height: 40px;
+        padding: 8px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        color: black;
+        border: none;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+    
+        svg {
+            height: 100%;
+            fill: royalblue;
+            background-color: rgba(70, 66, 66, 0.103);
+            border-radius: 50%;
+            padding: 2px;
+            cursor: pointer;
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.205);
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+        }
+    
+        p {
+            flex: 1;
+            text-align: center;
+            font-size: 10px;
+            margin-block: 0;
+        }
+    }
+}
+
+#programFile {
+    // display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    cursor: pointer;
+}
