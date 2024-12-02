@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useRef, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { json, Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../../images/logo-color-removebg-preview (1).png'
 // import logo from '../../images/programs-logo1.png'
 import programImage from '../../images/programsImageInDashboard3.png'
@@ -189,12 +189,12 @@ export default function Admin() {
                 })
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status:`);
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
             
                 const data = await response.json()
 
-                setPrograms(data.Programs)            
+                setPrograms(data)            
             } catch {
                 showToast("Error in fetching programs.", 'error')
             }
@@ -221,7 +221,15 @@ export default function Admin() {
         }, 6000);
     };
 
-    const user = JSON.parse(localStorage.getItem('loggedInUser'))
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        if (!user || !user.isAdmin) {
+            navigate('/');
+        }
+    }, [navigate]);
 
     // Logout User 
     const logoutUser = async (e) => {
@@ -259,7 +267,14 @@ export default function Admin() {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
+
     }, []);
+
+    // Prevent rendering the component if the user is not validated
+    const user = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (!user || !user.isAdmin) {
+        return null; // Optionally, display a loader or fallback content
+    }
 
     if (loading) {
         return <p className={`${style.loading} ${style.section}`}>No access token found. Please log in again. <span className={style.loader}></span></p>; 

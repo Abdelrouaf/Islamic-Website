@@ -242,6 +242,7 @@ export default function Sign({ onClose }) {
             if (user.userEmail === '' || user.userPassword === '') {
                 showToast("Invalid input", 'invalid')
                 setIsSubmittingSignIn(false);
+                return
             } 
 
             const response = await axios.post('http://147.79.101.225:2859/api/auth/login', {
@@ -253,6 +254,9 @@ export default function Sign({ onClose }) {
                 },
                 withCredentials: true
             });
+
+            console.log("response ", response.status);
+            
 
             if (response.status === 200) {
                 const token = response.data.token;
@@ -266,17 +270,28 @@ export default function Sign({ onClose }) {
                     if (response.data.isAdmin) {
                         navigate('../en', { state: { token } });
                     } else {
-                        navigate('../programs', { state: { token } });
+                        if (response.data.details.apprived) {
+                            navigate('../', { state: { token } });
+                        } else {
+                            navigate('../programs', { state: { token } });
+                        }
                     }
                 }, 2000);
-            } else if(response.status === 403) {
-                showToast(`You should active your account first`, 'error')
-                setTimeout(() => {
-                    window.location.href = '../verify-account'
-                }, 2000);
-            } else if (response.status === 401) {
+            } 
+            // else if(response.status === 403) {
+            //     showToast(`You should active your account first`, 'error')
+            //     setTimeout(() => {
+            //         window.location.href = '../verify-account'
+            //     }, 2000);
+            // } 
+            else if (response.status === 401) {
                 showToast('Email or Password is incorrect', 'error');
                 return
+            } else if ( response.status === 400 ) {
+                showToast('wait until admin approve your account.', 'error')
+                setTimeout(() => {
+                    window.location.href = '../'
+                }, 2000);
             }
         } catch {
             showToast('An error occurred while logging in', 'error');
