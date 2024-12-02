@@ -3,6 +3,8 @@ import layout from '../Style/Layout/Layout.module.scss';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { Editor } from '@tinymce/tinymce-react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 
 export default function CreateTopicInFaithBlog() {
@@ -20,12 +22,18 @@ export default function CreateTopicInFaithBlog() {
     });
 
     // Handle input change for text inputs
-    const handleChange = (e, editorContent) => {
-        if (editorContent !== undefined) {
-            // This is the case for TinyMCE's onEditorChange
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                description: editorContent, // Update the description field
+    const handleChange = (e, isQuill = false) => {
+        // if (editorContent !== undefined) {
+        //     // This is the case for TinyMCE's onEditorChange
+        //     setFormData((prevFormData) => ({
+        //         ...prevFormData,
+        //         description: editorContent, // Update the description field
+        //     }));
+        // } else {
+        if (isQuill) {
+            setFormData((prevState) => ({
+                ...prevState,
+                description: e,
             }));
         } else {
             const { id, value } = e.target;
@@ -212,7 +220,15 @@ const saveData = async () => {
                                     value={formData['description']}
                                     onChange={handleChange}></textarea> */}
 
-<Editor
+<ReactQuill
+            theme="snow"
+            value={formData['description']}
+            onChange={(content) => handleChange(content, true)}
+            placeholder="enter blog description"
+            id="description"
+        />
+
+{/* <Editor
                 apiKey="abj3vot1fn1h78eoev03org4gnykxta3vkqos95mdifnlatt" // Optional: replace with your TinyMCE API key
                 initialValue={formData.description}
                 init={{
@@ -229,7 +245,7 @@ const saveData = async () => {
                         bullist numlist outdent indent | removeformat | help',
                 }}
                 onEditorChange={(content) => handleChange(null, content)}
-            />
+            /> */}
                             
                             </div>
                         
