@@ -3,6 +3,7 @@ import style from './Islam.module.scss'
 import axios from 'axios'
 import { motion } from 'framer-motion'
 import { Azkar } from 'islam.js'
+import DOMPurify from 'dompurify';
 
 export default function Islam() {
 
@@ -227,7 +228,11 @@ export default function Islam() {
 
                                     <iframe src={topic.video} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
 
-                                    <p className={style.paragraph}>{topic.description}</p>
+                                    <p className={style.paragraph}><div
+    dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(topic.description) , // Render sanitized HTML content
+    }}
+/></p>
 
                                     <div className={`${style.details} d-flex gap-3`}>
 

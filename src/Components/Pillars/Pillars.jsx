@@ -3,6 +3,7 @@ import style from './Pillars.module.scss'
 import axios from 'axios'
 import { motion } from 'framer-motion'
 import { Azkar } from 'islam.js'
+import DOMPurify from 'dompurify';
 
 export default function Pillars() {
 
@@ -442,6 +443,8 @@ export default function Pillars() {
         visible: { opacity: 1, y: 0, transition: { duration: 1 } }
     };
 
+    const sanitizedDescription = DOMPurify.sanitize(sawmTopic);
+
     return (
     
         <div className={`${style.blogSection} ${style.section}`}>
@@ -506,7 +509,9 @@ export default function Pillars() {
                                 
                                 
                                 
-                                : ''}
+                                :
+                                <h3 className={`mb-0 ${style.HeadingTitle}`}>{shahadah.title}</h3>
+                            }
                             
                                 <div className={style.image}>
                                 
@@ -534,9 +539,15 @@ export default function Pillars() {
                                 
                                 </div> */}
                             
-                                {shahadahTopic[0]._id !== shahadah._id ? <h4 className={style.subTitle}>{shahadah.title}</h4> : '' }
+                                {/* {shahadahTopic[0]._id !== shahadah._id ? <h4 className={style.subTitle}>{shahadah.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}>{shahadah.description}</p>
+                                <p className={style.paragraph}><div
+    dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(shahadah.description) , // Render sanitized HTML content
+    }}
+/></p>
+
+                                
                             
                             </div>
                         
@@ -560,7 +571,9 @@ export default function Pillars() {
                             
                             
                             
-                            : ''}
+                            :
+                                <h3 className={`mb-0 ${style.HeadingTitle}`}>{salah.title}</h3>
+                            }
                             
                                 <div className={style.image}>
                                 
@@ -578,9 +591,15 @@ export default function Pillars() {
                                 
                                 </div>
                             
-                                {salahTopic[0]._id !== salah._id ? <h4 className={style.subTitle}>{salah.title}</h4> : '' }
+                                {/* {salahTopic[0]._id !== salah._id ? <h4 className={style.subTitle}>{salah.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}>{salah.description}</p>
+                                <p className={style.paragraph}><div
+    dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(salah.description) , // Render sanitized HTML content
+    }}
+/></p>
+
+                                
                             
                             </div>
                             
@@ -596,7 +615,7 @@ export default function Pillars() {
                                 
                                 <div className={style.topicDesign}>
                                 
-                                    <span className={style.count}>1</span>
+                                    <span className={style.count}>3</span>
                                 
                                     <h3 className={style.title}>{sawm.title}</h3>
                                 
@@ -604,7 +623,9 @@ export default function Pillars() {
                             
                             
                             
-                            : ''}
+                            :
+                                <h3 className={`mb-0 ${style.HeadingTitle}`}>{sawm.title}</h3>
+                            }
                             
                                 <div className={style.image}>
                                 
@@ -622,9 +643,17 @@ export default function Pillars() {
                                 
                                 </div>
                             
-                                {sawmTopic[0]._id !== sawm._id ? <h4 className={style.subTitle}>{sawm.title}</h4> : '' }
+                                {/* {sawmTopic[0]._id !== sawm._id ? <h4 className={style.subTitle}>{sawm.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}>{sawm.description}</p>
+                                {/* <p className={style.paragraph}>{sawm.description}</p> */}
+
+                                <p className={style.paragraph}><div
+    dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(sawm.description) , // Render sanitized HTML content
+    }}
+/></p>
+
+                                
                             
                             </div>
                         
@@ -640,7 +669,7 @@ export default function Pillars() {
                                 
                                 <div className={style.topicDesign}>
                                 
-                                    <span className={style.count}>1</span>
+                                    <span className={style.count}>4</span>
                                 
                                     <h3 className={style.title}>{zakat.title}</h3>
                                 
@@ -648,7 +677,9 @@ export default function Pillars() {
                             
                             
                             
-                            : ''}
+                            :
+                                <h3 className={`mb-0 ${style.HeadingTitle}`}>{zakat.title}</h3>
+                            }
                             
                                 <div className={style.image}>
                                 
@@ -666,10 +697,15 @@ export default function Pillars() {
                                 
                                 </div>
                             
-                                {zakatTopic[0]._id !== zakat._id ? <h4 className={style.subTitle}>{zakat.title}</h4> : '' }
+                                {/* {zakatTopic[0]._id !== zakat._id ? <h4 className={style.subTitle}>{zakat.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}>{zakat.description}</p>
-                            
+                                <p className={style.paragraph}><div
+    dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(zakat.description) , // Render sanitized HTML content
+    }}
+/></p>
+                                
+
                             </div>
                         
                         ) )}
@@ -682,13 +718,15 @@ export default function Pillars() {
                                 
                                 <div className={style.topicDesign}>
                                 
-                                    <span className={style.count}>1</span>
+                                    <span className={style.count}>5</span>
                                 
                                     <h3 className={style.title}>{haij.title}</h3>
                                 
                                 </div> 
                             
-                            : ''}
+                            :
+                                <h3 className={`mb-0 ${style.HeadingTitle}`}>{haij.title}</h3>
+                            }
                             
                                 <div className={style.image}>
                                 
@@ -706,9 +744,13 @@ export default function Pillars() {
                                 
                                 </div>
                             
-                                {haijTopic[0]._id !== haij._id ? <h4 className={style.subTitle}>{haij.title}</h4> : '' }
+                                {/* {haijTopic[0]._id !== haij._id ? <h4 className={style.subTitle}>{haij.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}>{haij.description}</p>
+                                <p className={style.paragraph}><div
+    dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(haij.description) , // Render sanitized HTML content
+    }}
+/></p>
                             
                             </div>
                         
@@ -858,6 +900,12 @@ export default function Pillars() {
                 </div>
             
             </div>
+
+            {/* <div
+    dangerouslySetInnerHTML={{
+        __html: sanitizedDescription, // Render sanitized HTML content
+    }}
+/> */}
 
         </div>
     

@@ -3,6 +3,7 @@ import style from './Monotheism.module.scss'
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion'
+import DOMPurify from 'dompurify';
 import { Azkar } from 'islam.js'
 
 export default function Monotheism() {
@@ -267,7 +268,13 @@ export default function Monotheism() {
                                     
                                     ): ''}
                                 
-                                    <p className={style.paragraph}>{topic.description}</p>
+                                    <p className={style.paragraph}><div
+    dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(topic.description) , // Render sanitized HTML content
+    }}
+/></p>
+
+                                    
                                 
                                 </div>
                             

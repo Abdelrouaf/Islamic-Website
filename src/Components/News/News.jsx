@@ -3,6 +3,7 @@ import style from './News.module.scss'
 import axios from 'axios'
 import { motion } from 'framer-motion'
 import { Azkar } from 'islam.js'
+import DOMPurify from 'dompurify';
 
 export default function News() {
 
@@ -238,7 +239,11 @@ export default function News() {
                                     </div>
                                 ) }
 
-                                <p className={style.paragraph}>{topic.description}</p>
+                                <p className={style.paragraph}><div
+    dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(topic.description) , // Render sanitized HTML content
+    }}
+/></p>
 
                                 <div className={`${style.details} d-flex gap-3`}>
 

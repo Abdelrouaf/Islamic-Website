@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { motion } from 'framer-motion'
 import { Azkar } from 'islam.js'
+import DOMPurify from 'dompurify';
 
 export default function Faith() {
 
@@ -485,7 +486,11 @@ export default function Faith() {
 
                                         <span className={style.publisher}>by <span>{topic.author}</span></span>
 
-                                        <p className={style.descriptionBook}>{topic.description}</p>
+                                        <p className={style.descriptionBook}><div
+    dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(topic.description) , // Render sanitized HTML content
+    }}
+/></p>
 
                                         <div className={`${style.details} d-flex gap-3`}>
                                     
@@ -546,7 +551,11 @@ export default function Faith() {
                                     </video>
                                 </div>
 
-                                <p className={style.paragraph}>{topic.description}</p>
+                                <p className={style.paragraph}><div
+    dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(topic.description) , // Render sanitized HTML content
+    }}
+/></p>
 
                                 <div className={`${style.details} d-flex gap-3`}>
 

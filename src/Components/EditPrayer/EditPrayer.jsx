@@ -62,7 +62,7 @@ if (isLoading) {
         
             <div className="container">
             
-                <div className=" gy-2 justify-content-evenly align-items-center">
+                <div className="row gy-2 justify-content-evenly align-items-center">
             
                     <div className="col-lg-4">
                     

@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import layout from '../Style/Layout/Layout.module.scss';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid'; 
+import { Editor } from '@tinymce/tinymce-react';
 import axios from 'axios';
 
 export default function CreateTopicInFaithBook() {
@@ -22,12 +23,21 @@ export default function CreateTopicInFaithBook() {
     });
 
     // Handle input change for text inputs
-    const handleChange = (e) => {
-        const { id, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [id]: value
-        }));
+    const handleChange = (e, editorContent) => {
+        if (editorContent !== undefined) {
+            // This is the case for TinyMCE's onEditorChange
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                description: editorContent, // Update the description field
+            }));
+        } else {
+            const { id, value } = e.target;
+            setFormData((prevState) => ({
+                ...prevState,
+                [id]: value
+            }));
+        }
+        
     };
 
     const onImageChange = (event) => {
@@ -256,9 +266,28 @@ const saveData = async () => {
                         
                             <div className={`${layout.rightInput} ${layout.input} w-100`}>
                             
-                                <textarea className='form-control py-2' placeholder='enter book description' id="description"
+                                {/* <textarea className='form-control py-2' placeholder='enter book description' id="description"
                                     value={formData['description']}
-                                    onChange={handleChange}></textarea>
+                                    onChange={handleChange}></textarea> */}
+
+<Editor
+                apiKey="abj3vot1fn1h78eoev03org4gnykxta3vkqos95mdifnlatt" // Optional: replace with your TinyMCE API key
+                initialValue={formData.description}
+                init={{
+                    height: 300,
+                    menubar: false,
+                    plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount',
+                    ],
+                    toolbar:
+                        'undo redo | formatselect | bold italic backcolor | \
+                        alignleft aligncenter alignright alignjustify | \
+                        bullist numlist outdent indent | removeformat | help',
+                }}
+                onEditorChange={(content) => handleChange(null, content)}
+            />
                             
                             </div>
                         

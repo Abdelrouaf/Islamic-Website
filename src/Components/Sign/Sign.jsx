@@ -117,7 +117,6 @@ export default function Sign({ onClose }) {
                             /[!@#$%^&*]/.test(userData.registerPassword);
     const isPasswordMatch = userData.registerPassword === userData.registerPasswordSec;
 
-
     // Handle Sign Up Form
     const saveData = async (e) => {
     
@@ -182,7 +181,7 @@ export default function Sign({ onClose }) {
                 // localStorage.setItem('userData', JSON.stringify(users))
                 localStorage.setItem('verifyUser', JSON.stringify(userData))
                 setTimeout(() => {
-                    window.location.href = '../verify-account'
+                    window.location.href = '../programs'
                 }, 2000);
                 resetForm();
                 setIsSubmittingSignUp(true);
@@ -339,7 +338,7 @@ export default function Sign({ onClose }) {
 
                                 <div className={`${style.signInBox} ${!isSignUpActive ? style.active : ''}`}>
 
-                                    <div className="row gy-2 h-100">
+                                    <div className="row h-100">
 
                                         <div className="col-sm-12 col-md-7 align-self-center">
 
@@ -421,7 +420,7 @@ export default function Sign({ onClose }) {
 
                                 <div className={`${style.signUpBox} ${isSignUpActive ? style.active : ''}`}>
 
-                                    <div className="row gy-2 h-100">
+                                    <div className="row h-100">
 
                                         <div className="d-none d-md-block col-md-5">
 
