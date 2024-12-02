@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Editor } from '@tinymce/tinymce-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 import axios from 'axios';
 
 export default function CreateTopicInFaithBlog() {
@@ -162,6 +163,30 @@ const saveData = async () => {
         }, 6000); // Keep the toast for 6 seconds
     };
 
+    const modules = {
+        toolbar: [
+          // Add font and size dropdowns
+          [{ font: [] }, { size: [] }],
+          
+          // Add text formatting options
+          ["bold", "italic", "underline", "strike"], // Text styles
+          [{ color: [] }, { background: [] }], // Text and background colors
+          
+          // Add list and alignment options
+          [{ list: "ordered" }, { list: "bullet" }], // Ordered and unordered lists
+          [{ align: [] }], // Text alignment
+    
+          // Add image, video, and link options
+          ["link", "image", "video"],
+    
+          // Add a code block and quote option
+          ["blockquote", "code-block"],
+    
+          // Add undo and redo functionality
+          ["clean"], // Remove formatting
+        ],
+      };
+
     return (
         <div >
         
@@ -225,6 +250,7 @@ const saveData = async () => {
             value={formData['description']}
             onChange={(content) => handleChange(content, true)}
             placeholder="enter blog description"
+            modules={modules}
             id="description"
         />
 
