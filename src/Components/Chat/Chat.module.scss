@@ -1,0 +1,287 @@
+@import '../Style/Layout/Layout.module.scss';
+
+.chatContainer {
+    // border: 1px solid black;
+    padding: 10px;
+
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #fff;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        /*background: hsla(0, 0%, 100%, 0.164);*/
+        background-color: $greenColor;
+        // background-color: $redColor;
+        // border-radius: 10px;
+        transition: all .5s;
+        -webkit-transition: all .5s;
+        -moz-transition: all .5s;
+        -ms-transition: all .5s;
+        -o-transition: all .5s;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        /* background: hsla(0, 0%, 100%, 0.315);  */
+        background-color: $lightBlue;
+    }
+
+    .users {
+        box-shadow: $shadow;
+        padding: 10px;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+
+        .searchBox {
+            display: flex;
+            align-items: center;
+            background-color: rgb(82 82 108 / 10%);
+            border: 1px solid #dee2e6;
+            padding: 5px 10px;
+            border-radius: 8px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            -ms-border-radius: 8px;
+            -o-border-radius: 8px;
+        
+            input {
+                background-color: transparent !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+        
+            i {
+                margin-right: 8px;
+            }
+        }
+
+    
+        .usersBox {
+            max-height: 600px;
+            padding: 10px;
+            margin-block: 10px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        
+            .userBox {
+                border-bottom: 1px solid rgb(0 0 0 / 13%);
+                margin-block: 10px;
+                padding-bottom: 5px;
+    
+                &:last-child {
+                    border-bottom: none;
+                    padding-bottom: 0;
+                }
+            
+                .left {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                
+                    .names {
+                    
+                        .name {
+                            font-size: 16px;
+                        }
+                    
+                        .message {
+                            font-size: 14px;
+                            color: rgba(0, 0, 0, 0.4);
+                        }
+                    }
+                }
+            
+                .right {
+                    text-align: end;
+                
+                    .time {
+                        color: $blackColor;
+                        opacity: .7;
+                        margin-bottom: 0;
+                    }
+                
+                    .countMsg {
+                        font-size: 14px;
+                        color: $greenColor;
+                    }
+                }
+            }
+        }
+    }
+
+    .chatBox {
+        background: linear-gradient(0deg, #F5F6FA, #F5F6FA), linear-gradient(0deg, #FFFFFF, #FFFFFF);
+    
+        .userDetails {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 13px 25px;
+            background-color: $whiteColor;
+            border-radius: 8px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            -ms-border-radius: 8px;
+            -o-border-radius: 8px;
+        }
+
+        .chat {
+            max-height: 500px;
+            padding: 10px;
+            margin-block: 10px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        
+            .inbox {
+                border-radius: 8px;
+                -webkit-border-radius: 8px;
+                -moz-border-radius: 8px;
+                -ms-border-radius: 8px;
+                -o-border-radius: 8px;
+            
+                .userInbox {
+                    display: flex;
+                    justify-content: end;
+                    align-items: center;
+                    gap: 10px;
+                    margin-block: 10px;
+                
+                    .userMessage {
+                        width: 60%;
+                        background-color: antiquewhite;
+                        background-color: rgb(0 102 102 / 80%);
+                        padding: 8px;
+                        border-radius: 8px;
+                        -webkit-border-radius: 8px;
+                        -moz-border-radius: 8px;
+                        -ms-border-radius: 8px;
+                        -o-border-radius: 8px;
+        
+                        .messageTiming {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            color: white;
+                            margin-bottom: 10px;
+                        
+                            .name {
+                                font-size: 12px;
+                            }
+                        
+                            .timing {
+                                font-size: 12px;
+                                margin-bottom: 0;
+                            }
+                        }
+                    
+                        .message {
+                            font-size: 16px;
+                            color: white;
+                            font-family: $fontDescriptionMedium;
+                        }
+                    }
+                }
+        
+                .userName {
+                    display: flex;
+                    justify-self: end;
+                    margin-top: -10px
+                }
+            
+                .adminInbox {
+                    @extend .userInbox;
+                    justify-content: start;
+                
+                    .adminMessage {
+                        @extend .userMessage;
+                        background-color: white;
+        
+                        .messageTiming {
+                            @extend .messageTiming;
+                            color: black;
+                        
+                            .name {
+                                @extend .name;
+                            }
+                        
+                            .timing {
+                                @extend .timing;
+                            }
+                        }
+                    
+                        .message {
+                            @extend .message;
+                            color: black;
+                        }
+                    }
+                }
+        
+                .adminName {
+                    @extend .userName;
+                    justify-self: start;
+                }
+            }
+        }
+    
+        .input {
+            text-transform: capitalize;
+            align-items: baseline;
+            justify-content: center;
+            display: flex;
+            background-color: rgb(232 232 232) !important;
+            padding: 8px 15px;
+            border-radius: 8px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            -ms-border-radius: 8px;
+            -o-border-radius: 8px;
+        
+            input {
+                background-color: transparent !important;
+            }
+    
+            .sendEmoji {
+                position: relative;
+            
+                button {
+                    color: black;
+                    border: none !important;
+                    background-color: transparent;
+                    margin-right: 8px;
+                }
+            
+                .emojiBox {
+                    position: absolute;
+                    bottom: 0;
+                    right: 35px;
+                
+                }
+            }
+        
+            .sendMessageBtn {
+                color: white;
+                background-color: rgba(0, 102, 102, 0.8);
+                border: none !important;
+                padding: 5px 8px;
+            }
+        }
+    }
+}
+
+@media (max-width: 425px) {
+    .inbox {
+    
+        .userInbox {
+        
+            .userMessage {
+                width: 100% !important;
+            }
+        }
+    }
+}

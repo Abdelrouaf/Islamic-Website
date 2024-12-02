@@ -207,7 +207,7 @@ export default function News() {
                 
                 </div> */}
             
-                <div className="row mt-5">
+                <div className="row gy-2 mt-5">
                 
                     <div className="col-md-8">
                     

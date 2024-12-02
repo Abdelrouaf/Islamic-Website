@@ -49,7 +49,7 @@ export default function HaijTopic() {
             try {
                 const response = await fetch(`http://147.79.101.225:2859/api/haijBlog/${id}`);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status`);
                 }
                 const topicData = await response.json();
                 const finalData = topicData.Blog;        
@@ -250,7 +250,7 @@ export default function HaijTopic() {
             <div className="container">
                 <div className={layout.inputs}>
                     {/* Image Upload Section */}
-                    <div className="row align-items-center justify-content-between mb-3">
+                    <div className="row gy-2 align-items-center justify-content-between mb-3">
                         <div className="col-2">
                             <div className={layout.inputTitle}>
                                 <h4>Image</h4>

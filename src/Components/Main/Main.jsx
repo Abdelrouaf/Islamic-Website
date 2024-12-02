@@ -156,7 +156,7 @@ export default function Main() {
         
           <div className="container">
           
-            <div className="row">
+            <div className="row gy-2">
             
               <div className="col-md-4 p-0">
               
@@ -270,7 +270,7 @@ export default function Main() {
         
           <div className="container">
           
-            <div className="row align-items-center">
+            <div className="row gy-2 align-items-center">
             
               <div className="col-lg-6">
               

@@ -186,7 +186,7 @@ export default function Sign({ onClose }) {
                 }, 2000);
                 resetForm();
                 setIsSubmittingSignUp(true);
-                console.log("message error ", response.data.message);
+                // console.log("message error ", response.data.message);
             } else {
                 showToast('Error during sign up', 'error');
             }
@@ -261,11 +261,14 @@ export default function Sign({ onClose }) {
                 window.localStorage.setItem('accessToken', token);
                 document.cookie = `accessToken = ${token}`
                 showToast('Sign in successfully!', 'success');
-                // localStorage.setItem('loggedInUser', JSON.stringify(response.data));
+                localStorage.setItem('loggedInUser', JSON.stringify(response.data));
                 localStorage.setItem('userIn', true);
                 setTimeout(() => {
-                
-                    navigate('../programs', { state: { token } });
+                    if (response.data.isAdmin) {
+                        navigate('../en', { state: { token } });
+                    } else {
+                        navigate('../programs', { state: { token } });
+                    }
                 }, 2000);
             } else if(response.status === 403) {
                 showToast(`You should active your account first`, 'error')
@@ -336,7 +339,7 @@ export default function Sign({ onClose }) {
 
                                 <div className={`${style.signInBox} ${!isSignUpActive ? style.active : ''}`}>
 
-                                    <div className="row h-100">
+                                    <div className="row gy-2 h-100">
 
                                         <div className="col-sm-12 col-md-7 align-self-center">
 
@@ -344,7 +347,7 @@ export default function Sign({ onClose }) {
 
                                                 <h4 className={style.title}>Sign in to Nextgen Knowledge</h4>
 
-                                                <div className={style.social}>
+                                                {/* <div className={style.social}>
 
                                                     <span><i className="fa-brands fa-facebook-f"></i></span>
 
@@ -352,9 +355,9 @@ export default function Sign({ onClose }) {
                                                 
                                                     <span><i className="fa-brands fa-linkedin-in"></i></span>
 
-                                                </div>
+                                                </div> */}
 
-                                                <p className={style.paragraph}>or use your email account</p>
+                                                <p className={style.paragraph}>you have to sign first to go to programs</p>
 
                                                 <div className={style.inputField}>
 
@@ -418,7 +421,7 @@ export default function Sign({ onClose }) {
 
                                 <div className={`${style.signUpBox} ${isSignUpActive ? style.active : ''}`}>
 
-                                    <div className="row h-100">
+                                    <div className="row gy-2 h-100">
 
                                         <div className="d-none d-md-block col-md-5">
 
@@ -444,7 +447,7 @@ export default function Sign({ onClose }) {
 
                                                 <h4 className={style.title}>Create Account</h4>
 
-                                                <div className={style.social}>
+                                                {/* <div className={style.social}>
 
                                                     <span><i className="fa-brands fa-facebook-f"></i></span>
 
@@ -452,9 +455,9 @@ export default function Sign({ onClose }) {
                                                 
                                                     <span><i className="fa-brands fa-linkedin-in"></i></span>
 
-                                                </div>
+                                                </div> */}
 
-                                                <p className={style.paragraph}>or use your email registration</p>
+                                                <p className={style.paragraph}>You have to sign first to go to programs</p>
 
                                                 <div className={style.inputField}>
 

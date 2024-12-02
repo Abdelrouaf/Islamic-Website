@@ -3,7 +3,8 @@ import { Link, NavLink } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import axios from 'axios'
 import logo from '../../images/program-logo1.png'
-import profileUser from '../../images/profile-user.png'
+// import profileUser from '../../images/profile-user.png'
+import profileUser from '../../images/man (1).png'
 import style from './ProgramsHeader.module.scss'
 
 export default function ProgramsHeader() {
@@ -18,9 +19,9 @@ export default function ProgramsHeader() {
     };
 
     function changeNavbarColor() {
-        if(window.scrollY >= 45) {
+        if(window.scrollY >= 90) {
             setNavbarColor(true)
-            // setHeaderPosition(true)
+            setHeaderPosition(true)
         } else {
             setNavbarColor(false)
             setHeaderPosition(false)
@@ -217,7 +218,7 @@ export default function ProgramsHeader() {
 
                 <div className="container">
 
-                    <div className="row justify-content-between align-items-center">
+                    <div className="row gy-2 justify-content-between align-items-center">
 
                         <div className="col-lg-2 col-sm-6">
 
@@ -308,27 +309,27 @@ export default function ProgramsHeader() {
                             <ul className={`navbar-nav mb-2 mb-lg-0`}>
                             
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/engineer'>Engineering</NavLink>
-                                </motion.li>
-
-                                <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : .5 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/dental'>Dental</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/architecture' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}>Architecture</NavLink>
                                 </motion.li>
 
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 1 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/medical'>Medical</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/structure' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}>Structure</NavLink>
+                                </motion.li>
+
+                                <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : .5 }} className="nav-item">
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/dental' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}>Dental</NavLink>
                                 </motion.li>
                             
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 1.5 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/programming'>Programming</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/english-material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}>English</NavLink>
                                 </motion.li>
                             
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 2 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/civil'>Civil</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/islamic-material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}>Islamic</NavLink>
                                 </motion.li>
                             
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 2.5 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/architecture'>Architecture</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}>different</NavLink>
                                 </motion.li>
                             
                                 {/* <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 3 }} className="nav-item">
@@ -353,11 +354,11 @@ export default function ProgramsHeader() {
 
                                     <ul className={`${isProfileUserActive ? style.active : ''}`}>
 
-                                        <li><Link><i className="fa-regular fa-user"></i> Profile</Link></li>
+                                        <li><Link  to='user'><i className="fa-regular fa-user"></i> Profile</Link></li>
 
-                                        <li><Link><i className="fa-regular fa-bookmark"></i> Saved items</Link></li>
+                                        <li><Link to='user/save-items'><i className="fa-regular fa-bookmark"></i> Saved items</Link></li>
 
-                                        <li><Link><i className="fa-solid fa-gear"></i> Setting</Link></li>
+                                        <li><Link to='user/inbox'><i className="fa-regular fa-comment"></i> inbox</Link></li>
 
                                         <li>
                                         
@@ -442,11 +443,11 @@ export default function ProgramsHeader() {
 
                             <ul className={`${isProfileUserActive ? style.active : ''}`}>
 
-                                <li><Link><i className="fa-regular fa-user"></i> Profile</Link></li>
+                                <li><Link to='user'><i className="fa-regular fa-user"></i> Profile</Link></li>
 
-                                <li><Link><i className="fa-regular fa-bookmark"></i> Saved items</Link></li>
+                                <li><Link to='user/save-items'><i className="fa-regular fa-bookmark"></i> Saved items</Link></li>
 
-                                <li><Link><i className="fa-solid fa-gear"></i> Setting</Link></li>
+                                <li><Link to='user/inbox'><i className="fa-regular fa-comment"></i> inbox</Link></li>
 
                                 <li>
                                 

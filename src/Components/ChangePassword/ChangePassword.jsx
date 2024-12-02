@@ -11,7 +11,8 @@ export default function ChangePassword() {
 
     // Data of Sign up
     const [userData, setUserData] = useState({
-        registerEmail: JSON.parse(localStorage.getItem('changePassword')).emailConfirm,
+        // registerEmail: JSON.parse(localStorage.getItem('changePassword')).emailConfirm,
+        registerEmail: '',
         registerPassword: '',
         registerPasswordSec: ''
     })

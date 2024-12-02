@@ -1,9 +1,31 @@
 import React, { useEffect, useState } from 'react'
-import style from './ProgramsHome.module.scss'
 import { Link, useOutletContext } from 'react-router-dom'
+import englishMaterialImg from '../../images/englishMaterial.jpg'
+import englishSoftwareImg from '../../images/englishSoftware.jpg'
+import englishCDSImg from '../../images/englishCDS.jpg'
+import islamicMaterialImg from '../../images/islamicMaterial.jpg'
+import differentImg from '../../images/different.jpg'
 import Sign from '../Sign/Sign'
+import { Azkar } from 'islam.js'
+import style from './ProgramsHome.module.scss'
 
 export default function ProgramsHome() {
+
+    const azkar = new Azkar()
+
+    const [dataZikr, setDataZikr] = useState([]);
+    // const movingZikrRef = useRef(null);
+
+    useEffect(() => {
+        const allAzkar = azkar.getAll()
+        setDataZikr(allAzkar);
+    }, []);
+
+    const [zikrScrollVisible, setZikrScrollVisible] = useState(false)
+
+    const toggleZikrScroll = () => {
+        setZikrScrollVisible(!zikrScrollVisible)
+    }
 
     const [showSign, setShowSign] = useState(false);
 
@@ -53,24 +75,24 @@ export default function ProgramsHome() {
                     credentials: "include"
                 });
     
-                console.log('Response from API:', response); // Log raw response
+                // console.log('Response from API:', response); // Log raw response
     
                 if (!response.ok) {
                     // Handle non-2xx HTTP status codes
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status`);
                 }
     
                 const data = await response.json();
-                console.log('Data received from API:', data.Programs); // Log parsed data
-            } catch (error) {
-                console.error("Error occurred during the fetch:", error.message); // Properly log error
+                // console.log('Data received from API:', data.Programs); // Log parsed data
+            } catch {
+                console.error("Error occurred during the fetch:"); // Properly log error
             }
         }
     
         getData();
     }, [run]);
 
-    console.log("home ", token);
+    // console.log("home ", token);
     
 
     return (
@@ -131,13 +153,13 @@ export default function ProgramsHome() {
 
                 <div className="container">
 
-                    <div className="row justify-content-center">
+                    <div className="row gy-2 justify-content-center">
 
                         <div className="col-md-6">
 
                             <div className={style.box}>
 
-                                <Link to='category/architecture'>
+                                <Link to='category/architecture' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}>
                                 
                                     <div className={style.image}>
 
@@ -147,11 +169,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/architecture'><h4 className={style.title}>Architecture</h4></Link>
+                                <Link to='category/architecture' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}><h4 className={style.title}>Architecture</h4></Link>
 
                                 <p className={style.description}>Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.</p>
 
-                                <Link to='category/architecture' className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/architecture' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -161,7 +183,7 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/dental'>
+                                <Link to='category/dental' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}>
                                 
                                     <div className={style.image}>
 
@@ -171,11 +193,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/dental'><h4 className={style.title}>Dental</h4></Link>
+                                <Link to='category/dental' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}><h4 className={style.title}>Dental</h4></Link>
 
                                 <p className={style.description}>Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.</p>
 
-                                <Link to='category/dental' className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/dental' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -185,21 +207,165 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/civil'>
+                                <Link to='category/structure' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}>
                                 
                                     <div className={style.image}>
 
-                                        <img src='http://147.79.101.225:2859/public/engineering5.jpg' alt="Civil" loading='lazy' />
+                                        <img src='http://147.79.101.225:2859/public/engineering5.jpg' alt="structure" loading='lazy' />
 
                                     </div>
                                 
                                 </Link>
 
-                                <Link to='category/civil'><h4 className={style.title}>Civil</h4></Link>
+                                <Link to='category/structure' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}><h4 className={style.title}>Structure</h4></Link>
 
-                                <p className={style.description}>Civil engineering programs offer specialized tools for planning, designing, and managing infrastructure projects.</p>
+                                <p className={style.description}>Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.</p>
 
-                                <Link to='category/civil' className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/structure' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }} className={style.seeMoreBtn}>See more</Link>
+
+                            </div>
+
+                        </div>
+
+                        <div className="col-md-6">
+
+                            <div className={style.box}>
+
+                                <Link to='category/english-material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}>
+                                
+                                    <div className={style.image}>
+
+                                        <img src={englishMaterialImg} alt="english-material" loading='lazy' />
+
+                                    </div>
+                                
+                                </Link>
+
+                                <Link to='category/english-material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}><h4 className={style.title}>English Material</h4></Link>
+
+                                <p className={style.description}>English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.</p>
+
+                                <Link to='category/english-material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }} className={style.seeMoreBtn}>See more</Link>
+
+                            </div>
+
+                        </div>
+
+                        <div className="col-md-6">
+
+                            <div className={style.box}>
+
+                                <Link to='category/english-software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }}>
+                                
+                                    <div className={style.image}>
+
+                                        <img src={englishSoftwareImg} alt="english-software" loading='lazy' />
+
+                                    </div>
+                                
+                                </Link>
+
+                                <Link to='category/english-software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }}><h4 className={style.title}>English Software</h4></Link>
+
+                                <p className={style.description}>English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.</p>
+
+                                <Link to='category/english-software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }} className={style.seeMoreBtn}>See more</Link>
+
+                            </div>
+
+                        </div>
+
+                        <div className="col-md-6">
+
+                            <div className={style.box}>
+
+                                <Link to='category/english-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }}>
+                                
+                                    <div className={style.image}>
+
+                                        <img src={englishCDSImg} alt="english-CDS" loading='lazy' />
+
+                                    </div>
+                                
+                                </Link>
+
+                                <Link to='category/english-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }}><h4 className={style.title}>English CDS</h4></Link>
+
+                                <p className={style.description}>English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.</p>
+
+                                <Link to='category/english-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }} className={style.seeMoreBtn}>See more</Link>
+
+                            </div>
+
+                        </div>
+
+                        <div className="col-md-6">
+
+                            <div className={style.box}>
+
+                                <Link to='category/islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }}>
+                                
+                                    <div className={style.image}>
+
+                                        <img src='http://147.79.101.225:2859/public/engineering5.jpg' alt="islamic-CDS" loading='lazy' />
+
+                                    </div>
+                                
+                                </Link>
+
+                                <Link to='category/islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }}><h4 className={style.title}>Islamic-CDS</h4></Link>
+
+                                <p className={style.description}>Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.</p>
+
+                                <Link to='category/islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }} className={style.seeMoreBtn}>See more</Link>
+
+                            </div>
+
+                        </div>
+
+                        <div className="col-md-6">
+
+                            <div className={style.box}>
+
+                                <Link to='category/islamic-material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}>
+                                
+                                    <div className={style.image}>
+
+                                        <img src={islamicMaterialImg} alt="islamic-material" loading='lazy' />
+
+                                    </div>
+                                
+                                </Link>
+
+                                <Link to='category/islamic-material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}><h4 className={style.title}>Islamic Material</h4></Link>
+
+                                <p className={style.description}>Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.</p>
+
+                                <Link to='category/islamic-material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }} className={style.seeMoreBtn}>See more</Link>
+
+                            </div>
+
+                        </div>
+
+                        <div className="col-md-6">
+
+                            <div className={style.box}>
+
+                                <Link to='category/different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}>
+                                
+                                    <div className={style.image}>
+
+                                        <img src={differentImg} alt="different" loading='lazy' />
+
+                                    </div>
+                                
+                                </Link>
+
+                                <Link to='category/different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}><h4 className={style.title}>Different</h4></Link>
+
+                                <p className={style.description}>Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.</p>
+
+                                <Link to='category/different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -220,6 +386,45 @@ export default function ProgramsHome() {
                 {showSign && <Sign onClose={closeSign} />}
             
             </div> */}
+
+<div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+                
+                <div className={style.scrollContent} onMouseEnter={(e) => {
+                        e.currentTarget.style.animationPlayState = 'paused';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.animationPlayState = 'running';
+                    }}>
+
+                    {Array.from(dataZikr.entries()).map( ([zkar, items], index) => (
+
+                            <div key={index} className={style.box}>
+
+                                <ul>
+
+                                    {items.map((item, key) => (
+                                    
+                                        <span key={key}>
+                                            
+                                            <li>
+                                            <h4 >{zkar}</h4>
+                                                <p>{item.zikr}</p>
+                                                
+                                            </li>
+                                        
+                                        </span>
+                                    ))}
+
+                                </ul>
+
+                            </div>
+                    
+                    ) )}
+
+                </div>
+            
+            </div>
 
         </>
     

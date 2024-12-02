@@ -63,7 +63,7 @@ export default function EditFaithBook() {
     
         <div className="container">
         
-            <div className="row justify-content-evenly align-items-center">
+            <div className="row gy-2 justify-content-evenly align-items-center">
         
                 <div className="col-lg-4">
                 

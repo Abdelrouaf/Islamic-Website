@@ -47,7 +47,7 @@ export default function IslamTopic() {
             try {
                 const response = await fetch(`http://147.79.101.225:2859/api/lifeBlogs/${id}`);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status`);
                 }
                 const topicData = await response.json();
                 const finalData = topicData.Blog;        

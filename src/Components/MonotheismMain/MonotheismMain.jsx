@@ -14,7 +14,7 @@ export default function MonotheismMain() {
             
                 <div className="inputs">
                 
-                    <div className="row align-items-baseline mb-3">
+                    <div className="row gy-2 align-items-baseline mb-3">
                         
                         <div className="col-sm-2">
                         
@@ -38,7 +38,7 @@ export default function MonotheismMain() {
                 
                     </div>
                 
-                    <div className="row align-items-baseline mb-3">
+                    <div className="row gy-2 align-items-baseline mb-3">
                     
                         <div className="col-sm-2">
                         
@@ -62,7 +62,7 @@ export default function MonotheismMain() {
                 
                     </div>
                 
-                    <div className="row align-items-baseline mb-3">
+                    <div className="row gy-2 align-items-baseline mb-3">
                     
                         <div className="col-sm-2">
                         

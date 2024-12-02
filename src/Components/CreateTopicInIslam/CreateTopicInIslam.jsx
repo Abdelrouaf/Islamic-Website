@@ -81,7 +81,7 @@ const saveData = async () => {
         form.append('description', description);
         form.append('video', video);
 
-        console.log("formData is: ", formData);
+        // console.log("formData is: ", formData);
         
 
         // Using Axios to make the POST request

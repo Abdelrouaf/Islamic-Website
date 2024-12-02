@@ -53,7 +53,7 @@ export default function FaithBookTopic() {
             try {
                 const response = await fetch(`http://147.79.101.225:2859/api/faithBook/${id}`);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status:`);
                 }
                 const topicData = await response.json();
                 const finalData = topicData.book;        
@@ -87,7 +87,7 @@ export default function FaithBookTopic() {
     }, [id]);
 
 
-    console.log("form data is: ", formData);
+    // console.log("form data is: ", formData);
     
 
     // Handle input change for text inputs
@@ -265,7 +265,7 @@ export default function FaithBookTopic() {
             <div className="container">
                 <div className={layout.inputs}>
                     {/* Image Upload Section */}
-                    <div className="row align-items-center justify-content-between mb-3">
+                    <div className="row gy-2 align-items-center justify-content-between mb-3">
                         <div className="col-2">
                             <div className={layout.inputTitle}>
                                 <h4>Image</h4>

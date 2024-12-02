@@ -27,9 +27,9 @@ export default function Footer() {
             
                 <div className={style.upperFooter}>
 
-                    <div className="row align-items-baseline text-center">
+                    <div className="row gy-2 align-items-baseline text-center">
 
-                        <div className="col-md-6 col-lg-3">
+                        <div className="col-md-6 col-lg-4">
 
                             <div className={style.footerBox}>
 
@@ -146,7 +146,7 @@ export default function Footer() {
 
                         </div>
 
-                        <div className="col-md-6 col-lg-3">
+                        <div className="col-md-6 col-lg-4">
 
                             <div className={style.footerBox}>
 
@@ -168,7 +168,7 @@ export default function Footer() {
 
                         </div>
 
-                        <div className="col-md-6 col-lg-3">
+                        <div className="col-md-6 col-lg-4">
 
                             <div className={style.footerBox}>
 
@@ -188,13 +188,13 @@ export default function Footer() {
 
                             </div>
 
-                        <div className="col-md-6 col-lg-3">
+                        {/* <div className="col-md-6 col-lg-3">
 
                             <div className={style.footerBox}>
 
                                 <h4>get in touch</h4>
 
-                                <form className={style.form} onSubmit={handleSubmit}>
+                                <form className={style.form}>
                                 
                                     <div className={style.inputBox}>
                                     
@@ -220,7 +220,7 @@ export default function Footer() {
 
                             </div>
 
-                        </div>
+                        </div> */}
 
                     </div>
 

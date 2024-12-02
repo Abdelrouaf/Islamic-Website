@@ -1,0 +1,199 @@
+@import '../Style/Layout/Layout.module.scss';
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: all .5s ease-in-out;
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    -ms-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: all .5s ease-in-out;
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    -ms-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+}
+
+.userInboxSec {
+    background: linear-gradient(0deg, #F5F6FA, #F5F6FA), linear-gradient(0deg, #FFFFFF, #FFFFFF);
+    padding-block: 10px;
+    height: 100vh;
+    position: relative;
+    overflow-y: scroll;
+    padding-bottom: 55px;
+
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #fff;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background-color: $greenColor;
+        transition: all .5s;
+        -webkit-transition: all .5s;
+        -moz-transition: all .5s;
+        -ms-transition: all .5s;
+        -o-transition: all .5s;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: $lightBlue;
+    }
+
+    .usersBox {
+        max-height: 100vh;
+        padding: 10px;
+        margin-block: 10px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    
+        .inbox {
+            // padding: 20px;
+            // border: 1px solid rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            -ms-border-radius: 8px;
+            -o-border-radius: 8px;
+        
+            .userInbox {
+                display: flex;
+                justify-content: end;
+                align-items: center;
+                gap: 10px;
+                margin-block: 10px;
+            
+                .userMessage {
+                    width: 60%;
+                    background-color: antiquewhite;
+                    background-color: rgb(0 102 102 / 80%);
+                    padding: 8px;
+                    border-radius: 8px;
+                    -webkit-border-radius: 8px;
+                    -moz-border-radius: 8px;
+                    -ms-border-radius: 8px;
+                    -o-border-radius: 8px;
+    
+                    .messageTiming {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        color: white;
+                        margin-bottom: 10px;
+                    
+                        .name {
+                            font-size: 12px;
+                        }
+                    
+                        .timing {
+                            font-size: 12px;
+                            margin-bottom: 0;
+                        }
+                    }
+                
+                    .message {
+                        font-size: 16px;
+                        color: white;
+                        font-family: $fontDescriptionMedium;
+                    }
+                }
+            }
+    
+            .userName {
+                display: flex;
+                justify-self: end;
+                margin-top: -10px
+            }
+        
+            .adminInbox {
+                @extend .userInbox;
+                justify-content: start;
+            
+                .adminMessage {
+                    @extend .userMessage;
+                    background-color: white;
+    
+                    .messageTiming {
+                        @extend .messageTiming;
+                        color: black;
+                    
+                        .name {
+                            @extend .name;
+                        }
+                    
+                        .timing {
+                            @extend .timing;
+                        }
+                    }
+                
+                    .message {
+                        @extend .message;
+                        color: black;
+                    }
+                }
+            }
+    
+            .adminName {
+                @extend .userName;
+                justify-self: start;
+            }
+        }
+    }
+
+    .input {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        text-transform: capitalize;
+        align-items: baseline;
+        justify-content: center;
+        display: flex;
+        background-color: rgb(232 232 232) !important;
+        padding: 8px 15px;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        -ms-border-radius: 8px;
+        -o-border-radius: 8px;
+    
+        input {
+            background-color: transparent !important;
+        }
+
+        .sendEmoji {
+            position: relative;
+        
+            button {
+                color: black;
+                border: none !important;
+                background-color: transparent;
+                margin-right: 8px;
+            }
+        
+            .emojiBox {
+                position: absolute;
+                bottom: 0;
+                right: 35px;
+            
+            }
+        }
+    
+        .sendMessageBtn {
+            color: white;
+            background-color: rgba(0, 102, 102, 0.8);
+            border: none !important;
+            padding: 5px 8px;
+        }
+    }
+}

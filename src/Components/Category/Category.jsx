@@ -1,11 +1,32 @@
-import React from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import program1 from '../../images/program1.jpeg'
+import { Azkar } from 'islam.js'
 import style from './Category.module.scss'
 
 export default function Category() {
 
     const { category } = useParams();
+
+    const location = useLocation()
+
+    const { description } = location.state || {}
+
+    const azkar = new Azkar()
+
+    const [dataZikr, setDataZikr] = useState([]);
+    // const movingZikrRef = useRef(null);
+
+    useEffect(() => {
+        const allAzkar = azkar.getAll()
+        setDataZikr(allAzkar);
+    }, []);
+
+    const [zikrScrollVisible, setZikrScrollVisible] = useState(false)
+
+    const toggleZikrScroll = () => {
+        setZikrScrollVisible(!zikrScrollVisible)
+    }
 
     return (
     
@@ -29,7 +50,7 @@ export default function Category() {
 
                         <h4 className={style.title}>{category}</h4>
 
-                        <p className={style.description}>Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.</p>
+                        <p className={style.description}>{description}</p>
 
                     </div>
 
@@ -51,7 +72,7 @@ export default function Category() {
 
                 <div className="container">
 
-                    <div className="row">
+                    <div className="row gy-2">
 
                         <div className="col-lg-3 d-none d-lg-block">
 
@@ -61,23 +82,23 @@ export default function Category() {
 
                                 <ul>
 
-                                    <li><Link>Architecture software</Link></li>
+                                    <li><Link to='/programs/category/architecture' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }} className={`${ location.pathname.endsWith('architecture') ? style.programsHover : '' }`}>Architecture software</Link></li>
 
-                                    <li><Link>Structure software</Link></li>
+                                    <li><Link to='/programs/category/structure' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }} className={`${ location.pathname.endsWith('structure') ? style.programsHover : '' }`}>Structure software</Link></li>
 
-                                    <li><Link>Dental software</Link></li>
+                                    <li><Link to='/programs/category/dental' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }} className={`${ location.pathname.endsWith('dental') ? style.programsHover : '' }`}>Dental software</Link></li>
 
-                                    <li><Link>English Material</Link></li>
+                                    <li><Link to='/programs/category/english-material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }} className={`${ location.pathname.endsWith('english-material') ? style.programsHover : '' }`}>English Material</Link></li>
 
-                                    <li><Link>English software</Link></li>
+                                    <li><Link to='/programs/category/english-software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }} className={`${ location.pathname.endsWith('english-software') ? style.programsHover : '' }`}>English software</Link></li>
 
-                                    <li><Link>English CDS</Link></li>
+                                    <li><Link to='/programs/category/english-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }} className={`${ location.pathname.endsWith('english-CDS') ? style.programsHover : '' }`}>English CDS</Link></li>
 
-                                    <li><Link>Islamic CDS</Link></li>
+                                    <li><Link to='/programs/category/islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }} className={`${ location.pathname.endsWith('islamic-CDS') ? style.programsHover : '' }`}>Islamic CDS</Link></li>
 
-                                    <li><Link>Islamic Material</Link></li>
+                                    <li><Link to='/programs/category/islamic-material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }} className={`${ location.pathname.endsWith('islamic-material') ? style.programsHover : '' }`}>Islamic Material</Link></li>
 
-                                    <li><Link>Different</Link></li>
+                                    <li><Link to='/programs/category/different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }} className={`${ location.pathname.endsWith('different') ? style.programsHover : '' }`}>Different</Link></li>
 
                                 </ul>
 
@@ -115,9 +136,9 @@ export default function Category() {
 
                         <div className="col-lg-9">
 
-                            <div className="row">
+                            <div className="row gy-2">
 
-                                <div className="col-md-6 col-lg-4">
+                                <div className="col-md-12 col-lg-6 col-xl-4">
 
                                     <div className={style.programBox}>
 
@@ -228,7 +249,7 @@ export default function Category() {
 
                                 </div>
 
-                                <div className="col-md-6 col-lg-4">
+                                <div className="col-md-12 col-lg-6 col-xl-4">
 
                                     <div className={style.programBox}>
 
@@ -317,7 +338,7 @@ export default function Category() {
 
                                 </div>
 
-                                <div className="col-md-6 col-lg-4">
+                                <div className="col-md-12 col-lg-6 col-xl-4">
 
                                     <div className={style.programBox}>
 
@@ -406,7 +427,7 @@ export default function Category() {
 
                                 </div>
 
-                                <div className="col-md-6 col-lg-4">
+                                <div className="col-md-12 col-lg-6 col-xl-4">
 
                                     <div className={style.programBox}>
 
@@ -495,7 +516,7 @@ export default function Category() {
 
                                 </div>
 
-                                <div className="col-md-6 col-lg-4">
+                                <div className="col-md-12 col-lg-6 col-xl-4">
 
                                     <div className={style.programBox}>
 
@@ -584,7 +605,7 @@ export default function Category() {
 
                                 </div>
 
-                                <div className="col-md-6 col-lg-4">
+                                <div className="col-md-12 col-lg-6 col-xl-4">
 
                                     <div className={style.programBox}>
 
@@ -673,7 +694,7 @@ export default function Category() {
 
                                 </div>
 
-                                <div className="col-md-6 col-lg-4">
+                                <div className="col-md-12 col-lg-6 col-xl-4">
 
                                     <div className={style.programBox}>
 
@@ -762,7 +783,7 @@ export default function Category() {
 
                                 </div>
 
-                                <div className="col-md-6 col-lg-4">
+                                <div className="col-md-12 col-lg-6 col-xl-4">
 
                                     <div className={style.programBox}>
 
@@ -851,7 +872,7 @@ export default function Category() {
 
                                 </div>
 
-                                <div className="col-md-6 col-lg-4">
+                                <div className="col-md-12 col-lg-6 col-xl-4">
 
                                     <div className={style.programBox}>
 
@@ -949,6 +970,45 @@ export default function Category() {
                 </div>
 
             </section>
+
+            <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+                
+                <div className={style.scrollContent} onMouseEnter={(e) => {
+                        e.currentTarget.style.animationPlayState = 'paused';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.animationPlayState = 'running';
+                    }}>
+
+                    {Array.from(dataZikr.entries()).map( ([zkar, items], index) => (
+
+                            <div key={index} className={style.box}>
+
+                                <ul>
+
+                                    {items.map((item, key) => (
+                                    
+                                        <span key={key}>
+                                            
+                                            <li>
+                                            <h4 >{zkar}</h4>
+                                                <p>{item.zikr}</p>
+                                                
+                                            </li>
+                                        
+                                        </span>
+                                    ))}
+
+                                </ul>
+
+                            </div>
+                    
+                    ) )}
+
+                </div>
+            
+            </div>
 
         </>
     

@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import programImage from '../../images/program1.jpeg'
+import { Azkar } from 'islam.js'
 import style from './Program.module.scss'
 
 export default function Program() {
@@ -10,7 +11,7 @@ export default function Program() {
 
     const token = window.localStorage.getItem('accessToken')
 
-    console.log("fw ", token);
+    // console.log("fw ", token);
     
 
     useEffect(() => {
@@ -19,12 +20,12 @@ export default function Program() {
                 await fetch('http://147.79.101.225:2859/api/programs/', {
                     method : "GET",
                     headers: {
-                        "Authorization": `Bearer ${token}`
+                        "Authorization": `Bearer ${token}`,
                     },
                         credentials: "include"
                 })
                 .then( (res) => res.json() )
-                .then( (data) => console.log(data) )
+                // .then( (data) => console.log(data) )
                 .then( err => console.error("Error is: ", err) )
             } catch (error) {
                 console.error("error ", error);
@@ -41,6 +42,22 @@ export default function Program() {
     const [systemRequirementsFlag, setSystemRequirementsFlag] = useState(false)
 
     const [installationFlag, setInstallationFlag] = useState(false)
+
+    const azkar = new Azkar()
+
+    const [dataZikr, setDataZikr] = useState([]);
+    // const movingZikrRef = useRef(null);
+
+    useEffect(() => {
+        const allAzkar = azkar.getAll()
+        setDataZikr(allAzkar);
+    }, []);
+
+    const [zikrScrollVisible, setZikrScrollVisible] = useState(false)
+
+    const toggleZikrScroll = () => {
+        setZikrScrollVisible(!zikrScrollVisible)
+    }
 
     return (
     
@@ -60,11 +77,11 @@ export default function Program() {
 
                 <div className="container">
 
-                    <div className="row">
+                    <div className="row gy-2">
 
                         <div className="col-12">
 
-                            <div className="row">
+                            <div className="row gy-2">
 
                                 <div className="col-md-6">
 
@@ -343,6 +360,45 @@ export default function Program() {
                 </div>
 
             </section>
+
+            <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+                
+                <div className={style.scrollContent} onMouseEnter={(e) => {
+                        e.currentTarget.style.animationPlayState = 'paused';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.animationPlayState = 'running';
+                    }}>
+
+                    {Array.from(dataZikr.entries()).map( ([zkar, items], index) => (
+
+                            <div key={index} className={style.box}>
+
+                                <ul>
+
+                                    {items.map((item, key) => (
+                                    
+                                        <span key={key}>
+                                            
+                                            <li>
+                                            <h4 >{zkar}</h4>
+                                                <p>{item.zikr}</p>
+                                                
+                                            </li>
+                                        
+                                        </span>
+                                    ))}
+
+                                </ul>
+
+                            </div>
+                    
+                    ) )}
+
+                </div>
+            
+            </div>
         
         </>
     

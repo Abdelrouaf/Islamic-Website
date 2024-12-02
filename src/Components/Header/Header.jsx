@@ -201,7 +201,7 @@ export default function Header() {
 
                 <div className="container">
 
-                    <div className="row justify-content-between align-items-center">
+                    <div className="row gy-2 justify-content-between align-items-center">
 
                         <div className="col-lg-2 col-sm-6">
 
@@ -320,7 +320,7 @@ export default function Header() {
                                 </motion.li>
 
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 3.5 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className="nav-link"  to='/programs'>Programs</NavLink>
+                                    <NavLink onClick={toggleNavbar} className="nav-link"  to='/sign'>Programs</NavLink>
                                 </motion.li>
                             
                                 {/* <li className="nav-item">
@@ -349,52 +349,94 @@ export default function Header() {
                     
                     <div className={style.right}>
 
-                        {/* <span>social: </span> */}
-
                         <div className={style.social}>
 
-                            {/* <a href="#" ><i className="fa-brands fa-facebook"></i></a>
+                            <div className={style.socialLoginIcons}>
+                                <div className={style.socialContainer}>
+                                    <div className={`${style.icon} ${style.socialIcon11}`}>
+                                    <svg
+                                        viewBox="0 0 512 512"
+                                        height="1.7em"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className={style.svgIcontwit}
+                                        fill="white"
+                                    >
+                                        <path
+                                        d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"
+                                        ></path>
+                                    </svg>
+                                    </div>
+                                    <div className={style.socialIcon1}>
+                                    <svg
+                                        viewBox="0 0 512 512"
+                                        height="1.7em"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className={style.svgIcontwit}
+                                        fill="black"
+                                    >
+                                        <path
+                                        d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"
+                                        ></path>
+                                    </svg>
+                                    </div>
+                                </div>
+                                <div className={style.socialContainer}>
+                                    <div className={`${style.icon} ${style.socialIcon22}`}>
+                                    <svg
+                                        fill="white"
+                                        className={style.svgIcon}
+                                        viewBox="0 0 448 512"
+                                        height="1.5em"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                        d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"
+                                        ></path>
+                                    </svg>
+                                    </div>
+                                    <div className={style.socialIcon2}>
+                                    <svg
+                                        fill="white"
+                                        className={style.svgIcon}
+                                        viewBox="0 0 448 512"
+                                        height="1.5em"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                        d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"
+                                        ></path>
+                                    </svg>
+                                    </div>
+                                </div>
+                                <div className={style.socialContainer}>
+                                    <div className={`${style.icon} ${style.socialIcon33}`}>
+                                    <svg
+                                        viewBox="0 0 384 512"
+                                        fill="white"
+                                        height="1.6em"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                        d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"
+                                        ></path>
+                                    </svg>
+                                    </div>
+                                    <div className={style.socialIcon3}>
+                                    <svg
+                                        viewBox="0 0 384 512"
+                                        fill="white"
+                                        height="1.6em"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                        d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"
+                                        ></path>
+                                    </svg>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <a href="#"><i className="fa-brands fa-youtube"></i></a>
-
-                            <a href="#"><i className="fa-brands fa-instagram"></i></a> */}
-
-                            {/* <button className={`${style.Btn} ${style.instagram}`}>
-                                <a><svg
-                                className={style.}
-                                viewBox="0 0 448 512"
-                                height="1.5em"
-                                xmlns="http://www.w3.org/2000/svg"
-                                >
-                                <path
-                                    d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"
-                                ></path>
-                                </svg></a>
-                                <span className={style.text}>Instagram</span>
-                            </button>
-
-                            <button className={`${style.Btn} ${style.youtube}`}>
-                                <svg
-                                className={style.}
-                                viewBox="0 0 576 512"
-                                height="1.5em"
-                                xmlns="http://www.w3.org/2000/svg"
-                                >
-                                <path
-                                    d="M549.655 148.28c-6.281-23.64-24.041-42.396-47.655-48.685C462.923 85 288 85 288 85S113.077 85 74 99.595c-23.614 6.289-41.374 25.045-47.655 48.685-12.614 47.328-12.614 147.717-12.614 147.717s0 100.39 12.614 147.718c6.281 23.64 24.041 42.396 47.655 48.684C113.077 427 288 427 288 427s174.923 0 214-14.595c23.614-6.289 41.374-25.045 47.655-48.685 12.614-47.328 12.614-147.718 12.614-147.718s0-100.389-12.614-147.717zM240 336V176l144 80-144 80z"
-                                ></path>
-                                </svg>
-                                <span className={style.text}>YouTube</span>
-                            </button>
-
-                            <button className={`${style.Btn} ${style.twitter}`}>
-                                <svg className={style.} xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 48 48">
-                                    <path d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"></path>
-                                </svg>
-                                <span className={style.text}>Facebook</span>
-                            </button> */}
-
-                            <Link to='/sign' className={style.glowOnHover}>Sign in!</Link>
+                            {/* <Link to='/sign' className={style.glowOnHover}>Sign in!</Link> */}
 
                         </div>
 

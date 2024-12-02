@@ -51,7 +51,7 @@ export default function FaithBlogTopic() {
             try {
                 const response = await fetch(`http://147.79.101.225:2859/api/faithVideo/${id}`);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status:`);
                 }
                 const topicData = await response.json();
                 const finalData = topicData.data;        

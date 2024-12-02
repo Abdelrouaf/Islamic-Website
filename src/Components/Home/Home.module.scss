@@ -553,8 +553,13 @@
     -moz-border-radius: 4px;
     -ms-border-radius: 4px;
     -o-border-radius: 4px;
+    transition: all .5s ease-in-out;
     cursor: pointer;
     z-index: 1000;
+    -webkit-transition: all .5s ease-in-out;
+    -moz-transition: all .5s ease-in-out;
+    -ms-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
 }
 
 .zikrScroll {
@@ -584,9 +589,14 @@
         -moz-border-radius: 4px;
         -ms-border-radius: 4px;
         -o-border-radius: 4px;
+        transition: all .5s ease-in-out;
         cursor: pointer;
         z-index: 1000;
-    }
+        -webkit-transition: all .5s ease-in-out;
+        -moz-transition: all .5s ease-in-out;
+        -ms-transition: all .5s ease-in-out;
+        -o-transition: all .5s ease-in-out;
+}
 
     .scrollContent {
         display: flex;

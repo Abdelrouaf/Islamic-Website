@@ -168,7 +168,7 @@ const saveData = async () => {
             <div className="container">
                 <form onSubmit={(e) => { e.preventDefault(); saveData(); }}>
                     <div className={layout.inputs}>
-                    <div className="row align-items-center justify-content-between mb-3">
+                    <div className="row gy-2 align-items-center justify-content-between mb-3">
                             <div className="col-2">
                                 <div className={layout.inputTitle}>
                                     <h4>Image</h4>

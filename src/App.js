@@ -56,6 +56,15 @@ import ScrollToTop from './Components/ScrollToTop/ScrollToTop';
 import AddCategory from './Components/AddCateogry/AddCategory';
 import AddProgram from './Components/AddProgram/AddProgram';
 import UpdateProgram from './Components/UpdateProgram/UpdateProgram';
+import AllUsers from './Components/AllUsers/AllUsers';
+import ApproveUser from './Components/ApproveUser/ApproveUser';
+import UserRole from './Components/UserRole/UserRole';
+import User from './Components/User/User';
+import UserProfile from './Components/UserProfile/UserProfile';
+import SaveItems from './Components/SaveItems/SaveItems';
+import UserInbox from './Components/UserInbox/UserInbox';
+import ResetPassword from './Components/ResetPassword/ResetPassword';
+import Chat from './Components/Chat/Chat';
 
 function App() {
   return (
@@ -87,57 +96,74 @@ function App() {
           <Route index element={<ProgramsHome />} />
           <Route path='category/:category' element={<Category />} /> 
           <Route path=':category/program-autoDESK' element={<Program />} />
+          <Route path='user' element={<User />} >
+          
+            <Route index element={<UserProfile />} />
+            <Route path='save-items' element={<SaveItems />} />
+            <Route path='inbox' element={<UserInbox />} />
+            <Route path='change-password' element={<ResetPassword />} />
+          
+          </Route>
           <Route path='sign' element={<Sign />} />
         
         </Route>
 
         <Route path='en' element={<Admin />}>
-          <Route path='monotheism' element={<EditMonotheism />}>
+    
+          <Route path='user/all-users' element={<AllUsers />} />
+
+          <Route path='user/approve-user' element={<ApproveUser />} />
+
+          <Route path='user/user-role' element={<UserRole />} />
+
+          <Route path='chat' element={<Chat />} />
+
+          <Route path='islamic/monotheism' element={<EditMonotheism />}>
             <Route path='create/topic' index element={<CreateTopicInMonotheism />} />
             <Route path='topic/:id' element={<MonotheismTopic />} />
           </Route>
 
-          <Route path='pillars/shahadah' element={<EditShahadah />}>
+          <Route path='islamic/pillars/shahadah' element={<EditShahadah />}>
             <Route path='create' index element={<CreateTopicInShahadah />} />
             <Route path='topic/:id' element={<ShahadahTopic />} />
           </Route>
 
-          <Route path='pillars/prayer' element={<EditPrayer />}>
+          <Route path='islamic/pillars/prayer' element={<EditPrayer />}>
             <Route path='create' index element={<CreateTopicInPrayer />} />
             <Route path='topic/:id' element={<PrayerTopic />} />
           </Route>
 
-          <Route path='pillars/sawm' element={<EditSawm />}>
+          <Route path='islamic/pillars/sawm' element={<EditSawm />}>
             <Route path='create' index element={<CreateTopicInSawm />} />
             <Route path='topic/:id' element={<SawmTopic />} />
           </Route>
 
-          <Route path='pillars/zakat' element={<EditZakat />}>
+          <Route path='islamic/pillars/zakat' element={<EditZakat />}>
             <Route path='create' index element={<CreateTopicInZakat />} />
             <Route path='topic/:id' element={<ZakatTopic />} />
           </Route>
 
-          <Route path='pillars/haij' element={<EditHaij />}>
+          <Route path='islamic/pillars/haij' element={<EditHaij />}>
             <Route path='create' index element={<CreateTopicInHaij />} />
             <Route path='topic/:id' element={<HaijTopic />} />
           </Route>
 
-          <Route path='faith/book' element={<EditFaithBook />}>
+          <Route path='islamic/faith/book' element={<EditFaithBook />}>
             <Route path='create' index element={<CreateTopicInFaithBook />} />
             <Route path='topic/:id' element={<FaithBookTopic />} />
           </Route>
 
-          <Route path='faith/blog' element={<EditFaithBlog />}>
+          <Route path='islamic/faith/blog' element={<EditFaithBlog />}>
             <Route path='create' index element={<CreateTopicInFaithBlog />} />
             <Route path='topic/:id' element={<FaithBlogTopic />} />
           </Route>
 
-          <Route path='islam' element={<EditIslam />}>
+          <Route path='islamic/islam' element={<EditIslam />}>
             <Route path='create' index element={<CreateTopicInIslam />} />
             <Route path='topic/:id' element={<IslamTopic />} />
           </Route>
 
-          <Route path='news' element={<EditNews />}>
+          <Route path='islamic/news' element={<EditNews />}>
             <Route path='create' index element={<CreateTopicInNews />} />
             <Route path='topic/:id' element={<NewsTopic />} />
           </Route>

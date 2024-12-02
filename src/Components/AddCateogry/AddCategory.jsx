@@ -113,7 +113,7 @@ export default function AddCategory() {
                         
                             <div className={style.inputs}>
                             
-                                <div className="row align-items-center justify-content-between mb-3">
+                                <div className="row gy-2 align-items-center justify-content-between mb-3">
                                 
                                     <div className="col-2">
                                     

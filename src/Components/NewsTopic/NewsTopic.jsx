@@ -52,7 +52,7 @@ export default function NewsTopic() {
             try {
                 const response = await fetch(`http://147.79.101.225:2859/api/news/${id}`);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status`);
                 }
                 const topicData = await response.json();
                 const finalData = topicData.Blog;        
@@ -198,7 +198,7 @@ export default function NewsTopic() {
                     showToast('Topic updated successfully!', 'success')
                     fetchData();
                 }else {
-                    showToast(`Failed to update the topic: Unexpected error occurred while adding the topic.`, 'error');
+                    showToast(`Failed to update the topic: Unexpected error occurred while updating the topic.`, 'error');
                 }
             } else {
                 showToast("You can't update without changing data", 'invalid')
@@ -211,7 +211,6 @@ export default function NewsTopic() {
         setIsUpdating(false)
     }, 6000);
     };
-    
 
     // Function to handle topic deletion with confirmation
     const handleDelete = async () => {
@@ -263,7 +262,7 @@ export default function NewsTopic() {
             <div className="container">
                 <div className={layout.inputs}>
                     {/* Image Upload Section */}
-                    <div className="row align-items-center justify-content-between mb-3">
+                    <div className="row gy-2 align-items-center justify-content-between mb-3">
                         <div className="col-2">
                             <div className={layout.inputTitle}>
                                 <h4>Image</h4>

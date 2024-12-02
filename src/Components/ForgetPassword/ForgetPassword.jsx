@@ -41,24 +41,30 @@ export default function ForgetPassword() {
         //     showToast('User not found', 'error')
         // }
     
-        try {
-            const response = await axios.post('http://147.79.101.225:2859/api/auth/forgetpassword', {
-                email: userData.emailConfirm
-            });
+        // try {
+        //     const response = await axios.post('http://147.79.101.225:2859/api/auth/login', {
+        //         email: userData.emailConfirm
+        //     });
 
-            if (response.status === 200) {
-                showToast('Email Founded!', 'success');
-                localStorage.setItem('changePassword', JSON.stringify(userData))
-                // localStorage.setItem('forgetPassword', true);
-                setTimeout(() => {
-                    window.location.href = '../verify-account'
-                }, 2000);
-            } else {
-                showToast('User not found', 'error');
-            }
-        } catch {
-            showToast('An error occurred while checking for email exist', 'error');
-        }
+        //     if (response.status === 200) {
+        //         showToast('Email Founded!', 'success');
+        //         localStorage.setItem('changePassword', JSON.stringify(userData))
+        //         // localStorage.setItem('forgetPassword', true);
+        //         setTimeout(() => {
+        //             window.location.href = '../verify-account'
+        //         }, 2000);
+        //     } else {
+        //         showToast('User not found', 'error');
+        //     }
+        // } catch {
+        //     showToast('An error occurred while checking for email exist', 'error');
+        // }
+
+        localStorage.setItem('changePassword', JSON.stringify(userData))
+        // localStorage.setItem('forgetPassword', true);
+        setTimeout(() => {
+            window.location.href = '../reset-password'
+        }, 2000);
 
     }
 

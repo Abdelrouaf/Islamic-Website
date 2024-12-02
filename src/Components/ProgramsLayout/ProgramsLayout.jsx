@@ -29,7 +29,7 @@ export default function ProgramsLayout( ) {
         }
     }, [token]);
 
-    console.log('layout ', token);
+    // console.log('layout ', token);
     
 
     return (
@@ -40,7 +40,7 @@ export default function ProgramsLayout( ) {
         
             <Outlet context={{token}}> </Outlet>
 
-            {/* <ProgramsFooter /> */}
+            <ProgramsFooter />
 
         </>
     

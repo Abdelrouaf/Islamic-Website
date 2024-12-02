@@ -26,7 +26,7 @@ export default function Home() {
     const azkar = new Azkar()
 
     const [dataZikr, setDataZikr] = useState([]);
-    const movingZikrRef = useRef(null);
+    // const movingZikrRef = useRef(null);
 
     useEffect(() => {
         const allAzkar = azkar.getAll()
@@ -69,7 +69,7 @@ export default function Home() {
                     
                     </div> */}
                 
-                    <div className="row">
+                    <div className="row gy-2">
                     
                         <div className="col-md-6 col-lg-4">
                         
@@ -187,7 +187,7 @@ export default function Home() {
                     
                     </div> */}
                 
-                    <div className="row align-items-center">
+                    <div className="row gy-2 align-items-center">
                     
                         <div className="col-lg-6">
                         
@@ -255,7 +255,7 @@ export default function Home() {
                 
                     <h4 className={style.subTitle}>Five Pillars <span>of Islam</span></h4>
                 
-                    <div className="row justify-content-center align-items-center">
+                    <div className="row gy-2 justify-content-center align-items-center">
                     
                         <div className="col-md-4 col-lg-2">
                         
@@ -663,10 +663,10 @@ export default function Home() {
         
             <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
 
-        <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
-            <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+            <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
                 
-            <div className={style.scrollContent} onMouseEnter={(e) => {
+                <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';
                     }}
                     onMouseLeave={(e) => {

@@ -295,7 +295,7 @@ export default function MonotheismTopic() {
             <div className="container">
                 <div className={layout.inputs}>
                     {/* Image Upload Section */}
-                    <div className="row align-items-center justify-content-between mb-3">
+                    <div className="row gy-2 align-items-center justify-content-between mb-3">
                         <div className="col-2">
                             <div className={layout.inputTitle}>
                                 <h4>Image</h4>
