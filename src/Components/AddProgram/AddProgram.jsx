@@ -263,13 +263,16 @@ const checkTitleExists = async (programName) => {
 
             if ( response.status === 200 || response.status === 201 ) {
                 showToast("Program added successfully!", 'success')
+                console.log("res ", response.status);
+                
                 resetData();
             } else {
                 showToast(`Failed to add the program: Unexpected error occurred while adding the program.`, 'error');
             }
 
-        } catch {
+        } catch (error) {
             showToast('An error occurred while adding the program', 'error');
+            console.error("error beacuse", error)
         }
 
         // const data = JSON.parse(localStorage.getItem('programData')) || []

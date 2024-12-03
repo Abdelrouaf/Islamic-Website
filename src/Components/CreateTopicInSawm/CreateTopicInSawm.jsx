@@ -3,6 +3,9 @@ import layout from '../Style/Layout/Layout.module.scss';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { Editor } from '@tinymce/tinymce-react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 import axios from 'axios';
 
 export default function CreateTopicInSawm() {
@@ -18,12 +21,18 @@ export default function CreateTopicInSawm() {
     });
 
     // Handle input change for text inputs
-    const handleChange = (e, editorContent) => {
-        if (editorContent !== undefined) {
-            // This is the case for TinyMCE's onEditorChange
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                description: editorContent, // Update the description field
+    const handleChange = (e, isQuill = false) => {
+        // if (editorContent !== undefined) {
+        //     // This is the case for TinyMCE's onEditorChange
+        //     setFormData((prevFormData) => ({
+        //         ...prevFormData,
+        //         description: editorContent, // Update the description field
+        //     }));
+        // }
+        if (isQuill) {
+            setFormData((prevState) => ({
+                ...prevState,
+                description: e,
             }));
         } else {
             const { id, value } = e.target;
@@ -32,6 +41,37 @@ export default function CreateTopicInSawm() {
                 [id]: value
             }));
         }
+    };
+
+    const modules = {
+        toolbar: [
+          // Add font and size dropdowns
+          [{ font: [] }, { size: [] }],
+
+          [ { 'header': [1, 2, 3, 4, 5, 6, false] } ],
+          
+          // Add text formatting options
+          ["bold", "italic", "underline", "strike"], // Text styles
+          [{ color: [] }, { background: [] }], // Text and background colors
+          
+          // Add list and alignment options
+          [{ list: "ordered" }, { list: "bullet" }], // Ordered and unordered lists
+          [{ align: [] }], // Text alignment
+          [{ 'script': 'sub' }, { 'script': 'super' }],
+    
+          [{ 'indent': '-1' }, { 'indent': '+1' }],
+
+          [ { 'direction': 'rtl' } ],
+
+          // Add image, video, and link options
+          ["link", "video"],
+    
+          // Add a code block and quote option
+          ["blockquote", "code-block"],
+    
+          // Add undo and redo functionality
+          ["clean"], // Remove formatting
+        ],
     };
 
     const onImageChange = (event) => {
@@ -231,7 +271,16 @@ const saveData = async () => {
                                     value={formData['description']}
                                     onChange={handleChange}></textarea> */}
 
-            <Editor
+<ReactQuill
+            theme="snow"
+            value={formData['description']}
+            onChange={(content) => handleChange(content, true)}
+            placeholder="enter blog description"
+            modules={modules}
+            id="description"
+        />
+
+            {/* <Editor
                 apiKey="abj3vot1fn1h78eoev03org4gnykxta3vkqos95mdifnlatt" // Optional: replace with your TinyMCE API key
                 initialValue={formData.description}
                 init={{
@@ -248,7 +297,7 @@ const saveData = async () => {
                         bullist numlist outdent indent | removeformat | help',
                 }}
                 onEditorChange={(content) => handleChange(null, content)}
-            />
+            /> */}
                             
                             </div>
                         

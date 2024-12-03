@@ -142,13 +142,13 @@ export default function ProgramsFooter() {
 
                                 <ul>
 
-                                    <li><Link to='category/architecture' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}>architecture</Link></li>
+                                    <li><Link to='category/Architecture-Software' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}>architecture</Link></li>
 
-                                    <li><Link to='category/dental' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}>dental</Link></li>
+                                    <li><Link to='category/Dental-Software' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}>dental</Link></li>
 
-                                    <li><Link to='category/structure' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}>structure</Link></li>
+                                    <li><Link to='category/Structure-Software' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}>structure</Link></li>
 
-                                    <li><Link to='category/english-material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}>english material</Link></li>
+                                    <li><Link to='category/English-Material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}>english material</Link></li>
 
                                 </ul>
 
@@ -164,15 +164,15 @@ export default function ProgramsFooter() {
 
                                 <ul>
 
-                                    <li><Link to='category/english-software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }}>english software</Link></li>
+                                    <li><Link to='category/English-Software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }}>english software</Link></li>
 
-                                    <li><Link to='category/english-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }}>english CDS</Link></li>
+                                    <li><Link to='category/English-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }}>english CDS</Link></li>
 
-                                    <li><Link to='category/islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }}>islamic CDS</Link></li>
+                                    <li><Link to='category/Islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }}>islamic CDS</Link></li>
 
-                                    <li><Link to='category/islamic-material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}>islamic material</Link></li>
+                                    <li><Link to='category/Islamic-Material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}>islamic material</Link></li>
 
-                                    <li><Link to='category/different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}>different</Link></li>
+                                    <li><Link to='category/Different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}>different</Link></li>
 
                                 </ul>
 

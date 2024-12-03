@@ -112,6 +112,8 @@ export default function AllUsers() {
 
                                     <th><input type="checkbox" className='w-auto'  /></th>
 
+                                    <th>user id</th>
+
                                     <th>userName</th>
 
                                     <th>user email</th>
@@ -136,6 +138,8 @@ export default function AllUsers() {
                                         <td>{index + 1}</td>
 
                                         <td><input type="checkbox" className='w-auto'  /></td>
+
+                                        <td>{user._id}</td>
 
                                         <td>{user.name}</td>
 

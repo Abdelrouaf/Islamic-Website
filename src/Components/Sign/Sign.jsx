@@ -260,14 +260,18 @@ export default function Sign({ onClose }) {
                 setUserToken(token)
                 window.localStorage.setItem('accessToken', token);
                 document.cookie = `accessToken = ${token}`
-                showToast('Sign in successfully!', 'success');
+                if (!response.data.details.apprived) {
+                    showToast('wait until admin approve your account.', 'error')
+                } else {
+                    showToast('Sign in successfully!', 'success');
+                }
                 localStorage.setItem('loggedInUser', JSON.stringify(response.data));
                 localStorage.setItem('userIn', true);
                 setTimeout(() => {
                     if (response.data.isAdmin) {
                         navigate('../en', { state: { token } });
                     } else {
-                        if (response.data.details.apprived) {
+                        if (!response.data.details.apprived) {
                             navigate('../', { state: { token } });
                         } else {
                             navigate('../programs', { state: { token } });

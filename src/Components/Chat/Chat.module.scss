@@ -63,6 +63,7 @@
 
     
         .usersBox {
+            height: 600px;
             max-height: 600px;
             padding: 10px;
             margin-block: 10px;
@@ -73,6 +74,7 @@
                 border-bottom: 1px solid rgb(0 0 0 / 13%);
                 margin-block: 10px;
                 padding-bottom: 5px;
+                cursor: pointer;
     
                 &:last-child {
                     border-bottom: none;
@@ -104,6 +106,7 @@
                         color: $blackColor;
                         opacity: .7;
                         margin-bottom: 0;
+                        font-size: 14px;
                     }
                 
                     .countMsg {
@@ -117,6 +120,8 @@
 
     .chatBox {
         background: linear-gradient(0deg, #F5F6FA, #F5F6FA), linear-gradient(0deg, #FFFFFF, #FFFFFF);
+        // height: 600px;
+        // max-height: 600px;
     
         .userDetails {
             display: flex;
@@ -273,6 +278,12 @@
         }
     }
 }
+
+.chatHeight {
+    height: 700px ;
+    max-height: 700px !important;
+}
+
 
 @media (max-width: 425px) {
     .inbox {

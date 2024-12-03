@@ -3,6 +3,9 @@ import layout from '../Style/Layout/Layout.module.scss';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 
 export default function ShahadahTopic() {
 
@@ -80,14 +83,51 @@ export default function ShahadahTopic() {
     }, [id]);
 
     // Handle input change for text inputs
-    const handleChange = (e) => {
-        const { id, value } = e.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [id]: value
-        }));
-    };    
+    const handleChange = (e, isQuill = false) => {
+        if (isQuill) {
+            setFormData((prevState) => ({
+                ...prevState,
+                description: e,
+            }));
+        } else {
+            const { id, value } = e.target;
+            setFormData((prevState) => ({
+                ...prevState,
+                [id]: value
+            }));
+        }
+    };
 
+    const modules = {
+        toolbar: [
+          // Add font and size dropdowns
+          [{ font: [] }, { size: [] }],
+
+          [ { 'header': [1, 2, 3, 4, 5, 6, false] } ],
+          
+          // Add text formatting options
+          ["bold", "italic", "underline", "strike"], // Text styles
+          [{ color: [] }, { background: [] }], // Text and background colors
+          
+          // Add list and alignment options
+          [{ list: "ordered" }, { list: "bullet" }], // Ordered and unordered lists
+          [{ align: [] }], // Text alignment
+          [{ 'script': 'sub' }, { 'script': 'super' }],
+    
+          [{ 'indent': '-1' }, { 'indent': '+1' }],
+
+          [ { 'direction': 'rtl' } ],
+
+          // Add image, video, and link options
+          ["link", "video"],
+    
+          // Add a code block and quote option
+          ["blockquote", "code-block"],
+    
+          // Add undo and redo functionality
+          ["clean"], // Remove formatting
+        ],
+    };
     // Handle image upload
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -305,14 +345,22 @@ export default function ShahadahTopic() {
                             <h4>Topic Description</h4>
                         </div>
                         <div className={`${layout.rightInput} ${layout.input} w-100`}>
-                            <textarea
+                            {/* <textarea
                                 className='form-control py-2'
                                 placeholder='Enter topic description'
                                 id="description" // Matches formData.description
                                 value={formData.description}
                                 onChange={handleChange}
                                 rows="4"
-                            ></textarea>
+                            ></textarea> */}
+                            <ReactQuill
+            theme="snow"
+            value={formData.description}
+            onChange={(content) => handleChange(content, true)}
+            placeholder="enter blog description"
+            modules={modules}
+            id="description"
+        />
                         </div>
                     </div>
                 

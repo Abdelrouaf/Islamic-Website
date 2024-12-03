@@ -4,6 +4,9 @@ import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion'
 import DOMPurify from 'dompurify';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 import { Azkar } from 'islam.js'
 
 export default function Monotheism() {
@@ -268,11 +271,16 @@ export default function Monotheism() {
                                     
                                     ): ''}
                                 
-                                    <p className={style.paragraph}><div
-    dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(topic.description) , // Render sanitized HTML content
-    }}
-/></p>
+                                <p className={style.paragraph}>
+                                    <div
+        dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(topic.description, {
+                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+            }),
+        }}
+/>
+</p>
 
                                     
                                 

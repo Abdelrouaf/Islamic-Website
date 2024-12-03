@@ -65,6 +65,7 @@ import SaveItems from './Components/SaveItems/SaveItems';
 import UserInbox from './Components/UserInbox/UserInbox';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import Chat from './Components/Chat/Chat';
+import Dashboard from './Components/Dashboard/Dashboard';
 
 function App() {
   return (
@@ -95,7 +96,7 @@ function App() {
         
           <Route index element={<ProgramsHome />} />
           <Route path='category/:category' element={<Category />} /> 
-          <Route path=':category/program-autoDESK' element={<Program />} />
+          <Route path=':category/:id' element={<Program />} />
           <Route path='user' element={<User />} >
           
             <Route index element={<UserProfile />} />
@@ -109,6 +110,8 @@ function App() {
         </Route>
 
         <Route path='en' element={<Admin />}>
+
+          <Route path='dashboard' element={<Dashboard />} />
     
           <Route path='user/all-users' element={<AllUsers />} />
 

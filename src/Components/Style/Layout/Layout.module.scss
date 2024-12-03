@@ -1444,7 +1444,8 @@
 .rightInput {
 
     p {
-        color: #838383bd;
+        // color: #838383bd;
+        color: inherit;
         margin-top: 5px;    
     }
 
@@ -1738,6 +1739,25 @@ input:checked + .slider:before {
     text-transform: capitalize;
     color: #838383bd;
     margin-top: 10px;
+}
+
+.fullEmpty {
+    background: antiquewhite;
+    color: $blackColor;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-block: 0;
+
+    span {
+        // background-color: $blackColor;
+        // color: $whiteColor;
+        padding: 30px 20px;
+        font-size: 25px;
+    }
 }
 
 .loading {
@@ -2102,6 +2122,12 @@ input:checked + .slider:before {
             }
         }
     }
+}
+
+iframe {
+    width: 100% !important;
+    height: 500px !important;
+    object-fit: cover; /* Optional: Ensures the video fits within the specified dimensions */
 }
 
 @media (max-width: 1020px) {

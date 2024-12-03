@@ -7,6 +7,43 @@ import style from './UserInbox.module.scss'
 
 export default function UserInbox() {
 
+    const [run, setRun] = useState(0)
+
+    const userToken = localStorage.getItem('accessToken')
+
+    const [chatMessages, setChatMessages] = useState([])
+
+    useEffect(() => {
+        async function getData() {
+            try {
+    
+                const response = await fetch('http://147.79.101.225:2859/api/message/', {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`
+                    },
+                    credentials: "include"
+                });
+    
+                console.log('Response from API:', response);
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status`);
+                }
+    
+                const data = await response.json();
+                console.log('message received from API:', data.Message);
+
+                setChatMessages(data.Message)
+
+            } catch (error) {
+                console.error("Error occurred during the fetch:", error.message); 
+            }
+        }
+    
+        getData();
+    }, [run]);
+
     const [text, setText] = useState("");
     const emojiRef = useRef(null);
 
@@ -39,7 +76,7 @@ export default function UserInbox() {
     },[] )
 
     // Sent message Func
-    const sentMessage = (e) => {
+    const sentMessage = async (e) => {
         e.preventDefault();
     
         if (text.trim() === '') return;
@@ -50,6 +87,37 @@ export default function UserInbox() {
             name: user.details.name,
             message: text
         };
+
+        const messageText = {
+            message: text, 
+        };
+
+        try {
+            const response = await fetch('http://147.79.101.225:2859/api/message/send', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${userToken}`,
+                    'Content-Type': 'application/json',  
+                },
+                credentials: 'include',
+                body: JSON.stringify(messageText),  
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Failed to send message, status`);
+            }
+    
+            const data = await response.json();  
+            console.log('Message sent successfully:', data);  
+    
+            setText('');  
+            setShowEmoji(false);  
+    
+        } catch (error) {
+            console.error('Error sending message:', error.message);  // Log error
+        }
+
+        setRun( (prevRun) => prevRun + 1 )
 
         messageData.push(newMessage)
     
@@ -73,6 +141,26 @@ export default function UserInbox() {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    const formatMessageTime = (timestamp) => {
+        const messageDate = new Date(timestamp);
+        if (isNaN(messageDate.getTime())) {
+            return "Invalid time";  
+        }
+    
+        const currentDate = new Date();
+        const diffInMs = currentDate - messageDate; 
+        const diffInMinutes = Math.floor(diffInMs / (1000 * 60)); 
+        const diffInHours = Math.floor(diffInMinutes / 60); 
+        const diffInDays = Math.floor(diffInHours / 24); 
+    
+            const hours = messageDate.getHours();
+            const minutes = messageDate.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+            return `${formattedHours}:${formattedMinutes} ${ampm}`;
+    };
 
     return (
     
@@ -146,11 +234,12 @@ export default function UserInbox() {
 
                         </div>
 
-                        { messageData.map( (data, index) => (
+                        { chatMessages.message && chatMessages.message.map( (userChat, index) => (
+                        
+                            <div className={style.inbox} key={userChat._id || index}>
 
-                            <div className={style.inbox} key={index + 1}>
-
-                                <div className={style.userInbox}>
+                                { !userChat.isAdmin ? (
+                                    <div className={style.userInbox}>
 
                                     <div className={style.userMessage}>
 
@@ -158,11 +247,11 @@ export default function UserInbox() {
 
                                             <h4 className={style.name}>{userData.name}</h4>
 
-                                            <p className={style.timing}>00:05</p>
+                                            <p className={style.timing}>{formatMessageTime(chatMessages.updatedAt)}</p>
 
                                         </div>
 
-                                        <h4 className={style.message}>{ data.message }</h4>
+                                        <h4 className={style.message}>{userChat.message}</h4>
 
                                     </div>
 
@@ -173,6 +262,7 @@ export default function UserInbox() {
                                     </div>
 
                                 </div>
+                                ) : '' }
 
                                 {/* <div className={style.adminInbox}>
 

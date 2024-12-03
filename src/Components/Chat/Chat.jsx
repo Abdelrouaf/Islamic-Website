@@ -7,39 +7,39 @@ import style from './Chat.module.scss'
 
 export default function Chat() {
 
-    // const [run, setRun] = useState(0)
+    const [run, setRun] = useState(0)
 
-    // const userToken = localStorage.getItem('accessToken')
+    const userToken = localStorage.getItem('accessToken')
 
-    // useEffect(() => {
-    //     async function getData() {
-    //         try {
-    //             // console.log('Fetching data with token:', token); // Log token
+    const [allUsers, setAllUsers] = useState([])
+
+    useEffect(() => {
+        async function getData() {
+            try {    
+                const response = await fetch('http://147.79.101.225:2859/api/message/admin', {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`
+                    },
+                    credentials: "include"
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status`);
+                }
     
-    //             const response = await fetch('http://147.79.101.225:2859/api/message/', {
-    //                 method: "GET",
-    //                 headers: {
-    //                     "Authorization": `Bearer ${userToken}`
-    //                 },
-    //                 credentials: "include"
-    //             });
+                const data = await response.json();
+                console.log('Data received from API:', data.Messages);
+
+                setAllUsers(data.Messages)
+
+            } catch (error) {
+                console.error("Error occurred during the fetch:", error.message);
+            }
+        }
     
-    //             console.log('Response from API:', response); // Log raw response
-    
-    //             if (!response.ok) {
-    //                 // Handle non-2xx HTTP status codes
-    //                 throw new Error(`HTTP error! status: ${response.status}`);
-    //             }
-    
-    //             const data = await response.json();
-    //             console.log('Data received from API:', data); // Log parsed data
-    //         } catch (error) {
-    //             console.error("Error occurred during the fetch:", error.message); // Properly log error
-    //         }
-    //     }
-    
-    //     getData();
-    // }, [run]);
+        getData();
+    }, [run]);
 
     const [text, setText] = useState("");
     const emojiRef = useRef(null);
@@ -73,7 +73,7 @@ export default function Chat() {
     },[] )
 
     // Sent message Func
-    const sentMessage = (e) => {
+    const sentMessage = async (e, userId) => {
         e.preventDefault();
     
         if (text.trim() === '') return;
@@ -84,6 +84,37 @@ export default function Chat() {
             name: user.details.name,
             message: text
         };
+
+        const messageText = {
+            message: text,
+        };
+
+        try {
+            const response = await fetch(`http://147.79.101.225:2859/api/message/replay/${userId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${userToken}`,
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(messageText),
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Failed to send message, status`);
+            }
+    
+            const data = await response.json(); 
+            console.log('Message sent successfully:', data);
+    
+            setText(''); 
+            setShowEmoji(false);  
+    
+        } catch (error) {
+            console.error('Error sending message:', error.message);  // Log error
+        }
+
+        setRun( (prevRun) => prevRun + 1 )
 
         messageData.push(newMessage)
     
@@ -107,6 +138,160 @@ export default function Chat() {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    const formatMessageTime = (timestamp) => {
+        const messageDate = new Date(timestamp);
+        if (isNaN(messageDate.getTime())) {
+            return "Invalid time"; 
+        }
+    
+        const currentDate = new Date();
+        const diffInMs = currentDate - messageDate;
+        const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+        const diffInHours = Math.floor(diffInMinutes / 60); 
+        const diffInDays = Math.floor(diffInHours / 24); 
+    
+        if (diffInMinutes < 1) {
+            return `now`;
+        }
+
+        // If the difference is less than 1 hour, show minutes
+        if (diffInMinutes < 60) {
+            return `${diffInMinutes} min`;
+        }
+    
+        // If the difference is less than 1 day, show the hour in natural format (e.g., 2:00 PM)
+        if (diffInDays < 1) {
+            const hours = messageDate.getHours();
+            const minutes = messageDate.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+            return `${formattedHours}:${formattedMinutes} ${ampm}`;
+        }
+    
+        // If the difference is more than 1 day, show the date in "day month" format (e.g., 2 Dec)
+        // const day = messageDate.getDate();
+        // const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        // const month = monthNames[messageDate.getMonth()];
+        // return `${day} ${month}`;
+
+        // If the difference is more than 1 day, show the date in "MM/DD/YY" format (e.g., 12/02/24)
+        const month = messageDate.getMonth() + 1;
+        const day = messageDate.getDate();
+        const year = messageDate.getFullYear().toString().slice(-2);
+        return `${month}/${day}/${year}`;
+    };
+
+    // // Assuming `allUsers` is the data you receive from the API
+    // const groupedMessages = allUsers.reduce((acc, userMessages) => {
+    //     const { userId, message } = userMessages;
+
+    //     // Filter messages where isAdmin is false
+    //     const filteredMessages = message.filter((msg) => !msg.isAdmin);
+
+    //     if (filteredMessages.length > 0) { 
+    //         // If userId already exists in the accumulator, add message count
+    //         if (acc[userId]) {
+    //             acc[userId].count += message.length;
+    //             acc[userId].lastMessage = message[message.length - 1].message;
+    //             acc[userId].createdAt = userMessages.updatedAt || userMessages.createdAt; // Use the correct timestamp
+    //         } else {
+    //             acc[userId] = {
+    //                 count: message.length,
+    //                 lastMessage: message[message.length - 1].message,
+    //                 createdAt: userMessages.updatedAt || userMessages.createdAt, // Add timestamp here
+    //             };
+    //         }
+    //     }
+
+    //     return acc;
+    // }, {});
+
+    const groupedMessages = allUsers.reduce((acc, userMessages) => {
+        const { userId, message, createdAt, updatedAt, _id } = userMessages;
+    
+        // Use email or another unique property of `userId` as the key
+        const uniqueKey = userId._id;
+    
+        // Filter messages where isAdmin is false
+        const filteredMessages = message.filter((msg) => !msg.isAdmin);
+    
+        if (message.length > 0) {
+            if (acc[uniqueKey]) {
+                acc[uniqueKey].count += filteredMessages.length;
+                acc[uniqueKey].lastMessage = filteredMessages.length > 0
+                    ? filteredMessages[filteredMessages.length - 1].message
+                    : null;
+                acc[uniqueKey].createdAt = updatedAt || createdAt;
+            } else {
+                acc[uniqueKey] = {
+                    userName: userId.name,
+                    count: filteredMessages.length,
+                    lastMessage: filteredMessages.length > 0
+                        ? filteredMessages[filteredMessages.length - 1].message
+                        : null,
+                    createdAt: updatedAt || createdAt,
+                    _id,
+                };
+            }
+        }
+    
+        return acc;
+    }, {});
+    
+
+    const [userChat, setUserChat] = useState({
+        id: '',
+        userId: {
+            name: '',
+            email: '',
+            isAdmin: false
+        },
+        createdAt: '',
+        updatedAt: '',
+        messages: [],
+    })
+
+    // show user chat
+    const showUserChat = async (userId) => {
+
+        try {
+            // Send the message data via a POST request
+            const response = await fetch(`http://147.79.101.225:2859/api/message/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${userToken}`,
+                },
+                credentials: 'include',
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Failed to send message, status: ${response.status}`);
+            }
+    
+            const data = await response.json();  // Parse the response data
+            console.log('DATA :', data.Message);  // Log success message
+
+            setUserChat({
+                id: data.Message._id,
+                userId: {
+                    name: data.Message.userId.name,
+                    email: data.Message.userId.email,
+                    isAdmin: data.Message.userId.isAdmin,
+                },
+                createdAt: data.Message.createdAt,
+                updatedAt: data.Message.updatedAt,
+                messages: data.Message.message,
+            })
+    
+        } catch (error) {
+            console.error('Error sending message:', error.message);  // Log error
+        }
+    }
+
+    console.log('caht ysr', userChat);
+    
 
     return (
     
@@ -144,413 +329,49 @@ export default function Chat() {
 
                                     <div className={style.usersBox}>
 
-                                        <div className={style.userBox}>
+                                        { Object.keys(groupedMessages).map( (uniqueKey) => {
 
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
+                                            const { userName, count, lastMessage, createdAt, _id } = groupedMessages[uniqueKey];
 
-                                                <div className={style.left}>
+                                            return (
 
-                                                    {/* <div className={style.image}>
+                                                <div onClick={ () => showUserChat(_id) } className={style.userBox} key={uniqueKey}>
 
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
+                                                    <div className="d-block d-lg-flex align-items-center justify-content-between">
 
-                                                    </div> */}
+                                                        <div className={style.left}>
 
-                                                    <div className={style.names}>
+                                                            {/* <div className={style.image}>
 
-                                                        <h4 className={style.name}>Abdelraouf</h4>
+                                                                <img src={userImg} width={40} alt="user-image" loading='lazy' />
 
-                                                        <span className={style.message}>Where are you?</span>
+                                                            </div> */}
 
-                                                    </div>
+                                                            <div className={style.names}>
 
-                                                </div>
+                                                                <h4 className={style.name}>{userName}</h4>
 
-                                                <div className={style.right}>
+                                                                <span className={style.message}>{lastMessage}</span>
 
-                                                    <p className={style.time}>2 min</p>
+                                                            </div>
 
-                                                    <span className={`badge text-bg-success`}>15</span>
+                                                        </div>
 
-                                                </div>
+                                                        <div className={style.right}>
 
-                                            </div>
+                                                            <p className={style.time}>{formatMessageTime(createdAt)}</p>
 
-                                        </div>
+                                                            <span className={`badge text-bg-success`}>{count}</span>
 
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
+                                                        </div>
 
                                                     </div>
 
                                                 </div>
 
-                                                <div className={style.right}>
+                                            )
 
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={style.right}>
-
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={style.right}>
-
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={style.right}>
-
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={style.right}>
-
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={style.right}>
-
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={style.right}>
-
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={style.right}>
-
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={style.right}>
-
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={style.right}>
-
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.userBox}>
-
-                                            <div className="d-block d-lg-flex align-items-center justify-content-between">
-
-                                                <div className={style.left}>
-
-                                                    {/* <div className={style.image}>
-
-                                                        <img src={userImg} width={40} alt="user-image" loading='lazy' />
-
-                                                    </div> */}
-
-                                                    <div className={style.names}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <span className={style.message}>Where are you?</span>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={style.right}>
-
-                                                    <p className={style.time}>2 min</p>
-
-                                                    <span className={`badge text-bg-success`}>15</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
+                                        } ) }
 
                                     </div>
 
@@ -560,341 +381,152 @@ export default function Chat() {
 
                             <div className="col-md-7 col-lg-8">
 
-                                <div className={style.chatBox}>
+                                { userChat.messages.length > 0 ? 
 
-                                    <div className={style.userDetails}>
+                                    (
+                                        <div className={style.chatBox}>
 
-                                        <div className={style.image}>
-
-                                            <img src={userImg} width={50} alt="user-image" loading='lazy' />
-
-                                        </div>
-
-                                        <h4 className={style.userName}>Abdelraouf</h4>
-
-                                    </div>
-
-                                    <div className={style.chat}>
-
-                                        <div className={style.inbox}>
-
-                                            <div className={style.userInbox}>
-
-                                                <div className={style.userMessage}>
-
-                                                    <div className={style.messageTiming}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <p className={style.timing}>00:05</p>
-
-                                                    </div>
-
-                                                    <h4 className={style.message}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat dolorem sequi at.</h4>
-
-                                                </div>
+                                            <div className={style.userDetails}>
 
                                                 <div className={style.image}>
 
-                                                    <img src={userImg} width={20} alt="user-image" loading='lazy' />
+                                                    <img src={userImg} width={50} alt="user-image" loading='lazy' />
 
                                                 </div>
+
+                                                <h4 className={style.userName}>{userChat.userId.name}</h4>
 
                                             </div>
 
-                                            <div className={style.adminInbox}>
+                                            <div className={style.chat}>
 
-                                                <div className={style.image}>
+                                                <div className={style.inbox}>
 
-                                                    <img src={adminImage} width={20} alt="user-image" loading='lazy' />
+                                                {userChat && userChat.messages && userChat.messages.map( (message, index) => (
 
-                                                </div>
+                                                    <div className={style.userInbox} key={index}>
 
-                                                <div className={style.adminMessage}>
+                                                        <div className={style.userMessage}>
 
-                                                    <div className={style.messageTiming}>
+                                                            <div className={style.messageTiming}>
 
-                                                        <h4 className={style.name}>You</h4>
+                                                                <h4 className={style.name}>{userChat.userId.name}</h4>
 
-                                                        <p className={style.timing}>00:05</p>
+                                                                <p className={style.timing}>00:05</p>
 
-                                                    </div>
+                                                            </div>
 
-                                                    <h4 className={style.message}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio autem reiciendis, quos cum earum veritatis!</h4>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.inbox}>
-
-                                            <div className={style.userInbox}>
-
-                                                <div className={style.userMessage}>
-
-                                                    <div className={style.messageTiming}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <p className={style.timing}>00:05</p>
-
-                                                    </div>
-
-                                                    <h4 className={style.message}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi iste odio sapiente.</h4>
-
-                                                </div>
-
-                                                <div className={style.image}>
-
-                                                    <img src={userImg} width={20} alt="user-image" loading='lazy' />
-
-                                                </div>
-
-                                            </div>
-
-                                            <div className={style.adminInbox}>
-
-                                                <div className={style.image}>
-
-                                                    <img src={adminImage} width={20} alt="user-image" loading='lazy' />
-
-                                                </div>
-
-                                                <div className={style.adminMessage}>
-
-                                                    <div className={style.messageTiming}>
-
-                                                        <h4 className={style.name}>You</h4>
-
-                                                        <p className={style.timing}>00:05</p>
-
-                                                    </div>
-
-                                                    <h4 className={style.message}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio autem reiciendis, quos cum earum veritatis!</h4>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.inbox}>
-
-                                            <div className={style.userInbox}>
-
-                                                <div className={style.userMessage}>
-
-                                                    <div className={style.messageTiming}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <p className={style.timing}>00:05</p>
-
-                                                    </div>
-
-                                                    <h4 className={style.message}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi iste odio sapiente.</h4>
-
-                                                </div>
-
-                                                <div className={style.image}>
-
-                                                    <img src={userImg} width={20} alt="user-image" loading='lazy' />
-
-                                                </div>
-
-                                            </div>
-
-                                            <div className={style.adminInbox}>
-
-                                                <div className={style.image}>
-
-                                                    <img src={adminImage} width={20} alt="user-image" loading='lazy' />
-
-                                                </div>
-
-                                                <div className={style.adminMessage}>
-
-                                                    <div className={style.messageTiming}>
-
-                                                        <h4 className={style.name}>You</h4>
-
-                                                        <p className={style.timing}>00:05</p>
-
-                                                    </div>
-
-                                                    <h4 className={style.message}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio autem reiciendis, quos cum earum veritatis!</h4>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.inbox}>
-
-                                            <div className={style.userInbox}>
-
-                                                <div className={style.userMessage}>
-
-                                                    <div className={style.messageTiming}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <p className={style.timing}>00:05</p>
-
-                                                    </div>
-
-                                                    <h4 className={style.message}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi iste odio sapiente.</h4>
-
-                                                </div>
-
-                                                <div className={style.image}>
-
-                                                    <img src={userImg} width={20} alt="user-image" loading='lazy' />
-
-                                                </div>
-
-                                            </div>
-
-                                            <div className={style.adminInbox}>
-
-                                                <div className={style.image}>
-
-                                                    <img src={adminImage} width={20} alt="user-image" loading='lazy' />
-
-                                                </div>
-
-                                                <div className={style.adminMessage}>
-
-                                                    <div className={style.messageTiming}>
-
-                                                        <h4 className={style.name}>You</h4>
-
-                                                        <p className={style.timing}>00:05</p>
-
-                                                    </div>
-
-                                                    <h4 className={style.message}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio autem reiciendis, quos cum earum veritatis!</h4>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        <div className={style.inbox}>
-
-                                            <div className={style.userInbox}>
-
-                                                <div className={style.userMessage}>
-
-                                                    <div className={style.messageTiming}>
-
-                                                        <h4 className={style.name}>Abdelraouf</h4>
-
-                                                        <p className={style.timing}>00:05</p>
-
-                                                    </div>
-
-                                                    <h4 className={style.message}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi iste odio sapiente.</h4>
-
-                                                </div>
-
-                                                <div className={style.image}>
-
-                                                    <img src={userImg} width={20} alt="user-image" loading='lazy' />
-
-                                                </div>
-
-                                            </div>
-
-                                            <div className={style.adminInbox}>
-
-                                                <div className={style.image}>
-
-                                                    <img src={adminImage} width={20} alt="user-image" loading='lazy' />
-
-                                                </div>
-
-                                                <div className={style.adminMessage}>
-
-                                                    <div className={style.messageTiming}>
-
-                                                        <h4 className={style.name}>You</h4>
-
-                                                        <p className={style.timing}>00:05</p>
-
-                                                    </div>
-
-                                                    <h4 className={style.message}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio autem reiciendis, quos cum earum veritatis!</h4>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                        { messageData.map( (data, index) => (
-
-                                            <div className={style.inbox} key={index + 1}>
-
-                                                <div className={style.adminInbox}>
-
-                                                    <div className={style.image}>
-
-                                                        <img src={adminImage} width={20} alt="user-image" loading='lazy' />
-
-                                                    </div>
-
-                                                    <div className={style.adminMessage}>
-
-                                                        <div className={style.messageTiming}>
-
-                                                            <h4 className={style.name}>You</h4>
-
-                                                            <p className={style.timing}>00:05</p>
+                                                            <h4 className={style.message}>{message.message}</h4>
 
                                                         </div>
 
-                                                        <h4 className={style.message}>{ data.message }</h4>
+                                                        <div className={style.image}>
+
+                                                            <img src={userImg} width={20} alt="user-image" loading='lazy' />
+
+                                                        </div>
+
+                                                    </div>
+
+                                                ) )}
+
+                                                    <div className={style.adminInbox}>
+
+                                                        <div className={style.image}>
+
+                                                            <img src={adminImage} width={20} alt="user-image" loading='lazy' />
+
+                                                        </div>
+
+                                                        <div className={style.adminMessage}>
+
+                                                            <div className={style.messageTiming}>
+
+                                                                <h4 className={style.name}>You</h4>
+
+                                                                <p className={style.timing}>00:05</p>
+
+                                                            </div>
+
+                                                            <h4 className={style.message}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio autem reiciendis, quos cum earum veritatis!</h4>
+
+                                                        </div>
 
                                                     </div>
 
                                                 </div>
 
+                                                { messageData.map( (data, index) => (
+
+                                                    <div className={style.inbox} key={index + 1}>
+
+                                                        <div className={style.adminInbox}>
+
+                                                            <div className={style.image}>
+
+                                                                <img src={adminImage} width={20} alt="user-image" loading='lazy' />
+
+                                                            </div>
+
+                                                            <div className={style.adminMessage}>
+
+                                                                <div className={style.messageTiming}>
+
+                                                                    <h4 className={style.name}>You</h4>
+
+                                                                    <p className={style.timing}>00:05</p>
+
+                                                                </div>
+
+                                                                <h4 className={style.message}>{ data.message }</h4>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                ) ) }
+
                                             </div>
 
-                                        ) ) }
+                                            <div className={style.input}>
 
-                                    </div>
+                                                <input type="text" className='form-control p-2' placeholder='enter message here..' value={text} onChange={(e) => setText(e.target.value)} onKeyDown={ (e) => { if (e.key === "Enter") { sentMessage(e) } } } />
 
-                                    <div className={style.input}>
-
-                                        <input type="text" className='form-control p-2' placeholder='enter message here..' value={text} onChange={(e) => setText(e.target.value)} onKeyDown={ (e) => { if (e.key === "Enter") { sentMessage(e) } } } />
-
-                                        <div className={style.sendEmoji}>
-                                        
-                                            <button type="button" className={style.emojiToggle} onClick={() => setShowEmoji(!showEmoji)} > <i className="fa-regular fa-face-smile"></i> </button>
-
-                                            {showEmoji && (
-                                            
-                                                <div className={style.emojiBox} ref={emojiRef}>
+                                                <div className={style.sendEmoji}>
                                                 
-                                                    <EmojiPicker onEmojiClick={handleEmojiClick} />
+                                                    <button type="button" className={style.emojiToggle} onClick={() => setShowEmoji(!showEmoji)} > <i className="fa-regular fa-face-smile"></i> </button>
+
+                                                    {showEmoji && (
+                                                    
+                                                        <div className={style.emojiBox} ref={emojiRef}>
+                                                        
+                                                            <EmojiPicker onEmojiClick={handleEmojiClick} />
+                                                        
+                                                        </div>
+                                                    
+                                                    )}
                                                 
                                                 </div>
-                                            
-                                            )}
-                                        
+
+                                                <button type='submit' onClick={ (e) => sentMessage(e, userChat.id)} className={style.sendMessageBtn}><i className="fa-solid fa-paper-plane"></i></button>
+
+                                            </div>
+
                                         </div>
+                                    
+                                    ) : 
+                                    
+                                        <div className={style.chatBox}>
 
-                                        <button type='submit' onClick={sentMessage} className={style.sendMessageBtn}><i className="fa-solid fa-paper-plane"></i></button>
+                                            <div className={`${style.chat} ${style.chatHeight}`}></div>
 
-                                    </div>
+                                        </div> 
+                                
+                                } 
 
-                                </div>
+                                
 
                             </div>
 

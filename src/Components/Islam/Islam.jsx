@@ -228,11 +228,16 @@ export default function Islam() {
 
                                     <iframe src={topic.video} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
 
-                                    <p className={style.paragraph}><div
-    dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(topic.description) , // Render sanitized HTML content
-    }}
-/></p>
+                                    <p className={style.paragraph}>
+                                    <div
+        dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(topic.description, {
+                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+            }),
+        }}
+/>
+</p>
 
                                     <div className={`${style.details} d-flex gap-3`}>
 

@@ -239,11 +239,16 @@ export default function News() {
                                     </div>
                                 ) }
 
-                                <p className={style.paragraph}><div
-    dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(topic.description) , // Render sanitized HTML content
-    }}
-/></p>
+<p className={style.paragraph}>
+                                    <div
+        dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(topic.description, {
+                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+            }),
+        }}
+/>
+</p>
 
                                 <div className={`${style.details} d-flex gap-3`}>
 

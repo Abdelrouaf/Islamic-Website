@@ -1,41 +1,69 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import programImage from '../../images/program1.jpeg'
 import { Azkar } from 'islam.js'
 import style from './Program.module.scss'
 
 export default function Program() {
 
+    const { id, category } = useParams()
+
+    const location = useLocation()
+
     const [run, setRun] = useState(0)
 
     const token = window.localStorage.getItem('accessToken')
 
-    // console.log("fw ", token);
-    
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [programData, setProgramData] = useState([])
 
     useEffect(() => {
         async function getData() {
-            try {
-                await fetch('http://147.79.101.225:2859/api/programs/', {
-                    method : "GET",
+            try {    
+                const response = await fetch(`http://147.79.101.225:2859/api/programs/${id}`, {
+                    method: "GET",
                     headers: {
-                        "Authorization": `Bearer ${token}`,
+                        "Authorization": `Bearer ${token}`
                     },
-                        credentials: "include"
-                })
-                .then( (res) => res.json() )
-                // .then( (data) => console.log(data) )
-                .then( err => console.error("Error is: ", err) )
+                    credentials: "include"
+                });
+    
+                console.log('Response from API:', response);
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status`);
+                }
+    
+                const data = await response.json();
+                console.log('Data received from API:', data.Program);
+
+                setProgramData(data.Program)
+                setIsLoading(false);
+
             } catch (error) {
-                console.error("error ", error);
+                console.error("Error occurred during the fetch:", error.message);
+                setIsLoading(false);
             }
         };
 
         getData();
     }, [run]);
 
-    const { category } = useParams();
+    const sizeInBytes = programData.size;
+    let sizeFormatted = '';
+
+    if (sizeInBytes >= 1024 * 1024 * 1024) {
+        // GB
+        sizeFormatted = (sizeInBytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+    } else if (sizeInBytes >= 1024 * 1024) {
+        // MB
+        sizeFormatted = (sizeInBytes / (1024 * 1024)).toFixed(2) + ' MB';
+    } else {
+        // KB
+        sizeFormatted = (sizeInBytes / 1024).toFixed(2) + ' KB';
+    }
 
     const [detailsFlag, setDetailsFlag] = useState(true)
 
@@ -58,6 +86,10 @@ export default function Program() {
     const toggleZikrScroll = () => {
         setZikrScrollVisible(!zikrScrollVisible)
     }
+
+    if (isLoading) {
+        return <p className={style.loading}>Loading, Please wait <span className={style.loader}></span></p>; 
+    }  
 
     return (
     
@@ -87,7 +119,7 @@ export default function Program() {
 
                                     <div className={style.image}>
 
-                                        <img src={programImage} alt="program-image" loading='lazy' />
+                                        <img src={`http://147.79.101.225:2859/uploads/Programs/${programData.programImage}`} alt="program-image" loading='lazy' />
 
                                     </div>
 
@@ -97,31 +129,41 @@ export default function Program() {
 
                                     <div className={style.programOverview}>
 
-                                        <h4 className={style.programTitle}>autoDESK - autoCAD</h4>
+                                        <h4 className={style.programTitle}>{programData.programName}</h4>
 
                                         <div className={style.downloadProgram}>
                                         
-                                            <a href="#">Download</a>
+                                            <a href={programData.programFile} target='_blank' download>Download</a>
                                         
                                             <b className={style.top}>click to download</b>
                                         
-                                            <b className={style.bottom}>1.2MB .zip</b>
+                                            <b className={style.bottom}>{sizeFormatted}</b>
                                         
                                         </div>
 
-                                        <div className={style.overview}>
+                                        { programData.description.length > 0 ? (
 
-                                            <h4 className={style.overviewTitle}>overview:</h4>
+                                            <div className={style.overview}>
 
-                                            <ul>
+                                                <h4 className={style.overviewTitle}>overview:</h4>
 
-                                                <li><p><i className="fa-solid fa-check"></i>AutoCAD is a professional software for 2D and 3D computer-aided design (CAD).</p></li>
+                                                <ul>
 
-                                                <li><p><i className="fa-solid fa-check"></i>It is widely used by architects, engineers, and construction professionals for drafting, designing, and modeling.</p></li>
+                                                    { programData.description.map( (description, index) =>
 
-                                            </ul>
+                                                        description.trim() !== '' ? (
+                                                        
+                                                            <li key={index + 1}><p><i className="fa-solid fa-check"></i>{description}</p></li>
+                                                        
+                                                        ) : null 
 
-                                        </div>
+                                                    ) }
+
+                                                </ul>
+
+                                            </div>
+
+                                        ) : '' }
 
                                     </div>
 
@@ -137,217 +179,265 @@ export default function Program() {
 
                                 <ul className='nav nav-tabs'>
 
-                                    <li className='nav-item'><button className={`nav-link ${detailsFlag ? 'active' : ''}`} onClick={ () => {setInstallationFlag(false); setSystemRequirementsFlag(false); setDetailsFlag(true)} } >details</button></li>
+                                    <li className='nav-item'><button className={`nav-link ${detailsFlag ? 'active' : ''} ${ (Object.values(programData.KeyFeatures).some((value) => value.trim() !== '') || programData.useCase.some((item) => item.trim() !== '')) ? 'd-block' : 'd-none' } `} onClick={ () => {setInstallationFlag(false); setSystemRequirementsFlag(false); setDetailsFlag(true)} } >details</button></li>
 
-                                    <li className='nav-item'><button className={`nav-link ${systemRequirementsFlag ? 'active' : ''} `} onClick={ () => {setDetailsFlag(false); setInstallationFlag(false); setSystemRequirementsFlag(true)} } >system requirements</button></li>
+                                    <li className='nav-item'><button className={`nav-link ${systemRequirementsFlag ? 'active' : ''} ${ (Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '') || Object.values(programData.MaximumRequirements).some((value) => value.trim() !== '') ) ? 'd-block' : 'd-none' } `} onClick={ () => {setDetailsFlag(false); setInstallationFlag(false); setSystemRequirementsFlag(true)} } >system requirements</button></li>
 
-                                    <li className='nav-item'><button className={`nav-link ${installationFlag ? 'active' : ''} `} onClick={ () => {setDetailsFlag(false); setSystemRequirementsFlag(false); setInstallationFlag(true)} } >Installation</button></li>
+                                    <li className='nav-item'><button className={`nav-link ${installationFlag ? 'active' : ''} ${ programData.Installation.some((item) => item.trim() !== '')  ? 'd-block' : 'd-none' } `} onClick={ () => {setDetailsFlag(false); setSystemRequirementsFlag(false); setInstallationFlag(true)} } >Installation</button></li>
 
                                 </ul>
 
                                 <div className={style.detailsBox}>
 
-                                    <div className={`${style.details} ${detailsFlag ? 'd-block' : 'd-none'}`}>
+                                    { (Object.values(programData.KeyFeatures).some((value) => value.trim() !== '') || programData.useCase.some((item) => item.trim() !== '')) ? (
 
-                                        <h4 className={style.detailsTitle}>Key features</h4>
+                                        <div className={`${style.details} ${detailsFlag ? 'd-block' : 'd-none'}`}>
 
-                                        <div className={style.keyFeatures}>
+                                            <h4 className={style.detailsTitle}>Key features</h4>
 
-                                            <h4 className={style.keyFeaturesTitle}>Precision Drafting:</h4>
+                                            { programData.KeyFeatures.precisionDrafting ? (
 
-                                            <p className={style.keyFeaturesDesc}>Tools to create detailed 2D drawings.</p>
+                                                <div className={style.keyFeatures}>
 
-                                        </div>
+                                                    <h4 className={style.keyFeaturesTitle}>Precision Drafting:</h4>
 
-                                        <div className={style.keyFeatures}>
+                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.precisionDrafting}</p>
 
-                                            <h4 className={style.keyFeaturesTitle}>3D Modeling and Visualization:</h4>
+                                                </div>
 
-                                            <p className={style.keyFeaturesDesc}>Advanced tools for creating 3D models and rendering them.</p>
+                                            ) : '' }
 
-                                        </div>
+                                            { programData.KeyFeatures.modelingVisualization ? (
 
-                                        <div className={style.keyFeatures}>
+                                                <div className={style.keyFeatures}>
 
-                                            <h4 className={style.keyFeaturesTitle}>Extensive Libraries:</h4>
+                                                    <h4 className={style.keyFeaturesTitle}>3D Modeling and Visualization:</h4>
 
-                                            <p className={style.keyFeaturesDesc}>Pre-built templates, blocks, and objects.</p>
+                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.modelingVisualization}</p>
 
-                                        </div>
+                                                </div>
 
-                                        <div className={style.keyFeatures}>
+                                            ) : ''  }
 
-                                            <h4 className={style.keyFeaturesTitle}>Collaboration:</h4>
+                                            { programData.KeyFeatures.extensiveLibraries ? ( 
 
-                                            <p className={style.keyFeaturesDesc}>Cloud storage and sharing tools for project collaboration.</p>
+                                                <div className={style.keyFeatures}>
 
-                                        </div>
+                                                    <h4 className={style.keyFeaturesTitle}>Extensive Libraries:</h4>
 
-                                        <div className={style.keyFeatures}>
+                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.extensiveLibraries}</p>
 
-                                            <h4 className={style.keyFeaturesTitle}>Custom Automation:</h4>
+                                                </div>
 
-                                            <p className={style.keyFeaturesDesc}>Use of scripts and plugins to automate repetitive tasks.</p>
+                                            ) : '' }
 
-                                        </div>
+                                            { programData.KeyFeatures.collaboration ? (
 
-                                        <div className={style.keyFeatures}>
+                                                <div className={style.keyFeatures}>
 
-                                            <h4 className={style.keyFeaturesTitle}>Integration:</h4>
+                                                    <h4 className={style.keyFeaturesTitle}>Collaboration:</h4>
 
-                                            <p className={style.keyFeaturesDesc}>Compatibility with other Autodesk products (e.g., Revit, Inventor).</p>
+                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.collaboration}.</p>
 
-                                        </div>
+                                                </div>
 
-                                        <div className={style.useCases}>
+                                            ) : '' }
 
-                                            <h4 className={style.useCasesTitle}>Use cases</h4>
+                                            { programData.KeyFeatures.customAutomation ? (
 
-                                            <ul>
+                                                <div className={style.keyFeatures}>
 
-                                                <li><p className={style.description}>Architectural designs and blueprints.</p></li>
+                                                    <h4 className={style.keyFeaturesTitle}>Custom Automation:</h4>
 
-                                                <li><p className={style.description}>Mechanical component modeling.</p></li>
+                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.customAutomation}</p>
 
-                                                <li><p className={style.description}>Electrical schematics and plumbing diagrams.</p></li>
+                                                </div>
 
-                                                <li><p className={style.description}>Civil engineering project layouts.</p></li>
+                                            ) : '' }
 
-                                            </ul>
+                                            { programData.KeyFeatures.integration ? (
 
-                                        </div>
+                                                <div className={style.keyFeatures}>
 
-                                    </div>
+                                                    <h4 className={style.keyFeaturesTitle}>Integration:</h4>
 
-                                    <div className={`${style.systemRequirements} ${systemRequirementsFlag ? 'd-block' : 'd-none'}`}>
+                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.integration}</p>
 
-                                        <div className={style.minimumRequirements}>
+                                                </div>
 
-                                            <h4 className={style.systemRequirementsTitle}>Minimum Requirements</h4>
+                                            ) : '' }
 
-                                            <div className={style.requirements}>
+                                            { programData.useCase.length > 0 ? (
 
-                                                <h4 className={style.requirementsTitle}>Operating System:</h4>
+                                                <div className={style.useCases}>
 
-                                                <h4 className={style.requirementsDesc}>Windows 10 (64-bit) or macOS Big Sur.</h4>
+                                                    <h4 className={style.useCasesTitle}>Use cases</h4>
 
-                                            </div>
+                                                    <ul>
 
-                                            <div className={style.requirements}>
+                                                        { programData.useCase.map( (cases, index) => 
+                                                        
+                                                            cases.trim() !== '' ? (
 
-                                                <h4 className={style.requirementsTitle}>Processor:</h4>
+                                                            <li key={index}><p className={style.description}>{cases}</p></li>
 
-                                                <h4 className={style.requirementsDesc}>2.5–2.9 GHz processor.</h4>
+                                                            ) : ''
 
-                                            </div>
+                                                        ) }
 
-                                            <div className={style.requirements}>
+                                                    </ul>
 
-                                                <h4 className={style.requirementsTitle}>RAM:</h4>
+                                                </div>
 
-                                                <h4 className={style.requirementsDesc}>8 GB.</h4>
+                                            ) : '' }
 
-                                            </div>
-
-                                            <div className={style.requirements}>
-
-                                                <h4 className={style.requirementsTitle}>GPU:</h4>
-
-                                                <h4 className={style.requirementsDesc}>Basic 1 GB GPU supporting DirectX 11.</h4>
-
-                                            </div>
-
-                                            <div className={style.requirements}>
-
-                                                <h4 className={style.requirementsTitle}>Storage:</h4>
-
-                                                <h4 className={style.requirementsDesc}>10 GB free disk space.</h4>
-
-                                            </div>
-
-                                            <div className={style.requirements}>
-
-                                                <h4 className={style.requirementsTitle}>Display:</h4>
-
-                                                <h4 className={style.requirementsDesc}>1920x1080 resolution.</h4>
-
-                                            </div>
+                                            
 
                                         </div>
 
-                                        <div className={style.recommendedRequirements}>
+                                    ) : ''  }
 
-                                            <h4 className={style.systemRequirementsTitle}>Recommended Requirements</h4>
+                                    { (Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '') || Object.values(programData.MaximumRequirements).some((value) => value.trim() !== '') ) ? (
 
-                                            <div className={style.requirements}>
+                                        <div className={`${style.systemRequirements} ${systemRequirementsFlag ? 'd-block' : 'd-none'}`}>
 
-                                                <h4 className={style.requirementsTitle}>Operating System:</h4>
+                                            <div className={style.minimumRequirements}>
 
-                                                <h4 className={style.requirementsDesc}>Windows 11 (64-bit) or macOS Ventura.</h4>
+                                                <h4 className={style.systemRequirementsTitle}>Minimum Requirements</h4>
+
+                                                <div className={style.requirements}>
+
+                                                    <h4 className={style.requirementsTitle}>Operating System:</h4>
+
+                                                    <h4 className={style.requirementsDesc}>Windows 10 (64-bit) or macOS Big Sur.</h4>
+
+                                                </div>
+
+                                                <div className={style.requirements}>
+
+                                                    <h4 className={style.requirementsTitle}>Processor:</h4>
+
+                                                    <h4 className={style.requirementsDesc}>2.5–2.9 GHz processor.</h4>
+
+                                                </div>
+
+                                                <div className={style.requirements}>
+
+                                                    <h4 className={style.requirementsTitle}>RAM:</h4>
+
+                                                    <h4 className={style.requirementsDesc}>8 GB.</h4>
+
+                                                </div>
+
+                                                <div className={style.requirements}>
+
+                                                    <h4 className={style.requirementsTitle}>GPU:</h4>
+
+                                                    <h4 className={style.requirementsDesc}>Basic 1 GB GPU supporting DirectX 11.</h4>
+
+                                                </div>
+
+                                                <div className={style.requirements}>
+
+                                                    <h4 className={style.requirementsTitle}>Storage:</h4>
+
+                                                    <h4 className={style.requirementsDesc}>10 GB free disk space.</h4>
+
+                                                </div>
+
+                                                <div className={style.requirements}>
+
+                                                    <h4 className={style.requirementsTitle}>Display:</h4>
+
+                                                    <h4 className={style.requirementsDesc}>1920x1080 resolution.</h4>
+
+                                                </div>
 
                                             </div>
 
-                                            <div className={style.requirements}>
+                                            <div className={style.recommendedRequirements}>
 
-                                                <h4 className={style.requirementsTitle}>Processor:</h4>
+                                                <h4 className={style.systemRequirementsTitle}>Recommended Requirements</h4>
 
-                                                <h4 className={style.requirementsDesc}>3+ GHz multi-core processor.</h4>
+                                                <div className={style.requirements}>
 
-                                            </div>
+                                                    <h4 className={style.requirementsTitle}>Operating System:</h4>
 
-                                            <div className={style.requirements}>
+                                                    <h4 className={style.requirementsDesc}>Windows 11 (64-bit) or macOS Ventura.</h4>
 
-                                                <h4 className={style.requirementsTitle}>RAM:</h4>
+                                                </div>
 
-                                                <h4 className={style.requirementsDesc}>16 GB or more.</h4>
+                                                <div className={style.requirements}>
 
-                                            </div>
+                                                    <h4 className={style.requirementsTitle}>Processor:</h4>
 
-                                            <div className={style.requirements}>
+                                                    <h4 className={style.requirementsDesc}>3+ GHz multi-core processor.</h4>
 
-                                                <h4 className={style.requirementsTitle}>GPU:</h4>
+                                                </div>
 
-                                                <h4 className={style.requirementsDesc}>4 GB GPU with DirectX 12 support.</h4>
+                                                <div className={style.requirements}>
 
-                                            </div>
+                                                    <h4 className={style.requirementsTitle}>RAM:</h4>
 
-                                            <div className={style.requirements}>
+                                                    <h4 className={style.requirementsDesc}>16 GB or more.</h4>
 
-                                                <h4 className={style.requirementsTitle}>Storage:</h4>
+                                                </div>
 
-                                                <h4 className={style.requirementsDesc}>20 GB SSD for faster performance.</h4>
+                                                <div className={style.requirements}>
 
-                                            </div>
+                                                    <h4 className={style.requirementsTitle}>GPU:</h4>
 
-                                            <div className={style.requirements}>
+                                                    <h4 className={style.requirementsDesc}>4 GB GPU with DirectX 12 support.</h4>
 
-                                                <h4 className={style.requirementsTitle}>Display:</h4>
+                                                </div>
 
-                                                <h4 className={style.requirementsDesc}>4K resolution support for professional clarity.</h4>
+                                                <div className={style.requirements}>
+
+                                                    <h4 className={style.requirementsTitle}>Storage:</h4>
+
+                                                    <h4 className={style.requirementsDesc}>20 GB SSD for faster performance.</h4>
+
+                                                </div>
+
+                                                <div className={style.requirements}>
+
+                                                    <h4 className={style.requirementsTitle}>Display:</h4>
+
+                                                    <h4 className={style.requirementsDesc}>4K resolution support for professional clarity.</h4>
+
+                                                </div>
 
                                             </div>
 
                                         </div>
 
-                                    </div>
+                                    ) : '' }
 
-                                    <div className={`${style.installationSteps} ${installationFlag ? 'd-block' : 'd-none'}`}>
+                                    { programData.Installation.some((item) => item.trim() !== '')  ? (
 
-                                        <h4 className={style.installationTitle}>Installation Steps</h4>
+                                        <div className={`${style.installationSteps} ${installationFlag ? 'd-block' : 'd-none'}`}>
 
-                                        <ol>
+                                            <h4 className={style.installationTitle}>Installation Steps</h4>
 
-                                            <li><p>Download the installer specific to your operating system.</p></li>
+                                            <ol>
 
-                                            <li><p>Run the installer and follow on-screen instructions.</p></li>
+                                                { programData.Installation.map( (step, index) =>
+                                                
+                                                    step.trim() !== '' ? (
 
-                                            <li><p>Enter your product key and license (if applicable).</p></li>
+                                                        <li key={index}><p>{step}</p></li>
 
-                                            <li><p>Complete the setup and restart your system.</p></li>
+                                                    ) : ''
+                                                
+                                                ) }
 
-                                        </ol>
+                                            </ol>
 
-                                    </div>
+                                        </div>
+
+                                    ) : '' }
+
+                                    
 
                                 </div>
 

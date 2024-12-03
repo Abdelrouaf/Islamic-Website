@@ -159,7 +159,7 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/architecture' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}>
+                                <Link to='category/Architecture-Software' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}>
                                 
                                     <div className={style.image}>
 
@@ -169,11 +169,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/architecture' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}><h4 className={style.title}>Architecture</h4></Link>
+                                <Link to='category/Architecture-Software' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}><h4 className={style.title}>Architecture</h4></Link>
 
                                 <p className={style.description}>Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.</p>
 
-                                <Link to='category/architecture' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }} className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/Architecture-Software' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -183,7 +183,7 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/dental' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}>
+                                <Link to='category/Dental-Software' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}>
                                 
                                     <div className={style.image}>
 
@@ -193,11 +193,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/dental' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}><h4 className={style.title}>Dental</h4></Link>
+                                <Link to='category/Dental-Software' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}><h4 className={style.title}>Dental</h4></Link>
 
                                 <p className={style.description}>Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.</p>
 
-                                <Link to='category/dental' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }} className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/Dental-Software' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -207,7 +207,7 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/structure' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}>
+                                <Link to='category/Structure-Software' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}>
                                 
                                     <div className={style.image}>
 
@@ -217,11 +217,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/structure' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}><h4 className={style.title}>Structure</h4></Link>
+                                <Link to='category/Structure-Software' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}><h4 className={style.title}>Structure</h4></Link>
 
                                 <p className={style.description}>Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.</p>
 
-                                <Link to='category/structure' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }} className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/Structure-Software' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -231,7 +231,7 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/english-material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}>
+                                <Link to='category/English-Material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}>
                                 
                                     <div className={style.image}>
 
@@ -241,11 +241,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/english-material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}><h4 className={style.title}>English Material</h4></Link>
+                                <Link to='category/English-Material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}><h4 className={style.title}>English Material</h4></Link>
 
                                 <p className={style.description}>English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.</p>
 
-                                <Link to='category/english-material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }} className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/English-Material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -255,7 +255,7 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/english-software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }}>
+                                <Link to='category/English-Software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }}>
                                 
                                     <div className={style.image}>
 
@@ -265,11 +265,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/english-software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }}><h4 className={style.title}>English Software</h4></Link>
+                                <Link to='category/English-Software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }}><h4 className={style.title}>English Software</h4></Link>
 
                                 <p className={style.description}>English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.</p>
 
-                                <Link to='category/english-software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }} className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/English-Software' state={{ description: 'English Software designed to teach, test, or improve English skills. These could include language learning applications, typing tutors, or interactive tools.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -279,7 +279,7 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/english-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }}>
+                                <Link to='category/English-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }}>
                                 
                                     <div className={style.image}>
 
@@ -289,11 +289,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/english-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }}><h4 className={style.title}>English CDS</h4></Link>
+                                <Link to='category/English-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }}><h4 className={style.title}>English CDS</h4></Link>
 
                                 <p className={style.description}>English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.</p>
 
-                                <Link to='category/english-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }} className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/English-CDS' state={{ description: 'English CDS containing English lessons, audio books, or multimedia resources aimed at improving listening and speaking skills.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -303,7 +303,7 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }}>
+                                <Link to='category/Islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }}>
                                 
                                     <div className={style.image}>
 
@@ -313,11 +313,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }}><h4 className={style.title}>Islamic-CDS</h4></Link>
+                                <Link to='category/Islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }}><h4 className={style.title}>Islamic-CDS</h4></Link>
 
                                 <p className={style.description}>Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.</p>
 
-                                <Link to='category/islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }} className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/Islamic-CDS' state={{ description: 'Islamic CDS contain CDs with Islamic content, such as Quran recitations, lectures, or Nasheeds.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -327,7 +327,7 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/islamic-material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}>
+                                <Link to='category/Islamic-Material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}>
                                 
                                     <div className={style.image}>
 
@@ -337,11 +337,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/islamic-material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}><h4 className={style.title}>Islamic Material</h4></Link>
+                                <Link to='category/Islamic-Material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}><h4 className={style.title}>Islamic Material</h4></Link>
 
                                 <p className={style.description}>Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.</p>
 
-                                <Link to='category/islamic-material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }} className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/Islamic-Material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 
@@ -351,7 +351,7 @@ export default function ProgramsHome() {
 
                             <div className={style.box}>
 
-                                <Link to='category/different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}>
+                                <Link to='category/Different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}>
                                 
                                     <div className={style.image}>
 
@@ -361,11 +361,11 @@ export default function ProgramsHome() {
                                 
                                 </Link>
 
-                                <Link to='category/different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}><h4 className={style.title}>Different</h4></Link>
+                                <Link to='category/Different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}><h4 className={style.title}>Different</h4></Link>
 
                                 <p className={style.description}>Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.</p>
 
-                                <Link to='category/different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }} className={style.seeMoreBtn}>See more</Link>
+                                <Link to='category/Different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }} className={style.seeMoreBtn}>See more</Link>
 
                             </div>
 

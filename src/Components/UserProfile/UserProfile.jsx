@@ -6,6 +6,46 @@ import style from './UserProfile.module.scss'
 
 export default function UserProfile() {
 
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [run, setRun] = useState(0)
+
+    const userToken = localStorage.getItem('accessToken')
+
+    const [allSavedPrograms, setAllSavedPrograms] = useState([])
+
+    useEffect(() => {
+        async function getData() {
+            try {    
+                const response = await fetch(`http://147.79.101.225:2859/api/saveitem`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`
+                    },
+                    credentials: "include"
+                });
+    
+                console.log('Response from API:', response);
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status`);
+                }
+    
+                const data = await response.json();
+                console.log('Sa received from API:', data.savedItems);
+
+                setAllSavedPrograms(data.savedItems)
+                setIsLoading(false);
+
+            } catch (error) {
+                console.error("Error occurred during the fetch:", error.message);
+                setIsLoading(false);
+            }
+        }
+    
+        getData();
+    }, [run]);
+
     const [userData ,setUserData] = useState({
         _id: '',
         name: '',
@@ -28,6 +68,19 @@ export default function UserProfile() {
             isAdmin: user.isAdmin
         })
     },[] )
+
+    function formatNumber(number) {
+        if (number >= 1_000_000) {
+            return `${(number / 1_000_000).toFixed(1)}M`;
+        } else if (number >= 1_000) {
+            return `${(number / 1_000).toFixed(1)}K`; 
+        }
+        return number.toString();
+    }
+
+    if (isLoading) {
+        return <p className={style.loading}>Loading, Please wait <span className={style.loader}></span></p>; 
+    }  
 
     return (
     
@@ -85,108 +138,128 @@ export default function UserProfile() {
 
                                 <div className="row gy-2">
 
-                                    <div className="col-md-12 col-lg-6 col-xl-4">
+                                { allSavedPrograms && allSavedPrograms.slice(0, 6).map( (saved, index) => {
 
-                                        <div className={style.programBox}>
+                                    const sizeInBytes = saved.programId.size;
+                                    let sizeFormatted = '';
 
-                                            <Link to={`../program-autoDESK`}>
-                                            
-                                                <div className={style.image}>
+                                    if (sizeInBytes >= 1024 * 1024 * 1024) {
+                                        // GB
+                                        sizeFormatted = (sizeInBytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+                                    } else if (sizeInBytes >= 1024 * 1024) {
+                                        // MB
+                                        sizeFormatted = (sizeInBytes / (1024 * 1024)).toFixed(2) + ' MB';
+                                    } else {
+                                        // KB
+                                        sizeFormatted = (sizeInBytes / 1024).toFixed(2) + ' KB';
+                                    }
 
-                                                    <img src={program1} alt="auto-desk" loading='lazy' />
+                                    return (
 
-                                                </div>
-                                            
-                                            </Link>
+                                        <div className="col-md-12 col-lg-6 col-xl-4">
 
-                                            <Link to={`../program-autoDESK`}><h4 className={style.programTitle}>AutoDesk AutoCAD</h4></Link>
+                                            <div className={style.programBox}>
 
-                                            <p className={style.programSize}>Program size: <span>512 MB</span></p>
+                                                <Link to={`/programs/${saved.programId.programCategory}/${saved._id}`}>
+                                                
+                                                    <div className={style.image}>
 
-                                            <div className={style.btns}>
+                                                        <img src={`http://147.79.101.225:2859/uploads/Programs/${saved.programId.programImage}`} alt="auto-desk" loading='lazy' />
 
-                                                <Link to={`../program-autoDESK`}>
-
-                                                    <button className={style.viewBtn}>
-                                                    
-                                                        View
-                                                    
-                                                        <span className={style.arrow}>
-                                                        
-                                                            <svg fill="rgb(183, 128, 255)" viewBox="0 0 320 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" /></svg>
-                                                        
-                                                        </span>
-
-                                                    </button>
+                                                    </div>
                                                 
                                                 </Link>
 
-                                                <button className={style.bookmarkBtn}>
-                                                
-                                                    <span className={style.IconContainer}>
+                                                <Link to={`/programs/${saved.programId.programCategory}/${saved._id}`}><h4 className={style.programTitle}>{saved.programId.programName}</h4></Link>
+
+                                                <p className={style.programSize}>Program size: <span>{sizeFormatted}</span></p>
+
+                                                <div className={style.btns}>
+
+                                                    <Link to={`/programs/${saved.programId.programCategory}/${saved._id}`}>
+
+                                                        <button className={style.viewBtn}>
+                                                        
+                                                            View
+                                                        
+                                                            <span className={style.arrow}>
+                                                            
+                                                                <svg fill="rgb(183, 128, 255)" viewBox="0 0 320 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" /></svg>
+                                                            
+                                                            </span>
+
+                                                        </button>
                                                     
-                                                        <svg viewBox="0 0 384 512" height="0.9em" className={style.icon}>
+                                                    </Link>
+
+                                                    <button className={style.bookmarkBtn}>
                                                     
-                                                        <path
-                                                            d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
-                                                        ></path>
+                                                        <span className={style.IconContainer}>
+                                                        
+                                                            <svg viewBox="0 0 384 512" height="0.9em" className={style.icon}>
+                                                        
+                                                            <path
+                                                                d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
+                                                            ></path>
+                                                        
+                                                            </svg>
+                                                        
+                                                        </span>
                                                     
+                                                        <p className={style.text}>Unsave</p>
+                                                    
+                                                    </button>
+
+
+                                                </div>
+
+                                                <div className={style.programDetails}>
+
+                                                    <button className={style.like}>
+                                                    
+                                                        <span className={style.icon}>
+                                                    
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className={`${style.bi} ${style.biHeart}`} viewBox="0 0 16 16">
+
+                                                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+
+                                                        </svg>
+
+                                                        </span>
+
+                                                        <span className={style.title}>i love it</span>
+
+                                                    </button>
+
+                                                    {/* <div className={`${style.likeButton}`}>
+                                                    
+                                                        <input className={style.on} id="heart" type="checkbox" />
+                                                    
+                                                        <label className={style.likeLabel} htmlFor="heart">
+                                                        
+                                                        <svg className={style.likeIcon} fillRule="nonzero" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        
+                                                            <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+                                                        
                                                         </svg>
                                                     
-                                                    </span>
-                                                
-                                                    <p className={style.text}>Remove</p>
-                                                
-                                                </button>
-
-
-                                            </div>
-
-                                            <div className={style.programDetails}>
-
-                                                <button className={style.like}>
-                                                
-                                                    <span className={style.icon}>
-                                                
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className={`${style.bi} ${style.biHeart}`} viewBox="0 0 16 16">
-
-                                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-
-                                                    </svg>
-
-                                                    </span>
-
-                                                    <span className={style.title}>i love it</span>
-
-                                                </button>
-
-                                                {/* <div className={`${style.likeButton}`}>
-                                                
-                                                    <input className={style.on} id="heart" type="checkbox" />
-                                                
-                                                    <label className={style.likeLabel} htmlFor="heart">
+                                                        <span className={style.likeText}>Likes</span>
                                                     
-                                                    <svg className={style.likeIcon} fillRule="nonzero" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        </label>
                                                     
-                                                        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+                                                        <span className={`${style.likeCount} ${style.one}`}>68</span>
                                                     
-                                                    </svg>
-                                                
-                                                    <span className={style.likeText}>Likes</span>
-                                                
-                                                    </label>
-                                                
-                                                    <span className={`${style.likeCount} ${style.one}`}>68</span>
-                                                
-                                                    <span className={`${style.likeCount} ${style.two}`}>69</span>
-                                                
-                                                </div> */}
+                                                        <span className={`${style.likeCount} ${style.two}`}>69</span>
+                                                    
+                                                    </div> */}
 
-                                                <div className={style.viewSave}>
+                                                    <div className={style.viewSave}>
 
-                                                    <span className={style.views}>1.2k views</span>
+                                                        <span className={style.views}>{formatNumber(saved.programId.views)} views</span>
 
-                                                    <span className={style.Saved}><i className="fa-regular fa-bookmark"></i> 50</span>
+                                                        <span className={style.Saved}><i className="fa-regular fa-bookmark"></i> 50</span>
+
+                                                    </div>
 
                                                 </div>
 
@@ -194,452 +267,9 @@ export default function UserProfile() {
 
                                         </div>
 
-                                    </div>
+                                    )
 
-                                    <div className="col-md-12 col-lg-6 col-xl-4">
-
-                                        <div className={style.programBox}>
-
-                                            <Link to={`../program-autoDESK`}>
-                                            
-                                                <div className={style.image}>
-
-                                                    <img src={program1} alt="auto-desk" loading='lazy' />
-
-                                                </div>
-                                            
-                                            </Link>
-
-                                            <Link to={`../program-autoDESK`}><h4 className={style.programTitle}>AutoDesk AutoCAD</h4></Link>
-
-                                            <p className={style.programSize}>Program size: <span>512 MB</span></p>
-
-                                            <div className={style.btns}>
-
-                                                <Link to={`../program-autoDESK`}>
-
-                                                    <button className={style.viewBtn}>
-                                                    
-                                                        View
-                                                    
-                                                        <span className={style.arrow}>
-                                                        
-                                                            <svg fill="rgb(183, 128, 255)" viewBox="0 0 320 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" /></svg>
-                                                        
-                                                        </span>
-
-                                                    </button>
-                                                
-                                                </Link>
-
-                                                <button className={style.bookmarkBtn}>
-                                                
-                                                    <span className={style.IconContainer}>
-                                                    
-                                                        <svg viewBox="0 0 384 512" height="0.9em" className={style.icon}>
-                                                    
-                                                        <path
-                                                            d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
-                                                        ></path>
-                                                    
-                                                        </svg>
-                                                    
-                                                    </span>
-                                                
-                                                    <p className={style.text}>Remove</p>
-                                                
-                                                </button>
-
-
-                                            </div>
-
-                                            <div className={style.programDetails}>
-
-                                                <button className={style.like}>
-                                                
-                                                    <span className={style.icon}>
-                                                
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className={`${style.bi} ${style.biHeart}`} viewBox="0 0 16 16">
-
-                                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-
-                                                    </svg>
-
-                                                    </span>
-
-                                                    <span className={style.title}>i love it</span>
-
-                                                </button>
-
-                                                <div className={style.viewSave}>
-
-                                                    <span className={style.views}>1.2k views</span>
-
-                                                    <span className={style.Saved}><i className="fa-regular fa-bookmark"></i> 50</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div className="col-md-12 col-lg-6 col-xl-4">
-
-                                        <div className={style.programBox}>
-
-                                            <Link to={`../program-autoDESK`}>
-                                            
-                                                <div className={style.image}>
-
-                                                    <img src={program1} alt="auto-desk" loading='lazy' />
-
-                                                </div>
-                                            
-                                            </Link>
-
-                                            <Link to={`../program-autoDESK`}><h4 className={style.programTitle}>AutoDesk AutoCAD</h4></Link>
-
-                                            <p className={style.programSize}>Program size: <span>512 MB</span></p>
-
-                                            <div className={style.btns}>
-
-                                                <Link to={`../program-autoDESK`}>
-
-                                                    <button className={style.viewBtn}>
-                                                    
-                                                        View
-                                                    
-                                                        <span className={style.arrow}>
-                                                        
-                                                            <svg fill="rgb(183, 128, 255)" viewBox="0 0 320 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" /></svg>
-                                                        
-                                                        </span>
-
-                                                    </button>
-                                                
-                                                </Link>
-
-                                                <button className={style.bookmarkBtn}>
-                                                
-                                                    <span className={style.IconContainer}>
-                                                    
-                                                        <svg viewBox="0 0 384 512" height="0.9em" className={style.icon}>
-                                                    
-                                                        <path
-                                                            d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
-                                                        ></path>
-                                                    
-                                                        </svg>
-                                                    
-                                                    </span>
-                                                
-                                                    <p className={style.text}>Remove</p>
-                                                
-                                                </button>
-
-
-                                            </div>
-
-                                            <div className={style.programDetails}>
-
-                                                <button className={style.like}>
-                                                
-                                                    <span className={style.icon}>
-                                                
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className={`${style.bi} ${style.biHeart}`} viewBox="0 0 16 16">
-
-                                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-
-                                                    </svg>
-
-                                                    </span>
-
-                                                    <span className={style.title}>i love it</span>
-
-                                                </button>
-
-                                                <div className={style.viewSave}>
-
-                                                    <span className={style.views}>1.2k views</span>
-
-                                                    <span className={style.Saved}><i className="fa-regular fa-bookmark"></i> 50</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div className="col-md-12 col-lg-6 col-xl-4">
-
-                                        <div className={style.programBox}>
-
-                                            <Link to={`../program-autoDESK`}>
-                                            
-                                                <div className={style.image}>
-
-                                                    <img src={program1} alt="auto-desk" loading='lazy' />
-
-                                                </div>
-                                            
-                                            </Link>
-
-                                            <Link to={`../program-autoDESK`}><h4 className={style.programTitle}>AutoDesk AutoCAD</h4></Link>
-
-                                            <p className={style.programSize}>Program size: <span>512 MB</span></p>
-
-                                            <div className={style.btns}>
-
-                                                <Link to={`../program-autoDESK`}>
-
-                                                    <button className={style.viewBtn}>
-                                                    
-                                                        View
-                                                    
-                                                        <span className={style.arrow}>
-                                                        
-                                                            <svg fill="rgb(183, 128, 255)" viewBox="0 0 320 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" /></svg>
-                                                        
-                                                        </span>
-
-                                                    </button>
-                                                
-                                                </Link>
-
-                                                <button className={style.bookmarkBtn}>
-                                                
-                                                    <span className={style.IconContainer}>
-                                                    
-                                                        <svg viewBox="0 0 384 512" height="0.9em" className={style.icon}>
-                                                    
-                                                        <path
-                                                            d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
-                                                        ></path>
-                                                    
-                                                        </svg>
-                                                    
-                                                    </span>
-                                                
-                                                    <p className={style.text}>Remove</p>
-                                                
-                                                </button>
-
-
-                                            </div>
-
-                                            <div className={style.programDetails}>
-
-                                                <button className={style.like}>
-                                                
-                                                    <span className={style.icon}>
-                                                
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className={`${style.bi} ${style.biHeart}`} viewBox="0 0 16 16">
-
-                                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-
-                                                    </svg>
-
-                                                    </span>
-
-                                                    <span className={style.title}>i love it</span>
-
-                                                </button>
-
-                                                <div className={style.viewSave}>
-
-                                                    <span className={style.views}>1.2k views</span>
-
-                                                    <span className={style.Saved}><i className="fa-regular fa-bookmark"></i> 50</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div className="col-md-12 col-lg-6 col-xl-4">
-
-                                        <div className={style.programBox}>
-
-                                            <Link to={`../program-autoDESK`}>
-                                            
-                                                <div className={style.image}>
-
-                                                    <img src={program1} alt="auto-desk" loading='lazy' />
-
-                                                </div>
-                                            
-                                            </Link>
-
-                                            <Link to={`../program-autoDESK`}><h4 className={style.programTitle}>AutoDesk AutoCAD</h4></Link>
-
-                                            <p className={style.programSize}>Program size: <span>512 MB</span></p>
-
-                                            <div className={style.btns}>
-
-                                                <Link to={`../program-autoDESK`}>
-
-                                                    <button className={style.viewBtn}>
-                                                    
-                                                        View
-                                                    
-                                                        <span className={style.arrow}>
-                                                        
-                                                            <svg fill="rgb(183, 128, 255)" viewBox="0 0 320 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" /></svg>
-                                                        
-                                                        </span>
-
-                                                    </button>
-                                                
-                                                </Link>
-
-                                                <button className={style.bookmarkBtn}>
-                                                
-                                                    <span className={style.IconContainer}>
-                                                    
-                                                        <svg viewBox="0 0 384 512" height="0.9em" className={style.icon}>
-                                                    
-                                                        <path
-                                                            d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
-                                                        ></path>
-                                                    
-                                                        </svg>
-                                                    
-                                                    </span>
-                                                
-                                                    <p className={style.text}>Remove</p>
-                                                
-                                                </button>
-
-
-                                            </div>
-
-                                            <div className={style.programDetails}>
-
-                                                <button className={style.like}>
-                                                
-                                                    <span className={style.icon}>
-                                                
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className={`${style.bi} ${style.biHeart}`} viewBox="0 0 16 16">
-
-                                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-
-                                                    </svg>
-
-                                                    </span>
-
-                                                    <span className={style.title}>i love it</span>
-
-                                                </button>
-
-                                                <div className={style.viewSave}>
-
-                                                    <span className={style.views}>1.2k views</span>
-
-                                                    <span className={style.Saved}><i className="fa-regular fa-bookmark"></i> 50</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div className="col-md-12 col-lg-6 col-xl-4">
-
-                                        <div className={style.programBox}>
-
-                                            <Link to={`../program-autoDESK`}>
-                                            
-                                                <div className={style.image}>
-
-                                                    <img src={program1} alt="auto-desk" loading='lazy' />
-
-                                                </div>
-                                            
-                                            </Link>
-
-                                            <Link to={`../program-autoDESK`}><h4 className={style.programTitle}>AutoDesk AutoCAD</h4></Link>
-
-                                            <p className={style.programSize}>Program size: <span>512 MB</span></p>
-
-                                            <div className={style.btns}>
-
-                                                <Link to={`../program-autoDESK`}>
-
-                                                    <button className={style.viewBtn}>
-                                                    
-                                                        View
-                                                    
-                                                        <span className={style.arrow}>
-                                                        
-                                                            <svg fill="rgb(183, 128, 255)" viewBox="0 0 320 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z" /></svg>
-                                                        
-                                                        </span>
-
-                                                    </button>
-                                                
-                                                </Link>
-
-                                                <button className={style.bookmarkBtn}>
-                                                
-                                                    <span className={style.IconContainer}>
-                                                    
-                                                        <svg viewBox="0 0 384 512" height="0.9em" className={style.icon}>
-                                                    
-                                                        <path
-                                                            d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
-                                                        ></path>
-                                                    
-                                                        </svg>
-                                                    
-                                                    </span>
-                                                
-                                                    <p className={style.text}>Remove</p>
-                                                
-                                                </button>
-
-
-                                            </div>
-
-                                            <div className={style.programDetails}>
-
-                                                <button className={style.like}>
-                                                
-                                                    <span className={style.icon}>
-                                                
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className={`${style.bi} ${style.biHeart}`} viewBox="0 0 16 16">
-
-                                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-
-                                                    </svg>
-
-                                                    </span>
-
-                                                    <span className={style.title}>i love it</span>
-
-                                                </button>
-
-                                                <div className={style.viewSave}>
-
-                                                    <span className={style.views}>1.2k views</span>
-
-                                                    <span className={style.Saved}><i className="fa-regular fa-bookmark"></i> 50</span>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
+                                } ) }
 
                                 </div>
 

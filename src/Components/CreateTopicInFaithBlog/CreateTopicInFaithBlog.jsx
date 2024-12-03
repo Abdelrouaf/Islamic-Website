@@ -167,6 +167,8 @@ const saveData = async () => {
         toolbar: [
           // Add font and size dropdowns
           [{ font: [] }, { size: [] }],
+
+          [ { 'header': [1, 2, 3, 4, 5, 6, false] } ],
           
           // Add text formatting options
           ["bold", "italic", "underline", "strike"], // Text styles
@@ -175,9 +177,14 @@ const saveData = async () => {
           // Add list and alignment options
           [{ list: "ordered" }, { list: "bullet" }], // Ordered and unordered lists
           [{ align: [] }], // Text alignment
+          [{ 'script': 'sub' }, { 'script': 'super' }],
     
+          [{ 'indent': '-1' }, { 'indent': '+1' }],
+
+          [ { 'direction': 'rtl' } ],
+
           // Add image, video, and link options
-          ["link", "image", "video"],
+          ["link", "video"],
     
           // Add a code block and quote option
           ["blockquote", "code-block"],
@@ -185,7 +192,7 @@ const saveData = async () => {
           // Add undo and redo functionality
           ["clean"], // Remove formatting
         ],
-      };
+    };
 
     return (
         <div >

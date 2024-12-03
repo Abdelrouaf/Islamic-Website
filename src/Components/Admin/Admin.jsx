@@ -189,10 +189,13 @@ export default function Admin() {
                 })
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status`);
                 }
             
                 const data = await response.json()
+
+                // console.log("data ", data);
+                
 
                 setPrograms(data)            
             } catch {

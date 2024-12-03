@@ -4,6 +4,9 @@ import axios from 'axios'
 import { motion } from 'framer-motion'
 import { Azkar } from 'islam.js'
 import DOMPurify from 'dompurify';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 
 export default function Pillars() {
 
@@ -541,11 +544,16 @@ export default function Pillars() {
                             
                                 {/* {shahadahTopic[0]._id !== shahadah._id ? <h4 className={style.subTitle}>{shahadah.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}><div
-    dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(shahadah.description) , // Render sanitized HTML content
-    }}
-/></p>
+                                <p className={style.paragraph}>
+                                    <div
+        dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(shahadah.description, {
+                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+            }),
+        }}
+/>
+</p>
 
                                 
                             
@@ -593,11 +601,16 @@ export default function Pillars() {
                             
                                 {/* {salahTopic[0]._id !== salah._id ? <h4 className={style.subTitle}>{salah.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}><div
-    dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(salah.description) , // Render sanitized HTML content
-    }}
-/></p>
+                                <p className={style.paragraph}>
+                                    <div
+        dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(salah.description, {
+                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+            }),
+        }}
+/>
+</p>
 
                                 
                             
@@ -647,11 +660,16 @@ export default function Pillars() {
                             
                                 {/* <p className={style.paragraph}>{sawm.description}</p> */}
 
-                                <p className={style.paragraph}><div
-    dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(sawm.description) , // Render sanitized HTML content
-    }}
-/></p>
+                                <p className={style.paragraph}>
+                                    <div
+        dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(sawm.description, {
+                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+            }),
+        }}
+/>
+</p>
 
                                 
                             
@@ -699,12 +717,16 @@ export default function Pillars() {
                             
                                 {/* {zakatTopic[0]._id !== zakat._id ? <h4 className={style.subTitle}>{zakat.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}><div
-    dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(zakat.description) , // Render sanitized HTML content
-    }}
-/></p>
-                                
+                                <p className={style.paragraph}>
+                                    <div
+        dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(zakat.description, {
+                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+            }),
+        }}
+/>
+</p>                      
 
                             </div>
                         
@@ -746,11 +768,16 @@ export default function Pillars() {
                             
                                 {/* {haijTopic[0]._id !== haij._id ? <h4 className={style.subTitle}>{haij.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}><div
-    dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(haij.description) , // Render sanitized HTML content
-    }}
-/></p>
+                                <p className={style.paragraph}>
+                                    <div
+        dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(haij.description, {
+                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+            }),
+        }}
+/>
+</p>
                             
                             </div>
                         

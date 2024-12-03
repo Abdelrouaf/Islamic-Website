@@ -63,6 +63,56 @@ export default function UserRole() {
         
             const data = await response.json();
             // console.log('Data received from API:', data);
+
+            let existingUserData = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            if (existingUserData) {
+                existingUserData = { 
+                    ...existingUserData, 
+                    isAdmin: true 
+                };
+            }
+
+            localStorage.setItem('loggedInUser', JSON.stringify(existingUserData));
+
+        } catch {
+            showToast("Error occurred during the fetch", 'error')
+        }
+
+        setRun((prevRun) => prevRun + 1);
+    }
+
+    // Make admin  user
+    const makeAdminUser = async (id) => {
+        try {
+            const response = await fetch(`http://147.79.101.225:2859/api/user/${id}`, {
+                method: "PUT",
+                body: JSON.stringify({ isAdmin: false }),
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                    "Content-Type": "application/json"
+                },
+                credentials: "include"
+            });
+        
+            if (!response.ok) {
+                throw new Error(`HTTP error! status`);
+            }
+        
+            const data = await response.json();
+            // console.log('Data received from API:', data);
+
+            let existingUserData = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            if (existingUserData) {
+                existingUserData = { 
+                    ...existingUserData, 
+                    isAdmin: false 
+                };
+            }
+
+            localStorage.setItem('loggedInUser', JSON.stringify(existingUserData));
+
         } catch {
             showToast("Error occurred during the fetch", 'error')
         }
@@ -125,7 +175,7 @@ export default function UserRole() {
 
                                 { userData.map( (user, index) => 
                                 
-                                    user.isAdmin ? "" : (
+                                    // user.isAdmin ? "" : (
                                     
                                         <tr key={user._id}>
     
@@ -135,10 +185,22 @@ export default function UserRole() {
     
                                             <td>{user.email}</td>
     
-                                            <td><button onClick={ () => makeUserAdmin(user._id) } className={style.simpleBtn}>Make the user admin</button></td>
+                                            <td>
+
+                                                {user.isAdmin ? (
+
+                                                    <button onClick={ () => makeAdminUser(user._id) } className='btn btn-danger'>Make the admin user</button>
+
+                                                ) : (
+
+                                                    <button onClick={ () => makeUserAdmin(user._id) } className='btn btn-success'>Make the user admin</button>
+
+                                                ) }
+                                                                                        
+                                            </td>
     
                                         </tr>
-                                    ) 
+                                    // ) 
                                 
                                 ) }
 

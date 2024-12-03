@@ -62,6 +62,17 @@ export default function ApproveUser() {
             }
         
             const data = await response.json();
+
+            let existingUserData = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            if (existingUserData) {
+                existingUserData = { 
+                    ...existingUserData, 
+                    apprived: true 
+                };
+            }
+
+            localStorage.setItem('loggedInUser', JSON.stringify(existingUserData));
             // console.log('Data received from API:', data);
         } catch {
             // console.error("Error occurred during the fetch:", error.message);
