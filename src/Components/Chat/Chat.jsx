@@ -100,9 +100,15 @@ export default function Chat() {
                 body: JSON.stringify(messageText),
             });
     
+            console.log('Response status:', response);
+            console.log('Response text:', await response.text());
+
             if (!response.ok) {
-                throw new Error(`Failed to send message, status`);
+                throw new Error(`Failed to send message, status ${response.status}`);
             }
+
+            
+            
     
             const data = await response.json(); 
             console.log('Message sent successfully:', data);
@@ -211,26 +217,31 @@ export default function Chat() {
     const groupedMessages = allUsers.reduce((acc, userMessages) => {
         const { userId, message, createdAt, updatedAt, _id } = userMessages;
     
+        // Skip processing if userId is null or undefined
+        if (!userId) return acc;
+    
         // Use email or another unique property of `userId` as the key
         const uniqueKey = userId._id;
     
         // Filter messages where isAdmin is false
         const filteredMessages = message.filter((msg) => !msg.isAdmin);
     
-        if (message.length > 0) {
+        if (filteredMessages.length > 0) {
             if (acc[uniqueKey]) {
                 acc[uniqueKey].count += filteredMessages.length;
-                acc[uniqueKey].lastMessage = filteredMessages.length > 0
-                    ? filteredMessages[filteredMessages.length - 1].message
-                    : null;
+                acc[uniqueKey].lastMessage =
+                    filteredMessages.length > 0
+                        ? filteredMessages[filteredMessages.length - 1].message
+                        : null;
                 acc[uniqueKey].createdAt = updatedAt || createdAt;
             } else {
                 acc[uniqueKey] = {
                     userName: userId.name,
                     count: filteredMessages.length,
-                    lastMessage: filteredMessages.length > 0
-                        ? filteredMessages[filteredMessages.length - 1].message
-                        : null,
+                    lastMessage:
+                        filteredMessages.length > 0
+                            ? filteredMessages[filteredMessages.length - 1].message
+                            : null,
                     createdAt: updatedAt || createdAt,
                     _id,
                 };
@@ -239,6 +250,10 @@ export default function Chat() {
     
         return acc;
     }, {});
+    
+
+    console.log("all usres", allUsers);
+    
     
 
     const [userChat, setUserChat] = useState({
@@ -271,7 +286,7 @@ export default function Chat() {
             }
     
             const data = await response.json();  // Parse the response data
-            console.log('DATA :', data.Message);  // Log success message
+            console.log('DATA from user:', data.Message);  // Log success message
 
             setUserChat({
                 id: data.Message._id,
@@ -329,7 +344,7 @@ export default function Chat() {
 
                                     <div className={style.usersBox}>
 
-                                        { Object.keys(groupedMessages).map( (uniqueKey) => {
+                                        { allUsers.length > 0 && Object.keys(groupedMessages).map( (uniqueKey) => {
 
                                             const { userName, count, lastMessage, createdAt, _id } = groupedMessages[uniqueKey];
 
@@ -456,7 +471,7 @@ export default function Chat() {
 
                                                 </div>
 
-                                                { messageData.map( (data, index) => (
+                                                {/* { messageData.map( (data, index) => (
 
                                                     <div className={style.inbox} key={index + 1}>
 
@@ -486,7 +501,7 @@ export default function Chat() {
 
                                                     </div>
 
-                                                ) ) }
+                                                ) ) } */}
 
                                             </div>
 

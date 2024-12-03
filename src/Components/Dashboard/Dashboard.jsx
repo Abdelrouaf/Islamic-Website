@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
+import { format } from 'date-fns/format';
 import style from './Dashboard.module.scss'
 
 // Chart.js setup
@@ -8,93 +9,136 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 export default function Dashboard() {
 
-    const [salesData, setSalesData] = useState([]);
-    const [revenueData, setRevenueData] = useState([]);
-    const [usersData, setUsersData] = useState([]);
+    const [viewsData, setViewsData] = useState([0, 0, 0, 0, 0, 0, 0]); // For Views (Mon-Sun)
+    const [likesData, setLikesData] = useState([0, 0, 0, 0, 0, 0, 0]); // For Likes (Mon-Sun)
 
-    const [statsData, setStatsData] = useState([])
+    const [programs, setPrograms] = useState([]);
 
-    const userToken = localStorage.getItem('accessToken')
+    const userToken = localStorage.getItem('accessToken');
 
     const fetchData = async () => {
         try {
-            
             const response = await fetch('http://147.79.101.225:2859/api/programs/', {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                    "Authorization": `Bearer ${userToken}`,
-                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${userToken}`,
+                    'Content-Type': 'application/json',
                 },
-                credentials: "include"
-            })
+                credentials: 'include',
+            });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status`);
+                throw new Error('HTTP error! status');
             }
-        
-            const data = await response.json()
 
-            // console.log("data ", data);
-            setStatsData(data)
-            
+            const data = await response.json();
+            setPrograms(data);
 
-        } catch {
-            // showToast("Error in fetching programs.", 'error')
+            const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+            const views = new Array(7).fill(0); // Initialize for 7 days of the week
+            const likes = new Array(7).fill(0); // Initialize for 7 days of the week
+
+            data.forEach(program => {
+                let programDate;
+                
+                // Check if _id is a MongoDB ObjectId and extract timestamp
+                try {
+                    if (program._id && typeof program._id === 'string' && program._id.length === 24) {
+                        // Extract timestamp from the first 8 characters of the ObjectId (hexadecimal)
+                        const timestamp = parseInt(program._id.substring(0, 8), 16) * 1000;
+                        programDate = new Date(timestamp); // Convert the timestamp to a Date object
+                    } else {
+                        // If _id is not a valid ObjectId, attempt to parse as date string
+                        programDate = new Date(program._id);
+                    }
+
+                    // Check if the date is valid
+                    if (isNaN(programDate)) {
+                        console.error('Invalid date for program:', program._id);
+                        return; // Skip processing this invalid entry
+                    }
+                } catch (error) {
+                    console.error('Error parsing date for program:', program._id, error);
+                    return; // Skip processing this invalid entry
+                }
+
+                const dayIndex = programDate.getDay(); // Get the day index (0 for Sun, 6 for Sat)
+                views[dayIndex] += program.views;
+                likes[dayIndex] += program.likes;
+            });
+
+            setViewsData(views);
+            setLikesData(likes);
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
-    }
+    };
 
-    console.log("fdasdc ", statsData);
+
+
+    console.log(programs);
     
 
     useEffect(() => {
-
         fetchData()
-        
-        setSalesData(statsData);
-        setRevenueData(statsData);
-        setUsersData(statsData);
-      }, []);
+    }, []);
     
-      // Chart Data Setup
-      const salesChartData = {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        datasets: [
-          {
-            label: 'Sales',
-            data: salesData,
-            borderColor: '#4caf50',
-            fill: false,
-            tension: 0.1,
-          },
-        ],
-      };
-    
-      const revenueChartData = {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        datasets: [
-          {
-            label: 'Revenue',
-            data: revenueData,
-            borderColor: '#3e95cd',
-            fill: false,
-            tension: 0.1,
-          },
-        ],
-      };
-    
-      const usersChartData = {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        datasets: [
-          {
-            label: 'New Users',
-            data: usersData,
-            borderColor: '#ff6384',
-            fill: false,
-            tension: 0.1,
-          },
-        ],
-      };
+  // Chart Data Setup for Views
+  const viewsChartDataDays = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      {
+        label: 'Views',
+        data: viewsData,
+        borderColor: '#ffcc00', // Choose a color for Views chart
+        fill: false,
+        tension: 0.1,
+      },
+    ],
+  };
 
+  // Chart Data Setup for Likes
+  const likesChartDataDays = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      {
+        label: 'Likes',
+        data: likesData,
+        borderColor: '#ff6384', // Choose a color for Likes chart
+        fill: false,
+        tension: 0.1,
+      },
+    ],
+  };
+
+  // Chart Data Setup for Views
+  const viewsChartData = {
+    labels: Array.from({ length: 12 }, (_, index) => format(new Date(new Date().getFullYear(), index), 'MMM yyyy')),
+    datasets: [
+      {
+        label: 'Views',
+        data: viewsData,
+        borderColor: '#ffcc00',
+        fill: false,
+        tension: 0.1,
+      },
+    ],
+  };
+
+  // Chart Data Setup for Likes
+  const likesChartData = {
+    labels: Array.from({ length: 12 }, (_, index) => format(new Date(new Date().getFullYear(), index), 'MMM yyyy')),
+    datasets: [
+      {
+        label: 'Likes',
+        data: likesData,
+        borderColor: '#ff6384',
+        fill: false,
+        tension: 0.1,
+      },
+    ],
+  };
 
 
     return (
@@ -111,35 +155,10 @@ export default function Dashboard() {
 
                 <div className="container">
 
-                <div className="stats-cards">
-        <div className="stat-card">
-          <h2>Total Sales</h2>
-          <p>{salesData.reduce((acc, num) => acc + num, 0)} units</p>
-        </div>
-        <div className="stat-card">
-          <h2>Total Revenue</h2>
-          <p>${revenueData.reduce((acc, num) => acc + num, 0)}</p>
-        </div>
-        <div className="stat-card">
-          <h2>New Users</h2>
-          <p>{usersData.reduce((acc, num) => acc + num, 0)} users</p>
-        </div>
-      </div>
-
-      <div className="charts">
-        <div className="chart">
-          <h3>Sales Over the Week</h3>
-          <Line data={salesChartData} />
-        </div>
-        <div className="chart">
-          <h3>Revenue Over the Week</h3>
-          <Line data={revenueChartData} />
-        </div>
-        <div className="chart">
-          <h3>New Users Over the Week</h3>
-          <Line data={usersChartData} />
-        </div>
-      </div>
+                <Line data={viewsChartDataDays} />
+                <Line data={viewsChartData} />
+                <Line data={likesChartData} />
+                <Line data={likesChartDataDays} />
 
                 </div>
 

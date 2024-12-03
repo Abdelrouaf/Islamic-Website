@@ -91,6 +91,9 @@ export default function Program() {
         return <p className={style.loading}>Loading, Please wait <span className={style.loader}></span></p>; 
     }  
 
+    console.log("progriam file ", programData.programFile);
+    
+
     return (
     
         <>
