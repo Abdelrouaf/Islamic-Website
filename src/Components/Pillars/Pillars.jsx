@@ -97,6 +97,9 @@ export default function Pillars() {
             const data5 = await haijResponse.json();
         
             setHaijTopic(data5.HaijBlog || [])
+
+            console.log(data5);
+            
         
             const initialLikesHaij = {};
             data5.HaijBlog.forEach( (topic) => {
@@ -544,8 +547,8 @@ export default function Pillars() {
                             
                                 {/* {shahadahTopic[0]._id !== shahadah._id ? <h4 className={style.subTitle}>{shahadah.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}>
-                                    <div
+                                {/* <p className={style.paragraph}> */}
+                                    <div className={style.paragraph}
         dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(shahadah.description, {
                 ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
@@ -553,7 +556,7 @@ export default function Pillars() {
             }),
         }}
 />
-</p>
+{/* </p> */}
 
                                 
                             
@@ -601,8 +604,8 @@ export default function Pillars() {
                             
                                 {/* {salahTopic[0]._id !== salah._id ? <h4 className={style.subTitle}>{salah.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}>
-                                    <div
+                                {/* <p className={style.paragraph}> */}
+                                    <div className={style.paragraph}
         dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(salah.description, {
                 ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
@@ -610,7 +613,7 @@ export default function Pillars() {
             }),
         }}
 />
-</p>
+{/* </p> */}
 
                                 
                             
@@ -660,8 +663,8 @@ export default function Pillars() {
                             
                                 {/* <p className={style.paragraph}>{sawm.description}</p> */}
 
-                                <p className={style.paragraph}>
-                                    <div
+                                {/* <p className={style.paragraph}> */}
+                                    <div className={style.paragraph}
         dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(sawm.description, {
                 ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
@@ -669,7 +672,7 @@ export default function Pillars() {
             }),
         }}
 />
-</p>
+{/* </p> */}
 
                                 
                             
@@ -717,8 +720,8 @@ export default function Pillars() {
                             
                                 {/* {zakatTopic[0]._id !== zakat._id ? <h4 className={style.subTitle}>{zakat.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}>
-                                    <div
+                                {/* <p className={style.paragraph}> */}
+                                    <div className={style.paragraph}
         dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(zakat.description, {
                 ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
@@ -726,7 +729,7 @@ export default function Pillars() {
             }),
         }}
 />
-</p>                      
+{/* </p>                       */}
 
                             </div>
                         
@@ -768,8 +771,8 @@ export default function Pillars() {
                             
                                 {/* {haijTopic[0]._id !== haij._id ? <h4 className={style.subTitle}>{haij.title}</h4> : '' } */}
                             
-                                <p className={style.paragraph}>
-                                    <div
+                                {/* <p className={style.paragraph}> */}
+                                    <div className={style.paragraph}
         dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(haij.description, {
                 ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
@@ -777,7 +780,7 @@ export default function Pillars() {
             }),
         }}
 />
-</p>
+{/* </p> */}
                             
                             </div>
                         

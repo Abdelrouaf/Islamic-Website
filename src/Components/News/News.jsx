@@ -239,8 +239,8 @@ export default function News() {
                                     </div>
                                 ) }
 
-<p className={style.paragraph}>
-                                    <div
+{/* <p className={style.paragraph}> */}
+                                    <div className={style.paragraph}
         dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(topic.description, {
                 ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
@@ -248,7 +248,7 @@ export default function News() {
             }),
         }}
 />
-</p>
+{/* </p> */}
 
                                 <div className={`${style.details} d-flex gap-3`}>
 

@@ -33,15 +33,12 @@ export default function Category() {
                         },
                         credentials: "include"
                     });
-
-                    console.log('Response from API:', response);
     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status`);
                     }
         
                     const data = await response.json();
-                    console.log('Data received from API:', data);
     
                     setAllPrograms(data)
                     setIsLoading(false);
@@ -54,15 +51,12 @@ export default function Category() {
                         },
                         credentials: "include"
                     });
-
-                    console.log('Response from API:', response);
     
                     if (!response.ok) {
                         throw new Error(`HTTP error! status`);
                     }
         
                     const data = await response.json();
-                    console.log('Data received from API:', data.Programs);
     
                     setAllPrograms(data.Programs)
                     setIsLoading(false);
@@ -77,123 +71,6 @@ export default function Category() {
         getData();
 
     }, [category]);
-
-    // const [deleteFromSave, setDeleteFromSave] = useState(false)
-
-    // Save Program
-    // const saveProgram = async (program) => {
-    // try {    
-    //     const checkResponse = await fetch(`http://147.79.101.225:2859/api/saveitem/`, {
-    //         method: "GET",
-    //         headers: {
-    //             "Authorization": `Bearer ${userToken}`,
-    //         },
-    //         credentials: "include",
-    //     });
-
-    //     if (checkResponse.ok) {
-    //         const allItems = await checkResponse.json();
-
-    //         const totalSaved = allItems.savedItems
-    //         const existingItem = totalSaved.find(item => item.programId._id === program._id);
-
-    //         if (existingItem) {
-    //             // showToast('This item already saved!', 'invalid');
-    //             setDeleteFromSave(true)
-    //             return;
-    //         }
-    //     }
-
-    //     if (deleteFromSave) {
-    //         const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${program._id}`, {
-    //             method: "DELETE",
-    //             headers: {
-    //                 "Authorization": `Bearer ${userToken}`,
-    //                 // 'Content-Type': 'multipart/form-data'
-    //             },
-    //             credentials: "include",
-    //             // body: JSON.stringify(program)
-    //         });
-    
-    //         console.log('Response from API:', response);
-    
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! status`);
-    //         }
-    
-    //         const data = await response.json();
-    
-    //         showToast('Item deleted successfully!', 'success')
-    //     } else {
-    //         const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${program._id}`, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Authorization": `Bearer ${userToken}`,
-    //                 'Content-Type': 'multipart/form-data'
-    //             },
-    //             credentials: "include",
-    //             body: JSON.stringify(program)
-    //         });
-    
-    //         console.log('Response from API:', response);
-    
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! status`);
-    //         }
-    
-    //         const data = await response.json();
-    
-    //         showToast('Item saved successfully!', 'success')
-    //     }
-
-    //     if ( category === "All-Categories" ) {
-    //         const response = await fetch(`http://147.79.101.225:2859/api/programs/`, {
-    //             method: "GET",
-    //             headers: {
-    //                 "Authorization": `Bearer ${userToken}`
-    //             },
-    //             credentials: "include"
-    //         });
-
-    //         console.log('Response from API:', response);
-
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! status`);
-    //         }
-
-    //         const data = await response.json();
-    //         console.log('Data received from API:', data);
-
-    //         setAllPrograms(data)
-
-    //     } else {
-    //         const response = await fetch(`http://147.79.101.225:2859/api/programs/category?category=${category}`, {
-    //             method: "GET",
-    //             headers: {
-    //                 "Authorization": `Bearer ${userToken}`
-    //             },
-    //             credentials: "include"
-    //         });
-
-    //         console.log('Response from API:', response);
-
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! status`);
-    //         }
-
-    //         const data = await response.json();
-    //         console.log('Data received from API:', data.Programs);
-
-    //         setAllPrograms(data.Programs)
-    //         setIsLoading(false);
-    //     }
-
-    // } catch (error) {
-    //     showToast('Error occurred during save the item', 'error')
-    //     setIsLoading(false);
-    // }
-    // setDeleteFromSave(false)
-    // } 
 
     const [allItemsSaved, setAllItemsSaved] = useState([])
 
@@ -275,7 +152,6 @@ export default function Category() {
     
     // Function to save the item
     const saveItem = async (program) => {
-        console.log("save item: ", program);
     
         try {
             const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${program._id}`, {
@@ -303,7 +179,6 @@ export default function Category() {
     
     // Function to delete the item
     const deleteItem = async (saveId) => {
-        console.log("del save: ", saveId);
     
         try {
             const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${saveId}`, {
@@ -357,9 +232,7 @@ export default function Category() {
     const likeProgram = async (program) => {
         try {
             const updatedLikes = program.likes + 1;
-    
-            console.log("Attempting to update program likes:", program._id);
-    
+        
             const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
                 ...program,
                 likes: updatedLikes
@@ -372,9 +245,6 @@ export default function Category() {
                 withCredentials: true,
             }
         );
-    
-            console.log("Update response status:", updateResponse.status);
-            console.log("Response data:", updateResponse.data);
     
             if (updateResponse.status === 200 || updateResponse.status === 201) {
                 setAllPrograms((prevPrograms) =>

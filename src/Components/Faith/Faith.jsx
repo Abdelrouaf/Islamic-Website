@@ -486,14 +486,16 @@ export default function Faith() {
 
                                         <span className={style.publisher}>by <span>{topic.author}</span></span>
 
-                                        <p className={style.descriptionBook}><div
+                                        {/* <p className={style.descriptionBook}> */}
+                                            <div className={style.descriptionBook}
         dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(topic.description, {
                 ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
                 ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
             }),
         }}
-/></p>
+/>
+{/* </p> */}
 
                                         <div className={`${style.details} d-flex gap-3`}>
                                     
@@ -554,8 +556,8 @@ export default function Faith() {
                                     </video>
                                 </div>
 
-                                <p className={style.paragraph}>
-                                    <div
+                                {/* <p className={style.paragraph}> */}
+                                    <div className={style.paragraph}
         dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(topic.description, {
                 ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
@@ -563,7 +565,7 @@ export default function Faith() {
             }),
         }}
 />
-</p>
+{/* </p> */}
 
                                 <div className={`${style.details} d-flex gap-3`}>
 

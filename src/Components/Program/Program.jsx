@@ -86,7 +86,6 @@ export default function Program() {
                     }
         
                     const data = await response.json();
-                    console.log('Data received from API:', data.Programs);
     
                     setAllPrograms(data.Programs)
                     setIsLoading(false);
@@ -285,9 +284,7 @@ export default function Program() {
     const likeProgram = async (program) => {
         try {
             const updatedLikes = program.likes + 1;
-    
-            console.log("Attempting to update program likes:", program._id);
-    
+        
             const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
                 ...program,
                 likes: updatedLikes
@@ -300,9 +297,6 @@ export default function Program() {
                 withCredentials: true,
             }
         );
-    
-            console.log("Update response status:", updateResponse.status);
-            console.log("Response data:", updateResponse.data);
     
             if (updateResponse.status === 200 || updateResponse.status === 201) {
                 setAllPrograms((prevPrograms) =>
@@ -432,7 +426,7 @@ export default function Program() {
 
                                         <div className={style.downloadProgram}>
                                         
-                                            <a onClick={ () => DownloadProgram(programData._id)} href={`http://147.79.101.255:2859/uploads/Programs/${programData.programFile}`} target='_blank' download>Download</a>
+                                            <a onClick={ () => DownloadProgram(programData._id)} href={`http://147.79.101.225:2859/uploads/Programs/${programData.programFile}`} target='_blank' download>Download</a>
                                         
                                             <b className={style.top}>click to download</b>
                                         

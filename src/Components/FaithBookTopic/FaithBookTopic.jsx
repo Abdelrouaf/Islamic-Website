@@ -268,7 +268,7 @@ export default function FaithBookTopic() {
                 showToast("Topic deleted successfully!", "success")
                 fetchData();
                 setTimeout( () => {
-                    navigate('/en/faith/book/create');
+                    navigate('/en/islamic/faith/book/create');
                 }, 6000 )
             } else {
                 showToast("Failed to delete topic.", "error")

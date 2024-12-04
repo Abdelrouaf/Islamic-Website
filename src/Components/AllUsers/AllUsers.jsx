@@ -15,7 +15,6 @@ export default function AllUsers() {
     useEffect(() => {
         async function getData() {
             try {
-                // console.log('Fetching data with token:', token); // Log token
     
                 const response = await fetch('http://147.79.101.225:2859/api/user/', {
                     method: "GET",
@@ -33,7 +32,6 @@ export default function AllUsers() {
             
                 const data = await response.json();
                 setUserData(data)
-                // console.log('Data received from API:', data);
             } catch {
                 // console.error("Error occurred during the fetch:", error.message);
                 showToast("Error occurred during the fetch", 'error')
@@ -42,6 +40,17 @@ export default function AllUsers() {
         }
     
         getData();
+    
+        // Set the interval to refresh the data every 3 seconds
+        const intervalId = setInterval(() => {
+            getData();
+        }, 10000);
+
+        // Cleanup the interval when the component unmounts or `run` changes
+        return () => {
+            clearInterval(intervalId);
+        };
+    
     }, [run]);
 
     // Delete user

@@ -55,10 +55,9 @@ export default function Monotheism() {
         } 
     };
 
-
     useEffect(() => {
         fetchData();
-    }, []);
+    }, []);    
 
     // Function to handle like button click
     const handleLikeClick = async (topicId) => {
@@ -271,8 +270,8 @@ export default function Monotheism() {
                                     
                                     ): ''}
                                 
-                                <p className={style.paragraph}>
-                                    <div
+                                {/* <p className={style.paragraph}> */}
+                                    <div className={style.paragraph}
         dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(topic.description, {
                 ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
@@ -280,7 +279,7 @@ export default function Monotheism() {
             }),
         }}
 />
-</p>
+{/* </p> */}
 
                                     
                                 

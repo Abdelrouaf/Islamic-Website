@@ -247,7 +247,7 @@ export default function FaithBlogTopic() {
                 showToast("Topic deleted successfully!", "success")
                 fetchData();
                 setTimeout( () => {
-                    navigate('/en/faith/blog/create');
+                    navigate('/en/islamic/faith/blog/create');
                 }, 6000 )
             } else {
                 showToast("Failed to delete topic.", "error")

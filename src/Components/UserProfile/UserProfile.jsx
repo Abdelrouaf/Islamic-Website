@@ -26,15 +26,12 @@ export default function UserProfile() {
                     },
                     credentials: "include"
                 });
-    
-                console.log('Response from API:', response);
-    
+        
                 if (!response.ok) {
                     throw new Error(`HTTP error! status`);
                 }
     
                 const data = await response.json();
-                console.log('Sa received from API:', data.savedItems);
 
                 setAllSavedPrograms(data.savedItems)
                 setIsLoading(false);
@@ -46,6 +43,17 @@ export default function UserProfile() {
         }
     
         getData();
+
+        // Set the interval to refresh the data every 3 seconds
+        const intervalId = setInterval(() => {
+            getData();
+        }, 1000);
+
+        // Cleanup the interval when the component unmounts or `run` changes
+        return () => {
+            clearInterval(intervalId);
+        };
+
     }, [run]);
 
     const [userData ,setUserData] = useState({
@@ -73,8 +81,6 @@ export default function UserProfile() {
 
     // Unsave Program
     const UnsaveProgram = async (saveId) => {
-
-        console.log("show program details ", saveId);
 
         try {    
             const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${saveId}`, {
@@ -121,9 +127,7 @@ export default function UserProfile() {
     const likeProgram = async (program) => {
         try {
             const updatedLikes = program.likes + 1;
-    
-            console.log("Attempting to update program likes:", program._id);
-    
+        
             const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
                 ...program,
                 likes: updatedLikes
@@ -136,9 +140,6 @@ export default function UserProfile() {
                 withCredentials: true,
             }
         );
-    
-            console.log("Update response status:", updateResponse.status);
-            console.log("Response data:", updateResponse.data);
     
             if (updateResponse.status === 200 || updateResponse.status === 201) {
                 setAllSavedPrograms((prevPrograms) =>

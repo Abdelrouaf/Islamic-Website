@@ -1,1 +1,7 @@
 @import '../Style/Layout/Layout.module.scss';
+
+.shadow {
+    box-shadow: $shadow;
+    padding: 10px;
+    margin-block: 15px;
+}

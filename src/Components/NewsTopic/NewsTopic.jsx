@@ -268,7 +268,7 @@ export default function NewsTopic() {
                 showToast("Topic deleted successfully!", "success")
                 fetchData();
                 setTimeout(() => {
-                    navigate('/en/news/create'); // Navigate back after deletion
+                    navigate('/en/islamic/news/create'); // Navigate back after deletion
                 }, 6000);
             } else {
                 showToast("Failed to delete topic.", "error")

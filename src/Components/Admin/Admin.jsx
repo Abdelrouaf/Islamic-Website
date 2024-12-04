@@ -303,7 +303,6 @@ export default function Admin() {
                 }
     
                 const data = await response.json();
-                console.log('Data received from API before edit:', data.Messages);
     
                 // Process the messages
                 let totalMessageCount = 0; // To track the total count across all users
@@ -331,9 +330,6 @@ export default function Admin() {
                         count: finalMessageCount,
                     };
                 });
-                
-                console.log("Processed Messages:", processedMessages);
-                console.log("Total Message Count:", totalMessageCount);
                 setTotalMessagesCount(totalMessageCount);
                 
     
@@ -827,9 +823,9 @@ export default function Admin() {
 
                                                 <li className={`${style.topicIcon} ${style.link} `}><NavLink to='/programs' target='_blank'><span> - Home page</span></NavLink></li>
 
-                                                <li className={`${style.topicIcon} ${style.link} `}><NavLink to='/programs/category/engineer' target='_blank'><span> - Categories</span></NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} `}><NavLink to='/programs/category/All-Categories' target='_blank'><span> - Categories</span></NavLink></li>
 
-                                                <li className={`${style.topicIcon} ${style.link} `}><NavLink to='/programs/category/engineer' target='_blank'><span> - program</span></NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} `}><NavLink to='/programs/category/All-Categories' target='_blank'><span> - program</span></NavLink></li>
 
                                                 <li className={`${style.topicIcon} ${style.link} `}><NavLink to='/programs/user' target='_blank'><span> - user profile</span></NavLink></li>
 

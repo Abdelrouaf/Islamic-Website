@@ -31,7 +31,6 @@ export default function Chat() {
                 }
     
                 const data = await response.json();
-                console.log('Data received from API all messages:', data.Messages);
 
                 setAllUsers(data.Messages)
 
@@ -113,7 +112,6 @@ export default function Chat() {
             }
     
             const data = await response.json();  // Parse the response data
-            console.log('DATA from user:', data.Message);  // Log success message
 
             const userInfo = data.Message.userId
             ? {
@@ -140,13 +138,9 @@ export default function Chat() {
         }
     }
 
-    console.log('chat user', userChat);
-
     // Sent message Func
     const sentMessage = async (e, userId) => {
         e.preventDefault();
-
-        console.log("chat id ", userId);
 
         if (!userId) {
             console.error("Error: userId is undefined or empty.");
@@ -177,15 +171,11 @@ export default function Chat() {
                 body: JSON.stringify(messageText),
             });
     
-            console.log('Response status:', response);
-            // console.log('Response text:', await response.text());
-
             if (!response.ok) {
                 throw new Error(`Failed to send message, status ${response.status}`);
             }
     
             const data = await response.json(); 
-            console.log('Message sent successfully:', data);
     
             setText(''); 
             setShowEmoji(false);  
@@ -204,7 +194,6 @@ export default function Chat() {
         }
 
         const updatedChatData = await updatedChatResponse.json();
-        console.log('Updated chat data:', updatedChatData.Message);
 
         const userInfo = updatedChatData.Message.userId
             ? {
@@ -345,8 +334,6 @@ export default function Chat() {
     
         return acc;
     }, {});
-
-    console.log("all usres", allUsers);
 
     const [searchQuery, setSearchQuery] = useState('');
 
