@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import program1 from '../../images/program1.jpeg'
 import { Azkar } from 'islam.js'
+import { v4 as uuid } from 'uuid'
 import style from './Category.module.scss'
+import axios from 'axios'
 
 export default function Category() {
 
@@ -23,25 +25,48 @@ export default function Category() {
     useEffect(() => {
         async function getData() {
             try {    
-                const response = await fetch(`http://147.79.101.225:2859/api/programs/category?category=${category}`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${userToken}`
-                    },
-                    credentials: "include"
-                });
-    
-                console.log('Response from API:', response);
-    
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status`);
-                }
-    
-                const data = await response.json();
-                console.log('Data received from API:', data.Programs);
+                if ( category === "All-Categories" ) {
+                    const response = await fetch(`http://147.79.101.225:2859/api/programs/`, {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `Bearer ${userToken}`
+                        },
+                        credentials: "include"
+                    });
 
-                setAllPrograms(data.Programs)
-                setIsLoading(false);
+                    console.log('Response from API:', response);
+    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status`);
+                    }
+        
+                    const data = await response.json();
+                    console.log('Data received from API:', data);
+    
+                    setAllPrograms(data)
+                    setIsLoading(false);
+
+                } else {
+                    const response = await fetch(`http://147.79.101.225:2859/api/programs/category?category=${category}`, {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `Bearer ${userToken}`
+                        },
+                        credentials: "include"
+                    });
+
+                    console.log('Response from API:', response);
+    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status`);
+                    }
+        
+                    const data = await response.json();
+                    console.log('Data received from API:', data.Programs);
+    
+                    setAllPrograms(data.Programs)
+                    setIsLoading(false);
+                }
 
             } catch (error) {
                 console.error("Error occurred during the fetch:", error.message);
@@ -50,41 +75,326 @@ export default function Category() {
         }
     
         getData();
+
     }, [category]);
 
+    // const [deleteFromSave, setDeleteFromSave] = useState(false)
+
     // Save Program
+    // const saveProgram = async (program) => {
+    // try {    
+    //     const checkResponse = await fetch(`http://147.79.101.225:2859/api/saveitem/`, {
+    //         method: "GET",
+    //         headers: {
+    //             "Authorization": `Bearer ${userToken}`,
+    //         },
+    //         credentials: "include",
+    //     });
+
+    //     if (checkResponse.ok) {
+    //         const allItems = await checkResponse.json();
+
+    //         const totalSaved = allItems.savedItems
+    //         const existingItem = totalSaved.find(item => item.programId._id === program._id);
+
+    //         if (existingItem) {
+    //             // showToast('This item already saved!', 'invalid');
+    //             setDeleteFromSave(true)
+    //             return;
+    //         }
+    //     }
+
+    //     if (deleteFromSave) {
+    //         const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${program._id}`, {
+    //             method: "DELETE",
+    //             headers: {
+    //                 "Authorization": `Bearer ${userToken}`,
+    //                 // 'Content-Type': 'multipart/form-data'
+    //             },
+    //             credentials: "include",
+    //             // body: JSON.stringify(program)
+    //         });
+    
+    //         console.log('Response from API:', response);
+    
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! status`);
+    //         }
+    
+    //         const data = await response.json();
+    
+    //         showToast('Item deleted successfully!', 'success')
+    //     } else {
+    //         const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${program._id}`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Authorization": `Bearer ${userToken}`,
+    //                 'Content-Type': 'multipart/form-data'
+    //             },
+    //             credentials: "include",
+    //             body: JSON.stringify(program)
+    //         });
+    
+    //         console.log('Response from API:', response);
+    
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! status`);
+    //         }
+    
+    //         const data = await response.json();
+    
+    //         showToast('Item saved successfully!', 'success')
+    //     }
+
+    //     if ( category === "All-Categories" ) {
+    //         const response = await fetch(`http://147.79.101.225:2859/api/programs/`, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Authorization": `Bearer ${userToken}`
+    //             },
+    //             credentials: "include"
+    //         });
+
+    //         console.log('Response from API:', response);
+
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! status`);
+    //         }
+
+    //         const data = await response.json();
+    //         console.log('Data received from API:', data);
+
+    //         setAllPrograms(data)
+
+    //     } else {
+    //         const response = await fetch(`http://147.79.101.225:2859/api/programs/category?category=${category}`, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Authorization": `Bearer ${userToken}`
+    //             },
+    //             credentials: "include"
+    //         });
+
+    //         console.log('Response from API:', response);
+
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! status`);
+    //         }
+
+    //         const data = await response.json();
+    //         console.log('Data received from API:', data.Programs);
+
+    //         setAllPrograms(data.Programs)
+    //         setIsLoading(false);
+    //     }
+
+    // } catch (error) {
+    //     showToast('Error occurred during save the item', 'error')
+    //     setIsLoading(false);
+    // }
+    // setDeleteFromSave(false)
+    // } 
+
+    const [allItemsSaved, setAllItemsSaved] = useState([])
+
+    useEffect( () => {
+        const fetchAllSavedPrograms = async () => {
+            try {
+                const checkResponse = await fetch(`http://147.79.101.225:2859/api/saveitem/`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`,
+                    },
+                    credentials: "include",
+                });
+            
+                if (checkResponse.ok) {
+                    const allItems = await checkResponse.json();
+                    const totalSaved = allItems.savedItems;
+                    setAllItemsSaved(totalSaved)
+                }
+            
+            } catch {
+                isLoading(false)
+            }
+        }
+        fetchAllSavedPrograms()
+
+        // Set the interval to refresh the data every 3 seconds
+        const intervalId = setInterval(() => {
+            fetchAllSavedPrograms();
+        }, 1000);
+
+        // Cleanup the interval when the component unmounts or `run` changes
+        return () => {
+            clearInterval(intervalId);
+        };
+
+    }, [] )
+
+    const [deleteFromSave, setDeleteFromSave] = useState(false);
+
+    // Save or delete the program
     const saveProgram = async (program) => {
-
-        console.log("sav pro ", program);
-
         try {    
+            const checkResponse = await fetch(`http://147.79.101.225:2859/api/saveitem/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                },
+                credentials: "include",
+            });
+    
+            if (checkResponse.ok) {
+                const allItems = await checkResponse.json();
+                const totalSaved = allItems.savedItems;
+                const existingItem = totalSaved.find(item => item.programId._id === program._id);
+    
+                if (existingItem) {
+                    // If the item is already saved, set deleteFromSave to true
+                    setDeleteFromSave(true);
+                    await deleteItem(existingItem._id);
+                    return;
+                }
+            }
+    
+            // If deleteFromSave is false, save the item
+            if (!deleteFromSave) {
+                await saveItem(program);
+            }
+    
+            // Fetch updated list of programs after saving or deleting
+            await fetchPrograms(category);
+    
+        } catch (error) {
+            showToast('Error occurred during save the item', 'error');
+            setIsLoading(false);
+        }
+        setDeleteFromSave(false);
+    }
+    
+    // Function to save the item
+    const saveItem = async (program) => {
+        console.log("save item: ", program);
+    
+        try {
             const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${program._id}`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${userToken}`,
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
                 },
                 credentials: "include",
-                body: JSON.stringify(program)
+                body: JSON.stringify(program),
             });
-
-            console.log('Response from API:', response);
-
+    
             if (!response.ok) {
-                throw new Error(`HTTP error! status`);
+                throw new Error('Failed to save item');
             }
-
-            const data = await response.json();
-            console.log('Save received from API:', data);
-
-            // setAllPrograms(data.Programs)
-            // setIsLoading(false);
-
+            showToast('Item saved successfully!', 'success');
+    
+            // Fetch updated programs after saving the item
+            await fetchPrograms(category);
+    
         } catch (error) {
-            console.error("Error occurred during the fetch:", error.message);
-            // setIsLoading(false);
+            showToast('Error saving item', 'error');
         }
-    } 
+    };
+    
+    // Function to delete the item
+    const deleteItem = async (saveId) => {
+        console.log("del save: ", saveId);
+    
+        try {
+            const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${saveId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                },
+                credentials: "include",
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to delete item');
+            }
+            showToast('Item deleted successfully!', 'success');
+    
+            // Fetch updated programs after deleting the item
+            await fetchPrograms(category);
+    
+        } catch (error) {
+            showToast('Error deleting item', 'error');
+            console.error('error', error);
+        }
+    };
+    
+    // Function to fetch programs after saving or deleting an item
+    const fetchPrograms = async (category) => {
+        try {
+            const response = await fetch(`http://147.79.101.225:2859/api/programs${category === "All-Categories" ? '' : `/category?category=${category}`}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                },
+                credentials: "include",
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to fetch programs');
+            }
+    
+            const data = await response.json();
+            const programs = category === "All-Categories" ? data : data.Programs;
+            setAllPrograms(programs);
+            setIsLoading(false);
+    
+        } catch (error) {
+            showToast('Error fetching programs', 'error');
+        }
+    };
+
+    // Like Program
+    const likeProgram = async (program) => {
+        try {
+            const updatedLikes = program.likes + 1;
+    
+            console.log("Attempting to update program likes:", program._id);
+    
+            const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
+                ...program,
+                likes: updatedLikes
+            }, 
+            {
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            }
+        );
+    
+            console.log("Update response status:", updateResponse.status);
+            console.log("Response data:", updateResponse.data);
+    
+            if (updateResponse.status === 200 || updateResponse.status === 201) {
+                setAllPrograms((prevPrograms) =>
+                    prevPrograms.map((t) =>
+                        t._id === program._id ? { ...t, likes: updatedLikes } : t
+                    )
+                );
+    
+                showToast("Program liked!", "success");
+            }
+    
+        } catch (error) {
+            console.error("Error occurred during the like request:", error.message);
+            if (error.response) {
+                console.error("Response error status:", error.response.status);
+                console.error("Response error data:", error.response.data);
+            }
+            showToast("Error liking the program", "error");
+        }
+    };
 
     const azkar = new Azkar()
 
@@ -103,6 +413,10 @@ export default function Category() {
     }
 
     function formatNumber(number) {
+        if (number === undefined || number === null) {
+            return ''; // Or return a default value, such as 'N/A'
+        }
+    
         if (number >= 1_000_000) {
             return `${(number / 1_000_000).toFixed(1)}M`;
         } else if (number >= 1_000) {
@@ -110,10 +424,38 @@ export default function Category() {
         }
         return number.toString();
     }
+    
+
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // Filter the programs based on the search query
+    const filteredPrograms = allPrograms && allPrograms.length > 0 ? allPrograms.filter(program =>
+        program.programName && typeof program.programName === 'string' 
+            && program.programName.toLowerCase().includes(searchQuery.toLowerCase())
+    ) : [];
+
+    const [toasts, setToasts] = useState([]);
+
+    // Function to show a new toast notification
+    const showToast = (message, type) => {
+        const newToast = { id: uuid(), message, type };
+    
+        setToasts((prevToasts) => [...prevToasts, newToast]);
+    
+        setTimeout(() => {
+            setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
+        }, 6000);
+    };
 
     if (isLoading) {
         return <p className={style.loading}>Loading, Please wait <span className={style.loader}></span></p>; 
     }  
+
+    // if (!allPrograms || allPrograms.length === 0) {
+    //     return (
+    //         <p className='d-flex justify-content-center align-items-center w-100 fs-5' style={{height: '100vh'}}>No items available</p>
+    //     )
+    // }
 
     return (
     
@@ -169,6 +511,8 @@ export default function Category() {
 
                                 <ul>
 
+                                    <li><Link to='/programs/category/All-Categories' state={{ description: 'Showing all categories programs.' }} className={`${ location.pathname.endsWith('All-Categories') ? style.programsHover : '' }`}>All Categories</Link></li>
+
                                     <li><Link to='/programs/category/Architecture-Software' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }} className={`${ location.pathname.endsWith('Architecture-Software') ? style.programsHover : '' }`}>Architecture software</Link></li>
 
                                     <li><Link to='/programs/category/Structure-Software' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }} className={`${ location.pathname.endsWith('Structure-Software') ? style.programsHover : '' }`}>Structure software</Link></li>
@@ -191,15 +535,23 @@ export default function Category() {
 
                             </div>
 
-                            { allPrograms.length > 0 ? (
+                            { allPrograms && !allPrograms.length < 1 ? (
 
                                 <div className={style.selectBox}>
 
                                     <h4 className={style.categoryTitle}>{category} Programs</h4>
 
+                                    <div className={style.input}>
+
+                                        <i className="fa-solid fa-magnifying-glass"></i>
+
+                                        <input type="search" className='form-control p-2' placeholder='search here..' value={searchQuery} onChange={ (e) => setSearchQuery(e.target.value) } />
+
+                                    </div>
+
                                     <ul>
 
-                                        { allPrograms && allPrograms.map( (program, index) => {
+                                        { allPrograms && filteredPrograms.map( (program, index) => {
 
                                             return <li key={index}><Link>{program.programName}</Link></li>
 
@@ -217,7 +569,7 @@ export default function Category() {
 
                         <div className="col-lg-8">
 
-                            { allPrograms.length < 1 ? 
+                            { allPrograms.length < 1 || allPrograms === null ? 
                             
                                 <p className={style.fullEmpty}><span>No programs in this category! <br></br> Try another one</span></p>
                         
@@ -225,25 +577,29 @@ export default function Category() {
 
                                     <div className="row gy-2">
 
-                                        { allPrograms && allPrograms.map( (program, index) => {
+                                        { allPrograms && allPrograms.length > 0 && allPrograms.map( (program, index) => {
 
                                             const sizeInBytes = program.size;
                                             let sizeFormatted = '';
 
-                                            if (sizeInBytes >= 1024 * 1024 * 1024) {
-                                                // GB
-                                                sizeFormatted = (sizeInBytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
-                                            } else if (sizeInBytes >= 1024 * 1024) {
-                                                // MB
-                                                sizeFormatted = (sizeInBytes / (1024 * 1024)).toFixed(2) + ' MB';
+                                            if (isNaN(sizeInBytes) || sizeInBytes <= 0) {
+                                                sizeFormatted = '0 KB'
                                             } else {
-                                                // KB
-                                                sizeFormatted = (sizeInBytes / 1024).toFixed(2) + ' KB';
+                                                if (sizeInBytes >= 1024 * 1024 * 1024) {
+                                                    // GB
+                                                    sizeFormatted = (sizeInBytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+                                                } else if (sizeInBytes >= 1024 * 1024) {
+                                                    // MB
+                                                    sizeFormatted = (sizeInBytes / (1024 * 1024)).toFixed(2) + ' MB';
+                                                } else {
+                                                    // KB
+                                                    sizeFormatted = (sizeInBytes / 1024).toFixed(2) + ' KB';
+                                                }
                                             }
 
                                             return (
 
-                                                <div className="col-md-12 col-lg-6 col-xl-4" key={program._id}>
+                                                <div className="col-md-12 col-lg-6 col-xxl-4" key={program._id}>
 
                                                     <div className={style.programBox}>
 
@@ -293,7 +649,7 @@ export default function Category() {
                                                                 
                                                                 </span>
                                                             
-                                                                <p className={style.text}>Save</p>
+                                                                <p className={style.text}> { allItemsSaved.find(item => item.programId._id === program._id) ? 'Unsave' : 'Save' } </p>
                                                             
                                                             </button>
 
@@ -301,7 +657,7 @@ export default function Category() {
 
                                                         <div className={style.programDetails}>
 
-                                                            <button className={style.like}>
+                                                            <button onClick={ () => likeProgram(program) } className={style.like}>
                                                             
                                                                 <span className={style.icon}>
                                                             
@@ -343,7 +699,9 @@ export default function Category() {
 
                                                                 <span className={style.views}>{formatNumber(program.views)} views</span>
 
-                                                                <span className={style.Saved}><i className="fa-regular fa-bookmark"></i> 50</span>
+                                                                <span className={style.Saved}><i class="fa-regular fa-heart"></i> {program.likes} </span>
+
+                                                                <span className={style.Saved}> {allItemsSaved.find(item => item.programId._id === program._id) ? (<i className="fa-solid fa-bookmark"></i>) : (<i className="fa-regular fa-bookmark"></i>) } {formatNumber(program.saved)}</span>
 
                                                             </div>
 
@@ -370,6 +728,24 @@ export default function Category() {
                 </div>
 
             </section>
+
+            <div id="toastBox" className={style.toastBox}>
+            
+                {toasts.map((toast) => (
+                
+                    <div key={toast.id} className={`${style.tast} ${toast.type} ${style[toast.type]} ${style.show}`}>
+                    
+                        <i className={`fa ${toast.type === 'success' ? 'fa-check-circle' : toast.type === 'error' ? 'fa-times-circle' : toast.type === 'invalid' ? 'fa-exclamation-circle' : ''}`}></i>
+                    
+                        {toast.message}
+                    
+                        <div className={style.progress}></div>
+                    
+                    </div>
+                
+                ))}
+            
+            </div>
 
             <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
                 <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>

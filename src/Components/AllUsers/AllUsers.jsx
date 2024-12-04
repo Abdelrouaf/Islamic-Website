@@ -52,7 +52,6 @@ export default function AllUsers() {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${userToken}`,
-                    // "Content-Type": "application/json"
                 },
                 credentials: "include"
             });

@@ -307,6 +307,10 @@ export default function ProgramsHeader() {
                         <div className={`collapse navbar-collapse justify-content-center ${style.navbarCollapse} ${isNavbarOpen ? 'show' : ''}`} id="navbarNav">
 
                             <ul className={`navbar-nav mb-2 mb-lg-0`}>
+
+                                <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1 }} className="nav-item">
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/All-Categories' state={{ description: 'Showing all categories programs.' }}>Categories</NavLink>
+                                </motion.li>
                             
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1 }} className="nav-item">
                                     <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/Architecture-Software' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}>Architecture</NavLink>

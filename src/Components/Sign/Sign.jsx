@@ -175,14 +175,15 @@ export default function Sign({ onClose }) {
             if (response.status === 400 || response.status === 401 || response.data.message === 'Sorry this Email is used before' ) {
                 showToast('User already exist!', 'error');
             } else if (response.status === 200 || response.status === 201) {
-                showToast('Sign up successfully!', 'success');
+                showToast(`Sign up successfully! You can't sign in until admin approve you`, 'success');
                 const { registerPasswordSec, ...userDataToSave } = userData;
                 users.push(userDataToSave)
                 // localStorage.setItem('userData', JSON.stringify(users))
                 localStorage.setItem('verifyUser', JSON.stringify(userData))
                 setTimeout(() => {
-                    window.location.href = '../programs'
-                }, 2000);
+                    setIsSignUpActive(false)
+                    navigate('../en');
+                }, 4000);
                 resetForm();
                 setIsSubmittingSignUp(true);
                 // console.log("message error ", response.data.message);
@@ -254,6 +255,9 @@ export default function Sign({ onClose }) {
                 },
                 withCredentials: true
             });
+
+            console.log(" status is ", response);
+            
 
             if (response.status === 200) {
                 const token = response.data.token;

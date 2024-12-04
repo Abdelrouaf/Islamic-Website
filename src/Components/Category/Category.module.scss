@@ -157,6 +157,26 @@
     }
 }
 
+.input {
+    text-transform: capitalize;
+    align-items: baseline;
+    justify-content: center;
+    display: flex;
+    // background-color: rgb(232 232 232) !important;
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding-inline: 15px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+
+    input {
+        background-color: transparent !important;
+    }
+}
+
 @keyframes movingZikr {
     0% {
         transform: translateX(0);

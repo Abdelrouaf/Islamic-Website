@@ -315,7 +315,7 @@ body::-webkit-scrollbar-track {
     position: relative;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     align-items: center;
     box-shadow: $shadow;
     padding: 22px 30px;
@@ -620,6 +620,14 @@ ul {
         }
     }
 
+    .imageBadge {
+        margin-right: 10px;
+    
+        .headTitleImg {
+            margin-right: 0;
+        }
+    }
+
     .headTitleImg {
         width: 25px;
         height: 25px;
@@ -635,6 +643,8 @@ ul {
         -o-transition: all .5s;
     }
 }
+
+
 
 .linkHover {
     color: $whiteColor;

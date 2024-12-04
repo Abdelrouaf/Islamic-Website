@@ -194,9 +194,6 @@ export default function Admin() {
             
                 const data = await response.json()
 
-                // console.log("data ", data);
-                
-
                 setPrograms(data)            
             } catch {
                 showToast("Error in fetching programs.", 'error')
@@ -256,6 +253,99 @@ export default function Admin() {
         }
     }
 
+    const [unapprovedUsersCount, setUnapprovedUsersCount] = useState(0);
+
+    useEffect(() => {
+        async function getData() {
+            try {
+                // console.log('Fetching data with token:', token); // Log token
+    
+                const response = await fetch('http://147.79.101.225:2859/api/user/', {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`
+                    },
+                    credentials: "include"
+                });
+            
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: `);
+                }
+            
+                const data = await response.json();
+
+                const unapprovedCount = data.filter(user => user.apprived === false).length;
+                setUnapprovedUsersCount(parseInt(unapprovedCount, 10));
+            } catch {
+                // console.error("Error occurred during the fetch:", error.message);
+                showToast("Error occurred during the fetch", 'error')
+            }
+        }
+    
+        getData();
+    }, []);
+
+    const [totalMessagesCount, setTotalMessagesCount] = useState(0)
+
+    useEffect(() => {
+        async function getData() {
+            try {
+                const response = await fetch('http://147.79.101.225:2859/api/message/admin', {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`
+                    },
+                    credentials: "include"
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+    
+                const data = await response.json();
+                console.log('Data received from API before edit:', data.Messages);
+    
+                // Process the messages
+                let totalMessageCount = 0; // To track the total count across all users
+    
+                const processedMessages = data.Messages.map((userMessages) => {
+                    const messages = userMessages.message || [];
+                
+                    // Check if the last message is from admin
+                    const isLastMessageAdmin = messages.length > 0 && messages[messages.length - 1].isAdmin;
+                
+                    // Count messages where `isAdmin` is false
+                    const userMessageCount = messages
+                        .filter(msg => !msg.isAdmin) // Count only non-admin messages
+                        .length;
+                
+                    // If the last message was from admin, don't count any messages for that user
+                    const finalMessageCount = isLastMessageAdmin ? 0 : userMessageCount;
+                
+                    // Accumulate total count
+                    totalMessageCount += finalMessageCount;
+                
+                    return {
+                        userId: userMessages.userId?._id || "Unknown User",
+                        userName: userMessages.userId?.name || "Unknown",
+                        count: finalMessageCount,
+                    };
+                });
+                
+                console.log("Processed Messages:", processedMessages);
+                console.log("Total Message Count:", totalMessageCount);
+                setTotalMessagesCount(totalMessageCount);
+                
+    
+            } catch (error) {
+                console.error("Error occurred during the fetch:", error.message);
+            }
+        }
+    
+        getData();
+    }, []);
+    
+
     const profileUserRef = useRef(null)
     const [isProfileUserActive, setIsProfileUserActive] = useState(false)
 
@@ -292,7 +382,7 @@ export default function Admin() {
                 
                     <div className={`${style.headerWrapper} ${theme === 'dark' ?  ` ${style.dark} ` : ` ${style.light} `} `}>
                     
-                        <div className={`${style.logo_Search}`}>
+                        {/* <div className={`${style.logo_Search}`}>
                         
                             <div className={`d-flex w-75 ${style.search} ${style.input}`}>
                             
@@ -302,7 +392,7 @@ export default function Admin() {
                             
                             </div>
                         
-                        </div>
+                        </div> */}
                     
                         <div className={`d-flex align-items-center gap-3 fs-5 mx-3 ${style.quickIcons}`}>
                         
@@ -419,7 +509,7 @@ export default function Admin() {
                             
                                 <li>
                                 
-                                    <h3 onClick={ ()=> {setOpen(!open); setOpen3(false); setIsProgramsOpen(false); setOpenPrograms(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/user') ? style.linkHover : '' } `} ><img src={group} className={style.headTitleImg} alt="teamwork-image" loading='lazy' /> users <i className={` fa-solid fa-angle-right ${style.menu} ${ open ? style.rotateArrow : '' }`}></i></h3>
+                                    <h3 onClick={ ()=> {setOpen(!open); setOpen3(false); setIsProgramsOpen(false); setOpenPrograms(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/user') ? style.linkHover : '' } `} ><span className={style.imageBadge}><img src={group} className={style.headTitleImg} alt="teamwork-image" loading='lazy' /> <sup><span className={`badge text-bg-warning`}>{unapprovedUsersCount.toFixed(0)}</span></sup></span> users <i className={` fa-solid fa-angle-right ${style.menu} ${ open ? style.rotateArrow : '' }`}></i></h3>
                                 
                                     <ul className={`${style.sidebarSubmenu} ${open ? `${style.active}`: `${style.inactive}` } `}>
 
@@ -435,7 +525,7 @@ export default function Admin() {
                                 
                                 </li>
 
-                                <li><NavLink to='chat' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}><img src={chat} className={style.headTitleImg} alt='chat-image' loading='lazy'/> chat</NavLink></li>
+                                <li><NavLink to='chat' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}> <span className={style.imageBadge}><img src={chat} className={style.headTitleImg} alt='chat-image' loading='lazy'/> <sup><span className={`badge text-bg-warning`}>{totalMessagesCount.toFixed(0)}</span></sup> </span> chat </NavLink></li>
                             
                                 <li>
                                 
@@ -751,10 +841,10 @@ export default function Admin() {
                                 
                                 </li>
                             
-                                <li><NavLink to='media' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}><img src={mediaImg} className={style.headTitleImg} alt='media-image' loading='lazy' /> media</NavLink></li>
+                                {/* <li><NavLink to='media' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}><img src={mediaImg} className={style.headTitleImg} alt='media-image' loading='lazy' /> media</NavLink></li>
                             
                                 <li><NavLink to='setting' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}><img src={settingImg} className={style.headTitleImg} alt='media-image' loading='lazy' /> settings</NavLink></li>
-                            
+                             */}
                             </ul>
                         
                         </nav>

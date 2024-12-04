@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom'
 import EmojiPicker from 'emoji-picker-react'
 import userImg from '../../images/man (1).png'
 import adminImage from '../../images/manager.png'
+import chatBackground from '../../images/chatBackground.jpg'
+import seen from '../../images/seen.png'
 import style from './Chat.module.scss'
 
 export default function Chat() {
@@ -29,7 +31,7 @@ export default function Chat() {
                 }
     
                 const data = await response.json();
-                console.log('Data received from API:', data.Messages);
+                console.log('Data received from API all messages:', data.Messages);
 
                 setAllUsers(data.Messages)
 
@@ -39,6 +41,17 @@ export default function Chat() {
         }
     
         getData();
+
+        // Set the interval to refresh the data every 3 seconds
+        const intervalId = setInterval(() => {
+            getData();
+        }, 3000);
+
+        // Cleanup the interval when the component unmounts or `run` changes
+        return () => {
+            clearInterval(intervalId);
+        };
+
     }, [run]);
 
     const [text, setText] = useState("");
@@ -58,8 +71,6 @@ export default function Chat() {
         isAdmin: false
     })
 
-    const location = useLocation();
-
     const user = JSON.parse(localStorage.getItem('loggedInUser'))
 
     useEffect( () => {
@@ -72,9 +83,75 @@ export default function Chat() {
         })
     },[] )
 
+    const [userChat, setUserChat] = useState({
+        id: '',
+        userId: {
+            name: '',
+            email: '',
+            isAdmin: false
+        },
+        createdAt: '',
+        updatedAt: '',
+        messages: [],
+    })
+
+    // show user chat
+    const showUserChat = async (userId) => {
+
+        try {
+            // Send the message data via a POST request
+            const response = await fetch(`http://147.79.101.225:2859/api/message/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${userToken}`,
+                },
+                credentials: 'include',
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Failed to send message, status: ${response.status}`);
+            }
+    
+            const data = await response.json();  // Parse the response data
+            console.log('DATA from user:', data.Message);  // Log success message
+
+            const userInfo = data.Message.userId
+            ? {
+                  name: data.Message.userId.name || '', // Use fallback if `name` is missing
+                  email: data.Message.userId.email || '', // Use fallback if `email` is missing
+                  isAdmin: data.Message.userId.isAdmin || false, // Use fallback if `isAdmin` is missing
+                }
+            : {
+                    name: '',
+                    email: '',
+                    isAdmin: false,
+                };
+
+            setUserChat({
+                id: data.Message._id,
+                userId: userInfo,
+                createdAt: data.Message.createdAt,
+                updatedAt: data.Message.updatedAt,
+                messages: data.Message.message,
+            })
+    
+        } catch (error) {
+            console.error('Error sending message:', error.message);  // Log error
+        }
+    }
+
+    console.log('chat user', userChat);
+
     // Sent message Func
     const sentMessage = async (e, userId) => {
         e.preventDefault();
+
+        console.log("chat id ", userId);
+
+        if (!userId) {
+            console.error("Error: userId is undefined or empty.");
+            return;
+        }
     
         if (text.trim() === '') return;
 
@@ -90,7 +167,7 @@ export default function Chat() {
         };
 
         try {
-            const response = await fetch(`http://147.79.101.225:2859/api/message/replay/${userId}`, {
+            const response = await fetch(`http://147.79.101.225:2859/api/message/reply/${userId}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${userToken}`,
@@ -101,20 +178,53 @@ export default function Chat() {
             });
     
             console.log('Response status:', response);
-            console.log('Response text:', await response.text());
+            // console.log('Response text:', await response.text());
 
             if (!response.ok) {
                 throw new Error(`Failed to send message, status ${response.status}`);
             }
-
-            
-            
     
             const data = await response.json(); 
             console.log('Message sent successfully:', data);
     
             setText(''); 
             setShowEmoji(false);  
+
+            // Fetch updated chat data after successfully sending the message
+        const updatedChatResponse = await fetch(`http://147.79.101.225:2859/api/message/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${userToken}`,
+            },
+            credentials: 'include',
+        });
+
+        if (!updatedChatResponse.ok) {
+            throw new Error(`Failed to fetch updated chat data, status: ${updatedChatResponse.status}`);
+        }
+
+        const updatedChatData = await updatedChatResponse.json();
+        console.log('Updated chat data:', updatedChatData.Message);
+
+        const userInfo = updatedChatData.Message.userId
+            ? {
+                name: updatedChatData.Message.userId.name || '',
+                email: updatedChatData.Message.userId.email || '',
+                isAdmin: updatedChatData.Message.userId.isAdmin || false,
+            }
+        : {
+                name: '',
+                email: '',
+                isAdmin: false,
+            };
+
+        setUserChat({
+            id: updatedChatData.Message._id,
+            userId: userInfo,
+            createdAt: updatedChatData.Message.createdAt,
+            updatedAt: updatedChatData.Message.updatedAt,
+            messages: updatedChatData.Message.message,
+        });
     
         } catch (error) {
             console.error('Error sending message:', error.message);  // Log error
@@ -175,6 +285,10 @@ export default function Chat() {
             const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
             return `${formattedHours}:${formattedMinutes} ${ampm}`;
         }
+
+        if (diffInDays === 1) {
+            return `Yesterday`;
+        }
     
         // If the difference is more than 1 day, show the date in "day month" format (e.g., 2 Dec)
         // const day = messageDate.getDate();
@@ -185,128 +299,67 @@ export default function Chat() {
         // If the difference is more than 1 day, show the date in "MM/DD/YY" format (e.g., 12/02/24)
         const month = messageDate.getMonth() + 1;
         const day = messageDate.getDate();
-        const year = messageDate.getFullYear().toString().slice(-2);
+        const year = messageDate.getFullYear().toString();
+        // const year = messageDate.getFullYear().toString().slice(-2);
         return `${month}/${day}/${year}`;
     };
-
-    // // Assuming `allUsers` is the data you receive from the API
-    // const groupedMessages = allUsers.reduce((acc, userMessages) => {
-    //     const { userId, message } = userMessages;
-
-    //     // Filter messages where isAdmin is false
-    //     const filteredMessages = message.filter((msg) => !msg.isAdmin);
-
-    //     if (filteredMessages.length > 0) { 
-    //         // If userId already exists in the accumulator, add message count
-    //         if (acc[userId]) {
-    //             acc[userId].count += message.length;
-    //             acc[userId].lastMessage = message[message.length - 1].message;
-    //             acc[userId].createdAt = userMessages.updatedAt || userMessages.createdAt; // Use the correct timestamp
-    //         } else {
-    //             acc[userId] = {
-    //                 count: message.length,
-    //                 lastMessage: message[message.length - 1].message,
-    //                 createdAt: userMessages.updatedAt || userMessages.createdAt, // Add timestamp here
-    //             };
-    //         }
-    //     }
-
-    //     return acc;
-    // }, {});
 
     const groupedMessages = allUsers.reduce((acc, userMessages) => {
         const { userId, message, createdAt, updatedAt, _id } = userMessages;
     
-        // Skip processing if userId is null or undefined
-        if (!userId) return acc;
+        // Ensure userId exists and is unique
+        const uniqueKey = userId?._id || _id; // Use fallback if userId is missing
     
-        // Use email or another unique property of `userId` as the key
-        const uniqueKey = userId._id;
-    
-        // Filter messages where isAdmin is false
-        const filteredMessages = message.filter((msg) => !msg.isAdmin);
-    
-        if (filteredMessages.length > 0) {
-            if (acc[uniqueKey]) {
-                acc[uniqueKey].count += filteredMessages.length;
-                acc[uniqueKey].lastMessage =
-                    filteredMessages.length > 0
-                        ? filteredMessages[filteredMessages.length - 1].message
-                        : null;
-                acc[uniqueKey].createdAt = updatedAt || createdAt;
-            } else {
-                acc[uniqueKey] = {
-                    userName: userId.name,
-                    count: filteredMessages.length,
-                    lastMessage:
-                        filteredMessages.length > 0
-                            ? filteredMessages[filteredMessages.length - 1].message
-                            : null,
-                    createdAt: updatedAt || createdAt,
-                    _id,
-                };
-            }
+        if (!uniqueKey) {
+            console.warn("Skipping user with missing unique identifier:", userMessages);
+            return acc;
         }
+    
+        // Parse the dates and handle invalid dates
+        const parseDate = (dateStr) => {
+            const parsedDate = Date.parse(dateStr);
+            return isNaN(parsedDate) ? new Date() : new Date(parsedDate); // Default to current date if invalid
+        };
+    
+        // Find the last admin message index
+        const lastAdminIndex = message.map((msg) => msg.isAdmin).lastIndexOf(true);
+    
+        // Count user messages after the last admin reply
+        const userMessageCount = message
+            .slice(lastAdminIndex + 1) // Get messages after the last admin reply
+            .filter((msg) => !msg.isAdmin).length;
+    
+        // Get the last message and sender details
+        const lastMessageData = message[message.length - 1];
+        const lastMessage = lastMessageData?.message || "No messages";
+        const lastSenderIsAdmin = lastMessageData?.isAdmin || false;
+    
+        acc[uniqueKey] = {
+            userName: userId?.name || "Unknown User",
+            count: userMessageCount, // Count messages after the last admin reply
+            lastMessage,
+            createdAt: updatedAt || createdAt || "Unknown date",
+            updatedAt: parseDate(updatedAt || createdAt || "Unknown date"), // Ensure valid date is used for sorting
+            _id,
+        };
     
         return acc;
     }, {});
-    
 
     console.log("all usres", allUsers);
-    
-    
 
-    const [userChat, setUserChat] = useState({
-        id: '',
-        userId: {
-            name: '',
-            email: '',
-            isAdmin: false
-        },
-        createdAt: '',
-        updatedAt: '',
-        messages: [],
-    })
+    const [searchQuery, setSearchQuery] = useState('');
 
-    // show user chat
-    const showUserChat = async (userId) => {
+    // Handle search input change
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
 
-        try {
-            // Send the message data via a POST request
-            const response = await fetch(`http://147.79.101.225:2859/api/message/${userId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${userToken}`,
-                },
-                credentials: 'include',
-            });
-    
-            if (!response.ok) {
-                throw new Error(`Failed to send message, status: ${response.status}`);
-            }
-    
-            const data = await response.json();  // Parse the response data
-            console.log('DATA from user:', data.Message);  // Log success message
-
-            setUserChat({
-                id: data.Message._id,
-                userId: {
-                    name: data.Message.userId.name,
-                    email: data.Message.userId.email,
-                    isAdmin: data.Message.userId.isAdmin,
-                },
-                createdAt: data.Message.createdAt,
-                updatedAt: data.Message.updatedAt,
-                messages: data.Message.message,
-            })
-    
-        } catch (error) {
-            console.error('Error sending message:', error.message);  // Log error
-        }
-    }
-
-    console.log('caht ysr', userChat);
-    
+    // Filter users based on the search query
+    const filteredUsers = Object.keys(groupedMessages).filter((uniqueKey) => {
+        const { userName } = groupedMessages[uniqueKey];
+        return userName.toLowerCase().includes(searchQuery.toLowerCase()); // Case-insensitive search
+    });
 
     return (
     
@@ -336,7 +389,7 @@ export default function Chat() {
 
                                         <div className={style.input}>
 
-                                            <input type="search" className='form-control p-2' placeholder='Search here...' />
+                                            <input type="search" className='form-control p-2' placeholder='Search here...' value={searchQuery} onChange={handleSearchChange} />
 
                                         </div>
 
@@ -344,7 +397,14 @@ export default function Chat() {
 
                                     <div className={style.usersBox}>
 
-                                        { allUsers.length > 0 && Object.keys(groupedMessages).map( (uniqueKey) => {
+                                        {/* { allUsers.length > 0 && Object.keys(groupedMessages).sort((a, b) => { */}
+                                            { filteredUsers.length > 0 && filteredUsers.sort((a, b) => {
+                                            const updatedA = groupedMessages[a].updatedAt;
+                                            const updatedB = groupedMessages[b].updatedAt;
+
+                                            // Sorting by updatedAt, with the most recent updates first
+                                            return updatedB - updatedA; // Sorts in descending order
+                                            }).map( (uniqueKey) => {
 
                                             const { userName, count, lastMessage, createdAt, _id } = groupedMessages[uniqueKey];
 
@@ -366,7 +426,7 @@ export default function Chat() {
 
                                                                 <h4 className={style.name}>{userName}</h4>
 
-                                                                <span className={style.message}>{lastMessage}</span>
+                                                                <span className={style.message}>{ count === 0 ? <> <img src={seen} width={15} alt="seen-image" loading='lazy' /> {lastMessage} </> : lastMessage }</span>
 
                                                             </div>
 
@@ -376,7 +436,7 @@ export default function Chat() {
 
                                                             <p className={style.time}>{formatMessageTime(createdAt)}</p>
 
-                                                            <span className={`badge text-bg-success`}>{count}</span>
+                                                            <span className={`badge text-bg-success`}>{ count === 0 ? '' : count }</span>
 
                                                         </div>
 
@@ -409,99 +469,77 @@ export default function Chat() {
 
                                                 </div>
 
-                                                <h4 className={style.userName}>{userChat.userId.name}</h4>
+                                                <h4 className={style.userName}>{ userChat.userId.name === '' ? 'Unknown User' : userChat.userId.name }</h4>
 
                                             </div>
 
-                                            <div className={style.chat}>
+                                            <div className={style.chat} >
 
                                                 <div className={style.inbox}>
 
                                                 {userChat && userChat.messages && userChat.messages.map( (message, index) => (
 
-                                                    <div className={style.userInbox} key={index}>
+                                                    <>
+                                                    
+                                                        { !message.isAdmin ? (
 
-                                                        <div className={style.userMessage}>
+                                                            <div className={style.userInbox} key={index}>
 
-                                                            <div className={style.messageTiming}>
-
-                                                                <h4 className={style.name}>{userChat.userId.name}</h4>
-
-                                                                <p className={style.timing}>00:05</p>
-
-                                                            </div>
-
-                                                            <h4 className={style.message}>{message.message}</h4>
-
-                                                        </div>
-
-                                                        <div className={style.image}>
-
-                                                            <img src={userImg} width={20} alt="user-image" loading='lazy' />
-
-                                                        </div>
-
-                                                    </div>
-
-                                                ) )}
-
-                                                    <div className={style.adminInbox}>
-
-                                                        <div className={style.image}>
-
-                                                            <img src={adminImage} width={20} alt="user-image" loading='lazy' />
-
-                                                        </div>
-
-                                                        <div className={style.adminMessage}>
-
-                                                            <div className={style.messageTiming}>
-
-                                                                <h4 className={style.name}>You</h4>
-
-                                                                <p className={style.timing}>00:05</p>
-
-                                                            </div>
-
-                                                            <h4 className={style.message}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio autem reiciendis, quos cum earum veritatis!</h4>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                                {/* { messageData.map( (data, index) => (
-
-                                                    <div className={style.inbox} key={index + 1}>
-
-                                                        <div className={style.adminInbox}>
-
-                                                            <div className={style.image}>
-
-                                                                <img src={adminImage} width={20} alt="user-image" loading='lazy' />
-
-                                                            </div>
-
-                                                            <div className={style.adminMessage}>
+                                                            <div className={style.userMessage}>
 
                                                                 <div className={style.messageTiming}>
 
-                                                                    <h4 className={style.name}>You</h4>
+                                                                    <h4 className={style.name}>{ userChat.userId.name === '' ? 'Unknown User' : userChat.userId.name }</h4>
 
-                                                                    <p className={style.timing}>00:05</p>
+                                                                    <p className={style.timing}>{formatMessageTime(message.time)}</p>
 
                                                                 </div>
 
-                                                                <h4 className={style.message}>{ data.message }</h4>
+                                                                <h4 className={style.message}>{message.message}</h4>
 
                                                             </div>
 
-                                                        </div>
+                                                            <div className={style.image}>
 
-                                                    </div>
+                                                                <img src={userImg} width={20} alt="user-image" loading='lazy' />
 
-                                                ) ) } */}
+                                                            </div>
+
+                                                            </div>
+
+                                                        ) : (
+
+                                                            <div className={style.adminInbox}>
+
+                                                                <div className={style.image}>
+
+                                                                    <img src={adminImage} width={20} alt="user-image" loading='lazy' />
+
+                                                                </div>
+
+                                                                <div className={style.adminMessage}>
+
+                                                                    <div className={style.messageTiming}>
+
+                                                                        <h4 className={style.name}>You</h4>
+
+                                                                        <p className={style.timing}>{formatMessageTime(message.time)}</p>
+
+                                                                    </div>
+
+                                                                    <h4 className={style.message}>{message.message}</h4>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        ) }
+
+                                                        
+                                                    
+                                                    </>
+) )}
+                                                </div>
 
                                             </div>
 
@@ -525,7 +563,7 @@ export default function Chat() {
                                                 
                                                 </div>
 
-                                                <button type='submit' onClick={ (e) => sentMessage(e, userChat.id)} className={style.sendMessageBtn}><i className="fa-solid fa-paper-plane"></i></button>
+                                                <button type='submit' onClick={ (e) => { if (!userChat.id) { console.error("Error: chat id is not set."); return; } sentMessage(e, userChat.id)}} className={style.sendMessageBtn}><i className="fa-solid fa-paper-plane"></i></button>
 
                                             </div>
 
@@ -535,7 +573,7 @@ export default function Chat() {
                                     
                                         <div className={style.chatBox}>
 
-                                            <div className={`${style.chat} ${style.chatHeight}`}></div>
+                                            <div className={`${style.chat} ${style.chatHeight}`} style={{ backgroundImage: `url(${chatBackground})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', opacity: '.3' }}></div>
 
                                         </div> 
                                 

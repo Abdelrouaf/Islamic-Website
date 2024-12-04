@@ -333,7 +333,9 @@ export default function Header() {
                     
                         <button className="navbar-toggler" type="button" onClick={toggleNavbar} data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         
-                            <span className="navbar-toggler-icon"></span>
+                            {/* <span className="navbar-toggler-icon"></span> */}
+
+                            <i className="fa-solid fa-bars text-white"></i>
                         
                         </button>
 
