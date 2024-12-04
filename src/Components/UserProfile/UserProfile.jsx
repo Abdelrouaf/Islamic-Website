@@ -367,7 +367,7 @@ export default function UserProfile() {
 
                                                             <span className={style.views}>{formatNumber(saved.programId.views)} views</span>
 
-                                                            <span><i class="fa-regular fa-heart"></i> {saved.programId.likes}</span>
+                                                            <span><i className="fa-regular fa-heart"></i> {saved.programId.likes}</span>
 
                                                             <span className={style.Saved}><i className="fa-regular fa-bookmark"></i> {formatNumber(saved.programId.saved)} </span>
 

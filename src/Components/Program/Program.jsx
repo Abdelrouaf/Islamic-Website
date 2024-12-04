@@ -432,7 +432,7 @@ export default function Program() {
 
                                         <div className={style.downloadProgram}>
                                         
-                                            <a onClick={ () => DownloadProgram(programData._id)} href={`http://147.79.101.255:2859/uploads/Programs/${programData.programFile}`} download>Download</a>
+                                            <a onClick={ () => DownloadProgram(programData._id)} href={`http://147.79.101.255:2859/uploads/Programs/${programData.programFile}`} target='_blank' download>Download</a>
                                         
                                             <b className={style.top}>click to download</b>
                                         
@@ -896,7 +896,7 @@ export default function Program() {
     
                                                                 <span className={style.views}>{formatNumber(program.views)} views</span>
     
-                                                                <span><i class="fa-regular fa-heart"></i> {program.likes} </span>
+                                                                <span><i className="fa-regular fa-heart"></i> {program.likes} </span>
 
                                                                 <span className={style.Saved}>{allItemsSaved.find(item => item.programId._id === program._id) ? (<i className="fa-solid fa-bookmark"></i>) : (<i className="fa-regular fa-bookmark"></i>) } {formatNumber(program.saved)} </span>
     

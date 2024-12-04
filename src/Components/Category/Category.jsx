@@ -699,7 +699,7 @@ export default function Category() {
 
                                                                 <span className={style.views}>{formatNumber(program.views)} views</span>
 
-                                                                <span className={style.Saved}><i class="fa-regular fa-heart"></i> {program.likes} </span>
+                                                                <span className={style.Saved}><i className="fa-regular fa-heart"></i> {program.likes} </span>
 
                                                                 <span className={style.Saved}> {allItemsSaved.find(item => item.programId._id === program._id) ? (<i className="fa-solid fa-bookmark"></i>) : (<i className="fa-regular fa-bookmark"></i>) } {formatNumber(program.saved)}</span>
 
