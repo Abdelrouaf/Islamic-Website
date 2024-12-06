@@ -15,11 +15,9 @@ import mosque from '../../images/mosque.png'
 import pillarServ from '../../images/pillarServ.png'
 import quran from '../../images/quran.png'
 import kabah from '../../images/kabah.png'
-// import donate from '../../images/donate.png'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/splide/css'
 import { Azkar } from 'islam.js'
-// import { Helmet } from "react-helmet";
 import style from './Home.module.scss'
 
 export default function Home() {
@@ -27,7 +25,6 @@ export default function Home() {
     const azkar = new Azkar()
 
     const [dataZikr, setDataZikr] = useState([]);
-    // const movingZikrRef = useRef(null);
 
     useEffect(() => {
         const allAzkar = azkar.getAll()
@@ -61,14 +58,6 @@ export default function Home() {
                         <h3 className={style.title}>Objective & Mission</h3>
                     
                     </div>
-                
-                    {/* <div className={style.titles}>
-                    
-                        <span className={style.headTitle2}>Services</span>
-                    
-                        <h3 className={style.title2}>Objective & Mission</h3>
-                    
-                    </div> */}
                 
                     <div className="row gy-2">
                     
@@ -143,24 +132,6 @@ export default function Home() {
                             </div>
                         
                         </div>
-                        
-                        {/* <div className="col-md-6 col-lg-4">
-                            
-                            <div className={style.box}>
-                            
-                                <h4 className={style.srvTitle}>Donation</h4>
-                            
-                                <div className={style.image}>
-                                
-                                    <img src={donate} alt="" />
-                                
-                                </div>
-                            
-                                <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p>
-                            
-                            </div>
-                        
-                        </div> */}
                     
                     </div>
                 
@@ -172,22 +143,6 @@ export default function Home() {
             
                 <div className="container">
                 
-                    {/* <div className="text-center mb-5">
-                    
-                        <span className={style.headTitle}>Monotheism</span>
-                    
-                        <h3 className={style.title}>Definition, Examples, & Facts</h3>
-                    
-                    </div> */}
-                
-                    {/* <div className={style.titles}>
-                    
-                        <span className={style.headTitle2}>Monotheism</span>
-                    
-                        <h3 className={style.title2}>Definition, Examples, & Facts</h3>
-                    
-                    </div> */}
-                
                     <div className="row gy-2 align-items-center">
                     
                         <div className="col-lg-6">
@@ -195,9 +150,7 @@ export default function Home() {
                             <div className={style.leftBox}>
                             
                                 <iframe src="https://www.youtube.com/embed/gVjuZ2RAX68?si=3Cz4goXrbWQWB3LH" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
-                            
-                                {/* <div className={style.image}></div> */}
-                            
+                                                        
                             </div>
                         
                         </div>
@@ -245,14 +198,6 @@ export default function Home() {
                         <h3 className={style.title}>Nums, Types</h3>
                     
                     </div>
-                
-                    {/* <div className={style.titles}>
-                    
-                        <span className={style.headTitle2}>The pillars of Islam</span>
-                    
-                        <h3 className={style.title2}>Nums, Types</h3>
-                    
-                    </div> */}
                 
                     <h4 className={style.subTitle}>Five Pillars <span>of Islam</span></h4>
                 
@@ -430,25 +375,17 @@ export default function Home() {
                     
                     </div>
                 
-                    {/* <div className={style.titles}>
-                    
-                        <span className={style.headTitle2}>Faith</span>
-                    
-                        <h3 className={style.title2}>Celebrities & Books</h3>
-                    
-                    </div> */}
-                
                     <Splide
                         options={{
                             type: 'loop',
-                            drag: 'free',        // Enable free dragging
-                            freeScroll: true,    // Enable free scrolling
-                            heightRatio: 0.5, // Set the height relative to the width
-                            cover: true,     // Ensures images cover the slide area
-                            lazyLoad: true,  // Enable lazy loading if needed
-                            perPage: 3,          // Number of slides to show per page
-                            gap: '20px',         // Gap between slides
-                            pagination: false,   // Disable pagination if not needed
+                            drag: 'free',       
+                            freeScroll: true,    
+                            heightRatio: 0.5, 
+                            cover: true,     
+                            lazyLoad: true,
+                            perPage: 3,          
+                            gap: '20px',         
+                            pagination: false,   
                         }}
                     >
                     
@@ -614,12 +551,6 @@ export default function Home() {
                     
                     </div>
                 
-                    {/* <div className={`${style.btn} d-flex align-items-center justify-content-center`}>
-                    
-                        <a href="#" className={style.readBtn}>Learn more</a>
-                    
-                    </div> */}
-                
                 </div>
             
             </section>
@@ -635,14 +566,6 @@ export default function Home() {
                         <h3 className={style.title}>The Purpose Of Life</h3>
                     
                     </div>
-                
-                    {/* <div className={style.titles}>
-                    
-                        <span className={style.headTitle2}>About Islam</span>
-                    
-                        <h3 className={style.title2}>The Purpose Of Life</h3>
-                    
-                    </div> */}
                 
                     <div className={style.video}>
                     

@@ -1,10 +1,9 @@
-@import '../Fonts/Fonts.module.scss';
+@import "../Fonts/Fonts.module.scss";
 
-// Colors Variables
 $redColor: #be202e;
 $orangeColor: #f74f22;
-$yellowColor: #FFAC00;
-$blueColor: #3F51B5;
+$yellowColor: #ffac00;
+$blueColor: #3f51b5;
 $mauveColor: rgb(30 30 110);
 $darkBlue: #0e1133;
 $lightBlue: rgba(68, 162, 255, 0.616);
@@ -16,10 +15,8 @@ $whiteColor: #fff;
 $boxShadow: 11px 10px 38px 0px rgba(0, 0, 0, 0.1);
 $shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.1);
 
-
 $sectionPadding: 150px;
 
-// Font Variables
 $titleSize: 40px;
 $headTitleSize: 32px;
 $descriptionSize: 14px;

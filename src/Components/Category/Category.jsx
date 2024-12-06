@@ -196,7 +196,7 @@ export default function Category() {
             }
             showToast('Program liked successfully!', 'success');
 
-            // await likeProgram(program);
+            await likeProgram(program);
     
         } catch (error) {
             showToast("Error liking the program", "error");
