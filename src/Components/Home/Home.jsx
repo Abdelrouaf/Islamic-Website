@@ -19,6 +19,7 @@ import kabah from '../../images/kabah.png'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/splide/css'
 import { Azkar } from 'islam.js'
+// import { Helmet } from "react-helmet";
 import style from './Home.module.scss'
 
 export default function Home() {

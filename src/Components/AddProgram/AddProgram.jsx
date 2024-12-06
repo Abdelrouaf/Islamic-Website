@@ -395,7 +395,7 @@ const checkTitleExists = async (programName) => {
                                     
                                         <div className={style.inputTitle}>
                                         
-                                            <h4>Select Program Category:</h4>
+                                            <h4><span style={{color: 'red'}}>* </span>Select Program Category:</h4>
                                         
                                         </div>
                                     
@@ -438,6 +438,10 @@ const checkTitleExists = async (programName) => {
                                                 <option value="Islamic-Material">
                                                     Islamic Material
                                                 </option>
+
+                                                <option value="lol">
+                                                    lol
+                                                </option>
                                             
                                                 {/* {dataInLocalStorage.map((category, index) => ( */}
                                                 
@@ -459,7 +463,7 @@ const checkTitleExists = async (programName) => {
                                         
                                             <div className={style.inputTitle}>
                                             
-                                                <h4>Image</h4>
+                                                <h4><span style={{color: 'red'}}>* </span>Image</h4>
                                             
                                             </div>
                                         
@@ -548,7 +552,7 @@ const checkTitleExists = async (programName) => {
                                 
                                         <div className={style.inputTitle}>
                                         
-                                            <h4>Program name</h4>
+                                            <h4><span style={{color: 'red'}}>* </span>Program name</h4>
                                         
                                         </div>
                                     
@@ -567,7 +571,7 @@ const checkTitleExists = async (programName) => {
                                     
                                         <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
                                         
-                                            <h4 className={style.multiUse}>Program overview</h4>
+                                            <h4 className={style.multiUse}><span style={{color: 'red'}}>* </span>Program overview</h4>
                                         
                                         </div>
                                     
@@ -609,7 +613,7 @@ const checkTitleExists = async (programName) => {
                                         
                                             <div>
 
-                                                <label htmlFor="precisionDrafting">Precision Drafting</label>
+                                                <label htmlFor="precisionDrafting"><span style={{color: 'red'}}>* </span>Precision Drafting</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Precision Drafting' id="precisionDrafting"
                                                 value={keyFeatures['precisionDrafting']}
@@ -620,7 +624,7 @@ const checkTitleExists = async (programName) => {
                                         
                                             <div>
 
-                                                <label htmlFor="modelingVisualization">3D Modeling and Visualization</label>
+                                                <label htmlFor="modelingVisualization"><span style={{color: 'red'}}>* </span>3D Modeling and Visualization</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Modeling and Visualization' id="modelingVisualization"
                                                 value={keyFeatures['modelingVisualization']}
@@ -631,7 +635,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="extensiveLibraries">Extensive Libraries</label>
+                                                <label htmlFor="extensiveLibraries"><span style={{color: 'red'}}>* </span>Extensive Libraries</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Extensive Libraries' id="extensiveLibraries"
                                                 value={keyFeatures['extensiveLibraries']}
@@ -642,7 +646,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="collaboration">Collaboration</label>
+                                                <label htmlFor="collaboration"><span style={{color: 'red'}}>* </span>Collaboration</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Collaboration' id="collaboration"
                                                 value={keyFeatures['collaboration']}
@@ -653,7 +657,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="customAutomation">Custom Automation</label>
+                                                <label htmlFor="customAutomation"><span style={{color: 'red'}}>* </span>Custom Automation</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Custom Automation' id="customAutomation"
                                                 value={keyFeatures['customAutomation']}
@@ -664,7 +668,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="integration">Integration</label>
+                                                <label htmlFor="integration"><span style={{color: 'red'}}>* </span>Integration</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Integration' id="integration"
                                                 value={keyFeatures['integration']}
@@ -681,7 +685,7 @@ const checkTitleExists = async (programName) => {
                                     
                                         <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
                                         
-                                            <h4 className={style.multiUse}>Program use cases</h4>
+                                            <h4 className={style.multiUse}><span style={{color: 'red'}}>* </span>Program use cases</h4>
                                         
                                         </div>
                                     
@@ -723,7 +727,7 @@ const checkTitleExists = async (programName) => {
                                         
                                             <div>
 
-                                                <label htmlFor="minOperatingSystem">Operating System</label>
+                                                <label htmlFor="minOperatingSystem"><span style={{color: 'red'}}>* </span>Operating System</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Operating System' id="minOperatingSystem"
                                                 value={minRequirements['minOperatingSystem']}
@@ -734,7 +738,7 @@ const checkTitleExists = async (programName) => {
                                         
                                             <div>
 
-                                                <label htmlFor="minProcessor">Processor</label>
+                                                <label htmlFor="minProcessor"><span style={{color: 'red'}}>* </span>Processor</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Processor' id="minProcessor"
                                                 value={minRequirements['minProcessor']}
@@ -745,7 +749,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="minRAM">RAM</label>
+                                                <label htmlFor="minRAM"><span style={{color: 'red'}}>* </span>RAM</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter RAM' id="minRAM"
                                                 value={minRequirements['minRAM']}
@@ -756,7 +760,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="minGPU">GPU</label>
+                                                <label htmlFor="minGPU"><span style={{color: 'red'}}>* </span>GPU</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter GPU' id="minGPU"
                                                 value={minRequirements['minGPU']}
@@ -767,7 +771,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="minStorage">Storage</label>
+                                                <label htmlFor="minStorage"><span style={{color: 'red'}}>* </span>Storage</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Storage' id="minStorage"
                                                 value={minRequirements['minStorage']}
@@ -778,7 +782,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="minDisplay">Display</label>
+                                                <label htmlFor="minDisplay"><span style={{color: 'red'}}>* </span>Display</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Display' id="minDisplay"
                                                 value={minRequirements['minDisplay']}
@@ -803,7 +807,7 @@ const checkTitleExists = async (programName) => {
                                         
                                             <div>
 
-                                                <label htmlFor="maxOperatingSystem">Operating System</label>
+                                                <label htmlFor="maxOperatingSystem"><span style={{color: 'red'}}>* </span>Operating System</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Operating System' id="maxOperatingSystem"
                                                 value={maxRequirements['maxOperatingSystem']}
@@ -814,7 +818,7 @@ const checkTitleExists = async (programName) => {
                                         
                                             <div>
 
-                                                <label htmlFor="maxProcessor">Processor</label>
+                                                <label htmlFor="maxProcessor"><span style={{color: 'red'}}>* </span>Processor</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Processor' id="maxProcessor"
                                                 value={maxRequirements['maxProcessor']}
@@ -825,7 +829,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="maxRAM">RAM</label>
+                                                <label htmlFor="maxRAM"><span style={{color: 'red'}}>* </span>RAM</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter RAM' id="maxRAM"
                                                 value={maxRequirements['maxRAM']}
@@ -836,7 +840,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="maxGPU">GPU</label>
+                                                <label htmlFor="maxGPU"><span style={{color: 'red'}}>* </span>GPU</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter GPU' id="maxGPU"
                                                 value={maxRequirements['maxGPU']}
@@ -847,7 +851,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="maxStorage">Storage</label>
+                                                <label htmlFor="maxStorage"><span style={{color: 'red'}}>* </span>Storage</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Storage' id="maxStorage"
                                                 value={maxRequirements['maxStorage']}
@@ -858,7 +862,7 @@ const checkTitleExists = async (programName) => {
 
                                             <div>
 
-                                                <label htmlFor="maxDisplay">Display</label>
+                                                <label htmlFor="maxDisplay"><span style={{color: 'red'}}>* </span>Display</label>
 
                                                 <input type="text" className='form-control py-2 my-2' placeholder='enter Display' id="maxDisplay"
                                                 value={maxRequirements['maxDisplay']}
@@ -875,7 +879,7 @@ const checkTitleExists = async (programName) => {
                                     
                                         <div className={`d-flex justify-content-center align-items-center ${style.inputTitle}`}>
                                         
-                                            <h4 className={style.multiUse}>Program Installation Steps</h4>
+                                            <h4 className={style.multiUse}><span style={{color: 'red'}}>* </span>Program Installation Steps</h4>
                                         
                                         </div>
                                     
@@ -907,7 +911,7 @@ const checkTitleExists = async (programName) => {
 
                                     <div className={`my-3 ${style.inputTitle}`}>
                                         
-                                            <h4>Upload program file</h4>
+                                            <h4><span style={{color: 'red'}}>* </span>Upload program file</h4>
                                         
                                         </div>
                                     

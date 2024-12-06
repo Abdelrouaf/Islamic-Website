@@ -119,7 +119,7 @@ export default function AddCategory() {
                                     
                                         <div className={style.inputTitle}>
                                         
-                                            <h4>Image</h4>
+                                            <span style={{color: 'red'}}>*</span><h4>Image</h4>
                                         
                                         </div>
                                     

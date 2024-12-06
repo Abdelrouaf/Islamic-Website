@@ -466,11 +466,11 @@ export default function Chat() {
 
                                                 {userChat && userChat.messages && userChat.messages.map( (message, index) => (
 
-                                                    <>
+                                                    <div key={message._id}>
                                                     
                                                         { !message.isAdmin ? (
 
-                                                            <div className={style.userInbox} key={index}>
+                                                            <div className={style.userInbox} >
 
                                                             <div className={style.userMessage}>
 
@@ -524,7 +524,7 @@ export default function Chat() {
 
                                                         
                                                     
-                                                    </>
+                                                    </div>
 ) )}
                                                 </div>
 
@@ -532,7 +532,7 @@ export default function Chat() {
 
                                             <div className={style.input}>
 
-                                                <input type="text" className='form-control p-2' placeholder='enter message here..' value={text} onChange={(e) => setText(e.target.value)} onKeyDown={ (e) => { if (e.key === "Enter") { sentMessage(e) } } } />
+                                                <input type="text" className='form-control p-2' placeholder='enter message here..' value={text} onChange={(e) => setText(e.target.value)} onKeyDown={ (e) => { if (e.key === "Enter") { sentMessage(e, userChat.id) } } } />
 
                                                 <div className={style.sendEmoji}>
                                                 

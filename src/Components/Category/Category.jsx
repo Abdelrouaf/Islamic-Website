@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
-import program1 from '../../images/program1.jpeg'
 import { Azkar } from 'islam.js'
 import { v4 as uuid } from 'uuid'
 import style from './Category.module.scss'
@@ -22,57 +21,58 @@ export default function Category() {
 
     const [allPrograms, setAllPrograms] = useState([])
 
-    useEffect(() => {
-        async function getData() {
-            try {    
-                if ( category === "All-Categories" ) {
-                    const response = await fetch(`http://147.79.101.225:2859/api/programs/`, {
-                        method: "GET",
-                        headers: {
-                            "Authorization": `Bearer ${userToken}`
-                        },
-                        credentials: "include"
-                    });
-    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status`);
-                    }
-        
-                    const data = await response.json();
-    
-                    setAllPrograms(data)
-                    setIsLoading(false);
+    async function getData() {
+        try {    
+            if ( category === "All-Categories" ) {
+                const response = await fetch(`http://147.79.101.225:2859/api/programs/`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`
+                    },
+                    credentials: "include"
+                });
 
-                } else {
-                    const response = await fetch(`http://147.79.101.225:2859/api/programs/category?category=${category}`, {
-                        method: "GET",
-                        headers: {
-                            "Authorization": `Bearer ${userToken}`
-                        },
-                        credentials: "include"
-                    });
-    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status`);
-                    }
-        
-                    const data = await response.json();
-    
-                    setAllPrograms(data.Programs)
-                    setIsLoading(false);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status`);
                 }
+    
+                const data = await response.json();
 
-            } catch (error) {
-                console.error("Error occurred during the fetch:", error.message);
+                setAllPrograms(data)
+                setIsLoading(false);
+
+            } else {
+                const response = await fetch(`http://147.79.101.225:2859/api/programs/category?category=${category}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`
+                    },
+                    credentials: "include"
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status`);
+                }
+    
+                const data = await response.json();
+
+                setAllPrograms(data.Programs)
                 setIsLoading(false);
             }
+
+        } catch (error) {
+            console.error("Error occurred during the fetch:", error.message);
+            setIsLoading(false);
         }
-    
+    }
+
+    useEffect(() => {
         getData();
 
-    }, [category]);
+    }, [category]);    
 
     const [allItemsSaved, setAllItemsSaved] = useState([])
+    const [allItemsLiked, setAllItemsLiked] = useState([])
 
     useEffect( () => {
         const fetchAllSavedPrograms = async () => {
@@ -97,10 +97,33 @@ export default function Category() {
         }
         fetchAllSavedPrograms()
 
+        const fetchAllLikedPrograms = async () => {
+            try {
+                const checkResponse = await fetch(`http://147.79.101.225:2859/api/like/`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`,
+                    },
+                    credentials: "include",
+                });
+            
+                if (checkResponse.ok) {
+                    const allItems = await checkResponse.json();
+                    const totalLiked = allItems.MyLikes;
+                    setAllItemsLiked(totalLiked)
+                }
+            
+            } catch {
+                isLoading(false)
+            }
+        }
+        fetchAllLikedPrograms()
+
         // Set the interval to refresh the data every 3 seconds
         const intervalId = setInterval(() => {
             fetchAllSavedPrograms();
-        }, 1000);
+            fetchAllLikedPrograms();
+        }, 100);
 
         // Cleanup the interval when the component unmounts or `run` changes
         return () => {
@@ -108,6 +131,159 @@ export default function Category() {
         };
 
     }, [] )
+
+    const [deleteFromLike, setDeleteFromLike] = useState(false)
+
+    // show likes
+    const showLikes = async (e,program) => {
+        e.preventDefault();
+
+        try {    
+            const checkResponse = await fetch(`http://147.79.101.225:2859/api/like/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                },
+                credentials: "include",
+            });
+    
+            if (checkResponse.ok) {
+                const allItems = await checkResponse.json();
+                const totalLikes= allItems.MyLikes;
+                const existingItem = totalLikes.find(item => item.programId._id === program._id);
+    
+                if (existingItem) {
+                    // If the item is already saved, set deleteFromSave to true
+                    setDeleteFromLike(true);
+                    await deleteLike(existingItem);
+                    // await fetchPrograms(category);
+                    return;
+                }
+            }
+    
+            // If deleteFromSave is false, save the item
+            if (!deleteFromLike) {
+                await likeFromUser(program);
+                // showToast("added for user successfully!", "success")
+                
+            }
+            // Fetch updated list of programs after saving or deleting
+            // await fetchPrograms(category);
+    
+        } catch (error) {
+            showToast('Error occurred during fetch the item', 'error');
+            setIsLoading(false);
+        }
+        setDeleteFromLike(false);
+    }
+
+    // Like From User
+    const likeFromUser = async (program) => {
+
+        try {        
+            const response = await fetch(`http://147.79.101.225:2859/api/like/${program._id}`,{
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                    'Content-Type': 'application/json',
+                },
+                credentials: "include",
+                // body: JSON.stringify(program),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to Like item');
+            }
+            showToast('Program liked successfully!', 'success');
+
+            // await likeProgram(program);
+    
+        } catch (error) {
+            showToast("Error liking the program", "error");
+        }
+    }
+
+    // Like Program
+    const likeProgram = async (program) => {
+
+        try {
+            const updatedLikes = program.likes + 1;
+        
+            const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
+                ...program,
+                likes: updatedLikes
+            }, 
+            {
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            }
+        );
+    
+            if (updateResponse.status === 200 || updateResponse.status === 201) {
+                setAllPrograms((prevPrograms) =>
+                    prevPrograms.map((t) =>
+                        t._id === program._id ? { ...t, likes: updatedLikes } : t
+                    )
+                );
+    
+            }
+    
+        } catch {
+            
+        }
+    };
+
+    // Delete Likes
+    const deleteLike = async (program) => {
+
+        try {
+            const response = await fetch(`http://147.79.101.225:2859/api/like/${program._id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                },
+                credentials: "include",
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to like item');
+            }
+
+            // const updatedLikes = program.likes - 1;
+        
+            // const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
+            //     ...program,
+            //     likes: updatedLikes
+            // }, 
+            // {
+            //     headers: {
+            //         "Authorization": `Bearer ${userToken}`,
+            //         "Content-Type": "application/json",
+            //     },
+            //     withCredentials: true,
+            // }
+            // );
+    
+            // if (updateResponse.status === 200 || updateResponse.status === 201) {
+            //     setAllPrograms((prevPrograms) =>
+            //         prevPrograms.map((t) =>
+            //             t._id === program._id ? { ...t, likes: updatedLikes } : t
+            //         )
+            //     );
+    
+            // }
+
+            showToast('Item deleted from likes successfully!', 'success');
+    
+        
+        } catch (error) {
+            console.error("error is ", error)
+            showToast('Error deleting item from likes', 'error');
+        }
+    }
 
     const [deleteFromSave, setDeleteFromSave] = useState(false);
 
@@ -141,7 +317,8 @@ export default function Category() {
             }
     
             // Fetch updated list of programs after saving or deleting
-            await fetchPrograms(category);
+            // await fetchPrograms(category);
+            await getData();
     
         } catch (error) {
             showToast('Error occurred during save the item', 'error');
@@ -161,7 +338,7 @@ export default function Category() {
                     'Content-Type': 'multipart/form-data',
                 },
                 credentials: "include",
-                body: JSON.stringify(program),
+                // body: JSON.stringify(program),
             });
     
             if (!response.ok) {
@@ -170,13 +347,13 @@ export default function Category() {
             showToast('Item saved successfully!', 'success');
     
             // Fetch updated programs after saving the item
-            await fetchPrograms(category);
+            // await fetchPrograms(category);
     
         } catch (error) {
             showToast('Error saving item', 'error');
         }
     };
-    
+
     // Function to delete the item
     const deleteItem = async (saveId) => {
     
@@ -202,7 +379,7 @@ export default function Category() {
             console.error('error', error);
         }
     };
-    
+
     // Function to fetch programs after saving or deleting an item
     const fetchPrograms = async (category) => {
         try {
@@ -213,56 +390,18 @@ export default function Category() {
                 },
                 credentials: "include",
             });
-    
+
             if (!response.ok) {
                 throw new Error('Failed to fetch programs');
             }
-    
+
             const data = await response.json();
             const programs = category === "All-Categories" ? data : data.Programs;
             setAllPrograms(programs);
             setIsLoading(false);
-    
+
         } catch (error) {
             showToast('Error fetching programs', 'error');
-        }
-    };
-
-    // Like Program
-    const likeProgram = async (program) => {
-        try {
-            const updatedLikes = program.likes + 1;
-        
-            const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
-                ...program,
-                likes: updatedLikes
-            }, 
-            {
-                headers: {
-                    "Authorization": `Bearer ${userToken}`,
-                    "Content-Type": "application/json",
-                },
-                withCredentials: true,
-            }
-        );
-    
-            if (updateResponse.status === 200 || updateResponse.status === 201) {
-                setAllPrograms((prevPrograms) =>
-                    prevPrograms.map((t) =>
-                        t._id === program._id ? { ...t, likes: updatedLikes } : t
-                    )
-                );
-    
-                showToast("Program liked!", "success");
-            }
-    
-        } catch (error) {
-            console.error("Error occurred during the like request:", error.message);
-            if (error.response) {
-                console.error("Response error status:", error.response.status);
-                console.error("Response error data:", error.response.data);
-            }
-            showToast("Error liking the program", "error");
         }
     };
 
@@ -467,13 +606,15 @@ export default function Category() {
                                                 }
                                             }
 
+                                            const isLiked = allItemsLiked.some(item => item.programId._id === program._id);
+
                                             return (
 
                                                 <div className="col-md-12 col-lg-6 col-xxl-4" key={program._id}>
 
                                                     <div className={style.programBox}>
 
-                                                        <Link to={`../${category}/${program._id}`}>
+                                                        <Link to={`../${program.programCategory}/${program._id}`}>
                                                         
                                                             <div className={style.image}>
 
@@ -483,13 +624,13 @@ export default function Category() {
                                                         
                                                         </Link>
 
-                                                        <Link to={`../${category}/${program._id}`}><h4 className={style.programTitle}>{program.programName}</h4></Link>
+                                                        <Link to={`../${program.programCategory}/${program._id}`}><h4 className={style.programTitle}>{program.programName}</h4></Link>
 
                                                         <p className={style.programSize}>Program size: <span>{sizeFormatted}</span></p>
 
                                                         <div className={style.btns}>
 
-                                                            <Link to={`../${category}/${program._id}`}>
+                                                            <Link to={`../${program.programCategory}/${program._id}`}>
 
                                                                 <button className={style.viewBtn}>
                                                                 
@@ -505,7 +646,7 @@ export default function Category() {
                                                             
                                                             </Link>
 
-                                                            <button onClick={ () => saveProgram(program) } className={style.bookmarkBtn}>
+                                                            <button onClick={ () => saveItem(program) } className={style.bookmarkBtn}>
                                                             
                                                                 <span className={style.IconContainer}>
                                                                 
@@ -527,49 +668,33 @@ export default function Category() {
 
                                                         <div className={style.programDetails}>
 
-                                                            <button onClick={ () => likeProgram(program) } className={style.like}>
-                                                            
-                                                                <span className={style.icon}>
-                                                            
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className={`${style.bi} ${style.biHeart}`} viewBox="0 0 16 16">
-
-                                                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-
-                                                                </svg>
-
-                                                                </span>
-
-                                                                <span className={style.title}>i love it</span>
-
-                                                            </button>
-
-                                                            {/* <div className={`${style.likeButton}`}>
-                                                            
+                                                            <div onClick={ (e) => {likeFromUser(e,program)} } className={`${ !isLiked ? style.removeLikeButton : style.likeButton }`}>
+                                                                                                                        
                                                                 <input className={style.on} id="heart" type="checkbox" />
-                                                            
+
                                                                 <label className={style.likeLabel} htmlFor="heart">
-                                                                
-                                                                <svg className={style.likeIcon} fillRule="nonzero" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                
-                                                                    <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-                                                                
-                                                                </svg>
-                                                            
-                                                                <span className={style.likeText}>Likes</span>
-                                                            
+
+                                                                    <svg className={style.likeIcon} fillRule="nonzero" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+                                                                        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+
+                                                                    </svg>
+
+                                                                    <span className={style.likeText}>Likes</span>
+
                                                                 </label>
-                                                            
-                                                                <span className={`${style.likeCount} ${style.one}`}>68</span>
-                                                            
-                                                                <span className={`${style.likeCount} ${style.two}`}>69</span>
-                                                            
-                                                            </div> */}
+
+                                                                <span className={`${style.likeCount} ${style.one}`}>{program.likes}</span>
+
+                                                                <span className={`${style.likeCount} ${style.two}`}>{ !isLiked ? program.likes - 1 : program.likes + 1}</span>
+
+                                                            </div>
 
                                                             <div className={style.viewSave}>
 
                                                                 <span className={style.views}>{formatNumber(program.views)} views</span>
 
-                                                                <span className={style.Saved}><i className="fa-regular fa-heart"></i> {program.likes} </span>
+                                                                {/* <span className={style.Saved}><i className="fa-regular fa-heart"></i> {program.likes} </span> */}
 
                                                                 <span className={style.Saved}> {allItemsSaved.find(item => item.programId._id === program._id) ? (<i className="fa-solid fa-bookmark"></i>) : (<i className="fa-regular fa-bookmark"></i>) } {formatNumber(program.saved)}</span>
 
@@ -616,6 +741,8 @@ export default function Category() {
                 ))}
             
             </div>
+
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
 
             <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
                 <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>

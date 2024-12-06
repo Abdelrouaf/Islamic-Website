@@ -4,8 +4,6 @@
     color: $redColor !important;
 }
 
-
-
 // .notSelection {
 //     background-color: transparent !important;
 //     color: $blackColor !important;
@@ -17,6 +15,28 @@
 
 .directionLTR {
     direction: ltr !important;
+}
+
+.highlight {
+    background-color: yellow;  /* You can change this to your desired background color */
+    font-weight: bold;         /* Optional, to make the highlighted text bold */
+}
+
+.verseInArabic {
+    direction: rtl;
+    font-weight: bolder;
+    font-size: 25px;
+}
+
+.verseInEnglish {
+    @extend .verseInArabic;
+    direction: ltr;
+}
+
+.verseSearchStyle {
+    // font-size: 30px;
+    margin-block: 20px;
+    display: block;
 }
 
 .verseNumber {
@@ -32,6 +52,13 @@
     color: #ca784e; 
     margin-right: 10px;
     font-family: 'Amiri', serif;
+}
+
+.verseNumberIndex {
+    font-family: $arabicBoldFont;
+    white-space: nowrap;
+    font-size: 30px;
+    direction: ltr;
 }
 
 .blogSection {
@@ -130,7 +157,7 @@
                 margin-bottom: 10px;
                 font-size: 18px;
                 font-weight: bold;
-                direction: rtl;
+                // direction: rtl;
                 position: relative;
             
                 button {
@@ -162,6 +189,13 @@
                 color: #ca784e; 
                 margin-right: 10px;
                 font-family: 'Amiri', serif;
+            }
+        
+            .verseNumberIndex {
+                font-family: $arabicBoldFont;
+                white-space: nowrap;
+                font-size: 20px;
+                direction: ltr;
             }
         }
 
@@ -685,6 +719,24 @@
         -o-border-radius: 10px;
         position: relative;
         z-index: 1110;
+
+        .verseSearch {
+            width: 45%;
+            background-color: hsl(0, 0%, 95%);
+            border: 1px solid hsl(0, 0%, 90%);
+            padding-inline: 15px;
+            display: flex;
+            align-items: center;
+            border-radius: 4px;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            -ms-border-radius: 4px;
+            -o-border-radius: 4px;
+        
+            input {
+                background-color: transparent !important;
+            }
+        }
     
         select {
             width: 20%;

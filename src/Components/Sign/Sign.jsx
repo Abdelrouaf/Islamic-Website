@@ -182,7 +182,7 @@ export default function Sign({ onClose }) {
                 localStorage.setItem('verifyUser', JSON.stringify(userData))
                 setTimeout(() => {
                     setIsSignUpActive(false)
-                    navigate('../en');
+                    navigate('../en/dashboard');
                 }, 4000);
                 resetForm();
                 setIsSubmittingSignUp(true);

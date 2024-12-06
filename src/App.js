@@ -66,6 +66,8 @@ import UserInbox from './Components/UserInbox/UserInbox';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import Chat from './Components/Chat/Chat';
 import Dashboard from './Components/Dashboard/Dashboard';
+import { Helmet } from "react-helmet";
+
 
 function App() {
   return (
@@ -75,7 +77,14 @@ function App() {
 
       <Routes>
         <Route path='/' element={<Layout />} >
-          <Route index element={<Home />} />
+          <Route index element={  <>
+    <Helmet>
+      <title>Monotheism Topics - Learn Islam | YourSiteName</title>
+      <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
+      <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
+    </Helmet>
+    <Home />
+  </>} />
           <Route path='azanTiming' element={< AzanTiming />} />
           <Route path='quran' element={<QuranSurahs />} />
           <Route path='azkarCatagories/:category' element={<AzkarDetails />} />

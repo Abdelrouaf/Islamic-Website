@@ -60,6 +60,8 @@ export default function Admin() {
 
     const [differentOpen, setDifferentOpen] = useState(false)
 
+    const [otherOpen, setOtherOpen] = useState(false)
+
     const [pagesOpen, setPagesOpen] = useState(false)
 
     const [islamicPagesOpen, setIslamicPagesOpen] = useState(false)
@@ -283,6 +285,17 @@ export default function Admin() {
         }
     
         getData();
+
+        // Set the interval to refresh the data every 3 seconds
+        const intervalId = setInterval(() => {
+            getData();
+        }, 1000);
+
+        // Cleanup the interval when the component unmounts or `run` changes
+        return () => {
+            clearInterval(intervalId);
+        };
+
     }, []);
 
     const [totalMessagesCount, setTotalMessagesCount] = useState(0)
@@ -310,24 +323,40 @@ export default function Admin() {
                 const processedMessages = data.Messages.map((userMessages) => {
                     const messages = userMessages.message || [];
                 
-                    // Check if the last message is from admin
-                    const isLastMessageAdmin = messages.length > 0 && messages[messages.length - 1].isAdmin;
-                
-                    // Count messages where `isAdmin` is false
-                    const userMessageCount = messages
-                        .filter(msg => !msg.isAdmin) // Count only non-admin messages
+                    // // Find the last admin message
+                    // const lastAdminMessage = messages
+                    //     .filter(msg => msg.isAdmin)
+                    //     .sort((a, b) => new Date(b.time) - new Date(a.time))[0]; // Get the most recent admin message
+
+                    // console.log("lastAdminMessage: ", lastAdminMessage);
+                    
+
+                    // // If no admin messages, consider all user messages
+                    // const lastAdminMessageTime = lastAdminMessage ? new Date(lastAdminMessage.time) : null;
+
+                    // console.log("lastAdminMessageTime: ", lastAdminMessageTime);
+
+                    // // Count user messages after the last admin message
+                    // const userMessageCountAfterAdmin = messages
+                    //     .filter(msg => !msg.isAdmin && (!lastAdminMessageTime || new Date(msg.time) > lastAdminMessageTime))
+                    //     .length;
+
+                    // Find the last admin message
+                    const lastAdminMessageIndex = messages.map(msg => msg.isAdmin).lastIndexOf(true);
+
+                    // Count user messages after the last admin message
+                    const userMessageCountAfterAdmin = messages
+                        .slice(lastAdminMessageIndex + 1)
+                        .filter(msg => !msg.isAdmin)
                         .length;
-                
-                    // If the last message was from admin, don't count any messages for that user
-                    const finalMessageCount = isLastMessageAdmin ? 0 : userMessageCount;
-                
-                    // Accumulate total count
-                    totalMessageCount += finalMessageCount;
-                
+                    
+                    // Accumulate the total count
+                    totalMessageCount += userMessageCountAfterAdmin;                    
+
                     return {
                         userId: userMessages.userId?._id || "Unknown User",
                         userName: userMessages.userId?.name || "Unknown",
-                        count: finalMessageCount,
+                        count: userMessageCountAfterAdmin,
                     };
                 });
                 setTotalMessagesCount(totalMessageCount);
@@ -339,8 +368,18 @@ export default function Admin() {
         }
     
         getData();
+
+        // Set the interval to refresh the data every 3 seconds
+        const intervalId = setInterval(() => {
+            getData();
+        }, 1000);
+
+        // Cleanup the interval when the component unmounts or `run` changes
+        return () => {
+            clearInterval(intervalId);
+        };
+
     }, []);
-    
 
     const profileUserRef = useRef(null)
     const [isProfileUserActive, setIsProfileUserActive] = useState(false)
@@ -764,6 +803,36 @@ export default function Admin() {
                                                 </ul>
 
                                             </li>
+
+                                            { programs.length > 1 && programs.filter(program => 
+    !['Different', 'Islamic-Material', 'Islamic-CDS', 'English-CDS', 'English-Software', 
+    'English-Material', 'Dental-Software', 'Structure-Software', 'Architecture-Software']
+    .includes(program.programCategory)
+).map((data, index) => (
+    <li key={index}>
+        <h3 onClick={() => { setOtherOpen(!otherOpen); }} 
+            className={`${style.link} ${location.pathname.startsWith('/en/programs/Different') ? style.linkHover : ''}`}>
+            Other 
+            <i className={`${style.menu} ${otherOpen ? 'fa-solid fa-angle-down' : 'fa-solid fa-angle-right'}`}></i>
+        </h3>
+
+        <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${otherOpen ? `${style.active}` : `${style.inactive}`}`}>
+            {programs.filter(data => 
+                !['Different', 'Islamic-Material', 'Islamic-CDS', 'English-CDS', 'English-Software', 
+                'English-Material', 'Dental-Software', 'Structure-Software', 'Architecture-Software']
+                .includes(data.programCategory)
+            ).map((data, index) => (
+                <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}>
+                    <NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => `text-white`}>
+                        <span> - {data.programName}</span>
+                    </NavLink>
+                </li>
+            ))}
+        </ul>
+    </li>
+))}
+
+                                            
 
                                             {/* { programCategories.length > 1 ? programCategories.map( (data, index) => (
                                             

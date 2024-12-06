@@ -30,7 +30,7 @@ export default function AllUsers() {
 
                 setIsLoading(false)
             
-                const data = await response.json();
+                const data = await response.json(); 
                 setUserData(data)
             } catch {
                 // console.error("Error occurred during the fetch:", error.message);

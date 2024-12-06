@@ -10,7 +10,16 @@ export default function Program() {
 
     const { id, category } = useParams()
 
-    const location = useLocation()
+    const azkar = new Azkar()
+
+    const [dataZikr, setDataZikr] = useState([]);
+    // const movingZikrRef = useRef(null);
+
+    const [zikrScrollVisible, setZikrScrollVisible] = useState(false)
+
+    const toggleZikrScroll = () => {
+        setZikrScrollVisible(!zikrScrollVisible)
+    }
 
     const [run, setRun] = useState(0)
 
@@ -20,8 +29,12 @@ export default function Program() {
 
     const [programData, setProgramData] = useState([])
 
-    useEffect(() => {
-        async function getData() {
+    const [allPrograms, setAllPrograms] = useState([])
+
+    const [allItemsSaved, setAllItemsSaved] = useState([])
+    const [allItemsLiked, setAllItemsLiked] = useState([])
+
+            async function getData() {
             try {    
                 const response = await fetch(`http://147.79.101.225:2859/api/programs/${id}`, {
                     method: "GET",
@@ -46,74 +59,39 @@ export default function Program() {
             }
         };
 
-        getData();
-    }, [run]);
-
-    const [allPrograms, setAllPrograms] = useState([])
-
-    useEffect(() => {
-        async function getData() {
+        async function getProgramsData() {
             try {    
-                if ( category === "All-Categories" ) {
-                    const response = await fetch(`http://147.79.101.225:2859/api/programs/`, {
-                        method: "GET",
-                        headers: {
-                            "Authorization": `Bearer ${token}`
-                        },
-                        credentials: "include"
-                    });
+                const response = await fetch(`http://147.79.101.225:2859/api/programs/`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    credentials: "include"
+                });
     
-                    if (!response.ok) {
-                        showToast('Failed to get item', 'error');
-                    }
-        
-                    const data = await response.json();
-    
-                    setAllPrograms(data)
-                    setIsLoading(false);
-
-                } else {
-                    const response = await fetch(`http://147.79.101.225:2859/api/programs/category?category=${category}`, {
-                        method: "GET",
-                        headers: {
-                            "Authorization": `Bearer ${token}`
-                        },
-                        credentials: "include"
-                    });
-    
-                    if (!response.ok) {
-                        showToast('Failed to get item', 'error');
-                    }
-        
-                    const data = await response.json();
-    
-                    setAllPrograms(data.Programs)
-                    setIsLoading(false);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status`);
                 }
-
-            } catch {
-                showToast('Error in fetch categories', 'error');
+    
+                const data = await response.json();
+    
+                setAllPrograms(data)
+                setIsLoading(false);
+    
+            } catch (error) {
+                console.error("Error occurred during the fetch:", error.message);
                 setIsLoading(false);
             }
         }
-    
+
+    useEffect(() => {
+
+        const allAzkar = azkar.getAll()
+        setDataZikr(allAzkar);
+
         getData();
+        getProgramsData();
 
-        // Set the interval to refresh the data every 3 seconds
-        const intervalId = setInterval(() => {
-            getData();
-        }, 1000);
-
-        // Cleanup the interval when the component unmounts or `run` changes
-        return () => {
-            clearInterval(intervalId);
-        };
-        
-    }, [category]);
-
-    const [allItemsSaved, setAllItemsSaved] = useState([])
-
-    useEffect( () => {
         const fetchAllSavedPrograms = async () => {
             try {
                 const checkResponse = await fetch(`http://147.79.101.225:2859/api/saveitem/`, {
@@ -136,17 +114,193 @@ export default function Program() {
         }
         fetchAllSavedPrograms()
 
+        const fetchAllLikedPrograms = async () => {
+            try {
+                const checkResponse = await fetch(`http://147.79.101.225:2859/api/like/`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+                    credentials: "include",
+                });
+            
+                if (checkResponse.ok) {
+                    const allItems = await checkResponse.json();
+                    const totalLiked = allItems.MyLikes;
+                    setAllItemsLiked(totalLiked)
+                }
+            
+            } catch {
+                isLoading(false)
+            }
+        }
+        fetchAllLikedPrograms()
+
         // Set the interval to refresh the data every 3 seconds
         const intervalId = setInterval(() => {
             fetchAllSavedPrograms();
-        }, 1000);
+            fetchAllLikedPrograms();
+        }, 100);
 
         // Cleanup the interval when the component unmounts or `run` changes
         return () => {
             clearInterval(intervalId);
         };
+    
+    }, [run]);
 
-    }, [] )
+    const [deleteFromLike, setDeleteFromLike] = useState(false)
+
+    // show likes
+    const showLikes = async (e,program) => {
+        e.preventDefault();
+
+        try {    
+            const checkResponse = await fetch(`http://147.79.101.225:2859/api/like/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                credentials: "include",
+            });
+    
+            if (checkResponse.ok) {
+                const allItems = await checkResponse.json();
+                const totalLikes= allItems.MyLikes;
+                const existingItem = totalLikes.find(item => item.programId._id === program._id);
+    
+                if (existingItem) {
+                    // If the item is already saved, set deleteFromSave to true
+                    setDeleteFromLike(true);
+                    await deleteLike(existingItem);
+                    // await fetchPrograms(category);
+                    return;
+                }
+            }
+    
+            // If deleteFromSave is false, save the item
+            if (!deleteFromLike) {
+                await likeFromUser(program);
+                // showToast("added for user successfully!", "success")
+                
+            }
+            // Fetch updated list of programs after saving or deleting
+            // await fetchPrograms(category);
+    
+        } catch (error) {
+            showToast('Error occurred during fetch the item', 'error');
+            setIsLoading(false);
+        }
+        setDeleteFromLike(false);
+    }
+
+    // Like From User
+    const likeFromUser = async (program) => {
+
+        try {        
+            const response = await fetch(`http://147.79.101.225:2859/api/like/${program._id}`,{
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                credentials: "include",
+                body: JSON.stringify(program),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to Like item');
+            }
+            showToast('Program liked successfully!', 'success');
+
+            await likeProgram(program);
+    
+        } catch (error) {
+            showToast("Error liking the program", "error");
+        }
+    }
+
+    // Like Program
+    const likeProgram = async (program) => {
+
+        try {
+            const updatedLikes = program.likes + 1;
+        
+            const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
+                ...program,
+                likes: updatedLikes
+            }, 
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            }
+        );
+    
+            if (updateResponse.status === 200 || updateResponse.status === 201) {
+                setAllPrograms((prevPrograms) =>
+                    prevPrograms.map((t) =>
+                        t._id === program._id ? { ...t, likes: updatedLikes } : t
+                    )
+                );
+    
+            }
+    
+        } catch {
+            
+        }
+    };
+
+    // Delete Likes
+    const deleteLike = async (program) => {
+
+        try {
+            const response = await fetch(`http://147.79.101.225:2859/api/like/${program._id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                credentials: "include",
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to like item');
+            }
+
+            const updatedLikes = program.likes - 1;
+        
+            const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
+                ...program,
+                likes: updatedLikes
+            }, 
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            }
+        );
+    
+            if (updateResponse.status === 200 || updateResponse.status === 201) {
+                setAllPrograms((prevPrograms) =>
+                    prevPrograms.map((t) =>
+                        t._id === program._id ? { ...t, likes: updatedLikes } : t
+                    )
+                );
+    
+            }
+
+            showToast('Item deleted from likes successfully!', 'success');
+    
+        
+        } catch (error) {
+            console.error("error is ", error)
+            showToast('Error deleting item from likes', 'error');
+        }
+    }
 
     const [deleteFromSave, setDeleteFromSave] = useState(false);
 
@@ -180,7 +334,7 @@ export default function Program() {
             }
     
             // Fetch updated list of programs
-            await fetchPrograms(category);
+            // await fetchPrograms(category);
     
         } catch {
             showToast('Error occurred during save the item', 'error');
@@ -235,28 +389,27 @@ export default function Program() {
     };
     
     // Function to fetch programs after saving or deleting an item
-    const fetchPrograms = async (category) => {
-        try {
-            const response = await fetch(`http://147.79.101.225:2859/api/programs${category === "All-Categories" ? '' : `/category?category=${category}`}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                },
-                credentials: "include",
-            });
+    // const fetchPrograms = async (category) => {
+    //     try {
+    //         const response = await fetch(`http://147.79.101.225:2859/api/programs/`, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Authorization": `Bearer ${token}`,
+    //             },
+    //             credentials: "include",
+    //         });
     
-            if (!response.ok) {
-                showToast('Failed to fetch programs', 'error');
-            }
+    //         if (!response.ok) {
+    //             showToast('Failed to fetch programs', 'error');
+    //         }
     
-            const data = await response.json();
-            const programs = category === "All-Categories" ? data : data.Programs;
-            setAllPrograms(programs);
-            setIsLoading(false);
-        } catch {
-            showToast('Error fetching programs', 'error');
-        }
-    };
+    //         const data = await response.json();
+    //         setAllPrograms(data);
+    //         setIsLoading(false);
+    //     } catch {
+    //         showToast('Error fetching programs', 'error');
+    //     }
+    // };
 
     // Download Program
     const DownloadProgram = async (programId) => {
@@ -279,44 +432,6 @@ export default function Program() {
             showToast('Error in downloading item', 'error');
         }
     }
-
-    // Like Program
-    const likeProgram = async (program) => {
-        try {
-            const updatedLikes = program.likes + 1;
-        
-            const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
-                ...program,
-                likes: updatedLikes
-            }, 
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-                withCredentials: true,
-            }
-        );
-    
-            if (updateResponse.status === 200 || updateResponse.status === 201) {
-                setAllPrograms((prevPrograms) =>
-                    prevPrograms.map((t) =>
-                        t._id === program._id ? { ...t, likes: updatedLikes } : t
-                    )
-                );
-    
-                showToast("Program liked!", "success");
-            }
-    
-        } catch (error) {
-            console.error("Error occurred during the like request:", error.message);
-            if (error.response) {
-                console.error("Response error status:", error.response.status);
-                console.error("Response error data:", error.response.data);
-            }
-            showToast("Error liking the program", "error");
-        }
-    };
 
     function formatNumber(number) {
         if (number >= 1_000_000) {
@@ -351,22 +466,6 @@ export default function Program() {
 
     const [installationFlag, setInstallationFlag] = useState(false)
 
-    const azkar = new Azkar()
-
-    const [dataZikr, setDataZikr] = useState([]);
-    // const movingZikrRef = useRef(null);
-
-    useEffect(() => {
-        const allAzkar = azkar.getAll()
-        setDataZikr(allAzkar);
-    }, []);
-
-    const [zikrScrollVisible, setZikrScrollVisible] = useState(false)
-
-    const toggleZikrScroll = () => {
-        setZikrScrollVisible(!zikrScrollVisible)
-    }
-
     const [toasts, setToasts] = useState([]);
 
     // Function to show a new toast notification
@@ -380,6 +479,20 @@ export default function Program() {
         }, 6000);
     };
 
+    console.log("all programs ", allPrograms);
+    
+
+    const filteredProgramsByCategory = allPrograms && allPrograms.filter(
+        program => program._id !== programData._id && program.programCategory === programData.programCategory
+    );
+    
+    const programsToDisplay = filteredProgramsByCategory && filteredProgramsByCategory.length > 0 
+        ? filteredProgramsByCategory 
+        : allPrograms.filter(program => program._id !== programData._id); 
+
+        // console.log("programs to display ", programsToDisplay);
+        
+
     if (isLoading) {
         return <p className={style.loading}>Loading, Please wait <span className={style.loader}></span></p>; 
     }  
@@ -392,7 +505,7 @@ export default function Program() {
 
                 <div className="container">
 
-                    <h4><i className="fa-solid fa-house"></i> <i className="fa-solid fa-angle-right"></i> {category} <i className="fa-solid fa-angle-right"></i> autoDESK </h4>
+                    <h4><i className="fa-solid fa-house"></i> <i className="fa-solid fa-angle-right"></i> {category} <i className="fa-solid fa-angle-right"></i> {programData.programName   } </h4>
 
                 </div>
 
@@ -434,7 +547,7 @@ export default function Program() {
                                         
                                         </div>
 
-                                        { programData.description.length > 0 ? (
+                                        { programData && programData.description && programData.description.length > 0 ? (
 
                                             <div className={style.overview}>
 
@@ -472,11 +585,11 @@ export default function Program() {
 
                                 <ul className='nav nav-tabs'>
 
-                                    <li className='nav-item'><button className={`nav-link ${detailsFlag ? 'active' : ''} ${ (Object.values(programData.KeyFeatures).some((value) => value.trim() !== '') || programData.useCase.some((item) => item.trim() !== '')) ? 'd-block' : 'd-none' } `} onClick={ () => {setInstallationFlag(false); setSystemRequirementsFlag(false); setDetailsFlag(true)} } >details</button></li>
+                                    <li className='nav-item'><button className={`nav-link ${detailsFlag ? 'active' : ''} ${ programData && (Object.values(programData.KeyFeatures).some((value) => value.trim() !== '') || programData.useCase.some((item) => item.trim() !== '')) ? 'd-block' : 'd-none' } `} onClick={ () => {setInstallationFlag(false); setSystemRequirementsFlag(false); setDetailsFlag(true)} } >details</button></li>
 
-                                    <li className='nav-item'><button className={`nav-link ${systemRequirementsFlag ? 'active' : ''} ${ (Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '') || Object.values(programData.MaximumRequirements).some((value) => value.trim() !== '') ) ? 'd-block' : 'd-none' } `} onClick={ () => {setDetailsFlag(false); setInstallationFlag(false); setSystemRequirementsFlag(true)} } >system requirements</button></li>
+                                    <li className='nav-item'><button className={`nav-link ${systemRequirementsFlag ? 'active' : ''} ${ programData && (Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '') || Object.values(programData.MaximumRequirements).some((value) => value.trim() !== '') ) ? 'd-block' : 'd-none' } `} onClick={ () => {setDetailsFlag(false); setInstallationFlag(false); setSystemRequirementsFlag(true)} } >system requirements</button></li>
 
-                                    <li className='nav-item'><button className={`nav-link ${installationFlag ? 'active' : ''} ${ programData.Installation.some((item) => item.trim() !== '')  ? 'd-block' : 'd-none' } `} onClick={ () => {setDetailsFlag(false); setSystemRequirementsFlag(false); setInstallationFlag(true)} } >Installation</button></li>
+                                    <li className='nav-item'><button className={`nav-link ${installationFlag ? 'active' : ''} ${ programData && programData.Installation.some((item) => item.trim() !== '')  ? 'd-block' : 'd-none' } `} onClick={ () => {setDetailsFlag(false); setSystemRequirementsFlag(false); setInstallationFlag(true)} } >Installation</button></li>
 
                                 </ul>
 
@@ -748,7 +861,7 @@ export default function Program() {
 
                 <div className="container">
 
-                    <h4><i className="fa-solid fa-ghost"></i> <i className="fa-solid fa-angle-right"></i> related Programs </h4>
+                    <h4 className={`${ allPrograms && allPrograms.length <= 1 ? 'd-none' : 'd-inline-block'}`}><i className="fa-solid fa-ghost"></i> <i className="fa-solid fa-angle-right"></i> { allPrograms.find(program => program.programCategory !== category ) ? "other programs" : 'related Programs' } </h4>
 
                 </div>
 
@@ -758,7 +871,7 @@ export default function Program() {
 
                 <div className="container">
 
-                    { allPrograms.length <= 1 ? 
+                    { programsToDisplay && programsToDisplay.length < 1 ? 
                     
                         <p className={style.fullEmpty}><span>There is no another programs right now! <br></br> Try again in another time</span></p>
                     
@@ -766,9 +879,15 @@ export default function Program() {
 
                                 <div className="row gy-2">
 
-                                    { allPrograms && allPrograms.map( (program, index) => {
+                                    { programsToDisplay && programsToDisplay.map( (program) => {
 
-                                        if ( program._id !== programData._id ) {
+if (!program._id) {
+    console.warn('Missing _id for program:', program);
+    return null;
+}
+
+                                            console.log("every program details ", program);
+                                            
 
                                             const sizeInBytes = program.size;
                                             let sizeFormatted = '';
@@ -787,6 +906,8 @@ export default function Program() {
                                                     sizeFormatted = (sizeInBytes / 1024).toFixed(2) + ' KB';
                                                 }
                                             }
+
+                                            const isLiked = allItemsLiked.some(item => item.programId._id === program._id);
                                         
                                             return (
 
@@ -848,43 +969,27 @@ export default function Program() {
     
                                                         <div className={style.programDetails}>
     
-                                                            <button  onClick={ () => likeProgram(program) } className={style.like}>
-                                                            
-                                                                <span className={style.icon}>
-                                                            
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className={`${style.bi} ${style.biHeart}`} viewBox="0 0 16 16">
-    
-                                                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-    
-                                                                </svg>
-    
-                                                                </span>
-    
-                                                                <span className={style.title}>i love it</span>
-    
-                                                            </button>
-    
-                                                            {/* <div className={`${style.likeButton}`}>
-                                                            
+                                                            <div onClick={ (e) => {showLikes(e,program)} } className={`${ !isLiked ? style.removeLikeButton : style.likeButton }`}>
+                                                                
                                                                 <input className={style.on} id="heart" type="checkbox" />
-                                                            
+
                                                                 <label className={style.likeLabel} htmlFor="heart">
-                                                                
-                                                                <svg className={style.likeIcon} fillRule="nonzero" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                
-                                                                    <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-                                                                
-                                                                </svg>
-                                                            
-                                                                <span className={style.likeText}>Likes</span>
-                                                            
+
+                                                                    <svg className={style.likeIcon} fillRule="nonzero" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+                                                                        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+
+                                                                    </svg>
+
+                                                                    <span className={style.likeText}>Likes</span>
+
                                                                 </label>
-                                                            
-                                                                <span className={`${style.likeCount} ${style.one}`}>68</span>
-                                                            
-                                                                <span className={`${style.likeCount} ${style.two}`}>69</span>
-                                                            
-                                                            </div> */}
+
+                                                                <span className={`${style.likeCount} ${style.one}`}>{program.likes}</span>
+
+                                                                <span className={`${style.likeCount} ${style.two}`}>{ !isLiked ? program.likes - 1 : program.likes + 1}</span>
+                                                        
+                                                            </div>
     
                                                             <div className={style.viewSave}>
     
@@ -904,7 +1009,7 @@ export default function Program() {
     
                                             )
                                         
-                                        }
+                                        // }
 
                                     } ) }
 
@@ -935,6 +1040,8 @@ export default function Program() {
                 ))}
             
             </div>
+
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
 
             <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
                 <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>

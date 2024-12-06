@@ -819,6 +819,111 @@
             ~ .likeLabel {
             
                 .likeIcon {
+                    fill: #505050;
+                    animation: enlarge 0.2s ease-out 1;
+                    transition: all 0.2s ease-out;
+                    -webkit-animation: enlarge 0.2s ease-out 1;
+                    -webkit-transition: all 0.2s ease-out;
+                    -moz-transition: all 0.2s ease-out;
+                    -ms-transition: all 0.2s ease-out;
+                    -o-transition: all 0.2s ease-out;
+                }
+            }
+        
+            ~ .two {
+                transform: translateX(0);
+                color: #fcfcfc;
+                -webkit-transform: translateX(0);
+                -moz-transform: translateX(0);
+                -ms-transform: translateX(0);
+                -o-transform: translateX(0);
+            }
+        
+            ~ .one {
+                transform: translateY(-40px);
+                -webkit-transform: translateY(-40px);
+                -moz-transform: translateY(-40px);
+                -ms-transform: translateY(-40px);
+                -o-transform: translateY(-40px);
+            }
+        }
+    }
+
+    .likeLabel {
+        width: 70%;
+        height: 100%;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .likeIcon {
+        fill: #fc4e4e;
+        height: 20px;
+        width: 20px;
+    }
+
+    .likeText {
+        color: #fcfcfc;
+        font-size: 16px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .likeCount {
+        position: absolute;
+        right: 0;
+        width: 30%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #717070;
+        font-size: 13px;
+        border-left: 2px solid #4e4e4e;
+        transition: all 0.5s ease-out;
+        -webkit-transition: all 0.5s ease-out;
+        -moz-transition: all 0.5s ease-out;
+        -ms-transition: all 0.5s ease-out;
+        -o-transition: all 0.5s ease-out;
+    }
+
+    .two {
+        transform: translateY(40px);
+        -webkit-transform: translateY(40px);
+        -moz-transform: translateY(40px);
+        -ms-transform: translateY(40px);
+        -o-transform: translateY(40px);
+    }
+}
+
+.removeLikeButton {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    height: 40px;
+    width: 110px;
+    border-radius: 16px;
+    border: none;
+    background-color: #1d1d1d;
+    overflow: hidden;
+    box-shadow: inset -2px -2px 5px rgba(255, 255, 255, 0.2),        
+        inset 2px 2px 5px rgba(0, 0, 0, 0.1),        
+        4px 4px 10px rgba(0, 0, 0, 0.4),       
+        -2px -2px 8px rgba(255, 255, 255, 0.1);
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    -ms-border-radius: 16px;
+    -o-border-radius: 16px;
+
+    .on {
+        display: none;
+    
+        &:checked {
+        
+            ~ .likeLabel {
+            
+                .likeIcon {
                     fill: #fc4e4e;
                     animation: enlarge 0.2s ease-out 1;
                     transition: all 0.2s ease-out;
@@ -1798,8 +1903,7 @@ input:checked + .slider:before {
         }
     }
 
-}    
-
+}  
 
 @keyframes rotation {
     0% {
@@ -1809,6 +1913,63 @@ input:checked + .slider:before {
         transform: rotate(360deg);
     }
 } 
+
+.loadingContainer {
+    width: 12px;
+    transform-origin: center;
+    animation: rotate4 2s linear infinite;
+    fill: transparent;
+    border: 3px solid black;
+    border-bottom: 3px solid transparent;
+    border-radius: 32px;
+    -webkit-animation: rotate4 2s linear infinite;
+    -webkit-border-radius: 32px;
+    -moz-border-radius: 32px;
+    -ms-border-radius: 32px;
+    -o-border-radius: 32px;
+
+    .loading {
+        fill: none;
+        stroke: #106ee8;
+        stroke-width: 10;
+        stroke-dasharray: 2, 200;
+        stroke-dashoffset: 0;
+        stroke-linecap: round;
+        animation: dash4 1.5s ease-in-out infinite;
+        -webkit-animation: dash4 1.5s ease-in-out infinite;
+}
+}
+
+.verseSearh {
+    font-size: 50px;
+}
+
+@keyframes rotate4 {
+    100% {
+        transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+    }
+}
+
+@keyframes dash4 {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 90, 200;
+        stroke-dashoffset: -35px;
+    }
+
+    100% {
+        stroke-dashoffset: -125px;
+    }
+}
+
 
 // Styles for modal backdrop
 .modalBackdrop {

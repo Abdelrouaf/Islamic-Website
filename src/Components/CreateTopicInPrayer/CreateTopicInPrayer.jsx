@@ -216,7 +216,7 @@ const saveData = async () => {
                         <div className="row gy-2 align-items-center justify-content-between mb-3">
                             <div className="col-2">
                                 <div className={layout.inputTitle}>
-                                    <h4>Image</h4>
+                                    <h4><span style={{color: 'red'}}>* </span>Image</h4>
                                 </div>
                             </div>
                             <div className="col-sm-12 col-md-10">
@@ -248,7 +248,7 @@ const saveData = async () => {
                     
                             <div className={layout.inputTitle}>
                             
-                                <h4>topic title</h4>
+                                <h4><span style={{color: 'red'}}>* </span>topic title</h4>
                             
                             </div>
                         
@@ -266,7 +266,7 @@ const saveData = async () => {
                         
                             <div className={layout.inputTitle}>
                             
-                                <h4>topic description</h4>
+                                <h4><span style={{color: 'red'}}>* </span>topic description</h4>
                             
                             </div>
                         

@@ -400,7 +400,7 @@ export default function UpdateProgram() {
             if (response.ok) {
                 showToast("Program deleted successfully!", "success")
                 setTimeout(() => {
-                    navigate(-1);
+                    navigate('../dashboard');
                 }, 6000);
             } else {
                 showToast("Failed to delete program.", "error")

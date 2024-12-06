@@ -193,7 +193,7 @@ const saveData = async () => {
                     
                             <div className={layout.inputTitle}>
                             
-                                <h4>topic title</h4>
+                                <h4><span style={{color: 'red'}}>* </span>topic title</h4>
                             
                             </div>
                         
@@ -211,7 +211,7 @@ const saveData = async () => {
                         
                             <div className={layout.inputTitle}>
                             
-                                <h4>topic description</h4>
+                                <h4><span style={{color: 'red'}}>* </span>topic description</h4>
                             
                             </div>
                         
@@ -257,7 +257,7 @@ const saveData = async () => {
                         
                             <div className={layout.inputTitle}>
                             
-                                <h4>video url</h4>
+                                <h4><span style={{color: 'red'}}>* </span>video url</h4>
                             
                             </div>
                         
