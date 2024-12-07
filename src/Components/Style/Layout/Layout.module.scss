@@ -787,7 +787,8 @@
   cursor: pointer;
   display: flex;
   height: 40px;
-  width: 110px;
+  // width: 110px;
+  width: 30%;
   border-radius: 16px;
   border: none;
   background-color: #1d1d1d;
@@ -846,7 +847,7 @@
   }
 
   .likeIcon {
-    fill: #fc4e4e;
+    fill: #505050;
     height: 20px;
     width: 20px;
   }
@@ -889,7 +890,8 @@
   cursor: pointer;
   display: flex;
   height: 40px;
-  width: 110px;
+  // width: 110px;
+  width: 30%;
   border-radius: 16px;
   border: none;
   background-color: #1d1d1d;
@@ -908,7 +910,7 @@
     &:checked {
       ~ .likeLabel {
         .likeIcon {
-          fill: #fc4e4e;
+          fill: #505050;
           animation: enlarge 0.2s ease-out 1;
           transition: all 0.2s ease-out;
           -webkit-animation: enlarge 0.2s ease-out 1;
@@ -948,7 +950,7 @@
   }
 
   .likeIcon {
-    fill: #505050;
+    fill: #fc4e4e !important;
     height: 20px;
     width: 20px;
   }
@@ -1799,8 +1801,21 @@ input:checked + .slider:before {
   }
 }
 
+.notranslate {
+  translate: none !important;
+  unicode-bidi: isolate;
+}
+
+i {
+  margin-inline: 5px !important;
+}
+
+
 .loading {
   position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 100%;
   height: 100%;
   padding: 30px 20px;
@@ -1809,6 +1824,8 @@ input:checked + .slider:before {
   align-items: center;
   justify-content: center;
   margin-block: 0;
+  background: white;
+  z-index: 99999;
 
   .loader {
     margin-left: 20px;
@@ -2151,9 +2168,11 @@ input:checked + .slider:before {
       justify-content: space-between;
       gap: 5px;
       margin-right: 0;
+      direction: ltr;
     }
 
     .programDetails {
+      direction: ltr;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -2210,6 +2229,121 @@ iframe {
   object-fit: cover; /* Optional: Ensures the video fits within the specified dimensions */
 }
 
+// Moving zakr
+.showToggle {
+  position: fixed;
+  right: 5px;
+  bottom: 0;
+  padding: 0 10px;
+  background: #040400;
+  color: beige;
+  text-transform: capitalize;
+  direction: ltr;
+  font-size: 14px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  transition: all .5s ease-in-out;
+  cursor: pointer;
+  z-index: 1000;
+  -webkit-transition: all .5s ease-in-out;
+  -moz-transition: all .5s ease-in-out;
+  -ms-transition: all .5s ease-in-out;
+  -o-transition: all .5s ease-in-out;
+}
+
+.zikrScroll {
+  display: flex;
+  direction: rtl;
+  white-space: nowrap;
+  background-color: rgba($color: #000000, $alpha: .5);
+  padding: 15px;
+  position: fixed;
+  bottom: 0;
+  height: auto;
+  width: 100%;
+  z-index: 50;
+  
+  .hideToggle {
+      position: absolute;
+      right: 5px;
+      top: -20px;
+      padding: 0 10px;
+      background: #040400;
+      color: beige;
+      text-transform: capitalize;
+      direction: ltr;
+      font-size: 14px;
+      border-radius: 4px;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      -ms-border-radius: 4px;
+      -o-border-radius: 4px;
+      transition: all .5s ease-in-out;
+      cursor: pointer;
+      z-index: 1000;
+      -webkit-transition: all .5s ease-in-out;
+      -moz-transition: all .5s ease-in-out;
+      -ms-transition: all .5s ease-in-out;
+      -o-transition: all .5s ease-in-out;
+}
+
+  .scrollContent {
+      display: flex;
+      animation: movingZikr 10000s 0s linear infinite;
+      -webkit-animation: movingZikr 10000s 0s linear infinite;
+  }
+  
+  .box {
+      margin-bottom: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      h4 {
+          display: inline;
+          padding: 10px 20px;
+          margin: 0 5px;
+          background-color: rgb(44, 67, 79);
+          color: $whiteColor;
+          text-align: center;
+          border-radius: 5px;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          -ms-border-radius: 5px;
+          -o-border-radius: 5px;
+          width: fit-content;
+      }
+  }
+
+  ul {
+    margin-bottom: 0;
+  
+      li {
+          display: inline;
+      
+          p {
+              display: inline;
+              background-color: $whiteColor;
+              color: $blackColor;
+              text-align: center;
+              font-size: 25px;
+              border-radius: 5px;
+              -webkit-border-radius: 5px;
+              -moz-border-radius: 5px;
+              -ms-border-radius: 5px;
+              -o-border-radius: 5px;
+              padding: 10px 20px;
+              margin: 5px;
+          }
+      }
+  }
+}
+
 @media (max-width: 1020px) {
   .listMenu {
     display: flex;
@@ -2250,5 +2384,25 @@ iframe {
 
   .tast {
     width: 280px !important;
+  }
+  .likeButton {
+    width: 50%;
+  }
+
+  .removeLikeButton {
+    width: 50%;
+  }
+
+  .zikrScroll {
+    padding: 10px !important;
+
+    h4 {
+      padding: 5px 8px !important;
+    }
+  
+    p {
+      font-size: 18px !important;
+      padding: 5px 10px !important;
+    }
   }
 }

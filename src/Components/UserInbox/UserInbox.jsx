@@ -24,6 +24,8 @@ export default function UserInbox() {
         messages: []
     })
 
+    const [loading, setLoading] = useState(true)
+
     useEffect(() => {
         async function getData() {
             try {
@@ -54,6 +56,8 @@ export default function UserInbox() {
 
             } catch (error) {
                 console.error("Error occurred during the fetch:", error.message); 
+            } finally {
+                setLoading(false)
             }
         }
     
@@ -144,6 +148,8 @@ export default function UserInbox() {
     
         } catch (error) {
             console.error('Error sending message:', error.message);  // Log error
+        } finally {
+            setLoading(false)
         }
 
         setRun( (prevRun) => prevRun + 1 )
@@ -190,6 +196,18 @@ export default function UserInbox() {
             const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
             return `${formattedHours}:${formattedMinutes} ${ampm}`;
     };
+
+    if (loading) {
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>
+    }
 
     return (
     

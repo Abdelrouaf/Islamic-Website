@@ -342,6 +342,18 @@ export default function Sign({ onClose }) {
         }, 6000); 
     };
 
+    if (isSubmittingSignIn || isSubmittingSignUp) {
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>
+    }
+
     return (
     
         <>
@@ -400,7 +412,7 @@ export default function Sign({ onClose }) {
 
                                                     <Link to='../forget-password' className={style.forgetPassword}>forget your password?</Link>
 
-                                                    <Link to='../verify-account' className={style.activateAccount}>Activate your account</Link>
+                                                    {/* <Link to='../verify-account' className={style.activateAccount}>Activate your account</Link> */}
 
                                                 </div>
 

@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import './App.css';
 import layout from './Components/Style/Base/Base.scss';
@@ -111,6 +111,7 @@ const AzkarDetails = React.lazy(() => import('./Components/AzkarDetails/AzkarDet
 const AzanTiming = React.lazy(() => import('./Components/AzanTiming/AzanTiming'));
 const Sign = React.lazy(() => import('./Components/Sign/Sign'));
 const ChangePassword = React.lazy(() => import('./Components/ChangePassword/ChangePassword'));
+const ForgetPassword = React.lazy( () => import('./Components/ForgetPassword/ForgetPassword') )
 const Program = React.lazy(() => import('./Components/Program/Program'));
 const ProgramsLayout = React.lazy(() => import('./Components/ProgramsLayout/ProgramsLayout'));
 const ProgramsHome = React.lazy(() => import('./Components/ProgramsHome/ProgramsHome'));
@@ -130,10 +131,52 @@ const Chat = React.lazy(() => import('./Components/Chat/Chat'));
 const Dashboard = React.lazy(() => import('./Components/Dashboard/Dashboard'));
 
 function App() {
+
+  // Function to set page direction based on the language
+  const setPageDirection = () => {
+    const htmlLang = document.documentElement.getAttribute('lang');
+    if (htmlLang === 'ar') {
+      document.documentElement.setAttribute('dir', 'rtl');
+      document.documentElement.style.textAlign = 'right';
+    } else {
+      document.documentElement.setAttribute('dir', 'ltr');
+      document.documentElement.style.textAlign = 'left';
+    }
+  };
+
+  useEffect(() => {
+    // Initial direction setting
+    setPageDirection();
+
+    // Observe changes in the <html> lang attribute
+    const observer = new MutationObserver(() => {
+      setPageDirection();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['lang'],
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+    observer.observe(document.body, { childList: true, subtree: true });
+
+  }, []);
+
   return (
       <div>
 
-<Suspense fallback={ <p className={layout.loading}>Loading, Please wait <span className={layout.loader}></span></p>}>
+<Suspense fallback={       <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>}>
         <BrowserRouter>
 
           <ScrollToTop />
@@ -229,7 +272,11 @@ function App() {
                 <Sign />
               </>} />
               {/* <Route path='verify-account' element={<VerifyAccount />} /> */}
-              {/* <Route path='forget-password' element={<ForgetPassword />} /> */}
+              <Route path='forget-password' element={<>{/* <Helmet>
+                  <title>Change Password - YourSiteName</title>
+                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
+                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
+                </Helmet> */}<ForgetPassword /></>} />
               <Route path='reset-password' element={<>
                 {/* <Helmet>
                   <title>Change Password - YourSiteName</title>

@@ -16,43 +16,58 @@ export default function UserProfile() {
 
     const [allSavedPrograms, setAllSavedPrograms] = useState([])
 
-    useEffect(() => {
-        async function getData() {
-            try {    
-                const response = await fetch(`http://147.79.101.225:2859/api/saveitem`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${userToken}`
-                    },
-                    credentials: "include"
-                });
-        
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status`);
-                }
+    const [allItemsLiked, setAllItemsLiked] = useState([])
+
+    async function getData() {
+        try {    
+            const response = await fetch(`http://147.79.101.225:2859/api/saveitem`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`
+                },
+                credentials: "include"
+            });
     
-                const data = await response.json();
-
-                setAllSavedPrograms(data.savedItems)
-                setIsLoading(false);
-
-            } catch (error) {
-                console.error("Error occurred during the fetch:", error.message);
-                setIsLoading(false);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status`);
             }
+
+            const data = await response.json();
+
+            setAllSavedPrograms(data.savedItems)
+            setIsLoading(false);
+
+        } catch (error) {
+            console.error("Error occurred during the fetch:", error.message);
+            setIsLoading(false);
         }
+    }
+
+    const fetchAllLikedPrograms = async () => {
+        try {
+            const checkResponse = await fetch(`http://147.79.101.225:2859/api/like/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                },
+                credentials: "include",
+            });
+        
+            if (checkResponse.ok) {
+                const allItems = await checkResponse.json();
+                const totalLiked = allItems.MyLikes;
+                setAllItemsLiked(totalLiked)
+            }
+        
+        } catch {
+            setIsLoading(false)
+        }
+    }
+
+    useEffect(() => {
     
         getData();
-
-        // Set the interval to refresh the data every 3 seconds
-        const intervalId = setInterval(() => {
-            getData();
-        }, 1000);
-
-        // Cleanup the interval when the component unmounts or `run` changes
-        return () => {
-            clearInterval(intervalId);
-        };
+        fetchAllLikedPrograms()
 
     }, [run]);
 
@@ -64,11 +79,8 @@ export default function UserProfile() {
         isAdmin: false
     })
 
-    const location = useLocation();
-
     const user = JSON.parse(localStorage.getItem('loggedInUser'))
 
-    
     useEffect( () => {
         setUserData({
             _id: user.details._id,
@@ -79,87 +91,117 @@ export default function UserProfile() {
         })
     },[] )
 
-    // Unsave Program
-    const UnsaveProgram = async (saveId) => {
-
+    // Save or delete the program
+    const saveProgram = async (program) => {
         try {    
-            const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${saveId}`, {
-                method: "DELETE",
+            const checkResponse = await fetch(`http://147.79.101.225:2859/api/saveitem/`, {
+                method: "GET",
                 headers: {
                     "Authorization": `Bearer ${userToken}`,
                 },
                 credentials: "include",
             });
-        
-            if (!response.ok) {
-                throw new Error(`HTTP error! status`);
-            }
     
-            const data = await response.json();
-
-            showToast('Item deleted successfully!', 'success')
-            
+            if (checkResponse.ok) {
+                const allItems = await checkResponse.json();
+                const totalSaved = allItems.savedItems;
+                const existingItem = totalSaved.find(item => item.programId._id === program._id);
     
-                const response2 = await fetch(`http://147.79.101.225:2859/api/saveitem`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${userToken}`
-                    },
-                    credentials: "include"
-                });
-        
-                if (!response2.ok) {
-                    throw new Error(`HTTP error! status`);
+                if (existingItem) {
+                    showToast('Item deleted from saved successfully!', 'success');
+                    return;
                 }
+            }
+
+            getData();
+            // fetchAllLikedPrograms()
+
+            showToast('Item saved successfully!', 'success');
     
-                const data2 = await response2.json();
-    
-                setAllSavedPrograms(data2.savedItems)
-                setIsLoading(false);
     
         } catch (error) {
-            showToast('Error occurred during delete the item', 'error')
+            showToast('Error occurred during save the item', 'error');
             setIsLoading(false);
+        } finally {
+            setIsLoading(false)
         }
-    } 
+    }
 
-    // Like Program
-    const likeProgram = async (program) => {
+    // Function to save the item
+    const saveItem = async (program) => {
+    
         try {
-            const updatedLikes = program.likes + 1;
-        
-            const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
-                ...program,
-                likes: updatedLikes
-            }, 
-            {
+            const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${program._id}`, {
+                method: "POST",
                 headers: {
                     "Authorization": `Bearer ${userToken}`,
-                    "Content-Type": "application/json",
+                    'Content-Type': 'multipart/form-data',
                 },
-                withCredentials: true,
-            }
-        );
+                credentials: "include",
+                // body: JSON.stringify(program),
+            });
     
-            if (updateResponse.status === 200 || updateResponse.status === 201) {
-                setAllSavedPrograms((prevPrograms) =>
-                    prevPrograms.map((t) =>
-                        t._id === program._id ? { ...t, likes: updatedLikes } : t
-                    )
-                );
-    
-                showToast("Program liked!", "success");
+            if (!response.ok) {
+                throw new Error('Failed to save item');
             }
+
+            console.log(response.status);
+            
+
+            await saveProgram(program)
+    
+            // Fetch updated programs after saving the item
+            // await fetchPrograms(category);
     
         } catch (error) {
-            console.error("Error occurred during the like request:", error.message);
-            if (error.response) {
-                console.error("Response error status:", error.response.status);
-                console.error("Response error data:", error.response.data);
-            }
-            showToast("Error liking the program", "error");
+            showToast('Error saving item', 'error');
+        } finally {
+            setIsLoading(false)
         }
     };
+
+    let isLiking = false;
+
+    // Like From User
+    const likeFromUser = async (program) => {
+
+        if (isLiking) return;
+
+        isLiking = true;
+
+        try {        
+            const response = await fetch(`http://147.79.101.225:2859/api/like/${program._id}`,{
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                    'Content-Type': 'application/json',
+                },
+                credentials: "include",
+                // body: JSON.stringify(program),
+            });
+    
+            if (!response.ok) {
+                // Log the response status and status text for debugging
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                const errorDetails = await response.json().catch(() => null); // Handle non-JSON error responses
+                console.error("Error details:", errorDetails);
+                throw new Error('Failed to Like item');
+            }
+            
+            const newProgram = await response.json();
+            const newProgramMessage = JSON.stringify(newProgram);
+            showToast(newProgram.message, 'success')
+
+            getData();
+            fetchAllLikedPrograms()
+    
+        } catch {
+            showToast("Error liking the program", "error");
+        } finally {
+            isLiking = false;  // Reset the flag
+            setIsLoading(false)
+        }
+    }
 
     function formatNumber(number) {
         if (number >= 1_000_000) {
@@ -184,7 +226,15 @@ export default function UserProfile() {
     };
 
     if (isLoading) {
-        return <p className={style.loading}>Loading, Please wait <span className={style.loader}></span></p>; 
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>; 
     }  
 
     return (
@@ -303,7 +353,7 @@ export default function UserProfile() {
                                                         
                                                         </Link>
 
-                                                        <button onClick={ () => UnsaveProgram(saved._id) } className={style.bookmarkBtn}>
+                                                        <button onClick={ () => saveItem(saved.programId) } className={style.bookmarkBtn}>
                                                         
                                                             <span className={style.IconContainer}>
                                                             
@@ -326,49 +376,31 @@ export default function UserProfile() {
 
                                                     <div className={style.programDetails}>
 
-                                                        <button onClick={ () => likeProgram(saved.programId) } className={style.like}>
+                                                    <div onClick={ () => {likeFromUser(saved.programId)} } className={`${ Array.isArray(allItemsLiked) && allItemsLiked.some(item => item.programId?._id === saved.programId._id) ? style.removeLikeButton : style.likeButton }`}>
                                                         
-                                                            <span className={style.icon}>
-                                                        
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className={`${style.bi} ${style.biHeart}`} viewBox="0 0 16 16">
+                                                        <input className={style.on} id="heart" type="checkbox" />
 
-                                                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                                                        <label className={style.likeLabel} htmlFor="heart">
 
-                                                            </svg>
-
-                                                            </span>
-
-                                                            <span className={style.title}>i love it</span>
-
-                                                        </button>
-
-                                                        {/* <div className={`${style.likeButton}`}>
-                                                        
-                                                            <input className={style.on} id="heart" type="checkbox" />
-                                                        
-                                                            <label className={style.likeLabel} htmlFor="heart">
-                                                            
                                                             <svg className={style.likeIcon} fillRule="nonzero" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                            
+
                                                                 <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
-                                                            
+
                                                             </svg>
-                                                        
+
                                                             <span className={style.likeText}>Likes</span>
-                                                        
-                                                            </label>
-                                                        
-                                                            <span className={`${style.likeCount} ${style.one}`}>68</span>
-                                                        
-                                                            <span className={`${style.likeCount} ${style.two}`}>69</span>
-                                                        
-                                                        </div> */}
+
+                                                        </label>
+
+                                                        <span className={`${style.likeCount} ${style.one}`}> {formatNumber(saved.programId.likes)}</span>
+
+                                                        <span className={`${style.likeCount} ${style.two}`}>{formatNumber(saved.programId.likes)}</span>
+
+                                                    </div>
 
                                                         <div className={style.viewSave}>
 
                                                             <span className={style.views}>{formatNumber(saved.programId.views)} views</span>
-
-                                                            <span><i className="fa-regular fa-heart"></i> {saved.programId.likes}</span>
 
                                                             <span className={style.Saved}><i className="fa-regular fa-bookmark"></i> {formatNumber(saved.programId.saved)} </span>
 

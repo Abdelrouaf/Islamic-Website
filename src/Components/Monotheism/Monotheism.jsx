@@ -10,6 +10,21 @@ import "react-quill/dist/quill.bubble.css";
 import { Azkar } from "islam.js";
 
 export default function Monotheism() {
+
+  const [isRTL, setIsRTL] = useState(false);
+
+  // Function to detect the language and set direction
+  const detectLanguage = () => {
+    // Example: Check if the current language is Arabic
+    const currentLang = document.documentElement.lang || "en";
+    setIsRTL(currentLang === "ar"); // Adjust based on actual language detection logic
+  };
+
+   // Run detection on mount
+   useEffect(() => {
+    detectLanguage();
+  }, []);
+
   const azkar = new Azkar();
 
   const [dataZikr, setDataZikr] = useState([]);
@@ -32,6 +47,8 @@ export default function Monotheism() {
 
   const mostLikedRef = useRef(null);
 
+  const [loading, setLoading] = useState(true)
+
   const fetchData = async () => {
     try {
       const response = await fetch(
@@ -46,7 +63,11 @@ export default function Monotheism() {
       });
 
       setLikes(initialLikes);
-    } catch {}
+    } catch {
+
+    } finally {
+      setLoading(false)
+    }
   };
 
   useEffect(() => {
@@ -163,6 +184,18 @@ export default function Monotheism() {
     visible: { opacity: 1, y: 0, transition: { duration: 1 } },
   };
 
+  if (loading) {
+    return  <div id="page">
+    <div id="container">
+      <div id="ring" />
+      <div id="ring" />
+      <div id="ring" />
+      <div id="ring" />
+      <div id="h3">loading</div>
+    </div>
+  </div>
+  }
+
   return (
     <div className={`${style.blogSection} ${style.section}`}>
       <div
@@ -225,7 +258,7 @@ export default function Monotheism() {
                   </div>
 
                   {topic.surah ? (
-                    <div className={style.ayat}>
+                    <div className={`${style.ayat} ${style.notranslate}`} translate="no">
                       <span className={style.enSurah}>
                         {" "}
                         <span className={style.basmala}>

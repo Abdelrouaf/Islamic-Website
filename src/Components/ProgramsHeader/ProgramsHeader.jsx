@@ -9,6 +9,21 @@ import style from './ProgramsHeader.module.scss'
 
 export default function ProgramsHeader() {
 
+    const [isRTL, setIsRTL] = useState(false);
+
+    // Function to detect the language and set direction
+    const detectLanguage = () => {
+      // Example: Check if the current language is Arabic
+      const currentLang = document.documentElement.lang || "en";
+      setIsRTL(currentLang === "ar"); // Adjust based on actual language detection logic
+    };
+  
+     // Run detection on mount
+     useEffect(() => {
+      detectLanguage();
+    }, []);
+
+
     // change Navbar color when scrolling down
     const [navbarColor, setNavbarColor] = useState(false)
     const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -18,17 +33,24 @@ export default function ProgramsHeader() {
         setIsNavbarOpen(prevState => !prevState);
     };
 
-    function changeNavbarColor() {
-        if(window.scrollY >= 90) {
-            setNavbarColor(true)
-            setHeaderPosition(true)
-        } else {
-            setNavbarColor(false)
-            setHeaderPosition(false)
-        }
-    }
+    useEffect(() => {
+        const changeNavbarColor = () => {
+            if (window.scrollY >= 90) {
+                setNavbarColor(true);
+                setHeaderPosition(true);
+            } else {
+                setNavbarColor(false);
+                setHeaderPosition(false);
+            }
+        };
 
-    window.addEventListener("scroll", changeNavbarColor)
+        window.addEventListener("scroll", changeNavbarColor);
+
+        // Cleanup function to remove the event listener when the component unmounts
+        return () => {
+            window.removeEventListener("scroll", changeNavbarColor);
+        };
+    }, []); 
 
     const countryData = {
         EG: { name: 'Egypt', capital: 'Cairo' },
@@ -210,9 +232,42 @@ export default function ProgramsHeader() {
         };
     }, []);
 
+    const menuRef = useRef(null)
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsNavbarOpen(false)
+            }
+        };
+
+        const handleScroll = () => {
+            setIsNavbarOpen(false);
+          };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
+    if (loading) {
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>
+    }
+
     return (
     
-        <header className={`${style.header} ${headerPosition ? 'position-fixed' : 'position-static'}`}>
+        <header className={`${style.header} ${headerPosition ? 'position-fixed' : 'position-static'}`} style={{direction: 'ltr'}}>
         
             <div className={style.upperHeader}>
 
@@ -292,7 +347,7 @@ export default function ProgramsHeader() {
 
             </div>
 
-            <nav className={navbarColor ? `${style.navbar} navbar navbar-expand-lg bg-white` : `${style.navbar} navbar navbar-expand-lg bg-transparent` }>
+            <nav className={navbarColor ? `${style.navbar} navbar navbar-expand-lg bg-white` : `${style.navbar} navbar navbar-expand-lg bg-transparent` } ref={menuRef}>
             
                 <div className="container">
                 
@@ -350,43 +405,47 @@ export default function ProgramsHeader() {
                         
                             </ul>
 
-                            <div className={style.right}>
+                            <div className={style.right} style={{direction: 'rtl'}}>
 
-                                <div ref={profileUserRef} onClick={ () => setIsProfileUserActive(prevState => !prevState) } className={style.profileUser}>
+                                <Link to='user' onClick={toggleNavbar}>
+                                
+                                    <div className={style.profileUser}>
 
-                                    <img src={profileUser} width={40} alt="profile-user" loading='lazy' />
+    <img src={profileUser} width={40} alt="profile-user" loading='lazy' />
 
-                                    <ul className={`${isProfileUserActive ? style.active : ''}`}>
+    {/* <ul className={`${isProfileUserActive ? style.active : ''}`}>
 
-                                        <li><Link  to='user'><i className="fa-regular fa-user"></i> Profile</Link></li>
+        <li><Link  to='user'><i className="fa-regular fa-user"></i> Profile</Link></li>
 
-                                        <li><Link to='user/save-items'><i className="fa-regular fa-bookmark"></i> Saved items</Link></li>
+        <li><Link to='user/save-items'><i className="fa-regular fa-bookmark"></i> Saved items</Link></li>
 
-                                        <li><Link to='user/inbox'><i className="fa-regular fa-comment"></i> inbox</Link></li>
+        <li><Link to='user/inbox'><i className="fa-regular fa-comment"></i> inbox</Link></li>
 
-                                        <li>
-                                        
-                                            <button type='submit' onClick={logoutUser} className={style.logoutBtn}>
-                                        
-                                                <div className={style.sign}>
-                                                
-                                                    <svg viewBox="0 0 512 512">
-                                                    
-                                                        <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
-                                                    
-                                                    </svg>
-                                                
-                                                </div>
-                                        
-                                                <div className={style.textBtn}>Logout</div>
-                                        
-                                            </button>
-                                        
-                                        </li>
+        <li>
+        
+            <button type='submit' onClick={logoutUser} className={style.logoutBtn}>
+        
+                <div className={style.sign}>
+                
+                    <svg viewBox="0 0 512 512">
+                    
+                        <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+                    
+                    </svg>
+                
+                </div>
+        
+                <div className={style.textBtn}>Logout</div>
+        
+            </button>
+        
+        </li>
 
-                                    </ul>
+    </ul> */}
 
-                                </div>
+                                    </div>
+                                
+                                </Link>
 
                             </div>
 

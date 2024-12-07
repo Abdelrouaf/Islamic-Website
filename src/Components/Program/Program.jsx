@@ -149,53 +149,15 @@ export default function Program() {
     
     }, [run]);
 
-    const [deleteFromLike, setDeleteFromLike] = useState(false)
-
-    // show likes
-    const showLikes = async (e,program) => {
-        e.preventDefault();
-
-        try {    
-            const checkResponse = await fetch(`http://147.79.101.225:2859/api/like/`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                },
-                credentials: "include",
-            });
-    
-            if (checkResponse.ok) {
-                const allItems = await checkResponse.json();
-                const totalLikes= allItems.MyLikes;
-                const existingItem = totalLikes.find(item => item.programId._id === program._id);
-    
-                if (existingItem) {
-                    // If the item is already saved, set deleteFromSave to true
-                    setDeleteFromLike(true);
-                    await deleteLike(existingItem);
-                    // await fetchPrograms(category);
-                    return;
-                }
-            }
-    
-            // If deleteFromSave is false, save the item
-            if (!deleteFromLike) {
-                await likeFromUser(program);
-                // showToast("added for user successfully!", "success")
-                
-            }
-            // Fetch updated list of programs after saving or deleting
-            // await fetchPrograms(category);
-    
-        } catch (error) {
-            showToast('Error occurred during fetch the item', 'error');
-            setIsLoading(false);
-        }
-        setDeleteFromLike(false);
-    }
+    let isLiking = false;
 
     // Like From User
     const likeFromUser = async (program) => {
+
+        if (isLiking) return;
+
+        console.log("likeFromUser received program:", program);
+        isLiking = true;
 
         try {        
             const response = await fetch(`http://147.79.101.225:2859/api/like/${program._id}`,{
@@ -205,18 +167,29 @@ export default function Program() {
                     'Content-Type': 'application/json',
                 },
                 credentials: "include",
-                body: JSON.stringify(program),
+                // body: JSON.stringify(program),
             });
     
             if (!response.ok) {
+                // Log the response status and status text for debugging
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                const errorDetails = await response.json().catch(() => null); // Handle non-JSON error responses
+                console.error("Error details:", errorDetails);
                 throw new Error('Failed to Like item');
             }
-            showToast('Program liked successfully!', 'success');
+            
+            const newProgram = await response.json();
+            const newProgramMessage = JSON.stringify(newProgram);
+            console.log("Program liked and updated:", newProgram);
 
-            await likeProgram(program);
+            showToast(newProgram.message, 'success')
     
-        } catch (error) {
+            allItemsLiked();
+    
+        } catch {
             showToast("Error liking the program", "error");
+        } finally {
+            isLiking = false;  // Reset the flag
         }
     }
 
@@ -253,55 +226,6 @@ export default function Program() {
         }
     };
 
-    // Delete Likes
-    const deleteLike = async (program) => {
-
-        try {
-            const response = await fetch(`http://147.79.101.225:2859/api/like/${program._id}`, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                },
-                credentials: "include",
-            });
-    
-            if (!response.ok) {
-                throw new Error('Failed to like item');
-            }
-
-            const updatedLikes = program.likes - 1;
-        
-            const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
-                ...program,
-                likes: updatedLikes
-            }, 
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-                withCredentials: true,
-            }
-        );
-    
-            if (updateResponse.status === 200 || updateResponse.status === 201) {
-                setAllPrograms((prevPrograms) =>
-                    prevPrograms.map((t) =>
-                        t._id === program._id ? { ...t, likes: updatedLikes } : t
-                    )
-                );
-    
-            }
-
-            showToast('Item deleted from likes successfully!', 'success');
-    
-        
-        } catch (error) {
-            console.error("error is ", error)
-            showToast('Error deleting item from likes', 'error');
-        }
-    }
-
     const [deleteFromSave, setDeleteFromSave] = useState(false);
 
     // Save or delete the program
@@ -321,22 +245,17 @@ export default function Program() {
                 const existingItem = totalSaved.find(item => item.programId._id === program._id);
     
                 if (existingItem) {
-                    // If the item is already saved, set deleteFromSave to true
-                    setDeleteFromSave(true);
-                    await deleteItem(existingItem._id);
+                    showToast('Item deleted from saved successfully!', 'success');
                     return;
                 }
             }
+
+            showToast('Item saved successfully!', 'success');
+
+            // allItemsSaved();
     
-            // If deleteFromSave is false, save the item
-            if (!deleteFromSave) {
-                await saveItem(program);
-            }
     
-            // Fetch updated list of programs
-            // await fetchPrograms(category);
-    
-        } catch {
+        } catch (error) {
             showToast('Error occurred during save the item', 'error');
             setIsLoading(false);
         }
@@ -354,37 +273,20 @@ export default function Program() {
                     'Content-Type': 'multipart/form-data',
                 },
                 credentials: "include",
-                body: JSON.stringify(program),
+                // body: JSON.stringify(program),
             });
     
             if (!response.ok) {
-                showToast('Failed to save item', 'error');
+                throw new Error('Failed to save item');
             }
-            showToast('Item saved successfully!', 'success');
-        } catch {
+
+            await saveProgram(program)
+    
+            // Fetch updated programs after saving the item
+            // await fetchPrograms(category);
+    
+        } catch (error) {
             showToast('Error saving item', 'error');
-        }
-    };
-    
-    // Function to delete the item
-    const deleteItem = async (saveId) => {
-    
-        try {
-            const response = await fetch(`http://147.79.101.225:2859/api/saveitem/${saveId}`, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                },
-                credentials: "include",
-            });
-    
-            if (!response.ok) {
-                showToast('Failed to delete item', 'error');
-            }
-            showToast('Item deleted successfully!', 'success');
-        
-        } catch {
-            showToast('Error deleting item', 'error');
         }
     };
     
@@ -479,7 +381,7 @@ export default function Program() {
         }, 6000);
     };
 
-    console.log("all programs ", allPrograms);
+    // console.log("all programs ", allPrograms);
     
 
     const filteredProgramsByCategory = allPrograms && allPrograms.filter(
@@ -494,7 +396,15 @@ export default function Program() {
         
 
     if (isLoading) {
-        return <p className={style.loading}>Loading, Please wait <span className={style.loader}></span></p>; 
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>; 
     }  
 
     return (
@@ -583,265 +493,163 @@ export default function Program() {
 
                             <div className={style.programDetails}>
 
-                                <ul className='nav nav-tabs'>
+                            <ul className='nav nav-tabs'>
+    <li className='nav-item'>
+        <button
+            className={`nav-link ${detailsFlag ? 'active' : ''} ${
+                programData &&
+                programData.KeyFeatures &&
+                (Object.values(programData.KeyFeatures).some((value) => value.trim() !== '') ||
+                    (programData.useCase && programData.useCase.some((item) => item.trim() !== '')))
+                    ? 'd-block'
+                    : 'd-none'
+            }`}
+            onClick={() => {
+                setInstallationFlag(false);
+                setSystemRequirementsFlag(false);
+                setDetailsFlag(true);
+            }}
+        >
+            Details
+        </button>
+    </li>
 
-                                    <li className='nav-item'><button className={`nav-link ${detailsFlag ? 'active' : ''} ${ programData && (Object.values(programData.KeyFeatures).some((value) => value.trim() !== '') || programData.useCase.some((item) => item.trim() !== '')) ? 'd-block' : 'd-none' } `} onClick={ () => {setInstallationFlag(false); setSystemRequirementsFlag(false); setDetailsFlag(true)} } >details</button></li>
+    <li className='nav-item'>
+        <button
+            className={`nav-link ${systemRequirementsFlag ? 'active' : ''} ${
+                programData &&
+                programData.MinimumRequirements &&
+                programData.MaximumRequirements &&
+                (Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '') ||
+                    Object.values(programData.MaximumRequirements).some((value) => value.trim() !== ''))
+                    ? 'd-block'
+                    : 'd-none'
+            }`}
+            onClick={() => {
+                setDetailsFlag(false);
+                setInstallationFlag(false);
+                setSystemRequirementsFlag(true);
+            }}
+        >
+            System Requirements
+        </button>
+    </li>
 
-                                    <li className='nav-item'><button className={`nav-link ${systemRequirementsFlag ? 'active' : ''} ${ programData && (Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '') || Object.values(programData.MaximumRequirements).some((value) => value.trim() !== '') ) ? 'd-block' : 'd-none' } `} onClick={ () => {setDetailsFlag(false); setInstallationFlag(false); setSystemRequirementsFlag(true)} } >system requirements</button></li>
+    <li className='nav-item'>
+        <button
+            className={`nav-link ${installationFlag ? 'active' : ''} ${
+                programData &&
+                programData.Installation &&
+                programData.Installation.some((item) => item.trim() !== '')
+                    ? 'd-block'
+                    : 'd-none'
+            }`}
+            onClick={() => {
+                setDetailsFlag(false);
+                setSystemRequirementsFlag(false);
+                setInstallationFlag(true);
+            }}
+        >
+            Installation
+        </button>
+    </li>
+</ul>
 
-                                    <li className='nav-item'><button className={`nav-link ${installationFlag ? 'active' : ''} ${ programData && programData.Installation.some((item) => item.trim() !== '')  ? 'd-block' : 'd-none' } `} onClick={ () => {setDetailsFlag(false); setSystemRequirementsFlag(false); setInstallationFlag(true)} } >Installation</button></li>
-
-                                </ul>
 
                                 <div className={style.detailsBox}>
 
-                                    { (Object.values(programData.KeyFeatures).some((value) => value.trim() !== '') || programData.useCase.some((item) => item.trim() !== '')) ? (
+                                {programData &&
+    (
+        (programData.KeyFeatures && Object.values(programData.KeyFeatures).some((value) => value.trim() !== '')) ||
+        (programData.useCase && programData.useCase.some((item) => item.trim() !== ''))
+    ) ? (
+    <div className={`${style.details} ${detailsFlag ? 'd-block' : 'd-none'}`}>
+        <h4 className={style.detailsTitle}>Key features</h4>
+
+        {programData.KeyFeatures?.precisionDrafting && (
+            <div className={style.keyFeatures}>
+                <h4 className={style.keyFeaturesTitle}>Precision Drafting:</h4>
+                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.precisionDrafting}</p>
+            </div>
+        )}
+
+        {programData.KeyFeatures?.modelingVisualization && (
+            <div className={style.keyFeatures}>
+                <h4 className={style.keyFeaturesTitle}>3D Modeling and Visualization:</h4>
+                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.modelingVisualization}</p>
+            </div>
+        )}
+
+        {programData.KeyFeatures?.extensiveLibraries && (
+            <div className={style.keyFeatures}>
+                <h4 className={style.keyFeaturesTitle}>Extensive Libraries:</h4>
+                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.extensiveLibraries}</p>
+            </div>
+        )}
+
+        {programData.KeyFeatures?.collaboration && (
+            <div className={style.keyFeatures}>
+                <h4 className={style.keyFeaturesTitle}>Collaboration:</h4>
+                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.collaboration}.</p>
+            </div>
+        )}
+
+        {programData.KeyFeatures?.customAutomation && (
+            <div className={style.keyFeatures}>
+                <h4 className={style.keyFeaturesTitle}>Custom Automation:</h4>
+                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.customAutomation}</p>
+            </div>
+        )}
+
+        {programData.KeyFeatures?.integration && (
+            <div className={style.keyFeatures}>
+                <h4 className={style.keyFeaturesTitle}>Integration:</h4>
+                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.integration}</p>
+            </div>
+        )}
+
+        {programData.useCase?.length > 0 && (
+            <div className={style.useCases}>
+                <h4 className={style.useCasesTitle}>Use cases</h4>
+                <ul>
+                    {programData.useCase.map((cases, index) =>
+                        cases.trim() !== '' ? (
+                            <li key={index}>
+                                <p className={style.description}>{cases}</p>
+                            </li>
+                        ) : null
+                    )}
+                </ul>
+            </div>
+        )}
+    </div>
+) : null}
+
+{programData &&
+    (
+        (programData.MinimumRequirements && Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '')) ||
+        (programData.MaximumRequirements && Object.values(programData.MaximumRequirements).some((value) => value.trim() !== ''))
+    ) ? (
+    <div className={`${style.systemRequirements} ${systemRequirementsFlag ? 'd-block' : 'd-none'}`}>
+        {/* System requirements content */}
+    </div>
+) : null}
+
+{programData?.Installation?.some((item) => item.trim() !== '') && (
+    <div className={`${style.installationSteps} ${installationFlag ? 'd-block' : 'd-none'}`}>
+        <h4 className={style.installationTitle}>Installation Steps</h4>
+        <ol>
+            {programData.Installation.map((step, index) =>
+                step.trim() !== '' ? (
+                    <li key={index}>
+                        <p>{step}</p>
+                    </li>
+                ) : null
+            )}
+        </ol>
+    </div>
+)}
 
-                                        <div className={`${style.details} ${detailsFlag ? 'd-block' : 'd-none'}`}>
-
-                                            <h4 className={style.detailsTitle}>Key features</h4>
-
-                                            { programData.KeyFeatures.precisionDrafting ? (
-
-                                                <div className={style.keyFeatures}>
-
-                                                    <h4 className={style.keyFeaturesTitle}>Precision Drafting:</h4>
-
-                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.precisionDrafting}</p>
-
-                                                </div>
-
-                                            ) : '' }
-
-                                            { programData.KeyFeatures.modelingVisualization ? (
-
-                                                <div className={style.keyFeatures}>
-
-                                                    <h4 className={style.keyFeaturesTitle}>3D Modeling and Visualization:</h4>
-
-                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.modelingVisualization}</p>
-
-                                                </div>
-
-                                            ) : ''  }
-
-                                            { programData.KeyFeatures.extensiveLibraries ? ( 
-
-                                                <div className={style.keyFeatures}>
-
-                                                    <h4 className={style.keyFeaturesTitle}>Extensive Libraries:</h4>
-
-                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.extensiveLibraries}</p>
-
-                                                </div>
-
-                                            ) : '' }
-
-                                            { programData.KeyFeatures.collaboration ? (
-
-                                                <div className={style.keyFeatures}>
-
-                                                    <h4 className={style.keyFeaturesTitle}>Collaboration:</h4>
-
-                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.collaboration}.</p>
-
-                                                </div>
-
-                                            ) : '' }
-
-                                            { programData.KeyFeatures.customAutomation ? (
-
-                                                <div className={style.keyFeatures}>
-
-                                                    <h4 className={style.keyFeaturesTitle}>Custom Automation:</h4>
-
-                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.customAutomation}</p>
-
-                                                </div>
-
-                                            ) : '' }
-
-                                            { programData.KeyFeatures.integration ? (
-
-                                                <div className={style.keyFeatures}>
-
-                                                    <h4 className={style.keyFeaturesTitle}>Integration:</h4>
-
-                                                    <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.integration}</p>
-
-                                                </div>
-
-                                            ) : '' }
-
-                                            { programData.useCase.length > 0 ? (
-
-                                                <div className={style.useCases}>
-
-                                                    <h4 className={style.useCasesTitle}>Use cases</h4>
-
-                                                    <ul>
-
-                                                        { programData.useCase.map( (cases, index) => 
-                                                        
-                                                            cases.trim() !== '' ? (
-
-                                                            <li key={index}><p className={style.description}>{cases}</p></li>
-
-                                                            ) : ''
-
-                                                        ) }
-
-                                                    </ul>
-
-                                                </div>
-
-                                            ) : '' }
-
-                                            
-
-                                        </div>
-
-                                    ) : ''  }
-
-                                    { (Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '') || Object.values(programData.MaximumRequirements).some((value) => value.trim() !== '') ) ? (
-
-                                        <div className={`${style.systemRequirements} ${systemRequirementsFlag ? 'd-block' : 'd-none'}`}>
-
-                                            <div className={style.minimumRequirements}>
-
-                                                <h4 className={style.systemRequirementsTitle}>Minimum Requirements</h4>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>Operating System:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>Windows 10 (64-bit) or macOS Big Sur.</h4>
-
-                                                </div>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>Processor:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>2.5–2.9 GHz processor.</h4>
-
-                                                </div>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>RAM:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>8 GB.</h4>
-
-                                                </div>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>GPU:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>Basic 1 GB GPU supporting DirectX 11.</h4>
-
-                                                </div>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>Storage:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>10 GB free disk space.</h4>
-
-                                                </div>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>Display:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>1920x1080 resolution.</h4>
-
-                                                </div>
-
-                                            </div>
-
-                                            <div className={style.recommendedRequirements}>
-
-                                                <h4 className={style.systemRequirementsTitle}>Recommended Requirements</h4>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>Operating System:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>Windows 11 (64-bit) or macOS Ventura.</h4>
-
-                                                </div>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>Processor:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>3+ GHz multi-core processor.</h4>
-
-                                                </div>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>RAM:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>16 GB or more.</h4>
-
-                                                </div>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>GPU:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>4 GB GPU with DirectX 12 support.</h4>
-
-                                                </div>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>Storage:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>20 GB SSD for faster performance.</h4>
-
-                                                </div>
-
-                                                <div className={style.requirements}>
-
-                                                    <h4 className={style.requirementsTitle}>Display:</h4>
-
-                                                    <h4 className={style.requirementsDesc}>4K resolution support for professional clarity.</h4>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    ) : '' }
-
-                                    { programData.Installation.some((item) => item.trim() !== '')  ? (
-
-                                        <div className={`${style.installationSteps} ${installationFlag ? 'd-block' : 'd-none'}`}>
-
-                                            <h4 className={style.installationTitle}>Installation Steps</h4>
-
-                                            <ol>
-
-                                                { programData.Installation.map( (step, index) =>
-                                                
-                                                    step.trim() !== '' ? (
-
-                                                        <li key={index}><p>{step}</p></li>
-
-                                                    ) : ''
-                                                
-                                                ) }
-
-                                            </ol>
-
-                                        </div>
-
-                                    ) : '' }
 
                                     
 
@@ -886,7 +694,7 @@ if (!program._id) {
     return null;
 }
 
-                                            console.log("every program details ", program);
+                                            // console.log("every program details ", program);
                                             
 
                                             const sizeInBytes = program.size;
@@ -907,7 +715,7 @@ if (!program._id) {
                                                 }
                                             }
 
-                                            const isLiked = allItemsLiked.some(item => item.programId._id === program._id);
+                                            // const isLiked = Array.isArray(allItemsLiked) && allItemsLiked.some(item => item.programId?._id === program._id);
                                         
                                             return (
 
@@ -947,7 +755,7 @@ if (!program._id) {
                                                             
                                                             </Link>
     
-                                                            <button onClick={ () => saveProgram(program) } className={style.bookmarkBtn}>
+                                                            <button onClick={ () => saveItem(program) } className={style.bookmarkBtn}>
                                                             
                                                                 <span className={style.IconContainer}>
                                                                 
@@ -969,7 +777,7 @@ if (!program._id) {
     
                                                         <div className={style.programDetails}>
     
-                                                            <div onClick={ (e) => {showLikes(e,program)} } className={`${ !isLiked ? style.removeLikeButton : style.likeButton }`}>
+                                                            <div onClick={ () => {likeFromUser(program)} } className={`${ Array.isArray(allItemsLiked) && allItemsLiked.some(item => item.programId?._id === program._id) ? style.removeLikeButton : style.likeButton }`}>
                                                                 
                                                                 <input className={style.on} id="heart" type="checkbox" />
 
@@ -985,9 +793,9 @@ if (!program._id) {
 
                                                                 </label>
 
-                                                                <span className={`${style.likeCount} ${style.one}`}>{program.likes}</span>
+                                                                <span className={`${style.likeCount} ${style.one}`}>{formatNumber(program.likes)}</span>
 
-                                                                <span className={`${style.likeCount} ${style.two}`}>{ !isLiked ? program.likes - 1 : program.likes + 1}</span>
+                                                                <span className={`${style.likeCount} ${style.two}`}>{formatNumber(program.likes)}</span>
                                                         
                                                             </div>
     

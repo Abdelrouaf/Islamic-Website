@@ -31,6 +31,9 @@ ChartJS.register(
 );
 
 export default function Dashboard() {
+
+  const [loading, setLoading] = useState(true)
+
   const [viewsData, setViewsData] = useState([0, 0, 0, 0, 0, 0, 0]);
   const [likesData, setLikesData] = useState([0, 0, 0, 0, 0, 0, 0]);
   const [savedData, setSavedData] = useState([0, 0, 0, 0, 0, 0, 0]);
@@ -134,6 +137,8 @@ export default function Dashboard() {
       setAllPrograms(data);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -302,6 +307,8 @@ export default function Dashboard() {
       setMonthlyUserCount(monthlyCount);
     } catch (error) {
       console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -423,6 +430,8 @@ export default function Dashboard() {
       setTotalViews(totalViewsCount);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -549,6 +558,8 @@ export default function Dashboard() {
       setTotalFaithBookViews(totalViewsCount);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -674,6 +685,8 @@ export default function Dashboard() {
       setTotalFaithBlogViews(totalViewsCount);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -792,6 +805,8 @@ export default function Dashboard() {
       setTotalNewsViews(totalViewsCount);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -913,6 +928,8 @@ export default function Dashboard() {
       setTotalIslamViews(totalViewsCount);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -1036,6 +1053,8 @@ export default function Dashboard() {
       setTotalShahadahViews(totalViewsCount);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -1157,6 +1176,8 @@ export default function Dashboard() {
       setTotalPrayerViews(totalViewsCount);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -1278,6 +1299,8 @@ export default function Dashboard() {
       setTotalSawmViews(totalViewsCount);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -1399,6 +1422,8 @@ export default function Dashboard() {
       setTotalZakatViews(totalViewsCount);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -1517,6 +1542,8 @@ export default function Dashboard() {
       setTotalHaijViews(totalViewsCount);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -1565,6 +1592,18 @@ export default function Dashboard() {
       },
     ],
   });
+
+  if (loading) {
+    return  <div id="page">
+    <div id="container">
+      <div id="ring" />
+      <div id="ring" />
+      <div id="ring" />
+      <div id="ring" />
+      <div id="h3">loading</div>
+    </div>
+  </div>
+  }
 
   return (
     <div className={style.box}>

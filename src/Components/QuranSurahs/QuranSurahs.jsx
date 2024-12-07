@@ -6,6 +6,21 @@ import Select from "react-select";
 import Diacritics from "diacritics";
 
 export default function QuranSurahs() {
+
+  const [isRTL, setIsRTL] = useState(false);
+
+  // Function to detect the language and set direction
+  const detectLanguage = () => {
+    // Example: Check if the current language is Arabic
+    const currentLang = document.documentElement.lang || "en";
+    setIsRTL(currentLang === "ar"); // Adjust based on actual language detection logic
+  };
+
+   // Run detection on mount
+   useEffect(() => {
+    detectLanguage();
+  }, []);
+
   const surahLang = {
     ar: { api: "quran.json" },
     bn: { api: "quran_bn.json" },
@@ -30,10 +45,12 @@ export default function QuranSurahs() {
   const mostLikedRef = useRef(null);
   const [verseIndexOnRead, setVerseIndexOnRead] = useState(2);
 
+  const [loading, setLoading] = useState(true)
+
   const quran = new Quran();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (defaultLang) => {
       try {
         const response = await fetch(
           `https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/${defaultLang}`
@@ -58,10 +75,14 @@ export default function QuranSurahs() {
           setTopic(data[1]);
         }
         audioOnReadClick();
-      } catch {}
+      } catch {
+
+      } finally {
+        setLoading(false)
+      }
     };
 
-    fetchData();
+    fetchData(defaultLang);
   }, [defaultLang]);
 
   useEffect(() => {
@@ -88,6 +109,8 @@ export default function QuranSurahs() {
       if (matchingSurah) {
         setTopic(matchingSurah);
         setNameSurahPlay(matchingSurah.transliteration);
+        togglePlayStopOnRead(selectedSurah)
+        setOnReadAudio(false)
       }
     }
   };
@@ -314,7 +337,11 @@ export default function QuranSurahs() {
       const audioUrlsAr = dataAr.data.ayahs.map((ayah) => ayah.audio);
       setAudiosSearchAr(audioUrlsAr);
       setAudioReadAr(audioUrlsAr);
-    } catch {}
+    } catch {
+
+    } finally {
+      setLoading(false)
+    }
   };
 
   const showAudio = () => {
@@ -335,7 +362,7 @@ export default function QuranSurahs() {
     setFlag(false);
   };
 
-  const handleSurahClick = (surah) => {
+  const handleSurahClick = (surah,index) => {
     setTopic(surah);
     setPlay(false);
     setVerseIndexOnRead(surah.id);
@@ -343,6 +370,8 @@ export default function QuranSurahs() {
     setSelectedSurah(surah.id);
     setNameSurahPlay(surah.transliteration);
     setSurahPlayIndex(surah.id);
+    togglePlayStopOnRead(index)
+    setOnReadAudio(false)
   };
 
   const formatTime = (time) => {
@@ -427,7 +456,7 @@ export default function QuranSurahs() {
   const componentRef = useRef(null);
 
   const handleVerseClick = (verse, index, surah) => {
-    const surahIndex = quran.getChapterByIndex(surah).number;
+    const surahIndex = quran.getChapterByIndex(surah).number;    
 
     setVerseIndexOnRead(surahIndex);
 
@@ -460,7 +489,11 @@ export default function QuranSurahs() {
       const dataAr = await responseAr.json();
       const audioUrlsAr = dataAr.data.ayahs.map((ayah) => ayah.audio);
       setAudioReadAr(audioUrlsAr);
-    } catch {}
+    } catch {
+
+    } finally {
+      setLoading(false)
+    }
   };
 
   const audioReadRef = useRef([]);
@@ -653,6 +686,18 @@ export default function QuranSurahs() {
     );
   };
 
+  if (loading) {
+    return  <div id="page">
+    <div id="container">
+      <div id="ring" />
+      <div id="ring" />
+      <div id="ring" />
+      <div id="ring" />
+      <div id="h3">loading</div>
+    </div>
+  </div>
+  }
+
   return (
     <>
     
@@ -722,7 +767,7 @@ export default function QuranSurahs() {
                     </div>
                   </div>
 
-                  <div className="text-center">
+                  { isRTL && <div className="text-center" style={{direction: 'ltr'}}>
                     <button
                       onClick={() => {
                         if (surahPlayIndex > 1) {
@@ -772,7 +817,61 @@ export default function QuranSurahs() {
                     >
                       <i className="fa-solid fa-forward"></i>
                     </button>
-                  </div>
+                  </div> }
+
+                  { !isRTL && <div className="text-center">
+                    <button
+                      onClick={() => {
+                        if (surahPlayIndex > 1) {
+                          setSurahPlayIndex(surahPlayIndex - 1);
+                          const previousSurah = topics.find(
+                            (topic) => topic.id === surahPlayIndex - 1
+                          );
+                          setNameSurahPlay(
+                            previousSurah ? previousSurah.transliteration : ""
+                          );
+                          if (play) {
+                            setPlay(!play);
+                          }
+                        }
+                      }}
+                    >
+                      <i className="fa-solid fa-backward"></i>
+                    </button>
+
+                    <button onClick={togglePlayStop}>
+                      {play ? (
+                        <i className="fa-solid fa-pause"></i>
+                      ) : (
+                        <i className="fa-solid fa-play"></i>
+                      )}
+                    </button>
+
+                    <button onClick={handleAudioReset}>
+                      <i className="fa-solid fa-stop"></i>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        if (surahPlayIndex < 114) {
+                          setSurahPlayIndex(surahPlayIndex + 1);
+                          const nextSurah = topics.find(
+                            (topic) => topic.id === surahPlayIndex + 1
+                          );
+                          setNameSurahPlay(
+                            nextSurah ? nextSurah.transliteration : ""
+                          );
+                          if (play) {
+                            setPlay(!play);
+                          }
+                        }
+                      }}
+                    >
+                      <i className="fa-solid fa-forward"></i>
+                    </button>
+                  </div> }
+
+                  
                 </div>
               </div>
             </div>
@@ -783,7 +882,8 @@ export default function QuranSurahs() {
               variants={toUp}
               className={style.search}
             >
-              <div className={style.inputGroup}>
+
+              { !isRTL &&  <div className={style.inputGroup}>
                 <div className="form-outline">
                   <input
                     type="search"
@@ -803,14 +903,40 @@ export default function QuranSurahs() {
                 >
                   <i className="fa-solid fa-magnifying-glass"></i>
                 </button>
-              </div>
+              </div>  }
+
+              { isRTL &&  <div className={style.inputGroup}>
+                <div className="form-outline" style={{direction: 'rtl'}}>
+
+                <button
+                  type="button"
+                  aria-label="search by surah name"
+                  className="btn btn-primary"
+                  style={{left: '0', right: 'auto'}}
+                >
+                  <i className="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+                  <input
+                    type="search"
+                    className="form-control"
+                    placeholder="Search..."
+                    name="search"
+                    id="search"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>  }
+
+             
             </motion.div>
 
             <motion.div
               initial="hidden"
               animate="visible"
               variants={toUp}
-              className={`${style.box} ${style.mostLikedBox} ${style.sticky}`}
+              className={`${style.box} ${style.mostLikedBox} ${style.sticky} ${style.notranslate}`} translate="no"
               ref={mostLikedRef}
             >
               <h4 className={style.title}>All Surahs.</h4>
@@ -823,7 +949,7 @@ export default function QuranSurahs() {
                           href="#"
                           onClick={(e) => {
                             e.preventDefault();
-                            handleSurahClick(surah);
+                            handleSurahClick(surah, index);
                           }}
                           className={`${style.cardTitle} d-flex justify-content-between align-items-center`}
                         >
@@ -892,7 +1018,7 @@ export default function QuranSurahs() {
               <div
                 key={topic?.id}
                 ref={componentRef}
-                className={style.topicSection}
+                className={`${style.topicSection} ${style.notranslate}`} translate="no"
               >
                 <div className={style.topicDesign} id={topic.id}>
                   <h3 className={style.title}>
@@ -925,7 +1051,7 @@ export default function QuranSurahs() {
                           ? style.selection
                           : ""
                       }  d-inline`}
-                      onClick={() => handleVerseClick(verse, index, topic.id)}
+                      onClick={() => { if ( defaultLang === "quran.json" || defaultLang === "quran_en.json" ) {handleVerseClick(verse, index, topic.id)}}}
                     >
                       {defaultLang === "quran.json"
                         ? verse.text
@@ -938,7 +1064,13 @@ export default function QuranSurahs() {
                       </span>
                       <audio
                         ref={(el) => (audioReadRef.current[index] = el)}
-                        src={audioReadEn[index]}
+                        src={`${
+                          defaultLang === "quran.json"
+                            ? audioReadAr[index]
+                            : defaultLang === "quran_en.json"
+                            ? audioReadEn[index]
+                            : undefined
+                        }`}
                         onEnded={handleAudioEnd}
                       ></audio>
                       <button
@@ -986,7 +1118,7 @@ export default function QuranSurahs() {
                             : ""
                         } d-inline rtl`}
                         onClick={() =>
-                          handleVerseClick(verse, index, defaultSurah.id)
+                          { if ( defaultLang === "quran.json" || defaultLang === "quran_en.json" ) {handleVerseClick(verse, index, defaultSurah.id)}}
                         }
                       >
                         {defaultLang === "quran.json"
@@ -1002,7 +1134,13 @@ export default function QuranSurahs() {
                           ref={(el) =>
                             audioReadRef.current[(defaultSurah.id = el)]
                           }
-                          src={audioReadEn[index]}
+                          src={`${
+                            defaultLang === "quran.json"
+                              ? audioReadAr[index]
+                              : defaultLang === "quran_en.json"
+                              ? audioReadEn[index]
+                              : undefined
+                          }`}
                           onEnded={handleAudioEnd}
                         ></audio>
                         <button

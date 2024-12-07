@@ -1,15 +1,152 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '../../images/programs-logo1.png'
 import { Link } from 'react-router-dom'
 import style from './ProgramsFooter.module.scss'
 
 export default function ProgramsFooter() {
 
-    const [message, setMessage] = useState('');
+    const [isRTL, setIsRTL] = useState(false);
+
+    // Function to detect the language and set direction
+    const detectLanguage = () => {
+      // Example: Check if the current language is Arabic
+      const currentLang = document.documentElement.lang || "en";
+      setIsRTL(currentLang === "ar"); // Adjust based on actual language detection logic
+    };
+  
+     // Run detection on mount
+     useEffect(() => {
+      detectLanguage();
+    }, []);
+
+    const [run, setRun] = useState(0)
+
+    const userToken = localStorage.getItem('accessToken')
+
+    const [userData ,setUserData] = useState({
+        _id: '',
+        name: '',
+        email: '',
+        apprived: false,
+        isAdmin: false,
+        messages: []
+    })
+
+    useEffect(() => {
+        async function getData() {
+            try {
+    
+                const response = await fetch('http://147.79.101.225:2859/api/message/', {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`
+                    },
+                    credentials: "include"
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status`);
+                }
+    
+                const data = await response.json();
+
+                setUserData( (prevState) =>({
+                    ...prevState,
+                    messages: data.Message || []
+                }) )
+
+            } catch (error) {
+                console.error("Error occurred during the fetch:", error.message); 
+            }
+        }
+    
+        getData();
+    }, [run]);
+
+    const [text, setText] = useState("");
+
+    const user = JSON.parse(localStorage.getItem('loggedInUser'))
+
+    useEffect( () => {
+        setUserData( (prevState) => ({
+            ...prevState,
+                _id: user.details._id,
+                name: user.details.name,
+                email: user.details.email,
+                apprived: user.details.apprived,
+                isAdmin: user.isAdmin,
+                messages: prevState.messages || []
+            
+        }) )
+    },[] )
+
+    // Sent message Func
+    const sentMessage = async (e) => {
+        e.preventDefault();
+    
+        if (text.trim() === '') return;
+
+        const messageData = JSON.parse(localStorage.getItem('temporaryMessage')) || []
+
+        const newMessage = {
+            name: user.details.name,
+            message: text
+        };
+
+        const messageText = {
+            message: text, 
+        };
+
+        try {
+            const response = await fetch('http://147.79.101.225:2859/api/message/send', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${userToken}`,
+                    'Content-Type': 'application/json',  
+                },
+                credentials: 'include',
+                body: JSON.stringify(messageText),  
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Failed to send message, status`);
+            }
+    
+            const data = await response.json();  
+    
+            setText('');  
+
+            // Fetch updated chat data after successfully sending the message
+            const updatedChatResponse = await fetch(`http://147.79.101.225:2859/api/message/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${userToken}`,
+                },
+                credentials: 'include',
+            });
+
+            if (!updatedChatResponse.ok) {
+                throw new Error(`Failed to fetch updated chat data, status: ${updatedChatResponse.status}`);
+            }
+
+            const updatedChatData = await updatedChatResponse.json();
+        
+        } catch (error) {
+            console.error('Error sending message:', error.message);  // Log error
+        }
+
+        setRun( (prevRun) => prevRun + 1 )
+
+        messageData.push(newMessage)
+    
+        localStorage.setItem('temporaryMessage', JSON.stringify(messageData));
+    
+        setText('');
+    };
 
     return (
     
-        <footer className={`${style.footer}`}>
+        <footer className={`${style.footer}`} style={{direction: 'ltr'}}>
         
             <div className="container">
             
@@ -31,7 +168,7 @@ export default function ProgramsFooter() {
 
                                 <div className={style.right}>
 
-                                    <span>social: </span>
+                                    {/* <span>social: </span> */}
 
                                     <div className={style.social}>
 
@@ -188,23 +325,41 @@ export default function ProgramsFooter() {
 
                                 <form className={style.form}>
                                 
-                                    <div className={style.inputBox}>
+                                    { isRTL && <div className={style.inputBox} style={{direction: 'ltr'}}>
                                     
-                                        <label>Message:</label>
-                                    
-                                        <textarea
-                                            className='form-control'
-                                            value={message}
-                                            onChange={(e) => setMessage(e.target.value)}
-                                            placeholder="Your message ..."
-                                            required
-                                        />
+                                    <label>Message:</label>
+                                
+                                    <textarea
+                                        className='form-control'
+                                        value={text} 
+                                        onChange={(e) => setText(e.target.value)} 
+                                        onKeyDown={ (e) => { if (e.key === "Enter") { sentMessage(e) } } }
+                                        placeholder="Your message ..."
+                                        style={{direction: 'rtl'}}
+                                        required
+                                    />
 
-                                    </div>
+                                </div> }
+
+                                { !isRTL && <div className={style.inputBox}>
+                                    
+                                    <label>Message:</label>
+                                
+                                    <textarea
+                                        className='form-control'
+                                        value={text} 
+                                        onChange={(e) => setText(e.target.value)} 
+                                        onKeyDown={ (e) => { if (e.key === "Enter") { sentMessage(e) } } }
+                                        placeholder="Your message ..."
+                                        required
+                                        style={{direction: 'ltr'}}
+                                    />
+
+                                </div> }
 
                                     <div className={style.btns}>
 
-                                    <button type="submit" className={style.downloadBtn}>Send </button>
+                                    <button type='submit' onClick={sentMessage} className={style.sendMessageBtn}><i className="fa-solid fa-paper-plane"></i></button>
 
                                     </div>
 

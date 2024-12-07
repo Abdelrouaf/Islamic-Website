@@ -293,7 +293,15 @@ export default function NewsTopic() {
     };
 
     if (isLoading) {
-        return <p className={layout.loading}>Loading, Please wait <span className={layout.loader}></span></p>; 
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>; 
     }    
 
     return (

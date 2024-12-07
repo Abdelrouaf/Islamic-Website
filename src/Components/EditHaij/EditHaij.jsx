@@ -45,7 +45,15 @@ const showToast = (message, type) => {
 };
 
 if (isLoading) {
-    return <p className={style.loading}>Loading, Please wait... <span className={style.loader}></span></p>; 
+    return  <div id="page">
+    <div id="container">
+      <div id="ring" />
+      <div id="ring" />
+      <div id="ring" />
+      <div id="ring" />
+      <div id="h3">loading</div>
+    </div>
+  </div>; 
 } 
 
     return (

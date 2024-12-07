@@ -335,7 +335,15 @@ export default function AzanTiming() {
     };
 
     if (loading) {
-        return <p className={`${style.loading} ${style.section}`}>Loading, Please wait <span className={style.loader}></span></p>; 
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>; 
     }  
 
     const text = 'Azan Timing'

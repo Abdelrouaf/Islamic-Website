@@ -60,8 +60,7 @@ export default function Category() {
                 setIsLoading(false);
             }
 
-        } catch (error) {
-            console.error("Error occurred during the fetch:", error.message);
+        } catch  {
             setIsLoading(false);
         }
     }
@@ -92,7 +91,7 @@ export default function Category() {
                 }
             
             } catch {
-                isLoading(false)
+                setIsLoading(false)
             }
         }
         fetchAllSavedPrograms()
@@ -114,7 +113,7 @@ export default function Category() {
                 }
             
             } catch {
-                isLoading(false)
+                setIsLoading(false)
             }
         }
         fetchAllLikedPrograms()
@@ -135,8 +134,7 @@ export default function Category() {
     const [deleteFromLike, setDeleteFromLike] = useState(false)
 
     // show likes
-    const showLikes = async (e,program) => {
-        e.preventDefault();
+    const showLikes = async (program) => {
 
         try {    
             const checkResponse = await fetch(`http://147.79.101.225:2859/api/like/`, {
@@ -150,25 +148,25 @@ export default function Category() {
             if (checkResponse.ok) {
                 const allItems = await checkResponse.json();
                 const totalLikes= allItems.MyLikes;
-                const existingItem = totalLikes.find(item => item.programId._id === program._id);
+                
+                const existingItem = totalLikes.find(item => item._id === program._id);
     
                 if (existingItem) {
-                    // If the item is already saved, set deleteFromSave to true
-                    setDeleteFromLike(true);
-                    await deleteLike(existingItem);
-                    // await fetchPrograms(category);
-                    return;
+                    showToast('Item deleted from liked successfully!', 'success');
                 }
             }
-    
-            // If deleteFromSave is false, save the item
-            if (!deleteFromLike) {
-                await likeFromUser(program);
-                // showToast("added for user successfully!", "success")
-                
+
+            if (!checkResponse.ok) {
+                // Log the response status and status text for debugging
+                console.error(`Error: ${checkResponse.status} - ${checkResponse.statusText}`);
+                const errorDetails = await checkResponse.json().catch(() => null); // Handle non-JSON error responses
+                console.error("Error details:", errorDetails);
+                throw new Error('Failed to Like item');
             }
-            // Fetch updated list of programs after saving or deleting
-            // await fetchPrograms(category);
+
+            await getData()
+    
+            showToast('Item liked successfully!', 'success');
     
         } catch (error) {
             showToast('Error occurred during fetch the item', 'error');
@@ -177,8 +175,14 @@ export default function Category() {
         setDeleteFromLike(false);
     }
 
+    let isLiking = false;
+
     // Like From User
     const likeFromUser = async (program) => {
+
+        if (isLiking) return;
+
+        isLiking = true;
 
         try {        
             const response = await fetch(`http://147.79.101.225:2859/api/like/${program._id}`,{
@@ -192,14 +196,33 @@ export default function Category() {
             });
     
             if (!response.ok) {
+                // Log the response status and status text for debugging
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                const errorDetails = await response.json().catch(() => null); // Handle non-JSON error responses
+                console.error("Error details:", errorDetails);
                 throw new Error('Failed to Like item');
             }
-            showToast('Program liked successfully!', 'success');
+            
+            const newProgram = await response.json();
+            const newProgramMessage = JSON.stringify(newProgram);
+            showToast(newProgram.message, 'success')
 
-            await likeProgram(program);
+                    // Set the interval to refresh the data every 3 seconds
+        const intervalId = setInterval(() => {
+            getData();
+        }, 100);
+
+        // Cleanup the interval when the component unmounts or `run` changes
+        return () => {
+            clearInterval(intervalId);
+        };
     
-        } catch (error) {
+            // await showLikes(program);
+    
+        } catch {
             showToast("Error liking the program", "error");
+        } finally {
+            isLiking = false;  // Reset the flag
         }
     }
 
@@ -304,21 +327,25 @@ export default function Category() {
                 const existingItem = totalSaved.find(item => item.programId._id === program._id);
     
                 if (existingItem) {
-                    // If the item is already saved, set deleteFromSave to true
-                    setDeleteFromSave(true);
-                    await deleteItem(existingItem._id);
+                    showToast('Item deleted from saved successfully!', 'success');
                     return;
                 }
             }
+
+            await getData()
+
+            showToast('Item saved successfully!', 'success');
+
+                                // Set the interval to refresh the data every 3 seconds
+        const intervalId = setInterval(() => {
+            getData();
+        }, 100);
+
+        // Cleanup the interval when the component unmounts or `run` changes
+        return () => {
+            clearInterval(intervalId);
+        };
     
-            // If deleteFromSave is false, save the item
-            if (!deleteFromSave) {
-                await saveItem(program);
-            }
-    
-            // Fetch updated list of programs after saving or deleting
-            // await fetchPrograms(category);
-            await getData();
     
         } catch (error) {
             showToast('Error occurred during save the item', 'error');
@@ -344,7 +371,8 @@ export default function Category() {
             if (!response.ok) {
                 throw new Error('Failed to save item');
             }
-            showToast('Item saved successfully!', 'success');
+
+            await saveProgram(program)
     
             // Fetch updated programs after saving the item
             // await fetchPrograms(category);
@@ -457,7 +485,15 @@ export default function Category() {
     };
 
     if (isLoading) {
-        return <p className={style.loading}>Loading, Please wait <span className={style.loader}></span></p>; 
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>; 
     }  
 
     // if (!allPrograms || allPrograms.length === 0) {
@@ -606,7 +642,10 @@ export default function Category() {
                                                 }
                                             }
 
-                                            const isLiked = allItemsLiked.some(item => item.programId._id === program._id);
+                                            // const isLiked = Array.isArray(allItemsLiked) && allItemsLiked.some(item => item.programId?._id === program._id);
+
+                                            // console.log("isliked: ", isLiked);
+                                            
 
                                             return (
 
@@ -668,7 +707,7 @@ export default function Category() {
 
                                                         <div className={style.programDetails}>
 
-                                                            <div onClick={ (e) => {likeFromUser(e,program)} } className={`${ !isLiked ? style.removeLikeButton : style.likeButton }`}>
+                                                            <div onClick={ () => {likeFromUser(program)} } className={`${ Array.isArray(allItemsLiked) && allItemsLiked.some(item => item.programId?._id === program._id) ? style.removeLikeButton : style.likeButton }`}>
                                                                                                                         
                                                                 <input className={style.on} id="heart" type="checkbox" />
 
@@ -684,9 +723,9 @@ export default function Category() {
 
                                                                 </label>
 
-                                                                <span className={`${style.likeCount} ${style.one}`}>{program.likes}</span>
+                                                                <span className={`${style.likeCount} ${style.one}`}>{formatNumber(program.likes)}</span>
 
-                                                                <span className={`${style.likeCount} ${style.two}`}>{ !isLiked ? program.likes - 1 : program.likes + 1}</span>
+                                                                <span className={`${style.likeCount} ${style.two}`}>{formatNumber(program.likes)}</span>
 
                                                             </div>
 

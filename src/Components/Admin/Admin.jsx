@@ -544,7 +544,7 @@ export default function Admin() {
                             
                                 <li>
                                 
-                                    <h3 onClick={ ()=> {setOpen(!open); setOpen3(false); setIsProgramsOpen(false); setOpenPrograms(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/user') ? style.linkHover : '' } `} ><span className={style.imageBadge}><img src={group} className={style.headTitleImg} alt="teamwork-image" loading='lazy' /> <sup><span className={`badge text-bg-warning`}>{unapprovedUsersCount.toFixed(0)}</span></sup></span> users <i className={` fa-solid fa-angle-right ${style.menu} ${ open ? style.rotateArrow : '' }`}></i></h3>
+                                    <h3 onClick={ ()=> {setOpen(!open); setOpen3(false); setIsProgramsOpen(false); setOpenPrograms(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/user') ? style.linkHover : '' } `} ><span className={style.imageBadge}><img src={group} className={style.headTitleImg} alt="teamwork-image" loading='lazy' /> { unapprovedUsersCount.toFixed(0) > 0 && (<sup><span className={`badge text-bg-warning`}>{unapprovedUsersCount.toFixed(0)}</span></sup>) } </span> users <i className={` fa-solid fa-angle-right ${style.menu} ${ open ? style.rotateArrow : '' }`}></i></h3>
                                 
                                     <ul className={`${style.sidebarSubmenu} ${open ? `${style.active}`: `${style.inactive}` } `}>
 
@@ -560,7 +560,7 @@ export default function Admin() {
                                 
                                 </li>
 
-                                <li><NavLink to='chat' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}> <span className={style.imageBadge}><img src={chat} className={style.headTitleImg} alt='chat-image' loading='lazy'/> <sup><span className={`badge text-bg-warning`}>{totalMessagesCount.toFixed(0)}</span></sup> </span> chat </NavLink></li>
+                                <li><NavLink to='chat' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}> <span className={style.imageBadge}><img src={chat} className={style.headTitleImg} alt='chat-image' loading='lazy'/> { totalMessagesCount.toFixed(0) > 0 && (<sup><span className={`badge text-bg-warning`}>{totalMessagesCount.toFixed(0)}</span></sup>)} </span> chat </NavLink></li>
                             
                                 <li>
                                 

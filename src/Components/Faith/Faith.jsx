@@ -38,6 +38,8 @@ export default function Faith() {
 
     // Fetch data from the API when the component mounts
 
+    const [loading ,setLoading] = useState(true)
+
     const fetchData = async () => {
         try {
             const response = await fetch('http://147.79.101.225:2859/api/faithBook/');
@@ -63,7 +65,9 @@ export default function Faith() {
             setLikes(initialLikes)
 
         } catch {
-        } 
+        } finally {
+            setLoading(false)
+        }
     };
 
     useEffect(() => {
@@ -237,6 +241,18 @@ export default function Faith() {
         hidden: { opacity: 0, y: 500 },
         visible: { opacity: 1, y: 0, transition: { duration: 1 } }
     };
+
+    if (loading) {
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>
+    }
 
     return (
     

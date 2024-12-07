@@ -28,6 +28,8 @@ export default function News() {
     const mostLikedRef = useRef(null); // Ref to observe the "most liked" section
 
     // Fetch data from the API when the component mounts
+
+    const [loading, setLoading] = useState(true)
     
     const fetchData = async () => {
         try {
@@ -43,7 +45,9 @@ export default function News() {
             setLikes(initialLikes)
 
         } catch {
-        } 
+        } finally {
+            setLoading(false)
+        }
     };
     
     useEffect(() => {
@@ -165,6 +169,18 @@ export default function News() {
         hidden: { opacity: 0, y: 500 },
         visible: { opacity: 1, y: 0, transition: { duration: 1 } }
     };
+
+    if (loading) {
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>
+    }
 
     return (
     

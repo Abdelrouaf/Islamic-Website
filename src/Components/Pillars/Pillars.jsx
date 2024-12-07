@@ -38,6 +38,8 @@ export default function Pillars() {
     const [likesHaij, setLikesHaij] = useState([])
     const mostLikedRef = useRef(null); // Ref to observe the "most liked" section
 
+    const [loading, setLoading] = useState(true)
+
     const fetchShahadah = async () => {
         
         try {
@@ -109,6 +111,8 @@ export default function Pillars() {
             setLikesHaij(initialLikesHaij)
 
         } catch {
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -450,6 +454,18 @@ export default function Pillars() {
     };
 
     const sanitizedDescription = DOMPurify.sanitize(sawmTopic);
+
+    if (loading) {
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>
+    }
 
     return (
     

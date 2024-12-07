@@ -1,27 +1,27 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '../../images/logo-color-removebg-preview (1).png'
 import { Link } from 'react-router-dom'
 import style from './Footer.module.scss'
 
 export default function Footer() {
 
-    const [email, setEmail] = useState('');
-    const [subject, setSubject] = useState('');
-    const [message, setMessage] = useState('');
+    const [isRTL, setIsRTL] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        // Construct the mailto link
-        const mailtoLink = `mailto:bodi.halaby654@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-
-        // Open the mailto link
-        window.location.href = mailtoLink;
+    // Function to detect the language and set direction
+    const detectLanguage = () => {
+      // Example: Check if the current language is Arabic
+      const currentLang = document.documentElement.lang || "en";
+      setIsRTL(currentLang === "ar"); // Adjust based on actual language detection logic
     };
+  
+     // Run detection on mount
+     useEffect(() => {
+      detectLanguage();
+    }, []);
 
     return (
     
-        <footer className={`${style.footer}`}>
+        <footer className={`${style.footer}`} style={{direction: 'ltr'}}>
         
             <div className="container">
             
@@ -43,7 +43,7 @@ export default function Footer() {
 
                                 <div className={style.right}>
 
-                                    <span>social: </span>
+                                    {/* <span>social: </span> */}
 
                                     <div className={style.social}>
 

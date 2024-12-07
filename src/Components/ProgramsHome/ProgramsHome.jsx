@@ -36,30 +36,6 @@ export default function ProgramsHome() {
 
     const [run, setRun] = useState(0)
 
-    // useEffect(() => {
-    //     async function getData() {
-    //         try {
-    //             await fetch('http://147.79.101.225:2859/api/programs/', {
-    //                 method : "GET",
-    //                 headers: {
-    //                     "Authorization": `Bearer ${token}`
-    //                 },
-    //                     credentials: "include"
-    //             })
-    //             .then( (res) => {
-    //                 console.log('Response from API:', res); // Log the response object
-    //                 return res.json();
-    //             } )
-    //             .then( (data) => console.log(data) )
-    //             .then( err => console.error("Error is: ", err) )
-    //         } catch (error) {
-    //             console.error("error ", error);
-    //         }
-    //     };
-
-    //     getData();
-    // }, [run]);
-
     const userToken = localStorage.getItem('accessToken')
 
     useEffect(() => {
@@ -91,9 +67,6 @@ export default function ProgramsHome() {
     
         getData();
     }, [run]);
-
-    // console.log("home ", token);
-    
 
     return (
     

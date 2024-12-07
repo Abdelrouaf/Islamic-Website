@@ -28,6 +28,8 @@ export default function AzkarDetails() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const splideRef = useRef();
 
+    const [url, setUrl] = useState("");
+
     const fetchData = async (url) => {
         try {
             const response = await fetch(url);
@@ -38,7 +40,7 @@ export default function AzkarDetails() {
             }             
 
         } catch {
-        } 
+        }
     };
 
     useEffect(() => {
@@ -47,19 +49,21 @@ export default function AzkarDetails() {
             setCategoryContent(content);
         }
 
-    }, [category]);
+    }, [category, url]);
 
     useEffect(() => {
     
         if ( category && categoryContent.length > 0 ) {
             if ( categoryContent[0].category === 'أذكار الصباح' ) {
-                fetchData(`https://ahegazy.github.io/muslimKit/json/azkar_sabah.json`);
+                setUrl(`https://ahegazy.github.io/muslimKit/json/azkar_sabah.json`);
             } else if ( categoryContent[0].category === 'أذكار المساء' ) {
-                fetchData('https://ahegazy.github.io/muslimKit/json/azkar_massa.json')
+                setUrl('https://ahegazy.github.io/muslimKit/json/azkar_massa.json')
             } else {
                 setTopics([])
             }
         }
+
+        fetchData(url)
 
     }, [category, categoryContent]);
 
@@ -170,14 +174,22 @@ export default function AzkarDetails() {
     };
 
     if (!category) {
-        return <div>Loading...</div>; // Handle loading state
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>; 
     }
 
     return (
     
         <>
         
-            <div className={`${style.blogSection} ${style.section}`}>
+            <div className={`${style.blogSection} ${style.section} ${style.notranslate}`} translate="no">
             
                 <div className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}>
                 
@@ -390,11 +402,11 @@ export default function AzkarDetails() {
                                 
                                     <div className={style.box}>
                                     
-                                        <div className={style.image}>
+                                        {/* <div className={style.image}>
                                         
                                             <img src={images[index % images.length]} alt={`Azkar images ${index + 1}`} loading='lazy' />
                                         
-                                        </div>
+                                        </div> */}
                                     
                                         <h4>{zkar}</h4>
                                     

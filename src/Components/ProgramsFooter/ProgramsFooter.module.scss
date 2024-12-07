@@ -1,5 +1,12 @@
 @import '../Style/Layout/Layout.module.scss';
 
+.sendMessageBtn {
+  color: white;
+  background-color: rgba(0, 102, 102, 0.8);
+  border: none !important;
+  padding: 5px 8px;
+}
+
 .footer {
     background-color: $whiteColor;
     box-shadow: $shadow;

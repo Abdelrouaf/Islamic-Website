@@ -27,6 +27,8 @@ export default function Islam() {
     const [likes, setLikes] = useState([])
     const mostLikedRef = useRef(null); // Ref to observe the "most liked" section
 
+    const [loading, setLoading] = useState(true)
+
     // Fetch data from the API when the component mounts
 
     const fetchData = async () => {
@@ -43,7 +45,9 @@ export default function Islam() {
             setLikes(initialLikes)
 
         } catch {
-        } 
+        } finally {
+            setLoading(false)
+        }
     };
 
     useEffect(() => {
@@ -97,7 +101,7 @@ export default function Islam() {
             }
 
         } catch  {
-        }
+        } 
 
         fetchData()
     }
@@ -165,6 +169,18 @@ export default function Islam() {
         hidden: { opacity: 0, y: 500 },
         visible: { opacity: 1, y: 0, transition: { duration: 1 } }
     };
+
+    if (loading) {
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>
+    }
 
     return (
     

@@ -113,11 +113,11 @@ export default function AzkarCatagories() {
                             
                                 <div className={style.box}>
                                 
-                                    <div className={style.image}>
+                                    {/* <div className={style.image}>
                                     
                                         <img src={images[index % images.length]} alt={`Azkar images ${index + 1}`} loading='lazy' />
                                     
-                                    </div>
+                                    </div> */}
                                 
                                     <h4>{zkar}</h4>
                                 

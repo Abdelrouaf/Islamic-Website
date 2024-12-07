@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import logo from '../../images/logo-color-removebg-preview (1).png'
 import { Link, NavLink } from 'react-router-dom'
 import style from './Header.module.scss'
@@ -6,6 +6,20 @@ import { motion } from 'framer-motion'
 import axios from 'axios'
 
 export default function Header() {
+
+    const [isRTL, setIsRTL] = useState(false);
+
+    // Function to detect the language and set direction
+    const detectLanguage = () => {
+      // Example: Check if the current language is Arabic
+      const currentLang = document.documentElement.lang || "en";
+      setIsRTL(currentLang === "ar"); // Adjust based on actual language detection logic
+    };
+  
+     // Run detection on mount
+     useEffect(() => {
+      detectLanguage();
+    }, []);
 
     // change Navbar color when scrolling down
     const [navbarColor, setNavbarColor] = useState(false)
@@ -193,6 +207,39 @@ export default function Header() {
         }
     }
 
+    const menuRef = useRef(null)
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsNavbarOpen(false)
+            }
+        };
+
+        const handleScroll = () => {
+            setIsNavbarOpen(false);
+          };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
+    if (loading) {
+        return  <div id="page">
+        <div id="container">
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="ring" />
+          <div id="h3">loading</div>
+        </div>
+      </div>
+    }
+
     return (
     
         <header className={`${style.header} ${headerPosition ? 'position-fixed' : 'position-static'}`}>
@@ -245,7 +292,7 @@ export default function Header() {
                                 
                                     <Link to='/azanTiming' className={style.timing}>Timing: </Link>
                                 
-                                    <select className="form-select my-2" onChange={handleCountryChange} value={selectedCountry} aria-label="Default select example">
+                                    { isRTL && <select className="form-select my-2" style={{direction: 'ltr'}} onChange={handleCountryChange} value={selectedCountry} aria-label="Default select example">
                                         <option value='EG'>Egypt</option>
                                         <option value="US">United States</option>
                                         <option value="SA">Saudi Arabia</option>
@@ -261,7 +308,25 @@ export default function Header() {
                                         <option value="DZ">Algeria</option>
                                         <option value="MA">Morocco</option>
                                         <option value="QA">Qatar</option>
-                                    </select>
+                                    </select> }
+
+                                    { !isRTL && <select className="form-select my-2" onChange={handleCountryChange} value={selectedCountry} aria-label="Default select example">
+                                        <option value='EG'>Egypt</option>
+                                        <option value="US">United States</option>
+                                        <option value="SA">Saudi Arabia</option>
+                                        <option value="AE">United Arab Emirates</option>
+                                        <option value="GB">United Kingdom</option>
+                                        <option value="FR">France</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="DE">Germany</option>
+                                        <option value="IN">India</option>
+                                        <option value="PK">Pakistan</option>
+                                        <option value="ID">Indonesia</option>
+                                        <option value="TR">Turkey</option>
+                                        <option value="DZ">Algeria</option>
+                                        <option value="MA">Morocco</option>
+                                        <option value="QA">Qatar</option>
+                                    </select> }
                                 
                                 </motion.div>
 
@@ -275,12 +340,12 @@ export default function Header() {
 
             </div>
 
-            <nav className={navbarColor ? `${style.navbar} navbar navbar-expand-lg bg-black` : `${style.navbar} navbar navbar-expand-lg bg-black` }>
+            <nav className={navbarColor ? `${style.navbar} navbar navbar-expand-lg bg-black` : `${style.navbar} navbar navbar-expand-lg bg-black` } style={{direction: 'ltr'}} ref={menuRef}>
             
                 <div className="container">
                 
                     <div className="d-flex justify-content-between align-items-center w-100">
-                    
+                        
                         <div className={style.logo}>
                         
                             <Link className="navbar-brand" to='/'><img src={logo} width={100} alt="" /></Link>
