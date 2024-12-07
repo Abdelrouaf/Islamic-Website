@@ -124,6 +124,19 @@ export default function UserRole() {
         setRun((prevRun) => prevRun + 1);
     }
 
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // Filter the users based on the search query
+    const filteredUsers = userData && userData.length > 0 
+    ? userData.filter(user => {
+        // Ensure `user.name` and `user.email` exist before checking
+        const nameMatch = user.name && user.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const emailMatch = user.email && user.email.toLowerCase().includes(searchQuery.toLowerCase());
+        return nameMatch || emailMatch;
+    })
+    : [];
+
+
     const [toasts, setToasts] = useState([]);
 
     // Function to show a new toast notification
@@ -163,7 +176,15 @@ export default function UserRole() {
 
                 <div className="container">
 
-                    <div className='table-responsive'>
+                    <div className={`d-flex align-items-center mb-3 ${style.input}`}>
+
+                        <i className="fa-solid fa-magnifying-glass"></i>
+
+                        <input type="search" className='form-control p-2' placeholder='search here..' value={searchQuery} onChange={ (e) => setSearchQuery(e.target.value) } />
+
+                    </div>
+
+                    { filteredUsers.length > 0 && <div className='table-responsive'>
 
                         <table className='table table-dark table-hover table-striped text-center'>
 
@@ -185,18 +206,18 @@ export default function UserRole() {
 
                             <tbody>
 
-                                { userData.map( (user, index) => 
+                                { filteredUsers && filteredUsers.map( (user, index) => 
                                 
                                     // user.isAdmin ? "" : (
                                     
                                         <tr key={user._id}>
-    
+
                                             <td>{index + 1}</td>
-    
+
                                             <td>{user.name}</td>
-    
+
                                             <td>{user.email}</td>
-    
+
                                             <td>
 
                                                 {user.isAdmin ? (
@@ -210,7 +231,7 @@ export default function UserRole() {
                                                 ) }
                                                                                         
                                             </td>
-    
+
                                         </tr>
                                     // ) 
                                 
@@ -220,7 +241,9 @@ export default function UserRole() {
 
                         </table>
 
-                    </div>
+                    </div> }
+
+                    { filteredUsers.length == 0 && <p className={`${style.fullEmpty} mt-5`}><span>There is no name or email matched! <br></br> Try another one</span></p> }
 
                 </div>
 

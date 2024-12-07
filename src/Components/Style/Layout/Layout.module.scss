@@ -1946,6 +1946,10 @@ i {
   margin-top: 20px;
 }
 
+.viewSave {
+  white-space: nowrap;
+}
+
 .toastBox {
   position: fixed;
   right: 30px;
@@ -2048,7 +2052,8 @@ i {
   .selectBox {
     position: relative;
     background-color: #f1f2f6;
-    padding: 50px;
+    // padding: 50px;
+    padding: 20px;
     border-radius: 40px;
     -webkit-border-radius: 40px;
     -moz-border-radius: 40px;
@@ -2067,8 +2072,8 @@ i {
       color: #ffffff;
       text-align: center;
       background-color: $lightBlueColor;
-      padding: 10px 30px;
-      margin: -30px -30px 30px;
+      padding: 10px;
+      margin: -10px 5px 10px;
       border-radius: 40px;
       -webkit-border-radius: 40px;
       -moz-border-radius: 40px;
@@ -2128,7 +2133,8 @@ i {
 
     .image {
       margin: -20px;
-      height: 180px;
+      // height: 180px;
+      height: 260px;
       position: relative;
       z-index: 1;
 
@@ -2193,6 +2199,13 @@ i {
 
 .programsHover {
   color: $lightBlueColor !important;
+}
+
+.sticky {
+  position: sticky;
+  top: 180px !important; 
+  z-index: 10;
+  transition: all 0.3s ease;
 }
 
 .currentlyNav {

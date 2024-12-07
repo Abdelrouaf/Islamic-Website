@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import layout from '../Style/Layout/Layout.module.scss';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid'; 
+import { v4 as uuid } from 'uuid'; 
 import { Editor } from '@tinymce/tinymce-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -13,7 +13,7 @@ export default function CreateTopicInHaij() {
 
     // State for the current form data
     const [formData, setFormData] = useState({
-        id: uuidv4(),
+        id: uuid(),
         image: '',
         imageURL:'',
         title: '',
@@ -185,21 +185,21 @@ const saveData = async () => {
     setIsSubmitting(false)
 };
 
-    const [toasts, setToasts] = useState([]);
+const [toasts, setToasts] = useState([]);
 
-    // Function to show a new toast notification
-    const showToast = (message, type) => {
-        const newToast = { id: uuidv4(), message, type }; // Create a unique ID for each toast
+// Function to show a new toast notification
+const showToast = (message, type) => {
 
-        // Add the new toast to the list of toasts
-        setToasts((prevToasts) => [...prevToasts, newToast]);
+    const newToast = { id: uuid(), message, type };
 
-        // Remove the toast after 6 seconds
-        setTimeout(() => {
-            setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
-        }, 6000); // Keep the toast for 6 seconds
-    };
+    setToasts((prevToasts) => [...prevToasts, newToast]);
 
+};
+
+// Function to manually remove a toast
+const closeToast = (id) => {
+    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+};
 
     return (
         <>
@@ -322,7 +322,13 @@ const saveData = async () => {
             {toasts.map((toast) => (
                 <div key={toast.id} className={`${layout.tast} ${toast.type} ${layout[toast.type]} ${layout.show}`}>
                     <i className={`fa ${toast.type === 'success' ? 'fa-check-circle' : toast.type === 'error' ? 'fa-times-circle' : toast.type === 'invalid' ? 'fa-exclamation-circle' : ''}`}></i>
-                    {toast.message}
+                    {toast.message}                    <button
+                        className={layout.closeButton}
+                        onClick={() => closeToast(toast.id)}
+                        style={{background: 'transparent', border: 'none', position: 'absolute', right: '0', top: '0', margin: '-10px'}}
+                    >
+                        <i className="fa-solid fa-circle-xmark" style={{color: 'red', background: 'white', borderRadius: '50%', fontSize: '20px'}}></i>
+                    </button>
                     <div className={layout.progress}></div>
                 </div>
             ))}

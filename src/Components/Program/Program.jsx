@@ -34,55 +34,99 @@ export default function Program() {
     const [allItemsSaved, setAllItemsSaved] = useState([])
     const [allItemsLiked, setAllItemsLiked] = useState([])
 
-            async function getData() {
-            try {    
-                const response = await fetch(`http://147.79.101.225:2859/api/programs/${id}`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    },
-                    credentials: "include"
-                });
-        
-                if (!response.ok) {
-                    showToast('Failed to delete item', 'error');
-                }
-    
-                const data = await response.json();
+    async function getData() {
+        try {    
+            const response = await fetch(`http://147.79.101.225:2859/api/programs/${id}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                credentials: "include"
+            });
 
-                setProgramData(data.Program)
-                setIsLoading(false);
-
-            } catch {
-                showToast('Error in fetch categories', 'error');
-                setIsLoading(false);
+            if (!response.ok) {
+                showToast('Failed to delete item', 'error');
             }
-        };
 
-        async function getProgramsData() {
-            try {    
-                const response = await fetch(`http://147.79.101.225:2859/api/programs/`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    },
-                    credentials: "include"
-                });
-    
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status`);
-                }
-    
-                const data = await response.json();
-    
-                setAllPrograms(data)
-                setIsLoading(false);
-    
-            } catch (error) {
-                console.error("Error occurred during the fetch:", error.message);
-                setIsLoading(false);
-            }
+            const data = await response.json();
+
+            setProgramData(data.Program)
+            setIsLoading(false);
+
+        } catch {
+            showToast('Error in fetch categories', 'error');
+        } finally {
+            setIsLoading(false);
         }
+    };
+
+    async function getProgramsData() {
+        try {    
+            const response = await fetch(`http://147.79.101.225:2859/api/programs/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                credentials: "include"
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status`);
+            }
+
+            const data = await response.json();
+
+            setAllPrograms(data)
+            setIsLoading(false);
+
+        } catch (error) {
+            console.error("Error occurred during the fetch:", error.message);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    const fetchAllLikedPrograms = async () => {
+        try {
+            const checkResponse = await fetch(`http://147.79.101.225:2859/api/like/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                credentials: "include",
+            });
+        
+            if (checkResponse.ok) {
+                const allItems = await checkResponse.json();
+                const totalLiked = allItems.MyLikes;
+                setAllItemsLiked(totalLiked)
+            }
+        
+        } catch {
+            isLoading(false)
+        }
+    }
+
+    const fetchAllSavedPrograms = async () => {
+        try {
+            const checkResponse = await fetch(`http://147.79.101.225:2859/api/saveitem/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                credentials: "include",
+            });
+        
+            if (checkResponse.ok) {
+                const allItems = await checkResponse.json();
+                const totalSaved = allItems.savedItems;
+                setAllItemsSaved(totalSaved)
+            }
+        
+        } catch {
+            isLoading(false)
+        }
+    }
 
     useEffect(() => {
 
@@ -92,62 +136,11 @@ export default function Program() {
         getData();
         getProgramsData();
 
-        const fetchAllSavedPrograms = async () => {
-            try {
-                const checkResponse = await fetch(`http://147.79.101.225:2859/api/saveitem/`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                    },
-                    credentials: "include",
-                });
-            
-                if (checkResponse.ok) {
-                    const allItems = await checkResponse.json();
-                    const totalSaved = allItems.savedItems;
-                    setAllItemsSaved(totalSaved)
-                }
-            
-            } catch {
-                isLoading(false)
-            }
-        }
         fetchAllSavedPrograms()
 
-        const fetchAllLikedPrograms = async () => {
-            try {
-                const checkResponse = await fetch(`http://147.79.101.225:2859/api/like/`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                    },
-                    credentials: "include",
-                });
-            
-                if (checkResponse.ok) {
-                    const allItems = await checkResponse.json();
-                    const totalLiked = allItems.MyLikes;
-                    setAllItemsLiked(totalLiked)
-                }
-            
-            } catch {
-                isLoading(false)
-            }
-        }
         fetchAllLikedPrograms()
-
-        // Set the interval to refresh the data every 3 seconds
-        const intervalId = setInterval(() => {
-            fetchAllSavedPrograms();
-            fetchAllLikedPrograms();
-        }, 100);
-
-        // Cleanup the interval when the component unmounts or `run` changes
-        return () => {
-            clearInterval(intervalId);
-        };
     
-    }, [run]);
+    }, [run, id]);
 
     let isLiking = false;
 
@@ -156,7 +149,6 @@ export default function Program() {
 
         if (isLiking) return;
 
-        console.log("likeFromUser received program:", program);
         isLiking = true;
 
         try {        
@@ -180,58 +172,27 @@ export default function Program() {
             
             const newProgram = await response.json();
             const newProgramMessage = JSON.stringify(newProgram);
-            console.log("Program liked and updated:", newProgram);
-
             showToast(newProgram.message, 'success')
-    
-            allItemsLiked();
-    
-        } catch {
-            showToast("Error liking the program", "error");
-        } finally {
-            isLiking = false;  // Reset the flag
-        }
-    }
-
-    // Like Program
-    const likeProgram = async (program) => {
-
-        try {
-            const updatedLikes = program.likes + 1;
-        
-            const updateResponse = await axios.post(`http://147.79.101.225:2859/api/programs/${program._id}`, {
-                ...program,
-                likes: updatedLikes
-            }, 
-            {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-                withCredentials: true,
-            }
-        );
-    
-            if (updateResponse.status === 200 || updateResponse.status === 201) {
-                setAllPrograms((prevPrograms) =>
-                    prevPrograms.map((t) =>
-                        t._id === program._id ? { ...t, likes: updatedLikes } : t
-                    )
-                );
-    
-            }
-    
-        } catch {
             
-        }
-    };
+        
+            const responsePrograms = await fetch(`http://147.79.101.225:2859/api/programs/${category !== 'All-Categories' ? `category?category=${category}` : ''}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                credentials: "include"
+            });
 
-    const [deleteFromSave, setDeleteFromSave] = useState(false);
+            if (!responsePrograms.ok) {
+                throw new Error(`HTTP error! status`);
+            }
 
-    // Save or delete the program
-    const saveProgram = async (program) => {
-        try {    
-            const checkResponse = await fetch(`http://147.79.101.225:2859/api/saveitem/`, {
+            const data = await responsePrograms.json();
+            const programs = category === "All-Categories" ? data : data.Programs;
+
+            setAllPrograms(programs)
+
+            const checkResponse = await fetch(`http://147.79.101.225:2859/api/like/`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -241,27 +202,17 @@ export default function Program() {
     
             if (checkResponse.ok) {
                 const allItems = await checkResponse.json();
-                const totalSaved = allItems.savedItems;
-                const existingItem = totalSaved.find(item => item.programId._id === program._id);
-    
-                if (existingItem) {
-                    showToast('Item deleted from saved successfully!', 'success');
-                    return;
-                }
+                const totalLikes= allItems.MyLikes;
+                setAllItemsLiked(totalLikes)
             }
-
-            showToast('Item saved successfully!', 'success');
-
-            // allItemsSaved();
     
-    
-        } catch (error) {
-            showToast('Error occurred during save the item', 'error');
-            setIsLoading(false);
+        } catch {
+            showToast("Error liking the program", "error");
+        } finally {
+            isLiking = false;  // Reset the flag
         }
-        setDeleteFromSave(false);
     }
-    
+
     // Function to save the item
     const saveItem = async (program) => {
     
@@ -280,10 +231,40 @@ export default function Program() {
                 throw new Error('Failed to save item');
             }
 
-            await saveProgram(program)
+            // await saveProgram(program)
+            const responseData = await response.json();
+            showToast(responseData.message, 'success')
     
-            // Fetch updated programs after saving the item
-            // await fetchPrograms(category);
+            const responsePrograms = await fetch(`http://147.79.101.225:2859/api/programs/${category !== 'All-Categories' ? `category?category=${category}` : ''}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                credentials: "include"
+            });
+
+            if (!responsePrograms.ok) {
+                throw new Error(`HTTP error! status`);
+            }
+
+            const data = await responsePrograms.json();
+            const programs = category === "All-Categories" ? data : data.Programs;
+
+            setAllPrograms(programs)
+
+            const checkResponse = await fetch(`http://147.79.101.225:2859/api/saveitem/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                credentials: "include",
+            });
+    
+            if (checkResponse.ok) {
+                const allItems = await checkResponse.json();
+                const totalSaved = allItems.savedItems;
+                setAllItemsSaved(totalSaved)
+            }
     
         } catch (error) {
             showToast('Error saving item', 'error');
@@ -733,7 +714,7 @@ if (!program._id) {
                                                         
                                                         </Link>
     
-                                                        <Link to={`../${category}/${program._id}`}><h4 className={style.programTitle}>{program.programName}</h4></Link>
+                                                        <Link to={`../${category}/${program._id}`} ><h4 className={style.programTitle}>{program.programName}</h4></Link>
     
                                                         <p className={style.programSize}>Program size: <span>{sizeFormatted}</span></p>
     
@@ -779,9 +760,9 @@ if (!program._id) {
     
                                                             <div onClick={ () => {likeFromUser(program)} } className={`${ Array.isArray(allItemsLiked) && allItemsLiked.some(item => item.programId?._id === program._id) ? style.removeLikeButton : style.likeButton }`}>
                                                                 
-                                                                <input className={style.on} id="heart" type="checkbox" />
+                                                                <input className={style.on} id={`heart-${program._id}`} type="checkbox" />
 
-                                                                <label className={style.likeLabel} htmlFor="heart">
+                                                                <label className={style.likeLabel} htmlFor={`heart-${program._id}`}>
 
                                                                     <svg className={style.likeIcon} fillRule="nonzero" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
@@ -801,9 +782,9 @@ if (!program._id) {
     
                                                             <div className={style.viewSave}>
     
-                                                                <span className={style.views}>{formatNumber(program.views)} views</span>
-    
-                                                                <span><i className="fa-regular fa-heart"></i> {program.likes} </span>
+                                                                <span className={style.views}> <i className="fa-regular fa-eye"></i>  {formatNumber(program.views)}</span>
+
+                                                                <span className={style.downloads}><i className="fa-solid fa-download"></i> {formatNumber(program.downloads)} </span>
 
                                                                 <span className={style.Saved}>{allItemsSaved.find(item => item.programId._id === program._id) ? (<i className="fa-solid fa-bookmark"></i>) : (<i className="fa-regular fa-bookmark"></i>) } {formatNumber(program.saved)} </span>
     

@@ -356,13 +356,16 @@ const checkTitleExists = async (programName) => {
 
     // Function to show a new toast notification
     const showToast = (message, type) => {
+
         const newToast = { id: uuid(), message, type };
-    
+
         setToasts((prevToasts) => [...prevToasts, newToast]);
-    
-        setTimeout(() => {
-            setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
-        }, 6000);
+
+    };
+
+    // Function to manually remove a toast
+    const closeToast = (id) => {
+        setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
     };
     
     if (isLoading) {
@@ -982,21 +985,19 @@ const checkTitleExists = async (programName) => {
             </div>
         
             <div id="toastBox" className={style.toastBox}>
-            
                 {toasts.map((toast) => (
-                
                     <div key={toast.id} className={`${style.tast} ${toast.type} ${style[toast.type]} ${style.show}`}>
-                    
                         <i className={`fa ${toast.type === 'success' ? 'fa-check-circle' : toast.type === 'error' ? 'fa-times-circle' : toast.type === 'invalid' ? 'fa-exclamation-circle' : ''}`}></i>
-                    
-                        {toast.message}
-                    
+                        {toast.message}                    <button
+                            className={style.closeButton}
+                            onClick={() => closeToast(toast.id)}
+                            style={{background: 'transparent', border: 'none', position: 'absolute', right: '0', top: '0', margin: '-10px'}}
+                        >
+                            <i className="fa-solid fa-circle-xmark" style={{color: 'red', background: 'white', borderRadius: '50%', fontSize: '20px'}}></i>
+                        </button>
                         <div className={style.progress}></div>
-                    
                     </div>
-                
                 ))}
-            
             </div>
 
         </>

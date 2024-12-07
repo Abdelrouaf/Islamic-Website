@@ -160,6 +160,11 @@
     }
 }
 
+.sticky {
+    position: sticky !important;
+    top: 105px !important;
+}
+
 .input {
     text-transform: capitalize;
     align-items: baseline;

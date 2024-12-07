@@ -425,16 +425,33 @@ export default function UpdateProgram() {
     };
 
     const [toasts, setToasts] = useState([]);
+    const [isPageVisible, setIsPageVisible] = useState(true);
+
     // Function to show a new toast notification
     const showToast = (message, type) => {
+        if (!isPageVisible) return;  // Only show toasts if the page is visible
+
         const newToast = { id: uuid(), message, type };
-    
+
         setToasts((prevToasts) => [...prevToasts, newToast]);
-    
+
         setTimeout(() => {
             setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
         }, 6000);
     };
+
+    // Handle page visibility changes
+    const handleVisibilityChange = () => {
+        setIsPageVisible(document.visibilityState === "visible");
+    };
+
+    useEffect(() => {
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        };
+    }, []);
     
     if (isLoading) {
         return  <div id="page">

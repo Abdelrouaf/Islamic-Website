@@ -30,17 +30,23 @@ export default function Header() {
         setIsNavbarOpen(prevState => !prevState); // Toggle navbar state
     };
 
-    function changeNavbarColor() {
-        if(window.scrollY >= 45) {
-            setNavbarColor(true)
-            setHeaderPosition(true)
-        } else {
-            setNavbarColor(false)
-            setHeaderPosition(false)
-        }
-    }
-
-    window.addEventListener("scroll", changeNavbarColor)
+    useEffect(() => {
+        const changeNavbarColor = () => {
+            if (window.scrollY >= 45) {
+                setNavbarColor(true);
+                setHeaderPosition(true);
+            } else {
+                setNavbarColor(false);
+                setHeaderPosition(false);
+            }
+        };
+    
+        // Attach the scroll event listener
+        window.addEventListener("scroll", changeNavbarColor);
+    
+        // Cleanup the event listener on unmount
+        return () => window.removeEventListener("scroll", changeNavbarColor);
+    }, []);
 
     const countryData = {
         EG: { name: 'Egypt', capital: 'Cairo' },
@@ -68,6 +74,7 @@ export default function Header() {
     const [selectedCity, setSelectedCity] = useState(countryData['EG'].capital); // Default is Cairo
 
     useEffect(() => {
+        let interval;
         const fetchPrayersTime = async () => {
             try {
                 const today = new Date();
@@ -91,7 +98,7 @@ export default function Header() {
         };
 
         fetchPrayersTime();
-        const interval = setInterval(() => {
+        interval = setInterval(() => {
             if (Object.keys(prayersTime).length > 0) {
                 findNextPrayer(prayersTime); // Recalculate every minute
             }

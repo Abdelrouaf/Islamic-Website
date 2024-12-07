@@ -43,6 +43,14 @@ export default function ApproveUser() {
         getData();
     }, [run]);
 
+    useEffect( () => {
+        if (userData.length < 1 ) {
+            setIsLoading(true)
+        } else {
+            setIsLoading(false)
+        }
+    }, [] )
+
     // Confirm user
     const confirmUser = async (id) => {
     
@@ -83,13 +91,29 @@ export default function ApproveUser() {
 
     }
 
-    useEffect( () => {
-        if (userData.length < 1 ) {
-            setIsLoading(true)
-        } else {
-            setIsLoading(false)
+        // Delete user
+        const deleteUser = async (id) => {
+
+            try {
+                const response = await fetch(`http://147.79.101.225:2859/api/user/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${userToken}`,
+                    },
+                    credentials: "include"
+                });
+            
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status:`);
+                }
+            
+            } catch (error) {
+                    console.error("Error occurred during the fetch:", error.message);
+                    showToast("Error occurred during the fetch", 'error')
+            }
+    
+            setRun((prevRun) => prevRun + 1);
         }
-    }, [] )
 
     const [toasts, setToasts] = useState([]);
 
@@ -160,13 +184,15 @@ export default function ApproveUser() {
 
                                         <th>confirm</th>
 
+                                        <th>delete user</th>
+
                                     </tr>
 
                                 </thead>
 
                                 <tbody>
 
-                                    { userData.map( (user, index) => 
+                                    { userData && userData.map( (user, index) => 
                                     
                                         user.apprived ? '' : 
                                             (
@@ -181,6 +207,8 @@ export default function ApproveUser() {
                                                     {/* <td>{user.apprived ? "Approved" : 'Not approved'}</td> */}
 
                                                     <td><i onClick={ () => confirmUser(user._id) } className="fa-regular fa-circle-check" style={{cursor: "pointer"}}></i></td>
+
+                                                    <td> <i onClick={ () => deleteUser(user._id) } className="fa-solid fa-trash-can" style={{cursor: "pointer"}}></i> </td>
 
                                                 </tr>
                                             )

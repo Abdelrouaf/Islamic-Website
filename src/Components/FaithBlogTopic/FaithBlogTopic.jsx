@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import layout from '../Style/Layout/Layout.module.scss';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
@@ -32,20 +32,22 @@ export default function FaithBlogTopic() {
 
     // Loading state
     const [isLoading, setIsLoading] = useState(true);
-    const [toasts, setToasts] = useState([]);
     const [showModal, setShowModal] = useState(false);
+
+    const [toasts, setToasts] = useState([]);
 
     // Function to show a new toast notification
     const showToast = (message, type) => {
-        const newToast = { id: uuidv4(), message, type }; // Create a unique ID for each toast
 
-        // Add the new toast to the list of toasts
+        const newToast = { id: uuid(), message, type };
+
         setToasts((prevToasts) => [...prevToasts, newToast]);
 
-        // Remove the toast after 6 seconds
-        setTimeout(() => {
-            setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
-        }, 6000); // Keep the toast for 6 seconds
+    };
+
+    // Function to manually remove a toast
+    const closeToast = (id) => {
+        setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
     };
 
     // Fetch the specific topic data using the ID from the URL
@@ -481,11 +483,17 @@ const handleCancelDelete = () => {
                 </div>
             )}
 
-        <div id="toastBox" className={layout.toastBox}>
+<div id="toastBox" className={layout.toastBox}>
             {toasts.map((toast) => (
                 <div key={toast.id} className={`${layout.tast} ${toast.type} ${layout[toast.type]} ${layout.show}`}>
                     <i className={`fa ${toast.type === 'success' ? 'fa-check-circle' : toast.type === 'error' ? 'fa-times-circle' : toast.type === 'invalid' ? 'fa-exclamation-circle' : ''}`}></i>
-                    {toast.message}
+                    {toast.message}                    <button
+                        className={layout.closeButton}
+                        onClick={() => closeToast(toast.id)}
+                        style={{background: 'transparent', border: 'none', position: 'absolute', right: '0', top: '0', margin: '-10px'}}
+                    >
+                        <i className="fa-solid fa-circle-xmark" style={{color: 'red', background: 'white', borderRadius: '50%', fontSize: '20px'}}></i>
+                    </button>
                     <div className={layout.progress}></div>
                 </div>
             ))}
