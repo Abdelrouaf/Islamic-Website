@@ -548,7 +548,7 @@ export default function Category() {
 
                     <div className="row gy-2">
 
-                        <div className="col-lg-4 d-none d-lg-block">
+                        <div className="col-lg-3 d-none d-lg-block">
 
                             <div className={style.selectBox}>
 
@@ -612,7 +612,7 @@ export default function Category() {
 
                         </div>
 
-                        <div className="col-lg-8">
+                        <div className="col-lg-9">
 
                             { allPrograms.length < 1 || allPrograms === null ? 
                             
