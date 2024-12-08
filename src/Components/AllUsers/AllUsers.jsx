@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import style from './AllUsers.module.scss'
+import { setConfig } from 'dompurify'
 
 export default function AllUsers() {
 
@@ -92,6 +93,44 @@ export default function AllUsers() {
     })
     : [];
 
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+const sortedUsers = React.useMemo(() => {
+    if (!sortConfig.key) return filteredUsers;
+
+    const sortedData = [...filteredUsers];
+    sortedData.sort((a, b) => {
+        if (sortConfig.key === 'downloads') {
+            return sortConfig.direction === 'asc'
+                ? a.downloads - b.downloads
+                : b.downloads - a.downloads;
+        }
+
+        if (sortConfig.key === 'approved') {
+            return sortConfig.direction === 'asc'
+                ? (a.apprived === b.apprived ? 0 : a.apprived ? -1 : 1)
+                : (a.apprived === b.apprived ? 0 : a.apprived ? 1 : -1);
+        }
+
+        if (sortConfig.key === 'role') {
+            return sortConfig.direction === 'asc'
+                ? (a.isAdmin === b.isAdmin ? 0 : a.isAdmin ? -1 : 1)
+                : (a.isAdmin === b.isAdmin ? 0 : a.isAdmin ? 1 : -1);
+        }
+
+        return 0;
+    });
+
+    return sortedData;
+}, [filteredUsers, sortConfig]);
+
+const handleSort = (key) => {
+    setSortConfig((prev) => ({
+        key,
+        direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc',
+    }));
+};
+
     const [toasts, setToasts] = useState([]);
 
     // Function to show a new toast notification
@@ -147,7 +186,7 @@ export default function AllUsers() {
 
                                 <tr>
 
-                                    <th>#</th>
+                                    <th onClick={() => setSortConfig({key: 'null', direction: 'asc'})} style={{ cursor: "pointer" }}>#</th>
 
                                     {/* <th><input type="checkbox" className='w-auto'  /></th> */}
 
@@ -157,11 +196,15 @@ export default function AllUsers() {
 
                                     <th>user email</th>
 
-                                    <th>user downloads</th>
-
-                                    <th>approved</th>
-
-                                    <th>role</th>
+                                    <th onClick={() => handleSort('downloads')} style={{ cursor: 'pointer' }}>
+                                        user downloads {sortConfig.key === 'downloads' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                                    </th>
+                                    <th onClick={() => handleSort('approved')} style={{ cursor: 'pointer' }}>
+                                        approved {sortConfig.key === 'approved' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                                    </th>
+                                    <th onClick={() => handleSort('role')} style={{ cursor: 'pointer' }}>
+                                        role {sortConfig.key === 'role' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                                    </th>
 
                                     <th>delete user</th>
 
@@ -171,7 +214,7 @@ export default function AllUsers() {
 
                             <tbody>
 
-                                { userData && filteredUsers.map( (user, index) => (
+                                { userData && sortedUsers.map( (user, index) => (
                                     <tr key={user._id}>
 
                                         <td>{index + 1}</td>
@@ -184,7 +227,7 @@ export default function AllUsers() {
 
                                         <td>{user.email}</td>
 
-                                        <td>05</td>
+                                        <td>{user.downloads}</td>
 
                                         <td>{user.apprived ? "Approved" : 'Not approved'}</td>
 

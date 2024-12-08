@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import axios from 'axios'
 import logo from '../../images/program-logo1.png'
@@ -23,6 +23,7 @@ export default function ProgramsHeader() {
       detectLanguage();
     }, []);
 
+    const location = useLocation()
 
     // change Navbar color when scrolling down
     const [navbarColor, setNavbarColor] = useState(false)
@@ -364,35 +365,35 @@ export default function ProgramsHeader() {
                             <ul className={`navbar-nav mb-2 mb-lg-0`}>
 
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/All-Categories' state={{ description: 'Showing all categories programs.' }}>Categories</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive|| location.pathname.includes('All-Categories')) ? `nav-link ${style.activeLink}` : 'nav-link'} to='category/All-Categories' state={{ description: 'Showing all categories programs.' }}>Categories</NavLink>
                                 </motion.li>
                             
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/Architecture-Software' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}>Architecture</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive || location.pathname.includes('Architecture-Software') ) ? `nav-link ${style.activeLink}` : 'nav-link'} to='category/Architecture-Software' state={{ description: 'Architecture software programs are essential tools for architects, designers, and students to create, visualize, and refine architectural designs.' }}>Architecture</NavLink>
                                 </motion.li>
 
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 1 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/Structure-Software' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}>Structure</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive|| location.pathname.includes('Structure-Software')) ? `nav-link ${style.activeLink}` : 'nav-link'} to='category/Structure-Software' state={{ description: 'Structure software programs offer specialized tools for planning, designing, and managing infrastructure projects.' }}>Structure</NavLink>
                                 </motion.li>
 
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : .5 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/Dental-Software' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}>Dental</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive|| location.pathname.includes('Dental-Software')) ? `nav-link ${style.activeLink}` : 'nav-link'} to='category/Dental-Software' state={{ description: 'Dental programs are designed to support dentists, hygienists, and dental offices with tools for diagnostics, patient management, and treatment planning.' }}>Dental</NavLink>
                                 </motion.li>
                             
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 1.5 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/English-Material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}>English</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive|| location.pathname.includes('English')) ? `nav-link ${style.activeLink}` : 'nav-link'} to='category/English-Material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}>English</NavLink>
                                 </motion.li>
                             
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 2 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/Islamic-Material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}>Islamic</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive|| location.pathname.includes('Islamic')) ? `nav-link ${style.activeLink}` : 'nav-link'} to='category/Islamic-Material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}>Islamic</NavLink>
                                 </motion.li>
                             
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 2.5 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='category/Different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}>different</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive|| location.pathname.includes('Different')) ? `nav-link ${style.activeLink}` : 'nav-link'} to='category/Different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}>different</NavLink>
                                 </motion.li>
                             
                                 {/* <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 3 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive ? `nav-link ${style.activeLink}` : 'nav-link')} to='news'>News</NavLink>
+                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive|| location.pathname.includes('All-Categories')) ? `nav-link ${style.activeLink}` : 'nav-link'} to='news'>News</NavLink>
                                 </motion.li>
 
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 3.5 }} className="nav-item">

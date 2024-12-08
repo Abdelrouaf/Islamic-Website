@@ -331,9 +331,9 @@ function App() {
               </Route>        
             </Route>
 
-            <Route path='en' element={<Admin />}>
+            <Route path='en/dashboard' element={<Admin />}>
 
-              <Route path='dashboard' element={<Dashboard />} />
+              <Route index element={<Dashboard />} />
         
               <Route path='user/all-users' element={<AllUsers />} />
 

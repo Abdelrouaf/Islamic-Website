@@ -69,7 +69,7 @@ export default function Admin() {
     const [programsPagesOpen, setProgramsPagesOpen] = useState(false)
 
     useEffect(() => {
-        if (location.pathname.startsWith('/en/islamic')) {
+        if (location.pathname.startsWith('/en/dashboard/islamic')) {
             setOpen3(true)
             setIsProgramsOpen(false)
             setOpenPrograms(false)
@@ -79,7 +79,7 @@ export default function Admin() {
             setOpen3(false)
         }
     
-        const isPillarsActive = location.pathname.startsWith('/en/islamic/pillars');
+        const isPillarsActive = location.pathname.startsWith('/en/dashboard/islamic/pillars');
         if (isPillarsActive) {
             setOpen4(true);
             setOpen3(true);
@@ -91,7 +91,7 @@ export default function Admin() {
             setOpen4(false);
         }
     
-        const isFaithActive = location.pathname.startsWith('/en/islamic/faith');
+        const isFaithActive = location.pathname.startsWith('/en/dashboard/islamic/faith');
         if (isFaithActive) {
             setOpen2(true);
             setOpen3(true);
@@ -103,9 +103,9 @@ export default function Admin() {
             setOpen2(false);
         }
 
-        const isAddProgramsOpen = location.pathname.startsWith("/en/add-programs")
+        const isAddProgramsOpen = location.pathname.startsWith("/en/dashboard/add-programs")
 
-        const isProgramOpen = location.pathname.startsWith("/en/programs/")
+        const isProgramOpen = location.pathname.startsWith("/en/dashboard/programs/")
 
         if ( isAddProgramsOpen || isProgramOpen ) {
             setIsProgramsOpen(true)
@@ -123,10 +123,10 @@ export default function Admin() {
             setAddProgramsOpen(false)
         }
 
-        if (location.pathname.startsWith('/en/add-programs')) {
+        if (location.pathname.startsWith('/en/dashboard/add-programs')) {
             setOpenPrograms(true);
             setAddProgramsOpen(true);
-        } else if (location.pathname.startsWith('/en/programs')) {
+        } else if (location.pathname.startsWith('/en/dashboard/programs')) {
             setOpenPrograms(true);
             setCategoriesOpen(true);
         } else {
@@ -135,7 +135,7 @@ export default function Admin() {
             setCategoriesOpen(false);
         }
 
-        if (location.pathname.startsWith('/en/user')) {
+        if (location.pathname.startsWith('/en/dashboard/user')) {
             setOpen(true)
             setIsProgramsOpen(false)
             setOpenPrograms(false)
@@ -540,21 +540,21 @@ export default function Admin() {
                         
                             <ul className={`${style.sidebarLinks}`}>
                             
-                                <li><NavLink to='dashboard' className={({isActive}) => { return ( ` ${style.link} ` + (isActive ? ` ${style.linkHover} ` : ` ${style.linkTransparent}`)) }}><img src={dashboardHome} className={style.headTitleImg} alt='dashboard-home-image' loading='lazy'/> dashboard</NavLink></li>
+                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.endsWith(`/en/dashboard`) ? style.linkHover : style.linkTransparent}`}><NavLink to='/en/dashboard' className={({isActive}) => {const dashboardActive = location.pathname.endsWith('dashboard'); return `${dashboardActive ? 'text-white' : ''}`;}}><img src={dashboardHome} className={style.headTitleImg} alt='dashboard-home-image' loading='lazy'/> <span>dashboard</span></NavLink></li>
                             
                                 <li>
                                 
-                                    <h3 onClick={ ()=> {setOpen(!open); setOpen3(false); setIsProgramsOpen(false); setOpenPrograms(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/user') ? style.linkHover : '' } `} ><span className={style.imageBadge}><img src={group} className={style.headTitleImg} alt="teamwork-image" loading='lazy' /> { unapprovedUsersCount.toFixed(0) > 0 && (<sup><span className={`badge text-bg-warning`}>{unapprovedUsersCount.toFixed(0)}</span></sup>) } </span> users <i className={` fa-solid fa-angle-right ${style.menu} ${ open ? style.rotateArrow : '' }`}></i></h3>
+                                    <h3 onClick={ ()=> {setOpen(!open); setOpen3(false); setIsProgramsOpen(false); setOpenPrograms(false); setPagesOpen(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/user') ? style.linkHover : '' } `} ><span className={style.imageBadge}><img src={group} className={style.headTitleImg} alt="teamwork-image" loading='lazy' /> { unapprovedUsersCount.toFixed(0) > 0 && (<sup><span className={`badge text-bg-warning`}>{unapprovedUsersCount.toFixed(0)}</span></sup>) } </span> users <i className={` fa-solid fa-angle-right ${style.menu} ${ open ? style.rotateArrow : '' }`}></i></h3>
                                 
                                     <ul className={`${style.sidebarSubmenu} ${open ? `${style.active}`: `${style.inactive}` } `}>
 
                                         <h3 className={`d-none ${style.link} ${style.justTitle}  ${style.linkHover} `} > users <i className={` fa-solid fa-angle-right ${style.menu} ${style.rotateArrow}`}></i></h3>
                                     
-                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/user/all-users`) ? style.linkHover : style.linkTransparent}`}><NavLink to='user/all-users' className={({ isActive }) => {const isAllUserActive = location.pathname.startsWith('/en/user/all-user'); return `text-white`;}}><span>all users</span> </NavLink></li>
+                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/user/all-users`) ? style.linkHover : style.linkTransparent}`}><NavLink to='user/all-users' className={({ isActive }) => {const isAllUserActive = location.pathname.startsWith('/en/dashboard/user/all-user'); return `text-white`;}}><span>all users</span> </NavLink></li>
 
-                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/user/approve-user`) ? style.linkHover : style.linkTransparent}`}><NavLink to='user/approve-user' className={({ isActive }) => {const isApprovedUserActive = location.pathname.startsWith('/en/user/approve-user'); return `text-white`;}}> <span>approve user</span> </NavLink></li>
+                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/user/approve-user`) ? style.linkHover : style.linkTransparent}`}><NavLink to='user/approve-user' className={({ isActive }) => {const isApprovedUserActive = location.pathname.startsWith('/en/dashboard/user/approve-user'); return `text-white`;}}> <span>approve user</span> </NavLink></li>
                                     
-                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/user/user-role`) ? style.linkHover : style.linkTransparent}`}><NavLink to='user/user-role' className={({ isActive }) => {const isUserRoleActive = location.pathname.startsWith('/en/user/user-role'); return `text-white`;}}> <span>role</span> </NavLink></li>
+                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/user/user-role`) ? style.linkHover : style.linkTransparent}`}><NavLink to='user/user-role' className={({ isActive }) => {const isUserRoleActive = location.pathname.startsWith('/en/dashboard/user/user-role'); return `text-white`;}}> <span>role</span> </NavLink></li>
                                     
                                     </ul>
                                 
@@ -564,29 +564,29 @@ export default function Admin() {
                             
                                 <li>
                                 
-                                    <h3 onClick={ ()=> {setOpen3(!open3); setOpen(false); setIsProgramsOpen(false); setOpenPrograms(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/islamic') ? style.linkHover : '' }`} ><img src={islamicImg} className={style.headTitleImg} alt="islamic-image" loading='lazy' /> islamic <i className={` fa-solid fa-angle-right ${style.menu} ${ open3 ? style.rotateArrow : '' }`}></i></h3>
+                                    <h3 onClick={ ()=> {setOpen3(!open3); setOpen(false); setIsProgramsOpen(false); setOpenPrograms(false); setPagesOpen(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/islamic') ? style.linkHover : '' }`} ><img src={islamicImg} className={style.headTitleImg} alt="islamic-image" loading='lazy' /> islamic <i className={` fa-solid fa-angle-right ${style.menu} ${ open3 ? style.rotateArrow : '' }`}></i></h3>
                                 
                                     <ul className={`${style.sidebarSubmenu} ${open3 ? `${style.active}`: `${style.inactive}` } `}>
                                     
                                         <h3 className={`d-none ${style.link} ${style.justTitle}  ${style.linkHover}`} > islamic <i className={` fa-solid fa-angle-right ${style.menu} ${style.rotateArrow}`}></i></h3>
 
-                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/islamic/monotheism`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/monotheism/create/topic' className={({ isActive }) => {const isMonotheismActive = location.pathname.startsWith('/en/islamic/monotheism'); return `text-white`;}}><span>Monotheism</span></NavLink></li>
+                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/islamic/monotheism`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/monotheism/create/topic' className={({ isActive }) => {const isMonotheismActive = location.pathname.startsWith('/en/dashboard/islamic/monotheism'); return `text-white`;}}><span>Monotheism</span></NavLink></li>
                                     
                                         <li>
                                         
-                                            <h3 onClick={ ()=> {setOpen4(!open4); setOpen2(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/islamic/pillars') ? style.linkHover : '' }`} >Pillars <i className={` ${style.menu} ${open4 ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                            <h3 onClick={ ()=> {setOpen4(!open4); setOpen2(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/islamic/pillars') ? style.linkHover : '' }`} >Pillars <i className={` ${style.menu} ${open4 ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
                                         
                                             <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${open4 ? `${style.active}`: `${style.inactive}` } `}>
 
-                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/islamic/pillars/shahadah`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/pillars/shahadah/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/islamic/pillars/shahadah'); return `text-white`;}}><span> - Shahadah</span></NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/islamic/pillars/shahadah`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/pillars/shahadah/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/dashboard/islamic/pillars/shahadah'); return `text-white`;}}><span> - Shahadah</span></NavLink></li>
 
-                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/islamic/pillars/prayer`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/pillars/prayer/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/islamic/pillars/prayer'); return `text-white`;}}><span> - Prayer</span></NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/islamic/pillars/prayer`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/pillars/prayer/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/dashboard/islamic/pillars/prayer'); return `text-white`;}}><span> - Prayer</span></NavLink></li>
 
-                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/islamic/pillars/sawm`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/pillars/sawm/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/islamic/pillars/sawm'); return `text-white`;}}><span> - Sawm</span></NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/islamic/pillars/sawm`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/pillars/sawm/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/dashboard/islamic/pillars/sawm'); return `text-white`;}}><span> - Sawm</span></NavLink></li>
 
-                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/islamic/pillars/zakat`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/pillars/zakat/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/islamic/pillars/zakat'); return `text-white`;}}><span> - Zakat</span></NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/islamic/pillars/zakat`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/pillars/zakat/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/dashboard/islamic/pillars/zakat'); return `text-white`;}}><span> - Zakat</span></NavLink></li>
 
-                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/islamic/pillars/haij`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/pillars/haij/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/islamic/pillars/haij'); return `text-white`;}}><span> - Haij</span></NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/islamic/pillars/haij`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/pillars/haij/create' className={({ isActive }) => {const isPillarsActive = location.pathname.startsWith('/en/dashboard/islamic/pillars/haij'); return `text-white`;}}><span> - Haij</span></NavLink></li>
 
                                             </ul>
                                         
@@ -594,21 +594,21 @@ export default function Admin() {
                                     
                                         <li>
                                         
-                                            <h3 onClick={ ()=> {setOpen2(!open2); setOpen4(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/islamic/faith') ? style.linkHover : '' }`} >Faith <i className={` ${style.menu} ${open4 ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                            <h3 onClick={ ()=> {setOpen2(!open2); setOpen4(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/islamic/faith') ? style.linkHover : '' }`} >Faith <i className={` ${style.menu} ${open4 ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
                                         
                                             <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${open2 ? `${style.active}`: `${style.inactive}` } `}>
 
-                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/islamic/faith/book`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/faith/book/create' className={({ isActive }) => {const isFaithActive = location.pathname.startsWith('/en/faith/book'); return `text-white`;}}><span> - Book</span></NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/islamic/faith/book`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/faith/book/create' className={({ isActive }) => {const isFaithActive = location.pathname.startsWith('/en/dashboard/faith/book'); return `text-white`;}}><span> - Book</span></NavLink></li>
 
-                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/islamic/faith/blog`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/faith/blog/create' className={({ isActive }) => {const isFaithActive = location.pathname.startsWith('/en/faith/blog'); return `text-white`;}}><span> - Blog</span></NavLink></li>
+                                                <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/islamic/faith/blog`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/faith/blog/create' className={({ isActive }) => {const isFaithActive = location.pathname.startsWith('/en/dashboard/faith/blog'); return `text-white`;}}><span> - Blog</span></NavLink></li>
 
                                             </ul>
                                         
                                         </li>
                                     
-                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/islamic/islam`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/islam/create' className={({isActive}) => {const isIslamActive = location.pathname.startsWith('/en/islam'); return ( ` text-white `) }}><span>About Islam</span></NavLink></li>
+                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/islamic/islam`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/islam/create' className={({isActive}) => {const isIslamActive = location.pathname.startsWith('/en/dashboard/islam'); return ( ` text-white `) }}><span>About Islam</span></NavLink></li>
                                     
-                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/islamic/news`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/news/create' className={({isActive}) => {const isNewsActive = location.pathname.startsWith('/en/news'); return ( ` text-white `) }}><span>News</span></NavLink></li>
+                                        <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/islamic/news`) ? style.linkHover : style.linkTransparent}`}><NavLink to='islamic/news/create' className={({isActive}) => {const isNewsActive = location.pathname.startsWith('/en/dashboard/news'); return ( ` text-white `) }}><span>News</span></NavLink></li>
 
                                     </ul>
                                 
@@ -616,7 +616,7 @@ export default function Admin() {
                             
                                 <li>
 
-                                <h3 onClick={ ()=> {setOpenPrograms(!openPrograms); setOpen3(false); setOpen(false)} } className={`${style.link} ${ isProgramsOpen ? style.linkHover : '' } `} ><img src={programImage} className={style.headTitleImg} alt="programs-image" loading='lazy ' /> programs <i className={` fa-solid fa-angle-right ${style.menu} ${ openPrograms ? style.rotateArrow : '' }`}></i></h3>
+                                <h3 onClick={ ()=> {setOpenPrograms(!openPrograms); setOpen3(false); setOpen(false); setPagesOpen(false)} } className={`${style.link} ${ isProgramsOpen ? style.linkHover : '' } `} ><img src={programImage} className={style.headTitleImg} alt="programs-image" loading='lazy ' /> programs <i className={` fa-solid fa-angle-right ${style.menu} ${ openPrograms ? style.rotateArrow : '' }`}></i></h3>
                                 
                                 <ul className={`${style.sidebarSubmenu} ${openPrograms ? `${style.active} `: `${style.inactive}` } `}>
                                 
@@ -624,13 +624,13 @@ export default function Admin() {
 
                                     <li>
                                     
-                                        <h3 onClick={ ()=> {setAddProgramsOpen(!addProgramsOpen); setCategoriesOpen(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/add-programs/') ? style.linkHover : '' } `} >Add <i className={` fa-solid fa-angle-right ${style.menu} ${ addProgramsOpen ? style.rotateArrow : '' }`}></i></h3>
+                                        <h3 onClick={ ()=> {setAddProgramsOpen(!addProgramsOpen); setCategoriesOpen(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/add-programs/') ? style.linkHover : '' } `} >Add <i className={` fa-solid fa-angle-right ${style.menu} ${ addProgramsOpen ? style.rotateArrow : '' }`}></i></h3>
                                     
                                         <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${addProgramsOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                             {/* <li className={`${style.topicIcon} ${style.link} ${addCategoryOpen ? style.linkHover : style.linkTransparent}`}><NavLink to='add-programs/categories/create' className={({ isActive }) => {const isAddCategoryActive = location.pathname.startsWith('/en/add-programs/categories/create'); return `text-white`;}}><span> - Add Category</span></NavLink></li> */}
 
-                                            <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith('/en/add-programs/program/create') ? style.linkHover : style.linkTransparent}`}><NavLink to='add-programs/program/create' className={({ isActive }) => {const isAddProgramActive = location.pathname.startsWith('/en/add-programs/program/create'); return `text-white`;}}><span> - Add Program</span></NavLink></li>
+                                            <li className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith('/en/dashboard/add-programs/program/create') ? style.linkHover : style.linkTransparent}`}><NavLink to='add-programs/program/create' className={({ isActive }) => {const isAddProgramActive = location.pathname.startsWith('/en/dashboard/add-programs/program/create'); return `text-white`;}}><span> - Add Program</span></NavLink></li>
 
                                         </ul>
                                     
@@ -638,20 +638,20 @@ export default function Admin() {
 
                                     <li>
                                     
-                                        <h3 onClick={ ()=> {setCategoriesOpen(!categoriesOpen); setAddProgramsOpen(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/') ? style.linkHover : '' } `}>Categories <i className={` ${style.menu} ${categoriesOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                        <h3 onClick={ ()=> {setCategoriesOpen(!categoriesOpen); setAddProgramsOpen(false)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/programs/') ? style.linkHover : '' } `}>Categories <i className={` ${style.menu} ${categoriesOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
                                     
                                         <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${categoriesOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                             <li>
 
-                                                <h3 onClick={ ()=> {setArchitectureOpen(!architectureOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Architecture-Software') ? style.linkHover : '' } `} >Architecture software <i className={` ${style.menu} ${architectureOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                                <h3 onClick={ ()=> {setArchitectureOpen(!architectureOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/programs/Architecture-Software') ? style.linkHover : '' } `} >Architecture software <i className={` ${style.menu} ${architectureOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
 
                                                 <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${architectureOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                                     { programs.length > 1 ? programs.map( (data, index) => (
                                                 
                                                         data.programCategory === 'Architecture-Software' ? (
-                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
                                                         ) : '' 
                                                     
                                                     )) : '' }
@@ -662,14 +662,14 @@ export default function Admin() {
 
                                             <li>
 
-                                                <h3 onClick={ ()=> {setStructureOpen(!structureOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Structure-Software') ? style.linkHover : '' } `} >Structure software <i className={` ${style.menu} ${structureOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                                <h3 onClick={ ()=> {setStructureOpen(!structureOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/programs/Structure-Software') ? style.linkHover : '' } `} >Structure software <i className={` ${style.menu} ${structureOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
 
                                                 <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${structureOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                                     { programs.length > 1 ? programs.map( (data, index) => (
                                                 
                                                         data.programCategory === 'Structure-Software' ? (
-                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
                                                         ) : '' 
                                                     
                                                     )) : '' }
@@ -680,14 +680,14 @@ export default function Admin() {
 
                                             <li>
 
-                                                <h3 onClick={ ()=> {setDentalOpen(!dentalOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Dental-software') ? style.linkHover : '' } `} >Dental software <i className={` ${style.menu} ${dentalOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                                <h3 onClick={ ()=> {setDentalOpen(!dentalOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/programs/Dental-software') ? style.linkHover : '' } `} >Dental software <i className={` ${style.menu} ${dentalOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
 
                                                 <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${dentalOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                                     { programs.length > 1 ? programs.map( (data, index) => (
                                                 
                                                         data.programCategory === 'Dental-Software' ? (
-                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
                                                         ) : '' 
                                                     
                                                     )) : '' }
@@ -698,14 +698,14 @@ export default function Admin() {
 
                                             <li>
 
-                                                <h3 onClick={ ()=> {setEnglishMaterialOpen(!englishMaterialOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/English-Material') ? style.linkHover : '' } `} >English Material <i className={` ${style.menu} ${englishMaterialOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                                <h3 onClick={ ()=> {setEnglishMaterialOpen(!englishMaterialOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/programs/English-Material') ? style.linkHover : '' } `} >English Material <i className={` ${style.menu} ${englishMaterialOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
 
                                                 <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${englishMaterialOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                                     { programs.length > 1 ? programs.map( (data, index) => (
                                                 
                                                         data.programCategory === 'English-Material' ? (
-                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
                                                         ) : '' 
                                                     
                                                     )) : '' }
@@ -716,14 +716,14 @@ export default function Admin() {
 
                                             <li>
 
-                                                <h3 onClick={ ()=> {setEnglishSoftwareOpen(!englishSoftwareOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/English-Software') ? style.linkHover : '' } `} >English Software <i className={` ${style.menu} ${englishSoftwareOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                                <h3 onClick={ ()=> {setEnglishSoftwareOpen(!englishSoftwareOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/programs/English-Software') ? style.linkHover : '' } `} >English Software <i className={` ${style.menu} ${englishSoftwareOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
 
                                                 <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${englishSoftwareOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                                     { programs.length > 1 ? programs.map( (data, index) => (
                                                 
                                                         data.programCategory === 'English-Software' ? (
-                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
                                                         ) : '' 
                                                     
                                                     )) : '' }
@@ -734,14 +734,14 @@ export default function Admin() {
 
                                             <li>
 
-                                                <h3 onClick={ ()=> {setEnglishCDSOpen(!englishCDSOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/English-CDS') ? style.linkHover : '' } `} >English CDS <i className={` ${style.menu} ${englishCDSOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                                <h3 onClick={ ()=> {setEnglishCDSOpen(!englishCDSOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/programs/English-CDS') ? style.linkHover : '' } `} >English CDS <i className={` ${style.menu} ${englishCDSOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
 
                                                 <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${englishCDSOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                                     { programs.length > 1 ? programs.map( (data, index) => (
 
                                                         data.programCategory === 'English-CDS' ? (
-                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
                                                         ) : '' 
                                                     
                                                     )) : '' }
@@ -752,14 +752,14 @@ export default function Admin() {
 
                                             <li>
 
-                                                <h3 onClick={ ()=> {setIslamicCDSOpen(!islamicCDSOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Islamic-CDS') ? style.linkHover : '' } `} >Islamic CDS <i className={` ${style.menu} ${islamicCDSOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                                <h3 onClick={ ()=> {setIslamicCDSOpen(!islamicCDSOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/programs/Islamic-CDS') ? style.linkHover : '' } `} >Islamic CDS <i className={` ${style.menu} ${islamicCDSOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
 
                                                 <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${islamicCDSOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                                     { programs.length > 1 ? programs.map( (data, index) => (
 
                                                         data.programCategory === 'Islamic-CDS' ? (
-                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
                                                         ) : '' 
                                                     
                                                     )) : '' }
@@ -770,14 +770,14 @@ export default function Admin() {
 
                                             <li>
 
-                                                <h3 onClick={ ()=> {setIslamicMaterialOpen(!islamicMaterialOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Islamic-Material') ? style.linkHover : '' } `} >Islamic Material <i className={` ${style.menu} ${islamicMaterialOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                                <h3 onClick={ ()=> {setIslamicMaterialOpen(!islamicMaterialOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/programs/Islamic-Material') ? style.linkHover : '' } `} >Islamic Material <i className={` ${style.menu} ${islamicMaterialOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
 
                                                 <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${islamicMaterialOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                                     { programs.length > 1 ? programs.map( (data, index) => (
                                                 
                                                         data.programCategory === 'Islamic-Material' ? (
-                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
                                                         ) : '' 
                                                     
                                                     )) : '' }
@@ -788,14 +788,14 @@ export default function Admin() {
 
                                             <li>
 
-                                                <h3 onClick={ ()=> {setDifferentOpen(!differentOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/programs/Different') ? style.linkHover : '' } `} >Different <i className={` ${style.menu} ${differentOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
+                                                <h3 onClick={ ()=> {setDifferentOpen(!differentOpen)} } className={`${style.link} ${ location.pathname.startsWith('/en/dashboard/programs/Different') ? style.linkHover : '' } `} >Different <i className={` ${style.menu} ${differentOpen ? 'fa-solid fa-angle-down': 'fa-solid fa-angle-right'}`}></i></h3>
 
                                                 <ul className={`${style.sidebarSubmenu} ${style.sidebarBackground} ${differentOpen ? `${style.active}`: `${style.inactive}` } `}>
 
                                                     { programs.length > 1 ? programs.map( (data, index) => (
                                                 
                                                         data.programCategory === 'Different' ? (
-                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
+                                                            <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`); return `text-white`;}}><span> - {data.programName}</span></NavLink></li>
                                                         ) : '' 
                                                     
                                                     )) : '' }
@@ -811,7 +811,7 @@ export default function Admin() {
 ).map((data, index) => (
     <li key={index}>
         <h3 onClick={() => { setOtherOpen(!otherOpen); }} 
-            className={`${style.link} ${location.pathname.startsWith('/en/programs/Different') ? style.linkHover : ''}`}>
+            className={`${style.link} ${location.pathname.startsWith('/en/dashboard/programs/Different') ? style.linkHover : ''}`}>
             Other 
             <i className={`${style.menu} ${otherOpen ? 'fa-solid fa-angle-down' : 'fa-solid fa-angle-right'}`}></i>
         </h3>
@@ -822,7 +822,7 @@ export default function Admin() {
                 'English-Material', 'Dental-Software', 'Structure-Software', 'Architecture-Software']
                 .includes(data.programCategory)
             ).map((data, index) => (
-                <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}>
+                <li key={index} className={`${style.topicIcon} ${style.link} ${location.pathname.startsWith(`/en/dashboard/programs/${data.programCategory}/${data._id}`) ? style.linkHover : style.linkTransparent}`}>
                     <NavLink to={`programs/${data.programCategory}/${data._id}`} className={({ isActive }) => `text-white`}>
                         <span> - {data.programName}</span>
                     </NavLink>
@@ -836,7 +836,7 @@ export default function Admin() {
 
                                             {/* { programCategories.length > 1 ? programCategories.map( (data, index) => (
                                             
-                                                <li key={index} className={`${style.topicIcon} ${style.link} ${openProgram ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.title}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/programs/${data.title}`); return `text-white`;}}><span> - {data.title}</span></NavLink></li>
+                                                <li key={index} className={`${style.topicIcon} ${style.link} ${openProgram ? style.linkHover : style.linkTransparent}`}><NavLink to={`programs/${data.title}`} className={({ isActive }) => {const isProgramActive = location.pathname.startsWith(`/en/dashboard/programs/${data.title}`); return `text-white`;}}><span> - {data.title}</span></NavLink></li>
                                             
                                             )) : '' } */}
 

@@ -612,7 +612,115 @@ export default function Program() {
         (programData.MaximumRequirements && Object.values(programData.MaximumRequirements).some((value) => value.trim() !== ''))
     ) ? (
     <div className={`${style.systemRequirements} ${systemRequirementsFlag ? 'd-block' : 'd-none'}`}>
-        {/* System requirements content */}
+    
+        <div className={style.minimumRequirements}>
+
+            <h4 className={style.systemRequirementsTitle}>Minimum Requirements</h4>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>Operating System:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minOperatingSystem}</h4>
+
+            </div>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>Processor:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minProcessor}</h4>
+
+            </div>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>RAM:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minRAM}</h4>
+
+            </div>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>GPU:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minGPU}</h4>
+
+            </div>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>Storage:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minStorage}</h4>
+
+            </div>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>Display:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minDisplay}</h4>
+
+            </div>
+
+        </div>
+
+        <div className={style.recommendedRequirements}>
+
+            <h4 className={style.systemRequirementsTitle}>Recommended Requirements</h4>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>Operating System:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxOperatingSystem}</h4>
+
+            </div>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>Processor:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxProcessor}</h4>
+
+            </div>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>RAM:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxRAM}</h4>
+
+            </div>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>GPU:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxGPU}</h4>
+
+            </div>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>Storage:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxStorage}</h4>
+
+            </div>
+
+            <div className={style.requirements}>
+
+                <h4 className={style.requirementsTitle}>Display:</h4>
+
+                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxDisplay}</h4>
+
+            </div>
+
+        </div>
+
     </div>
 ) : null}
 
@@ -704,7 +812,7 @@ if (!program._id) {
     
                                                     <div className={style.programBox}>
     
-                                                        <Link to={`../${category}/${program._id}`}>
+                                                        <Link to={`../${program.programCategory}/${program._id}`}>
                                                         
                                                             <div className={style.image}>
     
@@ -714,13 +822,13 @@ if (!program._id) {
                                                         
                                                         </Link>
     
-                                                        <Link to={`../${category}/${program._id}`} ><h4 className={style.programTitle}>{program.programName}</h4></Link>
+                                                        <Link to={`../${program.programCategory}/${program._id}`} ><h4 className={style.programTitle}>{program.programName}</h4></Link>
     
                                                         <p className={style.programSize}>Program size: <span>{sizeFormatted}</span></p>
     
                                                         <div className={style.btns}>
     
-                                                            <Link to={`../${category}/${program._id}`}>
+                                                            <Link to={`../${program.programCategory}/${program._id}`}>
     
                                                                 <button className={style.viewBtn}>
                                                                 

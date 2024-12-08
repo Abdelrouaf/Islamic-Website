@@ -165,6 +165,11 @@ export default function AddProgram() {
         }
     }
 
+    const [progress, setProgress] = useState(0);
+    const [timeRemaining, setTimeRemaining] = useState(null);
+    const [isSubmittingFile, setIsSubmittingFile] = useState(false);
+    const fileInputRefTime = useRef(null);
+
     const onFileChange = (e) => {
         if ( e.target.files && e.target.files[0] ) {
             const file = e.target.files[0]
@@ -176,6 +181,44 @@ export default function AddProgram() {
             // setImageURL(imageURL)
         }
     }
+
+    // const onFileChange = (e) => {
+    //     if (e.target.files && e.target.files[0]) {
+    //       const file = e.target.files[0];
+    //       const fileURL = URL.createObjectURL(file);
+    //       setProgramData((prevState) => ({
+    //         ...prevState,
+    //         programFile: file,
+    //       }));
+    
+    //       const xhr = new XMLHttpRequest();
+    //       xhr.upload.addEventListener('progress', (event) => {
+    //         const percent = Math.round((event.loaded / event.total) * 100);
+    //         setProgress(percent);
+    
+    //         // Calculate remaining time
+    //         const elapsedTime = Date.now() - xhr.upload.startTime;
+    //         const uploadSpeed = event.loaded / elapsedTime;
+    //         const remainingBytes = event.total - event.loaded;
+    //         const remainingTime = remainingBytes / uploadSpeed;
+    //         setTimeRemaining(formatTime(remainingTime));
+    //       });
+    
+    //       xhr.open('POST', 'http://147.79.101.225:2859/api/programs/');
+    //       xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+    //       const formData = new FormData();
+    //       formData.append('programFile', file);
+    //       // Append other program data fields to formData
+    //       xhr.send(formData);
+    //     }
+    //   };
+
+      const formatTime = (milliseconds) => {
+        const seconds = Math.floor(milliseconds / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+      };
 
     const fileInputRef = useRef(null);
     const imageInputRef = useRef(null)
@@ -252,18 +295,46 @@ const checkTitleExists = async (programName) => {
                 return;
             }
 
+            let initialUploadSpeed = 0;
+            let initialElapsedTime = 0;
+
             const response = await axios.post('http://147.79.101.225:2859/api/programs/', 
                 programData ,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                    }
+                    },
+                    onUploadProgress: (event) => {
+                        const percent = Math.round((event.loaded / event.total) * 100);
+                        setProgress(percent);
+            
+                        // Calculate remaining time (optional)
+                        const elapsedTime = Date.now() - event.timeStamp;
+
+                        // console.log("elapsedTime: ", elapsedTime);
+                        
+
+                        // Estimate initial upload speed
+                        if (!initialUploadSpeed) {
+                          initialUploadSpeed = event.loaded / elapsedTime;
+                        //   console.log("initialUploadSpeed: ", initialUploadSpeed);
+                          initialElapsedTime = elapsedTime;
+                        //   console.log("initialElapsedTime: ", initialElapsedTime);
+                        }
+                  
+                        // Calculate remaining time
+                        const remainingBytes = event.total - event.loaded;
+                        // console.log("remainingBytes: ", remainingBytes);
+                        const remainingTime = remainingBytes / (initialUploadSpeed || event.loaded / elapsedTime);
+                        // console.log("remainingTime: ", remainingTime);
+                        setTimeRemaining(formatTime(remainingTime));
+                    },
                 }
             )
 
             if ( response.status === 200 || response.status === 201 ) {
                 showToast("Program added successfully!", 'success')
-                console.log("res ", response.status);
+                // console.log("res ", response.status);
                 
                 resetData();
             } else {
@@ -296,6 +367,8 @@ const checkTitleExists = async (programName) => {
     const resetData = () => {
     
         setOverviews([''])
+
+        setProgress(0)
     
         setKeyFeatures({
             precisionDrafting: '',
@@ -960,6 +1033,20 @@ const checkTitleExists = async (programName) => {
 
                                         </div>
 
+                                        {programData.programFile && (
+                                            <div className="file-info">
+                                                {/* <p>{programData.programFile.name}</p> */}
+                                                {/* <div className="progress-bar" style={{ width: `${progress}%` }}>
+                                                {progress}%
+                                                </div> */}
+                                                <div className="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                                    <div className="progress-bar" style={{ width: `${progress}%` }}>{progress}%</div>
+                                                </div>
+                                                {/* {timeRemaining && (
+                                                <p>Estimated Time Remaining: {timeRemaining}</p>
+                                                )} */}
+                                            </div>
+                                        )}
                                 </div>
                                 
                                 <div className={`d-flex justify-content-end align-items-center gap-3 ${style.btns}`}>

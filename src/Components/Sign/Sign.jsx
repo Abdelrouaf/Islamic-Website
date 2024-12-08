@@ -273,7 +273,7 @@ export default function Sign({ onClose }) {
                 localStorage.setItem('userIn', true);
                 setTimeout(() => {
                     if (response.data.isAdmin) {
-                        navigate('../en', { state: { token } });
+                        navigate('../en/dashboard', { state: { token } });
                     } else {
                         if (!response.data.details.apprived) {
                             navigate('../', { state: { token } });
@@ -299,7 +299,8 @@ export default function Sign({ onClose }) {
                 }, 2000);
             }
         } catch {
-            showToast('An error occurred while logging in', 'error');
+            showToast('wait until admin approve your account.', 'error')
+            // showToast('An error occurred while logging in', 'error');
             setIsSubmittingSignIn(false);
         } finally {
             setIsSubmittingSignIn(false);
