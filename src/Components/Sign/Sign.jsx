@@ -281,7 +281,7 @@ export default function Sign({ onClose }) {
                             navigate('../programs', { state: { token } });
                         }
                     }
-                }, 2000);
+                }, 6000);
             } 
             // else if(response.status === 403) {
             //     showToast(`You should active your account first`, 'error')
