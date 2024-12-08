@@ -251,6 +251,68 @@ export default function Dashboard() {
   };
 
   // Fetch user data
+  // const fetchUserData = async () => {
+  //   try {
+  //     const response = await fetch("http://147.79.101.225:2859/api/user/", {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${userToken}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       credentials: "include",
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch user data");
+  //     }
+
+  //     const data = await response.json();
+
+  //     // Calculate time difference for each user
+  //     const stats = data.map((user) => {
+  //       const { diffDays, diffMonths } = calculateTimeDifference(
+  //         user.createdAt
+  //       );
+  //       return {
+  //         name: user.name,
+  //         createdAt: user.createdAt,
+  //         diffDays,
+  //         diffMonths,
+  //       };
+  //     });
+  //     setUserStats(stats);
+
+  //     // Count users per day and per month
+  //     const dailyCount = {};
+  //     const monthlyCount = {};
+
+  //     {
+  //       stats &&
+  //         stats.forEach(({ createdAt }) => {
+  //           const createdDate = new Date(createdAt);
+  //           const dayKey = createdDate.toISOString().split("T")[0]; // Get 'YYYY-MM-DD' format
+  //           const monthKey = `${
+  //             createdDate.getMonth() + 1
+  //           }-${createdDate.getFullYear()}`; // Get 'MM-YYYY' format
+
+  //           // Increment daily count
+  //           dailyCount[dayKey] = (dailyCount[dayKey] || 0) + 1;
+  //           // Increment monthly count
+  //           monthlyCount[monthKey] = (monthlyCount[monthKey] || 0) + 1;
+  //         });
+  //     }
+
+  //     // Set daily and monthly counts
+  //     setDailyUserCount(dailyCount);
+  //     setMonthlyUserCount(monthlyCount);
+  //   } catch (error) {
+  //     console.error("Error fetching user data:", error);
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // };
+
+  // Fetch user data
   const fetchUserData = async () => {
     try {
       const response = await fetch("http://147.79.101.225:2859/api/user/", {
@@ -261,18 +323,15 @@ export default function Dashboard() {
         },
         credentials: "include",
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to fetch user data");
       }
-
+  
       const data = await response.json();
-
-      // Calculate time difference for each user
+  
       const stats = data.map((user) => {
-        const { diffDays, diffMonths } = calculateTimeDifference(
-          user.createdAt
-        );
+        const { diffDays, diffMonths } = calculateTimeDifference(user.createdAt);
         return {
           name: user.name,
           createdAt: user.createdAt,
@@ -281,34 +340,77 @@ export default function Dashboard() {
         };
       });
       setUserStats(stats);
-
-      // Count users per day and per month
-      const dailyCount = {};
-      const monthlyCount = {};
-
-      {
-        stats &&
-          stats.forEach(({ createdAt }) => {
-            const createdDate = new Date(createdAt);
-            const dayKey = createdDate.toISOString().split("T")[0]; // Get 'YYYY-MM-DD' format
-            const monthKey = `${
-              createdDate.getMonth() + 1
-            }-${createdDate.getFullYear()}`; // Get 'MM-YYYY' format
-
-            // Increment daily count
-            dailyCount[dayKey] = (dailyCount[dayKey] || 0) + 1;
-            // Increment monthly count
-            monthlyCount[monthKey] = (monthlyCount[monthKey] || 0) + 1;
-          });
-      }
-
-      // Set daily and monthly counts
-      setDailyUserCount(dailyCount);
-      setMonthlyUserCount(monthlyCount);
+  
+      // **Daily Count**
+      const generatePast30Days = () => {
+        const past30Days = [];
+        const currentDate = new Date();
+        for (let i = 0; i < 30; i++) {
+          const date = new Date(currentDate);
+          date.setDate(currentDate.getDate() - i);
+          const formattedDate = date.toISOString().split("T")[0];
+          past30Days.push(formattedDate);
+        }
+        return past30Days;
+      };
+  
+      const dailyCount = generatePast30Days().reduce((acc, day) => {
+        acc[day] = 0;
+        return acc;
+      }, {});
+  
+      stats.forEach(({ createdAt }) => {
+        const createdDate = new Date(createdAt);
+        const dayKey = createdDate.toISOString().split("T")[0];
+        dailyCount[dayKey] += 1;
+      });
+  
+      // Sort and reverse daily count
+      const sortedDailyCountKeys = Object.keys(dailyCount).sort((a, b) => new Date(b) - new Date(a));
+      const sortedDailyData = sortedDailyCountKeys.reduce((acc, key) => {
+        acc[key] = dailyCount[key];
+        return acc;
+      }, {});
+  
+      setDailyUserCount(sortedDailyData);
+  
+      // **Monthly Count**
+      const generatePast12Months = () => {
+        const past12Months = [];
+        const currentDate = new Date();
+        for (let i = 0; i < 12; i++) {
+          const date = new Date(currentDate);
+          date.setMonth(currentDate.getMonth() - i);
+          const monthKey = `${date.getMonth() + 1}-${date.getFullYear()}`;
+          past12Months.push(monthKey);
+        }
+        return past12Months;
+      };
+  
+      const monthlyCount = generatePast12Months().reduce((acc, month) => {
+        acc[month] = 0;
+        return acc;
+      }, {});
+  
+      stats.forEach(({ createdAt }) => {
+        const createdDate = new Date(createdAt);
+        const monthKey = `${createdDate.getMonth() + 1}-${createdDate.getFullYear()}`;
+        monthlyCount[monthKey] += 1;
+      });
+  
+      // Sort and reverse monthly count
+      const sortedMonthlyCountKeys = Object.keys(monthlyCount).sort((a, b) => new Date(b.split('-')[1]) - new Date(a.split('-')[1]));
+      const sortedMonthlyData = sortedMonthlyCountKeys.reduce((acc, key) => {
+        acc[key] = monthlyCount[key];
+        return acc;
+      }, {});
+  
+      setMonthlyUserCount(sortedMonthlyData);
+  
     } catch (error) {
       console.error("Error fetching user data:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
