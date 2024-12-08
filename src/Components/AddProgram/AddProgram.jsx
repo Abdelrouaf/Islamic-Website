@@ -522,10 +522,6 @@ const checkTitleExists = async (programName) => {
                                                 <option value="Islamic-Material">
                                                     Islamic Material
                                                 </option>
-
-                                                <option value="lol">
-                                                    lol
-                                                </option>
                                             
                                                 {/* {dataInLocalStorage.map((category, index) => ( */}
                                                 

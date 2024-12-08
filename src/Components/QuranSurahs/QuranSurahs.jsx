@@ -1305,9 +1305,9 @@ export default function QuranSurahs() {
                     </div> */}
 
           <div
-            className={`${style.searchVerses} mt-3 ${
+            className={`${style.searchVerses} ${style.notranslate} mt-3 ${
               quranSearch?.verse?.length > 0 ? "d-block" : "d-none"
-            }`}
+            }`} translate="no"
           >
             <h4 className={style.basmala}>
               بِسۡمِ ٱللهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِيمِ
@@ -1365,8 +1365,8 @@ export default function QuranSurahs() {
             ))}
 
             <div
-              className={`d-flex align-items-center ${style.surahBottomDetails}`}
-            >
+              className={`d-flex align-items-center ${style.surahBottomDetails} ${style.notranslate}`}
+              translate="no" >
               <p className={style.nameSurahInSearchBox}>
                 {" "}
                 {surahSearchIndexName?.length <= 0
@@ -1382,7 +1382,7 @@ export default function QuranSurahs() {
           </div>
 
           {results.map((result, index) => (
-            <div key={index}>
+            <div key={index} className={style.notranslate} translate="no">
               {/* <h4>سورة {result.chapterName}</h4> */}
               <div
                 className={`d-flex align-items-center justify-content-center`}
