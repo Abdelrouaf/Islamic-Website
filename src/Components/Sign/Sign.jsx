@@ -256,9 +256,6 @@ export default function Sign({ onClose }) {
                 withCredentials: true
             });
 
-            console.log(" status is ", response);
-            
-
             if (response.status === 200) {
                 const token = response.data.token;
                 setUserToken(token)

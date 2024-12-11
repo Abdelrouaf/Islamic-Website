@@ -220,16 +220,18 @@ export default function UserRole() {
 
                                             <td>
 
-                                                {user.isAdmin ? (
+                                                {user.isAdmin ? 
 
-                                                    <button onClick={ () => makeAdminUser(user._id) } className='btn btn-danger'>Make the admin user</button>
+                                                    user._id === '67598b25c4e418116ce1e29d' ? "Can't change" : (<button onClick={ () => makeAdminUser(user._id) } className='btn btn-danger'>Make the admin user</button>) 
 
-                                                ) : (
+                                                    
+
+                                                : (
 
                                                     <button onClick={ () => makeUserAdmin(user._id) } className='btn btn-success'>Make the user admin</button>
 
                                                 ) }
-                                                                                        
+                                            
                                             </td>
 
                                         </tr>

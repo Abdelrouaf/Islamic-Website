@@ -233,7 +233,7 @@ const handleSort = (key) => {
 
                                         <td>{ user.isAdmin ? 'admin' : 'user' }</td>
 
-                                        <td> <i onClick={ () => deleteUser(user._id) } className="fa-solid fa-trash-can" style={{cursor: "pointer"}}></i> </td>
+                                        <td> {user._id === '67598b25c4e418116ce1e29d' ? `Can't delete` : <i onClick={ () => deleteUser(user._id) } className="fa-solid fa-trash-can" style={{cursor: "pointer"}}></i> } </td>
 
                                     </tr>
                                 ) ) }

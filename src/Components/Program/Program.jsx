@@ -438,7 +438,7 @@ export default function Program() {
                                         
                                         </div>
 
-                                        { programData && programData.description && programData.description.length > 0 ? (
+                                        { programData && programData.description && programData.description && programData.description.some((item) => item.trim() !== '') ? (
 
                                             <div className={style.overview}>
 
@@ -472,279 +472,289 @@ export default function Program() {
 
                         <div className="col-12">
 
-                            <div className={style.programDetails}>
+                            {programData &&
+                                (
+                                    (programData.KeyFeatures && Object.values(programData.KeyFeatures).some((value) => value.trim() !== '')) ||
+                                    (programData.useCase && programData.useCase.some((item) => item.trim() !== '')) ||
+                                    (programData.MinimumRequirements && Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '')) ||
+                                    (programData.MaximumRequirements && Object.values(programData.MaximumRequirements).some((value) => value.trim() !== '')) ||
+                                    (programData.Installation && programData.Installation.some((item) => item.trim() !== ''))
+                                ) && (
 
-                            <ul className='nav nav-tabs'>
-    <li className='nav-item'>
-        <button
-            className={`nav-link ${detailsFlag ? 'active' : ''} ${
-                programData &&
-                programData.KeyFeatures &&
-                (Object.values(programData.KeyFeatures).some((value) => value.trim() !== '') ||
-                    (programData.useCase && programData.useCase.some((item) => item.trim() !== '')))
-                    ? 'd-block'
-                    : 'd-none'
-            }`}
-            onClick={() => {
-                setInstallationFlag(false);
-                setSystemRequirementsFlag(false);
-                setDetailsFlag(true);
-            }}
-        >
-            Details
-        </button>
-    </li>
+                                    <div className={style.programDetails}>
 
-    <li className='nav-item'>
-        <button
-            className={`nav-link ${systemRequirementsFlag ? 'active' : ''} ${
-                programData &&
-                programData.MinimumRequirements &&
-                programData.MaximumRequirements &&
-                (Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '') ||
-                    Object.values(programData.MaximumRequirements).some((value) => value.trim() !== ''))
-                    ? 'd-block'
-                    : 'd-none'
-            }`}
-            onClick={() => {
-                setDetailsFlag(false);
-                setInstallationFlag(false);
-                setSystemRequirementsFlag(true);
-            }}
-        >
-            System Requirements
-        </button>
-    </li>
+                                    <ul className='nav nav-tabs'>
+                                        <li className='nav-item'>
+                                            <button
+                                                className={`nav-link ${detailsFlag ? 'active' : ''} ${
+                                                    programData &&
+                                                    programData.KeyFeatures &&
+                                                    (Object.values(programData.KeyFeatures).some((value) => value.trim() !== '') ||
+                                                        (programData.useCase && programData.useCase.some((item) => item.trim() !== '')))
+                                                        ? 'd-block'
+                                                        : 'd-none'
+                                                }`}
+                                                onClick={() => {
+                                                    setInstallationFlag(false);
+                                                    setSystemRequirementsFlag(false);
+                                                    setDetailsFlag(true);
+                                                }}
+                                            >
+                                                Details
+                                            </button>
+                                        </li>
 
-    <li className='nav-item'>
-        <button
-            className={`nav-link ${installationFlag ? 'active' : ''} ${
-                programData &&
-                programData.Installation &&
-                programData.Installation.some((item) => item.trim() !== '')
-                    ? 'd-block'
-                    : 'd-none'
-            }`}
-            onClick={() => {
-                setDetailsFlag(false);
-                setSystemRequirementsFlag(false);
-                setInstallationFlag(true);
-            }}
-        >
-            Installation
-        </button>
-    </li>
-</ul>
+                                        <li className='nav-item'>
+                                            <button
+                                                className={`nav-link ${systemRequirementsFlag ? 'active' : ''} ${
+                                                    programData &&
+                                                    programData.MinimumRequirements &&
+                                                    programData.MaximumRequirements &&
+                                                    (Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '') ||
+                                                        Object.values(programData.MaximumRequirements).some((value) => value.trim() !== ''))
+                                                        ? 'd-block'
+                                                        : 'd-none'
+                                                }`}
+                                                onClick={() => {
+                                                    setDetailsFlag(false);
+                                                    setInstallationFlag(false);
+                                                    setSystemRequirementsFlag(true);
+                                                }}
+                                            >
+                                                System Requirements
+                                            </button>
+                                        </li>
 
+                                        <li className='nav-item'>
+                                            <button
+                                                className={`nav-link ${installationFlag ? 'active' : ''} ${
+                                                    programData &&
+                                                    programData.Installation &&
+                                                    programData.Installation.some((item) => item.trim() !== '')
+                                                        ? 'd-block'
+                                                        : 'd-none'
+                                                }`}
+                                                onClick={() => {
+                                                    setDetailsFlag(false);
+                                                    setSystemRequirementsFlag(false);
+                                                    setInstallationFlag(true);
+                                                }}
+                                            >
+                                                Installation
+                                            </button>
+                                        </li>
+                                    </ul>
 
-                                <div className={style.detailsBox}>
+                                        <div className={style.detailsBox}>
 
-                                {programData &&
-    (
-        (programData.KeyFeatures && Object.values(programData.KeyFeatures).some((value) => value.trim() !== '')) ||
-        (programData.useCase && programData.useCase.some((item) => item.trim() !== ''))
-    ) ? (
-    <div className={`${style.details} ${detailsFlag ? 'd-block' : 'd-none'}`}>
-        <h4 className={style.detailsTitle}>Key features</h4>
+                                        {programData &&
+            (
+                (programData.KeyFeatures && Object.values(programData.KeyFeatures).some((value) => value.trim() !== '')) ||
+                (programData.useCase && programData.useCase.some((item) => item.trim() !== ''))
+            ) ? (
+            <div className={`${style.details} ${detailsFlag ? 'd-block' : 'd-none'}`}>
+                <h4 className={style.detailsTitle}>Key features</h4>
 
-        {programData.KeyFeatures?.precisionDrafting && (
-            <div className={style.keyFeatures}>
-                <h4 className={style.keyFeaturesTitle}>Precision Drafting:</h4>
-                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.precisionDrafting}</p>
+                {programData.KeyFeatures?.precisionDrafting && (
+                    <div className={style.keyFeatures}>
+                        <h4 className={style.keyFeaturesTitle}>Precision Drafting:</h4>
+                        <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.precisionDrafting}</p>
+                    </div>
+                )}
+
+                {programData.KeyFeatures?.modelingVisualization && (
+                    <div className={style.keyFeatures}>
+                        <h4 className={style.keyFeaturesTitle}>3D Modeling and Visualization:</h4>
+                        <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.modelingVisualization}</p>
+                    </div>
+                )}
+
+                {programData.KeyFeatures?.extensiveLibraries && (
+                    <div className={style.keyFeatures}>
+                        <h4 className={style.keyFeaturesTitle}>Extensive Libraries:</h4>
+                        <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.extensiveLibraries}</p>
+                    </div>
+                )}
+
+                {programData.KeyFeatures?.collaboration && (
+                    <div className={style.keyFeatures}>
+                        <h4 className={style.keyFeaturesTitle}>Collaboration:</h4>
+                        <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.collaboration}.</p>
+                    </div>
+                )}
+
+                {programData.KeyFeatures?.customAutomation && (
+                    <div className={style.keyFeatures}>
+                        <h4 className={style.keyFeaturesTitle}>Custom Automation:</h4>
+                        <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.customAutomation}</p>
+                    </div>
+                )}
+
+                {programData.KeyFeatures?.integration && (
+                    <div className={style.keyFeatures}>
+                        <h4 className={style.keyFeaturesTitle}>Integration:</h4>
+                        <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.integration}</p>
+                    </div>
+                )}
+
+                {programData.useCase?.length > 0 && (
+                    <div className={style.useCases}>
+                        <h4 className={style.useCasesTitle}>Use cases</h4>
+                        <ul>
+                            {programData.useCase.map((cases, index) =>
+                                cases.trim() !== '' ? (
+                                    <li key={index}>
+                                        <p className={style.description}>{cases}</p>
+                                    </li>
+                                ) : null
+                            )}
+                        </ul>
+                    </div>
+                )}
             </div>
-        )}
+        ) : null}
 
-        {programData.KeyFeatures?.modelingVisualization && (
-            <div className={style.keyFeatures}>
-                <h4 className={style.keyFeaturesTitle}>3D Modeling and Visualization:</h4>
-                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.modelingVisualization}</p>
+        {programData &&
+            (
+                (programData.MinimumRequirements && Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '')) ||
+                (programData.MaximumRequirements && Object.values(programData.MaximumRequirements).some((value) => value.trim() !== ''))
+            ) ? (
+            <div className={`${style.systemRequirements} ${systemRequirementsFlag ? 'd-block' : 'd-none'}`}>
+            
+                <div className={style.minimumRequirements}>
+
+                    <h4 className={style.systemRequirementsTitle}>Minimum Requirements</h4>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>Operating System:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minOperatingSystem}</h4>
+
+                    </div>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>Processor:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minProcessor}</h4>
+
+                    </div>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>RAM:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minRAM}</h4>
+
+                    </div>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>GPU:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minGPU}</h4>
+
+                    </div>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>Storage:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minStorage}</h4>
+
+                    </div>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>Display:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minDisplay}</h4>
+
+                    </div>
+
+                </div>
+
+                <div className={style.recommendedRequirements}>
+
+                    <h4 className={style.systemRequirementsTitle}>Recommended Requirements</h4>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>Operating System:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxOperatingSystem}</h4>
+
+                    </div>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>Processor:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxProcessor}</h4>
+
+                    </div>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>RAM:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxRAM}</h4>
+
+                    </div>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>GPU:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxGPU}</h4>
+
+                    </div>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>Storage:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxStorage}</h4>
+
+                    </div>
+
+                    <div className={style.requirements}>
+
+                        <h4 className={style.requirementsTitle}>Display:</h4>
+
+                        <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxDisplay}</h4>
+
+                    </div>
+
+                </div>
+
             </div>
-        )}
+        ) : null}
 
-        {programData.KeyFeatures?.extensiveLibraries && (
-            <div className={style.keyFeatures}>
-                <h4 className={style.keyFeaturesTitle}>Extensive Libraries:</h4>
-                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.extensiveLibraries}</p>
-            </div>
-        )}
-
-        {programData.KeyFeatures?.collaboration && (
-            <div className={style.keyFeatures}>
-                <h4 className={style.keyFeaturesTitle}>Collaboration:</h4>
-                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.collaboration}.</p>
-            </div>
-        )}
-
-        {programData.KeyFeatures?.customAutomation && (
-            <div className={style.keyFeatures}>
-                <h4 className={style.keyFeaturesTitle}>Custom Automation:</h4>
-                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.customAutomation}</p>
-            </div>
-        )}
-
-        {programData.KeyFeatures?.integration && (
-            <div className={style.keyFeatures}>
-                <h4 className={style.keyFeaturesTitle}>Integration:</h4>
-                <p className={style.keyFeaturesDesc}>{programData.KeyFeatures.integration}</p>
-            </div>
-        )}
-
-        {programData.useCase?.length > 0 && (
-            <div className={style.useCases}>
-                <h4 className={style.useCasesTitle}>Use cases</h4>
-                <ul>
-                    {programData.useCase.map((cases, index) =>
-                        cases.trim() !== '' ? (
+        {programData?.Installation?.some((item) => item.trim() !== '') && (
+            <div className={`${style.installationSteps} ${installationFlag ? 'd-block' : 'd-none'}`}>
+                <h4 className={style.installationTitle}>Installation Steps</h4>
+                <ol>
+                    {programData.Installation.map((step, index) =>
+                        step.trim() !== '' ? (
                             <li key={index}>
-                                <p className={style.description}>{cases}</p>
+                                <p>{step}</p>
                             </li>
                         ) : null
                     )}
-                </ul>
+                </ol>
             </div>
         )}
-    </div>
-) : null}
-
-{programData &&
-    (
-        (programData.MinimumRequirements && Object.values(programData.MinimumRequirements).some((value) => value.trim() !== '')) ||
-        (programData.MaximumRequirements && Object.values(programData.MaximumRequirements).some((value) => value.trim() !== ''))
-    ) ? (
-    <div className={`${style.systemRequirements} ${systemRequirementsFlag ? 'd-block' : 'd-none'}`}>
-    
-        <div className={style.minimumRequirements}>
-
-            <h4 className={style.systemRequirementsTitle}>Minimum Requirements</h4>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>Operating System:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minOperatingSystem}</h4>
-
-            </div>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>Processor:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minProcessor}</h4>
-
-            </div>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>RAM:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minRAM}</h4>
-
-            </div>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>GPU:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minGPU}</h4>
-
-            </div>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>Storage:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minStorage}</h4>
-
-            </div>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>Display:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MinimumRequirements.minDisplay}</h4>
-
-            </div>
-
-        </div>
-
-        <div className={style.recommendedRequirements}>
-
-            <h4 className={style.systemRequirementsTitle}>Recommended Requirements</h4>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>Operating System:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxOperatingSystem}</h4>
-
-            </div>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>Processor:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxProcessor}</h4>
-
-            </div>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>RAM:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxRAM}</h4>
-
-            </div>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>GPU:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxGPU}</h4>
-
-            </div>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>Storage:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxStorage}</h4>
-
-            </div>
-
-            <div className={style.requirements}>
-
-                <h4 className={style.requirementsTitle}>Display:</h4>
-
-                <h4 className={style.requirementsDesc}>{programData.MaximumRequirements.maxDisplay}</h4>
-
-            </div>
-
-        </div>
-
-    </div>
-) : null}
-
-{programData?.Installation?.some((item) => item.trim() !== '') && (
-    <div className={`${style.installationSteps} ${installationFlag ? 'd-block' : 'd-none'}`}>
-        <h4 className={style.installationTitle}>Installation Steps</h4>
-        <ol>
-            {programData.Installation.map((step, index) =>
-                step.trim() !== '' ? (
-                    <li key={index}>
-                        <p>{step}</p>
-                    </li>
-                ) : null
-            )}
-        </ol>
-    </div>
-)}
 
 
-                                    
+                                            
 
-                                </div>
+                                        </div>
 
-                            </div>
+                                    </div>
+
+                            )}
 
                         </div>
 
