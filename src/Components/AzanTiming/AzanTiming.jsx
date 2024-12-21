@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import loadingImg from '../../images/loading.png'
 import style from './AzanTiming.module.scss'
 import Select from 'react-select';
 import { Azkar } from 'islam.js'
@@ -334,17 +335,56 @@ export default function AzanTiming() {
         }
     };
 
+    // if (loading) {
+    //     return  <div id="page">
+    //     <div id="container">
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="h3">loading</div>
+    //     </div>
+    //   </div>; 
+    // }  
+
     if (loading) {
-        return  <div id="page">
-        <div id="container">
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="h3">loading</div>
+        return <div id='page'>
+        
+            <div>
+            
+                <div className='d-flex align-items-center justify-content-center'>
+                
+                    <div className={style.fImage}>
+                    
+                        <img src={loadingImg} width={100} alt="loading" />
+                    
+                    </div>
+                
+                    <div className={style.sImage}>
+                    
+                    <div className={style.hourglassBackground}>
+                        <div className={style.hourglassContainer}>
+                        <div className={style.hourglassCurves} />
+                        <div className={style.hourglassCapTop} />
+                        <div className={style.hourglassGlassTop} />
+                        <div className={style.hourglassSand} />
+                        <div className={style.hourglassSandStream} />
+                        <div className={style.hourglassCapBottom} />
+                        <div className={style.hourglassGlass} />
+                        </div>
+                    </div>
+                    
+                    </div>
+                
+                </div>
+            
+                <h4 style={{display: 'block !important', margin: '0'}}>استثمر دقائق الانتظار في الاستغفار</h4>
+            
+            </div>
+        
         </div>
-      </div>; 
-    }  
+    
+    }
 
     const text = 'Azan Timing'
 
@@ -391,7 +431,7 @@ export default function AzanTiming() {
         
             <div className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}>
                 
-                <div  className={`text-center mb-5`}>
+                {/* <div  className={`text-center mb-5`}>
                 
                     <motion.span initial='hidden' animate="visible" variants={variants} className={style.headTitle}>Timing</motion.span>
                 
@@ -405,7 +445,7 @@ export default function AzanTiming() {
 
                     </motion.h3>
                 
-                </div>
+                </div> */}
             
             </div>
         
@@ -511,14 +551,14 @@ export default function AzanTiming() {
                                     )}
                                     
                                     <tr className={`${isToday ? style.tableActive : ''} ${style.tableRow}`}>
-                                        <td>{timings.date.gregorian.day} {timings.date.gregorian.weekday.en.slice(0, 3)}</td>
-                                        <td>{timings.date.hijri.day}</td>
-                                        <td>{timings.timings.Fajr}</td>
-                                        <td>{timings.timings.Sunrise}</td>
-                                        <td>{timings.timings.Dhuhr}</td>
-                                        <td>{timings.timings.Asr}</td>
-                                        <td>{timings.timings.Maghrib}</td>
-                                        <td>{timings.timings.Isha}</td>
+                                        <td className={`${isToday ? style.tableActive : ''}`}>{timings.date.gregorian.day} {timings.date.gregorian.weekday.en.slice(0, 3)}</td>
+                                        <td className={`${isToday ? style.tableActive : ''}`}>{timings.date.hijri.day}</td>
+                                        <td className={`${isToday ? style.tableActive : ''}`}>{timings.timings.Fajr}</td>
+                                        <td className={`${isToday ? style.tableActive : ''}`}>{timings.timings.Sunrise}</td>
+                                        <td className={`${isToday ? style.tableActive : ''}`}>{timings.timings.Dhuhr}</td>
+                                        <td className={`${isToday ? style.tableActive : ''}`}>{timings.timings.Asr}</td>
+                                        <td className={`${isToday ? style.tableActive : ''}`}>{timings.timings.Maghrib}</td>
+                                        <td className={`${isToday ? style.tableActive : ''}`}>{timings.timings.Isha}</td>
                                     </tr>
                                 </React.Fragment>
                             );
@@ -532,10 +572,10 @@ export default function AzanTiming() {
 
             </div>
         
-            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <> <i className="fa-solid fa-caret-up"></i> show</>}</span>
 
-            <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
-                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+<div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <> <i className="fa-solid fa-caret-down"></i>hide </>}</span>
                     <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';
                     }}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
+import loadingImg from '../../images/loading.png'
 import ProgramsLayout from '../ProgramsLayout/ProgramsLayout'
 import style from './Sign.module.scss'
 import { Link, useNavigate } from 'react-router-dom';
@@ -183,7 +184,7 @@ export default function Sign({ onClose }) {
                 setTimeout(() => {
                     setIsSignUpActive(false)
                     navigate('../en/dashboard');
-                }, 4000);
+                }, 6000);
                 resetForm();
                 setIsSubmittingSignUp(true);
                 // console.log("message error ", response.data.message);
@@ -295,8 +296,9 @@ export default function Sign({ onClose }) {
                     window.location.href = '../'
                 }, 2000);
             }
-        } catch {
+        } catch (error) {
             showToast('wait until admin approve your account.', 'error')
+            console.error("fwe ", error)
             // showToast('An error occurred while logging in', 'error');
             setIsSubmittingSignIn(false);
         } finally {
@@ -340,16 +342,55 @@ export default function Sign({ onClose }) {
         }, 6000); 
     };
 
+    // if (isSubmittingSignIn || isSubmittingSignUp) {
+    //     return  <div id="page">
+    //     <div id="container">
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="h3">loading</div>
+    //     </div>
+    //   </div>
+    // }
+
     if (isSubmittingSignIn || isSubmittingSignUp) {
-        return  <div id="page">
-        <div id="container">
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="h3">loading</div>
+        return <div id='page'>
+        
+            <div>
+            
+                <div className='d-flex align-items-center justify-content-center'>
+                
+                    <div className={style.fImage}>
+                    
+                        <img src={loadingImg} width={100} alt="loading" />
+                    
+                    </div>
+                
+                    <div className={style.sImage}>
+                    
+                    <div className={style.hourglassBackground}>
+                        <div className={style.hourglassContainer}>
+                        <div className={style.hourglassCurves} />
+                        <div className={style.hourglassCapTop} />
+                        <div className={style.hourglassGlassTop} />
+                        <div className={style.hourglassSand} />
+                        <div className={style.hourglassSandStream} />
+                        <div className={style.hourglassCapBottom} />
+                        <div className={style.hourglassGlass} />
+                        </div>
+                    </div>
+                    
+                    </div>
+                
+                </div>
+            
+                <h4 style={{display: 'block !important', margin: '0'}}>استثمر دقائق الانتظار في الاستغفار</h4>
+            
+            </div>
+        
         </div>
-      </div>
+    
     }
 
     return (
@@ -367,6 +408,8 @@ export default function Sign({ onClose }) {
                             <div className={style.formContent} id="formContent">
 
                                 <div className={`${style.signInBox} ${!isSignUpActive ? style.active : ''}`}>
+
+                                    <Link to='/' style={{position: 'absolute', left: '5px', top: '10px', zIndex: '10'}}><i className="fa-solid fa-circle-arrow-left text-danger fs-4"></i></Link>
 
                                     <div className="row h-100">
 
@@ -432,7 +475,7 @@ export default function Sign({ onClose }) {
 
                                                 <div className={style.box}>
                                                 
-                                                    <h4 className={style.title}>Hello, Friend!</h4>
+                                                    <h4 className={style.title}>Aslam Alikum Brothers - sisters!</h4>
 
                                                     <p className={style.paragraph}>Enter your personal details and start journey with us</p>
 

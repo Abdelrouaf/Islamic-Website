@@ -401,7 +401,7 @@ export default function Admin() {
     // Prevent rendering the component if the user is not validated
     const user = JSON.parse(localStorage.getItem('loggedInUser'));
     if (!user || !user.isAdmin) {
-        return null; // Optionally, display a loader or fallback content
+        return null;
     }
 
     if (loading) {

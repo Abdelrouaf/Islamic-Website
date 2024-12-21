@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useOutletContext } from 'react-router-dom'
+import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 import englishMaterialImg from '../../images/englishMaterial.jpg'
 import englishSoftwareImg from '../../images/englishSoftware.jpg'
 import englishCDSImg from '../../images/englishCDS.jpg'
 import islamicMaterialImg from '../../images/islamicMaterial.jpg'
 import differentImg from '../../images/different.jpg'
-import Sign from '../Sign/Sign'
+import mosque from '../../images/mosque.png'
+import pillarServ from '../../images/pillarServ.png'
+import quran from '../../images/quran.png'
+import kabah from '../../images/kabah.png'
 import { Azkar } from 'islam.js'
 import style from './ProgramsHome.module.scss'
 
@@ -68,6 +71,16 @@ export default function ProgramsHome() {
         getData();
     }, [run]);
 
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        if (!user) {
+            navigate('/sign');
+        }
+    }, [navigate]);
+
     return (
     
         <>
@@ -82,9 +95,7 @@ export default function ProgramsHome() {
 
                         <p className={style.description}>"Discover a world of knowledge at your fingertips. Nextgen Knowledge is your one-stop destination for high-quality resources in engineering, medical, dental, and programming. Our carefully curated library provides the tools and materials you need to excel in your studies and professional journey. Explore, download, and empower your learning experience with content crafted to fuel your passion and potential. Dive into the resources you need today!"</p>
 
-                        {/* <a href="#categories" className={style.hoverBtn} ><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="css-i6dzq1"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>  explore</a> */}
-
-                        <Link to="#categories" className={style.exploreBtn}>
+                        <Link to="category/all-categories" className={style.exploreBtn}>
                             <span className={style.button_lg}>
                                 <span className={style.button_sl}></span>
                                 <span className={style.button_text}>Explore</span>
@@ -122,7 +133,159 @@ export default function ProgramsHome() {
 
             </section>
         
-            <section className={style.categoriesSec}>
+            <section className={`mt-4 ${style.services} ${style.section}`}>
+            
+            <div className="container">
+            
+                <div className="text-center mb-5">
+                
+                    <span className={style.headTitle}>Services</span>
+                
+                    <h3 className={style.title}>Don't forget to see</h3>
+                
+                </div>
+            
+                <div className="row gy-2">
+                
+                    <div className="col-md-6 col-lg-4">
+                    
+                        <Link to='../monotheism' target='_blank'>
+                        
+                            <div className={style.box}>
+                            
+                                <h4 className={style.srvTitle}>Monotheism</h4>
+                            
+                                <div className={style.image}>
+                                
+                                    <img src={kabah} alt="kabah" loading='lazy' />
+                                
+                                </div>
+                            
+                                {/* <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p> */}
+                            
+                            </div>
+                        
+                        </Link>
+                    
+                    </div>
+                
+                    <div className="col-md-6 col-lg-4">
+                    
+                        <Link to='../pillars' target='_blank'>
+                        
+                            <div className={style.box}>
+                            
+                                <h4 className={style.srvTitle}>Pillars of Islam</h4>
+                            
+                                <div className={style.image}>
+                                
+                                    <img src={pillarServ} alt="pillars of Islam" loading='lazy' />
+                                
+                                </div>
+                            
+                                {/* <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p> */}
+                            
+                            </div>
+                        
+                        </Link>
+                    
+                    </div>
+                
+                    <div className="col-md-6 col-lg-4">
+                    
+                        <Link to='../faith' target='_blank'>
+                        
+                            <div className={style.box}>
+                            
+                                <h4 className={style.srvTitle}>Faith</h4>
+                            
+                                <div className={style.image}>
+                                
+                                    <img src={quran} alt="quran-image" loading='lazy' />
+                                
+                                </div>
+                            
+                                {/* <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p> */}
+                            
+                            </div>
+                        
+                        </Link>
+                    
+                    </div>
+                    
+                    <div className="col-md-6 col-lg-4">
+                        
+                        <Link to='islam' target='_blank'>
+                        
+                            <div className={style.box}>
+                            
+                                <h4 className={style.srvTitle}>Purpose of Life</h4>
+                            
+                                <div className={style.image}>
+                                
+                                    <img src={mosque} alt="mosque" loading='lazy' />
+                                
+                                </div>
+                            
+                                {/* <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p> */}
+                            
+                            </div>
+                        
+                        </Link>
+                    
+                    </div>
+                
+                    <div className="col-md-6 col-lg-4">
+                    
+                        <Link to='../quran' target='_blank'>
+                        
+                            <div className={style.box}>
+                            
+                                <h4 className={style.srvTitle}>Quran</h4>
+                            
+                                <div className={style.image}>
+                                
+                                    <img src={quran} alt="quran-image" loading='lazy' />
+                                
+                                </div>
+                            
+                                {/* <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p> */}
+                            
+                            </div>
+                        
+                        </Link>
+                    
+                    </div>
+                
+                    <div className="col-md-6 col-lg-4">
+                        
+                        <Link to='../azkarCatagories' target='_blank'>
+                        
+                            <div className={style.box}>
+                            
+                                <h4 className={style.srvTitle}>Azkar (remembrance)</h4>
+                            
+                                <div className={style.image}>
+                                
+                                    <img src={mosque} alt="mosque" loading='lazy' />
+                                
+                                </div>
+                            
+                                {/* <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p> */}
+                            
+                            </div>
+                        
+                        </Link>
+                    
+                    </div>
+                
+                </div>
+            
+            </div>
+        
+        </section>
+        
+            <section className={style.categoriesSec} id='categories'>
 
                 <div className="container">
 
@@ -360,10 +523,10 @@ export default function ProgramsHome() {
             
             </div> */}
 
-<span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <> <i className="fa-solid fa-caret-up"></i> show</>}</span>
 
 <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
-                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <> <i className="fa-solid fa-caret-down"></i>hide </>}</span>
                 
                 <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';

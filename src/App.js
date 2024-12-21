@@ -1,70 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React, { Suspense, useEffect } from 'react';
 import { Helmet } from "react-helmet";
+import loadingImg from './images/loading.png'
 import './App.css';
-import layout from './Components/Style/Base/Base.scss';
-// import Home from './Components/Home/Home'
-// import Layout from './Components/Layout/Layout';
-// import NotFound from './Components/NotFound/NotFound';
-// import Monotheism from './Components/Monotheism/Monotheism';
-// import Pillars from './Components/Pillars/Pillars';
-// import Islam from './Components/Islam/Islam';
-// import Faith from './Components/Faith/Faith';
-// import Admin from './Components/Admin/Admin';
-// import EditMonotheism from './Components/EditMonotheism/EditMonotheism';
-// import CreateTopicInMonotheism from './Components/CreateTopicInMonotheism/CreateTopicInMonotheism';
-// import MonotheismTopic from './Components/MonotheismTopic/MonotheismTopic';
-// import ShahadahTopic from './Components/ShahadahTopic/ShahadahTopic';
-// import CreateTopicInShahadah from './Components/CreateTopicInShahadah/CreateTopicInShahadah';
-// import CreateTopicInPrayer from './Components/CreateTopicInPrayer/CreateTopicInPrayer';
-// import PrayerTopic from './Components/PrayerTopic/PrayerTopic';
-// import EditShahadah from './Components/EditShahadah/EditShahadah';
-// import EditPrayer from './Components/EditPrayer/EditPrayer';
-// import CreateTopicInSawm from './Components/CreateTopicInSawm/CreateTopicInSawm';
-// import SawmTopic from './Components/SawmTopic/SawmTopic';
-// import EditSawm from './Components/EditSawm/EditSawm';
-// import EditZakat from './Components/EditZakat/EditZakat';
-// import CreateTopicInZakat from './Components/CreateTopicInZakat/CreateTopicInZakat';
-// import ZakatTopic from './Components/ZakatTopic/ZakatTopic';
-// import EditHaij from './Components/EditHaij/EditHaij';
-// import CreateTopicInHaij from './Components/CreateTopicInHaij/CreateTopicInHaij';
-// import HaijTopic from './Components/HaijTopic/HaijTopic';
-// import CreateTopicInFaithBook from './Components/CreateTopicInFaithBook/CreateTopicInFaithBook';
-// import FaithBookTopic from './Components/FaithBookTopic/FaithBookTopic';
-// import EditFaithBook from './Components/EditFaithBook/EditFaithBook';
-// import EditFaithBlog from './Components/EditFaithBlog/EditFaithBlog';
-// import CreateTopicInFaithBlog from './Components/CreateTopicInFaithBlog/CreateTopicInFaithBlog';
-// import FaithBlogTopic from './Components/FaithBlogTopic/FaithBlogTopic';
-// import EditIslam from './Components/EditIslam/EditIslam';
-// import CreateTopicInIslam from './Components/CreateTopicInIslam/CreateTopicInIslam';
-// import IslamTopic from './Components/IslamTopic/IslamTopic';
-// import News from './Components/News/News';
-// import CreateTopicInNews from './Components/CreateTopicInNews/CreateTopicInNews';
-// import NewsTopic from './Components/NewsTopic/NewsTopic';
-// import EditNews from './Components/EditNews/EditNews';
-// import QuranSurahs from './Components/QuranSurahs/QuranSurahs';
-// import AzkarCatagories from './Components/AzkarCatagories/AzkarCatagories';
-// import AzkarDetails from './Components/AzkarDetails/AzkarDetails';
-// import AzanTiming from './Components/AzanTiming/AzanTiming';
-// import Sign from './Components/Sign/Sign';
-// import ChangePassword from './Components/ChangePassword/ChangePassword';
-// import Program from './Components/Program/Program';
-// import ProgramsLayout from './Components/ProgramsLayout/ProgramsLayout';
-// import ProgramsHome from './Components/ProgramsHome/ProgramsHome';
-// import Category from './Components/Category/Category';
-// import ScrollToTop from './Components/ScrollToTop/ScrollToTop';
-// import AddProgram from './Components/AddProgram/AddProgram';
-// import UpdateProgram from './Components/UpdateProgram/UpdateProgram';
-// import AllUsers from './Components/AllUsers/AllUsers';
-// import ApproveUser from './Components/ApproveUser/ApproveUser';
-// import UserRole from './Components/UserRole/UserRole';
-// import User from './Components/User/User';
-// import UserProfile from './Components/UserProfile/UserProfile';
-// import SaveItems from './Components/SaveItems/SaveItems';
-// import UserInbox from './Components/UserInbox/UserInbox';
-// import ResetPassword from './Components/ResetPassword/ResetPassword';
-// import Chat from './Components/Chat/Chat';
-// import Dashboard from './Components/Dashboard/Dashboard';
+import style from './Components/Style/Base/Base.scss';
 
 const Home = React.lazy(() => import('./Components/Home/Home'));
 const Layout = React.lazy(() => import('./Components/Layout/Layout'));
@@ -168,15 +107,41 @@ function App() {
   return (
       <div>
 
-<Suspense fallback={       <div id="page">
-        <div id="container">
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="h3">loading</div>
+<Suspense fallback={       <div id='page'>
+    
+    <div>
+    
+        <div className='d-flex align-items-center justify-content-center'>
+        
+            <div className={style.fImage}>
+            
+                <img src={loadingImg} width={100} alt="image-loading" />
+            
+            </div>
+        
+            <div className={style.sImage}>
+            
+            <div className={style.hourglassBackground}>
+                <div className={style.hourglassContainer}>
+                <div className={style.hourglassCurves} />
+                <div className={style.hourglassCapTop} />
+                <div className={style.hourglassGlassTop} />
+                <div className={style.hourglassSand} />
+                <div className={style.hourglassSandStream} />
+                <div className={style.hourglassCapBottom} />
+                <div className={style.hourglassGlass} />
+                </div>
+            </div>
+            
+            </div>
+        
         </div>
-      </div>}>
+    
+        <h4 style={{display: 'block !important', margin: '0'}}>استثمر دقائق الانتظار في الاستغفار</h4>
+    
+    </div>
+
+</div>}>
         <BrowserRouter>
 
           <ScrollToTop />
@@ -184,141 +149,165 @@ function App() {
           <Routes>
             <Route path='/' element={<Layout />} >
               <Route index element={ <>
-                {/* <Helmet>
-                  <title>Monotheism Topics - Learn Islam | YourSiteName</title>
-                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
-                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+                <Helmet>
+                  <title>Home | Purpose of Life</title>
+                  <meta name="description" content="Discover the core beliefs of Islam, including monotheism, faith, the five pillars, and the purpose of life. Learn how Islam guides us to live with purpose and devotion." />
+                  <meta name="keywords" content="Islam, Monotheism, Faith, Five Pillars, Purpose of Life, Allah, Islamic Beliefs, Tawhid, Life After Death" />
+                </Helmet>
                 <Home />
               </>} />
               <Route path='azanTiming' element={<>
-                {/* <Helmet>
-                  <title>Monotheism Topics - Learn Islam | YourSiteName</title>
-                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
-                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+                <Helmet>
+                  <title>Azan Timing - Islamic Prayer Times | Purpose of Life</title>
+                  <meta name="description" content="Get accurate Azan timings for your daily prayers and stay connected with Allah." />
+                  <meta name="keywords" content="Azan, Prayer Times, Salah, Islamic Prayer, Timings" />
+                </Helmet> 
                 <AzanTiming />
               </>} />
               <Route path='quran' element={<>
-                {/* <Helmet>
-                  <title>Monotheism Topics - Learn Islam | YourSiteName</title>
-                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
-                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+                <Helmet>
+                  <title>Quran Surahs - Learn the Quran | Purpose of Life</title>
+                  <meta name="description" content="Explore the divine wisdom and teachings of the Quran through its Surahs." />
+                  <meta name="keywords" content="Quran, Surahs, Islam, Teachings, Divine Wisdom" />
+                </Helmet>
                 <QuranSurahs />
               </>} />
               <Route path='azkarCatagories/:category' element={<>
-                {/* <Helmet>
-                  <title>Monotheism Topics - Learn Islam | YourSiteName</title>
-                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
-                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+                <Helmet>
+                  <title>Azkar Categories - Islamic Remembrance | Purpose of Life</title>
+                  <meta name="description" content="Learn about the different categories of Azkar and their significance in Islam." />
+                  <meta name="keywords" content="Azkar, Remembrance, Islam, Supplications, Dhikr" />
+                </Helmet>
                 <AzkarDetails />
               </>} />
               <Route path='azkarCatagories' element={<>
-                {/* <Helmet>
-                  <title>Monotheism Topics - Learn Islam | YourSiteName</title>
-                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
-                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+                <Helmet>
+                  <title>Azkar Categories - Explore Islamic Supplications | Purpose of Life</title>
+                  <meta name="description" content="Browse through various Azkar categories to enhance your spiritual journey in Islam." />
+                  <meta name="keywords" content="Azkar, Supplications, Dhikr, Islamic Remembrance" />
+                </Helmet>
                 <AzkarCatagories />
               </>} />
               <Route path='monotheism' element={<>
-                {/* <Helmet>
-                    <title>Monotheism in Islam - Learn Faith | YourSiteName</title>
-                    <meta name="description" content="Discover core monotheistic concepts and teachings in Islam." />
+                  <Helmet>
+                    <title>Monotheism in Islam | Purpose of Life</title>
+                    <meta name="description" content="The concept of monotheism (known as tawhîd in Arabic) is the single most important concept in Islam.  Everything in Islam is built upon it.  Islam calls to the absolute oneness of God.  No act of worship or devotion has any meaning or value if this concept is in any way compromised.
+
+                      Monotheism can be looked at from the following three angles:
+
+                      1. The Oneness of God in His Lordship
+
+                      2. Devotion of All Worship to God Alone
+
+                      3. The Oneness of God in His Names and Attributes" />
                     <meta name="keywords" content="Monotheism, Allah, Faith, Islam, Surahs" />
-                  </Helmet> */}
+                  </Helmet> 
                 <Monotheism />
               </>} />
               <Route path='pillars' element={<>
-                {/* <Helmet>
-                    <title>Pillars of Islam - YourSiteName</title>
-                    <meta name="description" content="Learn about the five pillars of Islam and their significance." />
+                  <Helmet>
+                    <title>Pillars of Islam | Purpose of Life</title>
+                    <meta name="description" content="The five pillars of Islam 
+
+The declaration of faith (shahada).
+
+Prayer (salah)
+
+Alms-giving (zakat).
+
+Fasting (sawm)
+
+Pilgrimage (hajj)
+
+
+Constitute the basic norms of Islamic practice" />
                     <meta name="keywords" content="Pillars, Islam, Faith, Worship, Allah" />
-                  </Helmet> */}
+                  </Helmet>
                 <Pillars />
               </>} />
               <Route path='islam' element={<>
-                {/* <Helmet>
-                    <title>Islamic Teachings - Learn Islam | YourSiteName</title>
-                    <meta name="description" content="Explore the teachings and principles of Islam comprehensively." />
+                  <Helmet>
+                    <title>Purpose of Live - Islamic Teachings - Learn Islam | Purpose of Life</title>
+                    <meta name="description" content="One's life can only be fulfilled when man reaches his spiritual peak and is in divine communion with God. This very goal forms the foundation of Islam. Believers are encouraged to present themselves before God in the utmost humility and desperately seek His Mercy in order to create an intimate bond with their Master." />
                     <meta name="keywords" content="Islam, Teachings, Surahs, Knowledge, Allah" />
-                  </Helmet> */}
+                  </Helmet>
                 <Islam />
               </>} />
               <Route path='faith' element={<>
-                {/* <Helmet>
-                    <title>Faith in Islam - Learn More | YourSiteName</title>
+                <Helmet>
+                    <title>Faith in Islam - Learn More | Purpose of Life</title>
                     <meta name="description" content="Understand the concept of faith and belief in Islam." />
                     <meta name="keywords" content="Faith, Islam, Belief, Monotheism, Teachings" />
-                  </Helmet> */}
+                  </Helmet>
                 <Faith />
               </>} />
               <Route path='news' element={<>
-                {/* <Helmet>
-                    <title>Islamic News - Stay Updated | YourSiteName</title>
+                <Helmet>
+                    <title>Islamic News - Stay Updated | Purpose of Life</title>
                     <meta name="description" content="Get the latest news and updates about Islam and community events." />
-                    <meta name="keywords" content="News, Islam, Updates, Community, YourSiteName" />
-                  </Helmet> */}
+                    <meta name="keywords" content="News, Islam, Updates, Community, Purpose of Life" />
+                  </Helmet>
                 <News />
               </>} />
               <Route path='sign' element={<>
-                {/* <Helmet>
-                    <title>Sign In - YourSiteName</title>
+                <Helmet>
+                    <title>Sign In - Purpose of Life</title>
                     <meta name="description" content="Sign in to access your account and explore Islamic content." />
-                    <meta name="keywords" content="Sign In, Login, Account, Islam, YourSiteName" />
-                  </Helmet> */}
+                    <meta name="keywords" content="Sign In, Login, Account, Islam, Purpose of Life" />
+                  </Helmet>
                 <Sign />
               </>} />
               {/* <Route path='verify-account' element={<VerifyAccount />} /> */}
-              <Route path='forget-password' element={<>{/* <Helmet>
-                  <title>Change Password - YourSiteName</title>
+              <Route path='forget-password' element={<>
+                <Helmet>
+                  <title>Change Password - Purpose of Life</title>
                   <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
                   <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}<ForgetPassword /></>} />
+                </Helmet> 
+                <ForgetPassword />
+                </>} />
               <Route path='reset-password' element={<>
-                {/* <Helmet>
-                  <title>Change Password - YourSiteName</title>
+                <Helmet>
+                  <title>Change Password - Purpose of Life</title>
                   <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
                   <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+                </Helmet>
                 <ChangePassword />
               </>} />
               {/* <Route path='program' element={<Program />} /> */}
             </Route>
 
             <Route path='programs' element={<>
-                {/* <Helmet>
-                  <title>Monotheism Topics - Learn Islam | YourSiteName</title>
-                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
-                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+              <Helmet>
+                <title>Educational Programs - Learn and Grow | Purpose of Life</title>
+                <meta name="description" content="Explore various educational programs across different fields like Software, Dental, Architecture, English, and Islamic studies." />
+                <meta name="keywords" content="Educational Programs, Software, Dental, Architecture, English, Islamic Studies, Faith, Learning" />
+              </Helmet>
                 <ProgramsLayout />
               </>} >
             
               <Route index element={<>
-                {/* <Helmet>
-                  <title>Monotheism Topics - Learn Islam | YourSiteName</title>
-                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
-                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+                <Helmet>
+                  <title>Educational Programs | Purpose of Life</title>
+                  <meta name="description" content="Browse a wide variety of educational programs in Software, Dental, Architecture, English, and Islamic studies to enrich your learning." />
+                  <meta name="keywords" content="Educational Programs, Learning, Software, Dental, Architecture, English, Islamic Studies" />
+                </Helmet>
                 <ProgramsHome />
               </>} />
               <Route path='category/:category' element={<>
-                {/* <Helmet>
-                  <title>Monotheism Topics - Learn Islam | YourSiteName</title>
-                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
-                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+                <Helmet>
+                  <title>Programs Categories | Purpose of Life</title>
+                  <meta name="description" content="Explore a wide range of educational programs designed to enhance personal growth and knowledge" />
+                  <meta name="keywords" content="Educational Programs, Learning, Software, Dental, Architecture, English, Islamic Studies" />
+                </Helmet>
                 <Category />
               </>} /> 
               <Route path=':category/:id' element={<>
-                {/* <Helmet>
-                  <title>Monotheism Topics - Learn Islam | YourSiteName</title>
-                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
-                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+                <Helmet>
+                  <title>Program | Purpose of Life</title>
+                  <meta name="description" content="Get detailed information about our educational programs designed for personal growth and learning." />
+                  <meta name="keywords" content="Educational Programs, Learning, Software, Dental, Architecture, English, Islamic Studies" />
+                </Helmet>
                 <Program />
               </>} />
               <Route path='user' element={<User />} >
@@ -333,79 +322,430 @@ function App() {
 
             <Route path='en/dashboard' element={<Admin />}>
 
-              <Route index element={<Dashboard />} />
+              <Route index element={ 
+              
+                <> 
+                
+                  <Helmet>
+                    <title>Dashboard</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                  </Helmet>
+                
+                  <Dashboard /> 
+                
+                </>
+              
+              } />
         
-              <Route path='user/all-users' element={<AllUsers />} />
+              <Route path='user/all-users' element={
+              
+                <>
+                
+                  <Helmet>
+                    <title>All Users</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                  </Helmet>
+                
+                  <AllUsers />
+                
+                </>
+              
+              } />
 
-              <Route path='user/approve-user' element={<ApproveUser />} />
+              <Route path='user/approve-user' element={
+              
+                <>
+                
+                  <Helmet>
+                    <title>Approve Users</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                  </Helmet>
+                
+                  <ApproveUser />
+                
+                </>
+              
+              } />
 
-              <Route path='user/user-role' element={<UserRole />} />
+              <Route path='user/user-role' element={
+              
+              <>
+              
+                <Helmet>
+                  <title>User Role</title>
+                  <meta name="robots" content="noindex, nofollow" />
+                </Helmet>
+              
+                <UserRole />
+              
+              </>
+              
+              } />
 
-              <Route path='chat' element={<Chat />} />
+              <Route path='chat' element={
+              
+                <>
+                
+                  <Helmet>
+                    <title>Chat</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                  </Helmet>
+                
+                  <Chat />
+                
+                </>
+              
+              } />
 
               <Route path='islamic/monotheism' element={<EditMonotheism />}>
-                <Route path='create/topic' index element={<CreateTopicInMonotheism />} />
-                <Route path='topic/:id' element={<MonotheismTopic />} />
+                <Route path='create/topic' index element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Create topic in Monotheism</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <CreateTopicInMonotheism />
+                  
+                  </>
+                
+                } />
+                <Route path='topic/:id' element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Monotheism Topic</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <MonotheismTopic />
+                  
+                  </>
+                
+                } />
               </Route>
 
               <Route path='islamic/pillars/shahadah' element={<EditShahadah />}>
-                <Route path='create' index element={<CreateTopicInShahadah />} />
-                <Route path='topic/:id' element={<ShahadahTopic />} />
+                <Route path='create' index element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Create Topic in Shahadah</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <CreateTopicInShahadah />
+                  
+                  </>
+                
+                } />
+                <Route path='topic/:id' element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Shahadah Topic</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <ShahadahTopic />
+                  
+                  </>
+                
+                } />
               </Route>
 
               <Route path='islamic/pillars/prayer' element={<EditPrayer />}>
-                <Route path='create' index element={<CreateTopicInPrayer />} />
-                <Route path='topic/:id' element={<PrayerTopic />} />
+                <Route path='create' index element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Create Topic in Prayer</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <CreateTopicInPrayer />
+                  
+                  </>
+                
+                } />
+                <Route path='topic/:id' element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Prayer Topic</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <PrayerTopic />
+                  
+                  </>
+                
+                } />
               </Route>
 
               <Route path='islamic/pillars/sawm' element={<EditSawm />}>
-                <Route path='create' index element={<CreateTopicInSawm />} />
-                <Route path='topic/:id' element={<SawmTopic />} />
+                <Route path='create' index element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Create Topic in Sawm</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <CreateTopicInSawm />
+                  
+                  </>
+                
+                } />
+                <Route path='topic/:id' element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Sawm Topic</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <SawmTopic />
+                  
+                  </>
+                
+                } />
               </Route>
 
               <Route path='islamic/pillars/zakat' element={<EditZakat />}>
-                <Route path='create' index element={<CreateTopicInZakat />} />
-                <Route path='topic/:id' element={<ZakatTopic />} />
+                <Route path='create' index element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Create Topic in Zakat</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <CreateTopicInZakat />
+                  
+                  </>
+                
+                } />
+                <Route path='topic/:id' element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Zakat Topic</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <ZakatTopic />
+                  
+                  </>
+                
+                } />
               </Route>
 
               <Route path='islamic/pillars/haij' element={<EditHaij />}>
-                <Route path='create' index element={<CreateTopicInHaij />} />
-                <Route path='topic/:id' element={<HaijTopic />} />
+                <Route path='create' index element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Create Topic in Haij</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <CreateTopicInHaij />
+                  
+                  </>
+                
+                } />
+                <Route path='topic/:id' element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Haij Topic</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <HaijTopic />
+                  
+                  </>
+                
+                } />
               </Route>
 
               <Route path='islamic/faith/book' element={<EditFaithBook />}>
-                <Route path='create' index element={<CreateTopicInFaithBook />} />
-                <Route path='topic/:id' element={<FaithBookTopic />} />
+                <Route path='create' index element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Create Topic in Faith Book</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet> 
+                  
+                    <CreateTopicInFaithBook />
+                  
+                  </>
+                
+                } />
+                <Route path='topic/:id' element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Faith Book Topic</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <FaithBookTopic />
+                  
+                  </>
+                
+                } />
               </Route>
 
               <Route path='islamic/faith/blog' element={<EditFaithBlog />}>
-                <Route path='create' index element={<CreateTopicInFaithBlog />} />
-                <Route path='topic/:id' element={<FaithBlogTopic />} />
+                <Route path='create' index element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Create Topic in Faith Blog</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <CreateTopicInFaithBlog />
+                  
+                  </>
+                
+                } />
+                <Route path='topic/:id' element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Faith Blog Topic</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <FaithBlogTopic />
+                  
+                  </>
+                
+                } />
               </Route>
 
               <Route path='islamic/islam' element={<EditIslam />}>
-                <Route path='create' index element={<CreateTopicInIslam />} />
-                <Route path='topic/:id' element={<IslamTopic />} />
+                <Route path='create' index element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Create Topic in Islam</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <CreateTopicInIslam />
+                  
+                  </>
+                
+                } />
+                <Route path='topic/:id' element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Islam Topic</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <IslamTopic />
+                  
+                  </>
+                
+                } />
               </Route>
 
               <Route path='islamic/news' element={<EditNews />}>
-                <Route path='create' index element={<CreateTopicInNews />} />
-                <Route path='topic/:id' element={<NewsTopic />} />
+                <Route path='create' index element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>Create Topic in News</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <CreateTopicInNews />
+                  
+                  </>
+                
+                } />
+                <Route path='topic/:id' element={
+                
+                  <>
+                  
+                    <Helmet>
+                      <title>News Topic</title>
+                      <meta name="robots" content="noindex, nofollow" />
+                    </Helmet>
+                  
+                    <NewsTopic />
+                  
+                  </>
+                
+                } />
               </Route>
             
               {/* <Route path='add-programs/categories/create' element={<AddCategory />} /> */}
 
-              <Route path='add-programs/program/create' element={<AddProgram />} />
+              <Route path='add-programs/program/create' element={
+              
+                <>
+                
+                  <Helmet>
+                    <title>Add Program</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                  </Helmet>
+                
+                  <AddProgram />
+                
+                </>
+              
+              } />
 
-              <Route path='programs/:category/:id' element={<UpdateProgram />} />
+              <Route path='programs/:category/:id' element={
+              
+                <>
+                
+                  <Helmet>
+                    <title>Update Program</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                  </Helmet>
+                
+                  <UpdateProgram />
+                
+                </>
+              
+              } />
 
             </Route>
             <Route path="*" element={<>
-                {/* <Helmet>
-                  <title>Monotheism Topics - Learn Islam | YourSiteName</title>
-                  <meta name="description" content="Explore core monotheistic topics about faith in Islam." />
-                  <meta name="keywords" content="Monotheism, Faith, Islam, Surahs, Allah" />
-                </Helmet> */}
+                <Helmet>
+                  <title>Not Found Page | Purpose of Life</title>
+                  <meta name="description" content="Sorry, the page you are looking for doesn't exist. You can return to the homepage or explore other sections of our website." />
+                  <meta name="keywords" content="404 error, page not found, Purpose of Life, explore topics, home" />
+                </Helmet>
                 <NotFound />
               </>} />
           </Routes>

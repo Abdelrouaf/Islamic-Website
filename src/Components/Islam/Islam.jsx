@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import loadingImg from '../../images/loading.png'
 import style from './Islam.module.scss'
 import axios from 'axios'
 import { motion } from 'framer-motion'
@@ -171,15 +172,42 @@ export default function Islam() {
     };
 
     if (loading) {
-        return  <div id="page">
-        <div id="container">
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="h3">loading</div>
+        return <div id='page'>
+        
+            <div>
+            
+                <div className='d-flex align-items-center justify-content-center'>
+                
+                    <div className={style.fImage}>
+                    
+                        <img src={loadingImg} width={100} alt="loading" />
+                    
+                    </div>
+                
+                    <div className={style.sImage}>
+                    
+                    <div className={style.hourglassBackground}>
+                        <div className={style.hourglassContainer}>
+                        <div className={style.hourglassCurves} />
+                        <div className={style.hourglassCapTop} />
+                        <div className={style.hourglassGlassTop} />
+                        <div className={style.hourglassSand} />
+                        <div className={style.hourglassSandStream} />
+                        <div className={style.hourglassCapBottom} />
+                        <div className={style.hourglassGlass} />
+                        </div>
+                    </div>
+                    
+                    </div>
+                
+                </div>
+            
+                <h4 style={{display: 'block !important', margin: '0'}}>استثمر دقائق الانتظار في الاستغفار</h4>
+            
+            </div>
+        
         </div>
-      </div>
+    
     }
 
     return (
@@ -188,7 +216,7 @@ export default function Islam() {
         
             <div className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}>
             
-                <div className={`text-center mb-5`}>
+                {/* <div className={`text-center mb-5`}>
                 
                     <motion.span initial='hidden' animate="visible" variants={variants} className={style.headTitle}>About Islam</motion.span>
                 
@@ -202,257 +230,220 @@ export default function Islam() {
 
                         </motion.h3>
                 
-                </div>
+                </div> */}
             
             </div>
 
             <div className="container">
             
-                {/* <div className="text-center mb-5">
+                { topics.length > 0 ? (
                 
-                    <span className={style.headTitle}>About Islam</span>
-                
-                    <h3 className={style.title}>The Purpose Of Life</h3>
-                
-                </div> */}
-            
-                {/* <div className={style.titles}>
-                
-                    <span className={style.headTitle2}>About Islam</span>
-                
-                    <h3 className={style.title2}>The Purpose Of Life</h3>
-                
-                </div> */}
-            
-                <div className="row gy-2 mt-5">
-                
-                    <div className="col-md-8">
+                    <div className="row gy-2 mt-5">
                     
-                        {topics.map( (topic, index) => (
+                        <div className="col-md-8">
+                        
+                            {topics.map( (topic, index) => (
 
-                            <div key={topic._id} className={style.topicSection}>
-                            
-                                <div className={style.topicDesign} id={topic._id}>
+                                <div key={topic._id} className={style.topicSection}>
+                                
+                                    <div className={style.topicDesign} id={topic._id}>
 
-                                    <span className={style.count}>{index + 1}</span>
+                                        <span className={style.count}>{index + 1}</span>
 
-                                    <h3 className={style.title}>{topic.title}</h3>
+                                        <h3 className={style.title}>{topic.title}</h3>
 
-                                </div> 
+                                    </div> 
 
-                                <div className={style.video}>
+                                    <div className={style.video}>
 
-                                    <iframe src={topic.video} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                                        <iframe src={topic.video} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
 
-                                    {/* <p className={style.paragraph}> */}
-                                    <div className={style.paragraph}
-        dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(topic.description, {
-                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
-                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
-            }),
-        }}
-/>
-{/* </p> */}
+                                        {/* <p className={style.paragraph}> */}
+                                        <div className={style.paragraph}
+            dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(topic.description, {
+                    ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                    ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+                }),
+            }}
+    />
+    {/* </p> */}
 
-                                    <div className={`${style.details} d-flex gap-3`}>
+                                        <div className={`${style.details} d-flex gap-3`}>
 
-                                        <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
+                                            <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
 
-                                        {/* <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClick(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span> */}
+                                            {/* <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClick(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span> */}
 
-                                        {/* <span><i className="fa-regular fa-eye"></i>{topic.Views}</span> */}
+                                            {/* <span><i className="fa-regular fa-eye"></i>{topic.Views}</span> */}
+
+                                        </div>
 
                                     </div>
 
                                 </div>
 
-                            </div>
+                            ) )}
 
-                        ) )}
-
-                        {/* <div className={style.topicSection}>
-                        
-                            <div className={style.topicDesign}>
+                            {/* <div className={style.topicSection}>
                             
-                                <span className={style.count}>1</span>
+                                <div className={style.topicDesign}>
+                                
+                                    <span className={style.count}>1</span>
+                                
+                                    <h3 className={style.title}>The Purpose of Life</h3>
+                                
+                                </div> 
                             
-                                <h3 className={style.title}>The Purpose of Life</h3>
-                            
-                            </div> 
-                        
-                            <div className={style.video}>
-                            
-                                <iframe src="https://www.youtube.com/embed/Zor1et-rT8c?si=Z9ZqFmGY27DUDk1R" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-                            
-                                <p className={style.paragraph}>Khalid Yasin delivered this lecture in Saudi Arabia in 1994, which resulted in 43 persons accepting Islam on that very night. What Is The Purpose of Life? Why are we here and where are we going? Through the verses of the Holy Qur'an, Shaykh Khalid Yasin expounds upon the creation of the universe and this amazing world we live in -- and how it came to be. With his logical style of argument, the Shaykh answers these questions with much wisdom.</p>
+                                <div className={style.video}>
+                                
+                                    <iframe src="https://www.youtube.com/embed/Zor1et-rT8c?si=Z9ZqFmGY27DUDk1R" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                                
+                                    <p className={style.paragraph}>Khalid Yasin delivered this lecture in Saudi Arabia in 1994, which resulted in 43 persons accepting Islam on that very night. What Is The Purpose of Life? Why are we here and where are we going? Through the verses of the Holy Qur'an, Shaykh Khalid Yasin expounds upon the creation of the universe and this amazing world we live in -- and how it came to be. With his logical style of argument, the Shaykh answers these questions with much wisdom.</p>
+                                
+                                </div>
                             
                             </div>
+                        
+                            <div className={style.topicSection}>
+                            
+                                <div className={style.topicDesign}>
+                                
+                                    <span className={style.count}>2</span>
+                                
+                                    <h3 className={style.title}>The Purpose of Life</h3>
+                                
+                                </div> 
+                            
+                                <div className={style.video}>
+                                
+                                    <iframe src="https://www.youtube.com/embed/Y5W1dkXv05Q?si=JsO18Tonf0__mlop" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                                
+                                    <p className={style.paragraph}>Khalid Yasin delivered this lecture in Saudi Arabia in 1994, which resulted in 43 persons accepting Islam on that very night. What Is The Purpose of Life? Why are we here and where are we going? Through the verses of the Holy Qur'an, Shaykh Khalid Yasin expounds upon the creation of the universe and this amazing world we live in -- and how it came to be. With his logical style of argument, the Shaykh answers these questions with much wisdom.</p>
+                                
+                                </div>
+                            
+                                <p className={style.paragraph}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui eum error dolorum ut natus officiis in quos harum aspernatur laborum. Voluptas asperiores consequuntur et qui necessitatibus, dolores tempora pariatur provident repudiandae rem molestias! Officia a possimus, voluptatem maiores autem similique, quae illum dolorum mollitia laborum tempore reprehenderit accusamus? Ab reiciendis nobis quasi repudiandae, cumque eaque a nulla ipsa commodi non magni odio enim? Maxime impedit dolore possimus reprehenderit ab quisquam iste, neque, exercitationem similique autem consectetur quas nesciunt cum ratione vel, animi expedita cumque mollitia recusandae nobis qui. Neque nemo dolorum tempore assumenda alias, commodi corrupti quisquam maxime omnis quae?</p>
+                            
+                            </div>
+                        
+                            <div className={style.topicSection}>
+                            
+                                <div className={style.topicDesign}>
+                                
+                                    <span className={style.count}>3</span>
+                                
+                                    <h3 className={style.title}>The Purpose of Life</h3>
+                                
+                                </div> 
+                            
+                                <div className={style.video}>
+                                
+                                    <iframe src="https://www.youtube.com/embed/NQbnt5ZLRu8?si=c7MbzlcF228s_9nZ" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                                
+                                    <p className={style.paragraph}>Khalid Yasin delivered this lecture in Saudi Arabia in 1994, which resulted in 43 persons accepting Islam on that very night. What Is The Purpose of Life? Why are we here and where are we going? Through the verses of the Holy Qur'an, Shaykh Khalid Yasin expounds upon the creation of the universe and this amazing world we live in -- and how it came to be. With his logical style of argument, the Shaykh answers these questions with much wisdom.</p>
+                                
+                                </div>
+                            
+                                <p className={style.paragraph}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui eum error dolorum ut natus officiis in quos harum aspernatur laborum. Voluptas asperiores consequuntur et qui necessitatibus, dolores tempora pariatur provident repudiandae rem molestias! Officia a possimus, voluptatem maiores autem similique, quae illum dolorum mollitia laborum tempore reprehenderit accusamus? Ab reiciendis nobis quasi repudiandae, cumque eaque a nulla ipsa commodi non magni odio enim? Maxime impedit dolore possimus reprehenderit ab quisquam iste, neque, exercitationem similique autem consectetur quas nesciunt cum ratione vel, animi expedita cumque mollitia recusandae nobis qui. Neque nemo dolorum tempore assumenda alias, commodi corrupti quisquam maxime omnis quae?</p>
+                            
+                            </div> */}
                         
                         </div>
                     
-                        <div className={style.topicSection}>
+                        <div className="col-md-4">
                         
-                            <div className={style.topicDesign}>
+                            <div className={style.box}>
+                                
+                                <h4 className={style.title}>Recent Blogs</h4>
                             
-                                <span className={style.count}>2</span>
-                            
-                                <h3 className={style.title}>The Purpose of Life</h3>
-                            
-                            </div> 
-                        
-                            <div className={style.video}>
-                            
-                                <iframe src="https://www.youtube.com/embed/Y5W1dkXv05Q?si=JsO18Tonf0__mlop" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-                            
-                                <p className={style.paragraph}>Khalid Yasin delivered this lecture in Saudi Arabia in 1994, which resulted in 43 persons accepting Islam on that very night. What Is The Purpose of Life? Why are we here and where are we going? Through the verses of the Holy Qur'an, Shaykh Khalid Yasin expounds upon the creation of the universe and this amazing world we live in -- and how it came to be. With his logical style of argument, the Shaykh answers these questions with much wisdom.</p>
-                            
-                            </div>
-                        
-                            <p className={style.paragraph}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui eum error dolorum ut natus officiis in quos harum aspernatur laborum. Voluptas asperiores consequuntur et qui necessitatibus, dolores tempora pariatur provident repudiandae rem molestias! Officia a possimus, voluptatem maiores autem similique, quae illum dolorum mollitia laborum tempore reprehenderit accusamus? Ab reiciendis nobis quasi repudiandae, cumque eaque a nulla ipsa commodi non magni odio enim? Maxime impedit dolore possimus reprehenderit ab quisquam iste, neque, exercitationem similique autem consectetur quas nesciunt cum ratione vel, animi expedita cumque mollitia recusandae nobis qui. Neque nemo dolorum tempore assumenda alias, commodi corrupti quisquam maxime omnis quae?</p>
-                        
-                        </div>
-                    
-                        <div className={style.topicSection}>
-                        
-                            <div className={style.topicDesign}>
-                            
-                                <span className={style.count}>3</span>
-                            
-                                <h3 className={style.title}>The Purpose of Life</h3>
-                            
-                            </div> 
-                        
-                            <div className={style.video}>
-                            
-                                <iframe src="https://www.youtube.com/embed/NQbnt5ZLRu8?si=c7MbzlcF228s_9nZ" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-                            
-                                <p className={style.paragraph}>Khalid Yasin delivered this lecture in Saudi Arabia in 1994, which resulted in 43 persons accepting Islam on that very night. What Is The Purpose of Life? Why are we here and where are we going? Through the verses of the Holy Qur'an, Shaykh Khalid Yasin expounds upon the creation of the universe and this amazing world we live in -- and how it came to be. With his logical style of argument, the Shaykh answers these questions with much wisdom.</p>
-                            
-                            </div>
-                        
-                            <p className={style.paragraph}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui eum error dolorum ut natus officiis in quos harum aspernatur laborum. Voluptas asperiores consequuntur et qui necessitatibus, dolores tempora pariatur provident repudiandae rem molestias! Officia a possimus, voluptatem maiores autem similique, quae illum dolorum mollitia laborum tempore reprehenderit accusamus? Ab reiciendis nobis quasi repudiandae, cumque eaque a nulla ipsa commodi non magni odio enim? Maxime impedit dolore possimus reprehenderit ab quisquam iste, neque, exercitationem similique autem consectetur quas nesciunt cum ratione vel, animi expedita cumque mollitia recusandae nobis qui. Neque nemo dolorum tempore assumenda alias, commodi corrupti quisquam maxime omnis quae?</p>
-                        
-                        </div> */}
-                    
-                    </div>
-                
-                    <div className="col-md-4">
-                    
-                        {/* <div className={style.box}>
-                        
-                            <h4 className={style.title}>Quick Links</h4>
-                        
-                            <ul>
-                            
-                                <li>
+                                <ul>
+                                
+                                    {topics.length > 0 ? (
                                     
-                                    <a href="#part1 "><i className="fa-solid fa-chevron-right"></i>The Purpose of Life (Part 1)</a>
-                                
-                                </li>
-                            
-                                <li>
-                                
-                                    <a href="#part2"><i className="fa-solid fa-chevron-right"></i>The Purpose of Life (Part 2)</a>
-                                
-                                </li>
-                            
-                                <li>
-                                
-                                    <a href="#part3"><i className="fa-solid fa-chevron-right"></i>The Purpose of Life (Part 3)</a>
-                                
-                                </li>
-                            
-                            </ul>
-                        
-                        </div> */}
-                    
-                        <div className={style.box}>
-                            
-                            <h4 className={style.title}>Recent Blogs</h4>
-                        
-                            <ul>
-                            
-                                {topics.length > 0 ? (
-                                
-                                    recentBlogs.map( (topic, index) => ( 
-                                    
-                                        <li className={style.quickLink} key={topic._id}>
+                                        recentBlogs.map( (topic, index) => ( 
                                         
-                                            <div className={`${style.cardBox} d-flex align-items-center`}>
+                                            <li className={style.quickLink} key={topic._id}>
                                             
-                                                <div className={style.cardBody}>
+                                                <div className={`${style.cardBox} d-flex align-items-center`}>
                                                 
-                                                    <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.cardTitle}><h4>{topic.title}</h4></a>
-                                                
-                                                    <p className={style.paragraph}>{getDate(topic.createdAt)}</p>
+                                                    <div className={style.cardBody}>
+                                                    
+                                                        <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.cardTitle}><h4>{topic.title}</h4></a>
+                                                    
+                                                        <p className={style.paragraph}>{getDate(topic.createdAt)}</p>
+                                                    
+                                                    </div>
                                                 
                                                 </div>
                                             
-                                            </div>
+                                            </li>
                                         
-                                        </li>
-                                    
-                                    ) ) ) : ("")}
-                            
-                            </ul>
-                        
-                        </div>
-                    
-                        <div className={style.box}>
-                        
-                            <h4 className={style.title}>Blog Categories</h4>
-                        
-                            <ul>
-                            
-                                {
+                                        ) ) ) : ("")}
                                 
-                                    topics.map( (topic, index) => ( 
-                                    
-                                        <li className={style.quickLink} key={topic._id}>
-                                        
-                                            <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.blogTitle}>{topic.title}</a>
-                                        
-                                        </li>
-                                    
-                                    ) )}
+                                </ul>
                             
-                            </ul>
+                            </div>
                         
+                            <div className={style.box}>
+                            
+                                <h4 className={style.title}>Blog Categories</h4>
+                            
+                                <ul>
+                                
+                                    {
+                                    
+                                        topics.map( (topic, index) => ( 
+                                        
+                                            <li className={style.quickLink} key={topic._id}>
+                                            
+                                                <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.blogTitle}>{topic.title}</a>
+                                            
+                                            </li>
+                                        
+                                        ) )}
+                                
+                                </ul>
+                            
+                            </div>
+                        
+                            <div className={`${style.box} ${style.mostLikedBox} ${style.sticky}`} ref={mostLikedRef}>
+                            
+                                <h4 className={style.title}>most Views</h4>
+                            
+                                <ul>
+                                
+                                {topics
+                                    .sort((a, b) => b.Views - a.Views)
+                                    .map((topic) => (
+                                        
+                                            <li className={style.quickLink} key={topic._id}>
+                                            
+                                                <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.mostLiked}>{topic.title}</a>
+                                            
+                                            </li>
+                                        
+                                        ) )}
+                                
+                                </ul>
+                            
+                            </div>
+
                         </div>
                     
-                        <div className={`${style.box} ${style.mostLikedBox} ${style.sticky}`} ref={mostLikedRef}>
-                        
-                            <h4 className={style.title}>most Liked</h4>
-                        
-                            <ul>
-                            
-                            {topics
-                                .sort((a, b) => b.Likes - a.Likes)
-                                .map((topic) => (
-                                    
-                                        <li className={style.quickLink} key={topic._id}>
-                                        
-                                            <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.mostLiked}>{topic.title}</a>
-                                        
-                                        </li>
-                                    
-                                    ) )}
-                            
-                            </ul>
-                        
-                        </div>
-
                     </div>
                 
-                </div>
+                ) : (
+                
+                    <p className={`mt-5 ${style.fullEmpty}`}><span>There is no blogs right now! <br></br> Try again in another time</span></p>                
+                ) }
             
             </div>
         
-            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <> <i className="fa-solid fa-caret-up"></i> show</>}</span>
 
 <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
-    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <> <i className="fa-solid fa-caret-down"></i>hide </>}</span>
                 
             <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';

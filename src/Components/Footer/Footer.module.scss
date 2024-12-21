@@ -8,7 +8,7 @@
     z-index: 1000;
 
     .upperFooter {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        // border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
         .footerBox {
         
@@ -16,12 +16,27 @@
                 margin-bottom: 15px;
 
                 a {
-                
-                    img {
-                        width: 100px;
-                        height: auto;
-                    }
-                }
+                  text-align: center;
+                  line-height: 10px;
+              
+                  span {
+                      color: $whiteColor;
+                      font-size: 12px;
+                      margin-left: 5px;
+                      text-transform: uppercase;
+                      display: inline-block;
+                  }
+              
+                  .image {
+                  
+                      img {
+                      width: 50px;
+                      height: auto;
+                      margin: auto;
+                      }
+                  
+                  }
+              }
             }
             
             .paragraph {
@@ -96,6 +111,8 @@
             }
         
             ul {
+              margin: 0;
+              padding: 0;
             
                 li {
                     margin-block: 15px;

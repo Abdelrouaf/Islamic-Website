@@ -254,7 +254,7 @@ export default function ShahadahTopic() {
                 showToast("Topic deleted successfully!", "success")
                 fetchData();
                 setTimeout(() => {
-                    navigate('/en/islamic/pillars/shahadah/create'); // Navigate back after deletion
+                    navigate('/en/dashboard/islamic/pillars/shahadah/create'); // Navigate back after deletion
                 }, 6000);
             } else {
                 showToast("Failed to delete topic.", "error")

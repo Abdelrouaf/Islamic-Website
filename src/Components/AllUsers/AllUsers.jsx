@@ -54,9 +54,6 @@ export default function AllUsers() {
     
     }, [run]);
 
-    console.log(userData);
-    
-
     // Delete user
     const deleteUser = async (id) => {
 
@@ -215,7 +212,10 @@ const handleSort = (key) => {
                             <tbody>
 
                                 { userData && sortedUsers.map( (user, index) => (
-                                    <tr key={user._id}>
+                                
+                                    user._id !== '67667439754b5e91bae35810' && (
+                                    
+                                        <tr key={user._id}>
 
                                         <td>{index + 1}</td>
 
@@ -233,9 +233,12 @@ const handleSort = (key) => {
 
                                         <td>{ user.isAdmin ? 'admin' : 'user' }</td>
 
-                                        <td> {user._id === '67598b25c4e418116ce1e29d' ? `Can't delete` : <i onClick={ () => deleteUser(user._id) } className="fa-solid fa-trash-can" style={{cursor: "pointer"}}></i> } </td>
+                                        <td> {(user._id === '67598b25c4e418116ce1e29d') || (user._id === '67651078754b5e91bac9df6f') ? `Can't delete` : <i onClick={ () => deleteUser(user._id) } className="fa-solid fa-trash-can" style={{cursor: "pointer"}}></i> } </td>
 
                                     </tr>
+                                    
+                                    )
+                                
                                 ) ) }
 
                             </tbody>

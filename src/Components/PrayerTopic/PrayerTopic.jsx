@@ -254,7 +254,7 @@ export default function PrayerTopic() {
                 showToast("Topic deleted successfully!", "success")
                 fetchData();
                 setTimeout(() => {
-                    navigate('/en/islamic/pillars/prayer/create'); // Navigate back after deletion
+                    navigate('/en/dashboard/islamic/pillars/prayer/create'); // Navigate back after deletion
                 }, 6000);
             } else {
                 showToast("Failed to delete topic.", "error")

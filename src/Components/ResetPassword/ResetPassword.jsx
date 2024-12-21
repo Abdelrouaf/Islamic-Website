@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import resetPasswordImage from '../../images/resetPassword.png'
 import style from './ResetPassword.module.scss'
+import { useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
 
@@ -192,6 +193,16 @@ export default function ResetPassword() {
             setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== newToast.id));
         }, 6000); 
     };
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        if (!user) {
+            navigate('/sign');
+        }
+    }, [navigate]);
 
     return (
     

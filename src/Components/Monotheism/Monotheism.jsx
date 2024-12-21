@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import loadingImg from '../../images/loading.png'
 import style from "./Monotheism.module.scss";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
@@ -184,24 +185,63 @@ export default function Monotheism() {
     visible: { opacity: 1, y: 0, transition: { duration: 1 } },
   };
 
+  // if (loading) {
+  //   return  <div id="page">
+  //   <div id="container">
+  //     <div id="ring" />
+  //     <div id="ring" />
+  //     <div id="ring" />
+  //     <div id="ring" />
+  //     <div id="h3">loading</div>
+  //   </div>
+  // </div>
+  // }
+
   if (loading) {
-    return  <div id="page">
-    <div id="container">
-      <div id="ring" />
-      <div id="ring" />
-      <div id="ring" />
-      <div id="ring" />
-      <div id="h3">loading</div>
+    return <div id='page'>
+    
+        <div>
+        
+            <div className='d-flex align-items-center justify-content-center'>
+            
+                <div className={style.fImage}>
+                
+                    <img src={loadingImg} width={100} alt="loading" />
+                
+                </div>
+            
+                <div className={style.sImage}>
+                
+                <div className={style.hourglassBackground}>
+                    <div className={style.hourglassContainer}>
+                    <div className={style.hourglassCurves} />
+                    <div className={style.hourglassCapTop} />
+                    <div className={style.hourglassGlassTop} />
+                    <div className={style.hourglassSand} />
+                    <div className={style.hourglassSandStream} />
+                    <div className={style.hourglassCapBottom} />
+                    <div className={style.hourglassGlass} />
+                    </div>
+                </div>
+                
+                </div>
+            
+            </div>
+        
+            <h4 style={{display: 'block !important', margin: '0'}}>استثمر دقائق الانتظار في الاستغفار</h4>
+        
+        </div>
+    
     </div>
-  </div>
-  }
+
+}
 
   return (
     <div className={`${style.blogSection} ${style.section}`}>
       <div
         className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}
       >
-        <div className={`text-center mb-5`}>
+        {/* <div className={`text-center mb-5`}>
           <motion.span
             initial="hidden"
             animate="visible"
@@ -223,7 +263,7 @@ export default function Monotheism() {
               </motion.span>
             ))}
           </motion.h3>
-        </div>
+        </div> */}
       </div>
 
       <div className="container">
@@ -387,11 +427,11 @@ export default function Monotheism() {
                 className={`${style.box} ${style.mostLikedBox} ${style.sticky}`}
                 ref={mostLikedRef}
               >
-                <h4 className={style.title}>most Liked</h4>
+                <h4 className={style.title}>most Views</h4>
 
                 <ul>
                   {topics
-                    .sort((a, b) => b.Likes - a.Likes)
+                    .sort((a, b) => b.Views - a.Views)
                     .map((topic) => (
                       <li className={style.quickLink} key={topic._id}>
                         <a
@@ -411,22 +451,13 @@ export default function Monotheism() {
             </div>
           </div>
         ) : (
-          ""
-        )}
+          <p className={`mt-5 ${style.fullEmpty}`}><span>There is no blogs right now! <br></br> Try again in another time</span></p>        )}
       </div>
 
-      <span className={style.showToggle} onClick={toggleZikrScroll}>
-        {zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}
-      </span>
+      <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <> <i className="fa-solid fa-caret-up"></i> show</>}</span>
 
-      <div
-        className={`${style.zikrScroll} ${
-          zikrScrollVisible ? "d-none" : "d-flex"
-        }`}
-      >
-        <span className={style.hideToggle} onClick={toggleZikrScroll}>
-          {!zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}
-        </span>
+<div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <> <i className="fa-solid fa-caret-down"></i>hide </>}</span>
 
         <div
           className={style.scrollContent}

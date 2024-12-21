@@ -67,7 +67,7 @@ export default function AzkarCatagories() {
         
             <div className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}>
             
-                <div className={`text-center mb-5`}>
+                {/* <div className={`text-center mb-5`}>
                 
                     <motion.span initial='hidden' animate="visible" variants={variants} className={style.headTitle}>Azkar</motion.span>
                 
@@ -81,7 +81,7 @@ export default function AzkarCatagories() {
 
                     </motion.h3>
                 
-                </div>
+                </div> */}
             
             </div>
 

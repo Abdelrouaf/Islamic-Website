@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import EmojiPicker from 'emoji-picker-react'
 import userImage from '../../images/man (1).png'
 import adminImage from '../../images/manager.png'
 import chatBackground from '../../images/chatBackground.jpg'
 import seen from '../../images/seen.png'
+import loadingImg from '../../images/loading.png'
 import style from './UserInbox.module.scss'
 
 export default function UserInbox() {
@@ -197,16 +198,53 @@ export default function UserInbox() {
             return `${formattedHours}:${formattedMinutes} ${ampm}`;
     };
 
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        if (!user) {
+            navigate('/sign');
+        }
+    }, [navigate]);
+
     if (loading) {
-        return  <div id="page">
-        <div id="container">
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="h3">loading</div>
+        return <div id='page'>
+        
+            <div>
+            
+                <div className='d-flex align-items-center justify-content-center'>
+                
+                    <div className={style.fImage}>
+                    
+                        <img src={loadingImg} width={100} alt="loading" loading='lazy' />
+                    
+                    </div>
+                
+                    <div className={style.sImage}>
+                    
+                    <div className={style.hourglassBackground}>
+                        <div className={style.hourglassContainer}>
+                        <div className={style.hourglassCurves} />
+                        <div className={style.hourglassCapTop} />
+                        <div className={style.hourglassGlassTop} />
+                        <div className={style.hourglassSand} />
+                        <div className={style.hourglassSandStream} />
+                        <div className={style.hourglassCapBottom} />
+                        <div className={style.hourglassGlass} />
+                        </div>
+                    </div>
+                    
+                    </div>
+                
+                </div>
+            
+                <h4 style={{display: 'block !important', margin: '0'}}>استثمر دقائق الانتظار في الاستغفار</h4>
+            
+            </div>
+        
         </div>
-      </div>
+    
     }
 
     return (

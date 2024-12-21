@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import logo from '../../images/logo-color-removebg-preview (1).png'
+// import logo from '../../images/logo-color-removebg-preview (1).png'
+import logo from '../../images/GLogo.png'
 import { Link, NavLink } from 'react-router-dom'
 import style from './Header.module.scss'
 import { motion } from 'framer-motion'
@@ -235,6 +236,10 @@ export default function Header() {
         };
     }, []);
 
+    const userToken = localStorage.getItem('accessToken')
+
+    const user = JSON.parse(localStorage.getItem('loggedInUser'))
+
     if (loading) {
         return  <div id="page">
         <div id="container">
@@ -355,7 +360,17 @@ export default function Header() {
                         
                         <div className={style.logo}>
                         
-                            <Link className="navbar-brand" to='/'><img src={logo} width={100} alt="" /></Link>
+                            <Link className="navbar-brand" to='/'>
+                            
+                                <div className={style.image}>
+                                
+                                    <img src={logo} width={100} alt="" /> 
+                                
+                                </div>
+                            
+                                <span>Purpose of Life</span>
+                            
+                            </Link>
                         
                         </div>
 
@@ -392,7 +407,7 @@ export default function Header() {
                                 </motion.li>
 
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1, delay : 3.5 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className="nav-link"  to='/sign'>Programs</NavLink>
+                                    <NavLink onClick={toggleNavbar} className="nav-link"  to={`${ user && userToken ? `/programs` : `/sign` }`}>Programs</NavLink>
                                 </motion.li>
                             
                                 {/* <li className="nav-item">

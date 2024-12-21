@@ -287,6 +287,8 @@ export default function ProgramsFooter() {
 
                                     <li><Link to='category/English-Material' state={{ description: 'English Material contains resources for learning English, such as books, guides, grammar explanations, or vocabulary building materials.' }}>english material</Link></li>
 
+                                    <li><Link to='category/Different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}>different</Link></li>
+
                                 </ul>
 
                             </div>
@@ -309,7 +311,7 @@ export default function ProgramsFooter() {
 
                                     <li><Link to='category/Islamic-Material' state={{ description: 'Islamic Material consists of Islamic educational content, including books, articles, and guides about the Quran, Hadith, and other aspects of Islamic teachings.' }}>islamic material</Link></li>
 
-                                    <li><Link to='category/Different' state={{ description: 'Include a variety of unrelated programs or tools that don’t fit into the above categories. These could range from utility software to general learning applications.' }}>different</Link></li>
+                                    <li><Link to='../../'>Islamic</Link></li>
 
                                 </ul>
 

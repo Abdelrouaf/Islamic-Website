@@ -365,7 +365,7 @@ export default function ProgramsHeader() {
                             <ul className={`navbar-nav mb-2 mb-lg-0`}>
 
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1 }} className="nav-item">
-                                    <NavLink onClick={toggleNavbar} className={({ isActive }) => (isActive|| location.pathname.includes('All-Categories')) ? `nav-link ${style.activeLink}` : 'nav-link'} to='category/All-Categories' state={{ description: 'Showing all categories programs.' }}>Categories</NavLink>
+                                    <NavLink onClick={toggleNavbar} className='nav-link' to='/' target='_blank' state={{ description: 'Showing all categories programs.' }}>Islam</NavLink>
                                 </motion.li>
                             
                                 <motion.li initial={{ x : -20, opacity: 0 }} animate={{ x : 0, opacity : 1 }} transition={{ duration : 1 }} className="nav-item">

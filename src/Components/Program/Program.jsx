@@ -1,9 +1,10 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import programImage from '../../images/program1.jpeg'
 import { Azkar } from 'islam.js'
 import { v4 as uuid } from 'uuid'
+import loadingImg from '../../images/loading.png'
 import style from './Program.module.scss'
 
 export default function Program() {
@@ -373,20 +374,54 @@ export default function Program() {
         ? filteredProgramsByCategory 
         : allPrograms.filter(program => program._id !== programData._id); 
 
-        // console.log("programs to display ", programsToDisplay);
-        
+    const navigate = useNavigate();
 
-    if (isLoading) {
-        return  <div id="page">
-        <div id="container">
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="h3">loading</div>
-        </div>
-      </div>; 
-    }  
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        if (!user) {
+            navigate('/sign');
+        }
+    }, [navigate]);
+
+        if (isLoading) {
+            return <div id='page'>
+            
+                <div>
+                
+                    <div className='d-flex align-items-center justify-content-center'>
+                    
+                        <div className={style.fImage}>
+                        
+                            <img src={loadingImg} width={100} alt="loading" loading='lazy' />
+                        
+                        </div>
+                    
+                        <div className={style.sImage}>
+                        
+                        <div className={style.hourglassBackground}>
+                            <div className={style.hourglassContainer}>
+                            <div className={style.hourglassCurves} />
+                            <div className={style.hourglassCapTop} />
+                            <div className={style.hourglassGlassTop} />
+                            <div className={style.hourglassSand} />
+                            <div className={style.hourglassSandStream} />
+                            <div className={style.hourglassCapBottom} />
+                            <div className={style.hourglassGlass} />
+                            </div>
+                        </div>
+                        
+                        </div>
+                    
+                    </div>
+                
+                    <h4 style={{display: 'block !important', margin: '0'}}>استثمر دقائق الانتظار في الاستغفار</h4>
+                
+                </div>
+            
+            </div>
+        
+        } 
 
     return (
     
@@ -948,10 +983,10 @@ if (!program._id) {
             
             </div>
 
-            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <> <i className="fa-solid fa-caret-up"></i> show</>}</span>
 
-            <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
-                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+<div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <> <i className="fa-solid fa-caret-down"></i>hide </>}</span>
                 
                 <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';

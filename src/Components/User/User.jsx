@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, Outlet, useLocation, useOutletContext } from 'react-router-dom'
+import { Link, Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import man from '../../images/man (1).png'
 import { Azkar } from 'islam.js'
 import style from './User.module.scss'
@@ -28,6 +28,16 @@ export default function User() {
             isAdmin: user.isAdmin
         })
     },[] )
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        if (!user) {
+            navigate('/sign');
+        }
+    }, [navigate]);
 
     const azkar = new Azkar()
 
@@ -119,10 +129,10 @@ export default function User() {
 
             </section>
 
-            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <> <i className="fa-solid fa-caret-up"></i> show</>}</span>
 
-            <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
-                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+<div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
+    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <> <i className="fa-solid fa-caret-down"></i>hide </>}</span>
                 
                 <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';

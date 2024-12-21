@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import loadingImg from '../../images/loading.png'
 import style from './AzkarDetails.module.scss'
 import { motion } from 'framer-motion'
 import { Link, useParams } from 'react-router-dom'
@@ -173,16 +174,55 @@ export default function AzkarDetails() {
         visible: { opacity: 1, y: 0, transition: { duration: 1 } }
     };
 
+    // if (!category) {
+    //     return  <div id="page">
+    //     <div id="container">
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="h3">loading</div>
+    //     </div>
+    //   </div>; 
+    // }
+
     if (!category) {
-        return  <div id="page">
-        <div id="container">
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="h3">loading</div>
+        return <div id='page'>
+        
+            <div>
+            
+                <div className='d-flex align-items-center justify-content-center'>
+                
+                    <div className={style.fImage}>
+                    
+                        <img src={loadingImg} width={100} alt="loading" />
+                    
+                    </div>
+                
+                    <div className={style.sImage}>
+                    
+                    <div className={style.hourglassBackground}>
+                        <div className={style.hourglassContainer}>
+                        <div className={style.hourglassCurves} />
+                        <div className={style.hourglassCapTop} />
+                        <div className={style.hourglassGlassTop} />
+                        <div className={style.hourglassSand} />
+                        <div className={style.hourglassSandStream} />
+                        <div className={style.hourglassCapBottom} />
+                        <div className={style.hourglassGlass} />
+                        </div>
+                    </div>
+                    
+                    </div>
+                
+                </div>
+            
+                <h4 style={{display: 'block !important', margin: '0'}}>استثمر دقائق الانتظار في الاستغفار</h4>
+            
+            </div>
+        
         </div>
-      </div>; 
+    
     }
 
     return (
@@ -193,7 +233,7 @@ export default function AzkarDetails() {
             
                 <div className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}>
                 
-                    <div className={`text-center mb-5`}>
+                    {/* <div className={`text-center mb-5`}>
                     
                         <motion.span initial='hidden' animate="visible" variants={variants} className={style.headTitle}>Azkar</motion.span>
                     
@@ -207,7 +247,7 @@ export default function AzkarDetails() {
 
                         </motion.h3>
                     
-                    </div>
+                    </div> */}
                 
                 </div>
 

@@ -235,13 +235,26 @@ h4 {
         .logo {
         
             a {
-                
+                text-align: center;
+                line-height: 10px;
             
-                img {
-                    width: 100px;
-                    height: auto;
+                span {
+                    color: $whiteColor;
+                    font-size: 12px;
+                    margin-left: 5px;
+                    text-transform: uppercase;
+                    display: inline-block;
                 }
             
+                .image {
+                
+                    img {
+                    width: 50px;
+                    height: auto;
+                    margin: auto;
+                    }
+                
+                }
             }
         
         }

@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Malcolm from '../../images/malcolmX.png'
 import kilay from '../../images/muhammad_ali.png'
+import ahmedDeedat from '../../images/Da3yia.jpg'
 import IslamBook from '../../images/Islam.jpg'
 import notgodButGodBook from '../../images/not-god-but-God.jpg'
+import loadingImg from '../../images/loading.png'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/splide/css'
 import style from './Faith.module.scss'
@@ -242,16 +244,55 @@ export default function Faith() {
         visible: { opacity: 1, y: 0, transition: { duration: 1 } }
     };
 
+    // if (loading) {
+    //     return  <div id="page">
+    //     <div id="container">
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="ring" />
+    //       <div id="h3">loading</div>
+    //     </div>
+    //   </div>
+    // }
+
     if (loading) {
-        return  <div id="page">
-        <div id="container">
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="ring" />
-          <div id="h3">loading</div>
+        return <div id='page'>
+        
+            <div>
+            
+                <div className='d-flex align-items-center justify-content-center'>
+                
+                    <div className={style.fImage}>
+                    
+                        <img src={loadingImg} width={100} alt="loading" />
+                    
+                    </div>
+                
+                    <div className={style.sImage}>
+                    
+                    <div className={style.hourglassBackground}>
+                        <div className={style.hourglassContainer}>
+                        <div className={style.hourglassCurves} />
+                        <div className={style.hourglassCapTop} />
+                        <div className={style.hourglassGlassTop} />
+                        <div className={style.hourglassSand} />
+                        <div className={style.hourglassSandStream} />
+                        <div className={style.hourglassCapBottom} />
+                        <div className={style.hourglassGlass} />
+                        </div>
+                    </div>
+                    
+                    </div>
+                
+                </div>
+            
+                <h4 style={{display: 'block !important', margin: '0'}}>استثمر دقائق الانتظار في الاستغفار</h4>
+            
+            </div>
+        
         </div>
-      </div>
+    
     }
 
     return (
@@ -259,44 +300,94 @@ export default function Faith() {
         <div className={`${style.blogSection} ${style.section}`}>
         
             <div className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}>
-                
-                <div className={`text-center mb-5`}>
-                
-                    <motion.span initial='hidden' animate="visible" variants={variants} className={`${style.headTitle}`}>Faith</motion.span>
-                
-                    <motion.h3 className={style.title} initial='hidden' animate='visible' variants={h3Variants}>
-
-                        {text.split('').map( (char, index) => 
-                        
-                            <motion.span key={index} variants={spanVariants}>{char}</motion.span>
-                        
-                        )}
-
-                    </motion.h3>
-                
-                </div>
             
             </div>
 
             <div className="container">
             
-                {/* <div className="text-center mb-5">
+                <div className="row gy-3 mt-5">
+                    
+                    <div className="col-md-6 col-lg-4">
+                    
+                        <div className={style.card}>
+                            
+                            <a href="/faith">
+                            
+                                <div className={style.image}>
+                                
+                                    <img src={Malcolm} alt="Malcolm" loading='lazy' />
+                                
+                                </div>
+                            
+                                <div className="p-2">
+                                
+                                    <h4 className={style.celName}>Malcolm x</h4>
+                                
+                                    <p className={style.description}>Malcolm X ( Brother Shahbaz) was a Muslim -  well-read, reflective, minimalist, passionate, and visionary man who taught black Americans the value of self-reliance, self-respect, and pride. He was said to be incorruptible in his principles and beliefs.</p>
+                                
+                                </div>
+                            
+                            </a>
+                        
+                        </div>
+                    
+                    </div>
                 
-                    <span className={style.headTitle}>Faith</span>
+                    <div className="col-md-6 col-lg-4">
+                    
+                        <div className={style.card}>
+                            
+                            <a href="/faith">
+                            
+                                <div className={style.image}>
+                                
+                                    <img src={kilay} alt="kilay" loading='lazy' />
+                                
+                                </div>
+                            
+                                <div className="p-2">
+                                
+                                    <h4 className={style.celName}>Muhammed Ali</h4>
+                                
+                                    <p className={style.description}>Muhammad Ali was one of the greatest boxers in history, the first fighter to win the world heavyweight championship on three separate occasions. In addition, he was known for his social message of black pride and black resistance to white domination and for refusing induction into the U.S. Army during the Vietnam War.</p>
+                                
+                                </div>
+                            
+                            </a>
+                        
+                        </div>
+                    
+                    </div>
                 
-                    <h3 className={style.title}>Celebrities & Books</h3>
+                    <div className="col-md-6 col-lg-4">
+                    
+                        <div className={`${style.card}`}>
+                            
+                            <a href="/faith">
+                            
+                                <div className={style.image}>
+                                
+                                    <img src={ahmedDeedat} alt="Ahmed-Deedat" loading='lazy' />
+                                
+                                </div>
+                            
+                                <div className="p-2">
+                                
+                                    <h4 className={style.celName}>Ahmed Deedat</h4>
+                                
+                                    <p className={style.description}>Benefacted writer, polymath and dexterous in every wake of expertise, Deedat has been discussed so much up-to-date circumstances. Being a Muslim missionary, his works and lectures had a unique position among the pastoral Christian biblical scholars. Deedat, as the expert of more than twenty different languages, he could convince the audience through his eloquence and scholarship.</p>
+                                
+                                </div>
+                            
+                            </a>
+                        
+                        </div>
+                    
+                    </div>
                 
-                </div> */}
+                </div>
             
-                {/* <div className={style.titles}>
-                
-                    <span className={style.headTitle2}>Faith</span>
-                
-                    <h3 className={style.title2}>Celebrities & Books</h3>
-                
-                </div> */}
-            
-                <Splide className='mt-5' 
+                {/* <Splide className='mt-5' 
                         options={{
                             type: 'loop',
                             drag: 'free',        // Enable free dragging
@@ -370,13 +461,13 @@ export default function Faith() {
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={Malcolm} alt="Malcolm" loading='lazy' />
+                                        <img src={ahmedDeedat} alt="Ahmed-Deedat" loading='lazy' />
                                     
                                     </div>
                                 
                                     <div className="p-2">
                                     
-                                        <h4 className={style.celName}>Malcolm x</h4>
+                                        <h4 className={style.celName}>Ahmed Deedat</h4>
                                     
                                         <p className={style.description}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, temporibus.</p>
                                     
@@ -388,364 +479,242 @@ export default function Faith() {
                         
                         </SplideSlide>
                     
-                </Splide>
+                </Splide> */}
             
-                <div className={`${style.titleBox} text-center mt-5`}>
+                { topics.length > 0 || blogTopics.length > 0 ? (
                 
-                    <h3 className={style.title}>Books about Islam</h3>
+                    <>
                 
-                </div>
-
-                <div className="row gy-2 mt-5">
-                
-                    <div className="col-md-9">
-
-                        {/* <div className={style.bookSection}>
+                        { topics.length > 0 && (
                         
-                            <div className={style.topicDesign}>
+                            <div className={`${style.titleBox} text-center mt-5`}>
                             
-                                <span className={style.count}>1</span>
+                                <h3 className={style.title}>Books about Islam</h3>
                             
-                                <h3 className={style.title}>Islam</h3>
-                            
-                            </div> 
-                        
-                            <div className="row align-items-center">
-
-                                <div className="col-md-8">
-
-                                    <span className={style.publisher}>by <span>Karen Armstrong</span></span>
-
-                                    <p className={style.descriptionBook}>No religion in the modern world is as feared and misunderstood as Islam. It haunts the popular imagination as an extreme faith that promotes terrorism, authoritarian government, female oppression, and civil war. In a vital revision of this narrow view of Islam and a distillation of years of thinking and writing about the subject, Karen Armstrong’s short history demonstrates that the world’s fastest-growing faith is a much more complex phenomenon than its modern fundamentalist strain might suggest.</p>
-
-                                </div>
-
-                                <div className="col-md-4">
-
-                                    <div className={style.image}>
-
-                                        <img src={IslamBook} alt="" />
-
-                                    </div>
-
-                                    <div className={`${style.btn} overflow-hidden text-center`}>
-
-                                        <a href='/images/donate.png' className={style.downloadBtn} download='donateImage.png'><i className="fa-solid fa-cloud-arrow-down"></i>Download</a>
-
-                                    </div>
-
-                                </div>
-
                             </div>
                         
-                            
-                        
-                        </div>
+                        ) }
                     
-                        <div className={style.bookSection} >
+                        <div className="row gy-2 mt-5">
                         
-                            <div className={style.topicDesign}>
-                                
-                                <span className={style.count}>2</span>
-                            
-                                <h3 className={style.title}>No god but God</h3>
-                            
-                            </div> 
-                        
-                            <div className="row align-items-center">
+                            <div className="col-md-9">
 
-                                <div className="col-md-8">
+                                {topics.map( (topic, index) => (
 
-                                    <span className={style.publisher}>by <span>Reza Aslan</span></span>
-                        
-                                    <p className={style.descriptionBook}>In No god but God, internationally acclaimed scholar Reza Aslan explains Islam — the origins and evolution of the faith — in all its beauty and complexity. Timely and persuasive, No god but God is an elegantly written account that explains this magnificent yet misunderstood faith.</p>
+                                    <div key={topic._id} id={topic._id} className={style.bookSection} >
 
-                                </div>
+                                        <div className="row gy-2 align-items-center">
 
-                                <div className="col-md-4">
+                                            <div className="col-md-8">
 
-                                    <div className={style.image}>
-                                        
-                                        <img src={notgodButGodBook} alt="" />
-                                    
-                                    </div>
-                                    
-                                    <div className={`${style.btn} overflow-hidden text-center`}>
-                                    
-                                        <a href='/images/donate.png' className={style.downloadBtn} download='donateImage.png'><i className="fa-solid fa-cloud-arrow-down"></i>Download</a>
-                                    
-                                    </div>
-                                
-                                </div>
+                                                <h3 className={style.bookTitle}>{topic.title}</h3>
 
-                            </div>
-                        
-                        </div> */}
+                                                <span className={style.publisher}>by <span>{topic.author}</span></span>
 
-                        {topics.map( (topic, index) => (
+                                                    <div className={style.descriptionBook}
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: DOMPurify.sanitize(topic.description, {
+                                                                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                                                                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+                                                            }),
+                                                        }}
+                                                    />
 
-                            <div key={topic._id} id={topic._id} className={style.bookSection} >
+                                                <div className={`${style.details} d-flex gap-3`}>
+                                            
+                                                    <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
+                                                
+                                                    {/* <span><i className={`fa-regular fa-heart ${likes2[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickBook(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span> */}
+                                                
+                                                    {/* <span><i className="fa-regular fa-eye"></i> {topic.Views} </span> */}
+                                                
+                                                </div>
+
+                                            </div>
+
+                                            <div className="col-md-4">
+
+                                                <div className={style.image}>
                                                     
-                                {/* <div className={style.topicDesign} id={topic._id}>
-                                    
-                                    <span className={style.count}>{index + 1}</span>
-
-                                    <h3 className={style.title}>{topic.title}</h3>
-
-                                </div>  */}
-
-                                <div className="row gy-2 align-items-center">
-
-                                    <div className="col-md-8">
-
-                                        <h3 className={style.bookTitle}>{topic.title}</h3>
-
-                                        <span className={style.publisher}>by <span>{topic.author}</span></span>
-
-                                        {/* <p className={style.descriptionBook}> */}
-                                            <div className={style.descriptionBook}
-        dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(topic.description, {
-                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
-                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
-            }),
-        }}
-/>
-{/* </p> */}
-
-                                        <div className={`${style.details} d-flex gap-3`}>
-                                    
-                                            <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
-                                        
-                                            {/* <span><i className={`fa-regular fa-heart ${likes2[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickBook(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span> */}
-                                        
-                                            {/* <span><i className="fa-regular fa-eye"></i> {topic.Views} </span> */}
-                                        
-                                        </div>
-
-                                    </div>
-
-                                    <div className="col-md-4">
-
-                                        <div className={style.image}>
+                                                    <img src={`http://147.79.101.225:2859/uploads/books/${topic.imageName}`} alt={topic.title} loading='lazy' />
+                                                
+                                                </div>
+                                                
+                                                <div className={`${style.btn} overflow-hidden text-center`}>
+                                                
+                                                    <a href={`http://147.79.101.225:2859/uploads/books/${topic.book}`} target='_blank' className={style.downloadBtn} download={`http://147.79.101.225:2859/uploads/Books/${topic.book}`}><i className="fa-solid fa-cloud-arrow-down"></i>Download</a>
+                                                
+                                                </div>
                                             
-                                            <img src={`http://147.79.101.225:2859/uploads/books/${topic.imageName}`} alt={topic.title} loading='lazy' />
-                                        
+                                            </div>
+
                                         </div>
-                                        
-                                        <div className={`${style.btn} overflow-hidden text-center`}>
-                                        
-                                            <a href={`http://147.79.101.225:2859/uploads/books/${topic.book}`} target='_blank' className={style.downloadBtn} download={`http://147.79.101.225:2859/uploads/Books/${topic.book}`}><i className="fa-solid fa-cloud-arrow-down"></i>Download</a>
-                                        
-                                        </div>
-                                    
+
                                     </div>
 
-                                </div>
+                                ) )}
+
+                                { blogTopics.length > 0 && (
+                                
+                                    <>
+                                    
+                                        <div className={`${style.titleBox} text-center my-5`}>
+                                        
+                                            <h3 className={style.title}>blogs</h3>
+                                        
+                                        </div>
+
+                                        {blogTopics.map( (topic, index) => (
+
+                                            <div key={topic._id} className={style.topicSection}>
+
+                                                <div id={topic._id} className={style.topicDesign}>
+
+                                                    <span className={style.count}>{index + 1}</span>
+
+                                                    <h3 className={style.title}>{topic.title}</h3>
+
+                                                </div>
+
+                                                <div className={style.videoContainer}>
+                                                    <video className={style.videoPlayer}  controls>
+                                                        <source src={`http://147.79.101.225:2859/uploads/Videos/${topic.video}`} type="video/mp4" />
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                </div>
+
+                                                {/* <p className={style.paragraph}> */}
+                                                    <div className={style.paragraph}
+                        dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(topic.description, {
+                                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+                            }),
+                        }}
+                    />
+                    {/* </p> */}
+
+                                                <div className={`${style.details} d-flex gap-3`}>
+
+                                                    <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
+
+                                                    {/* <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickVideo(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span> */}
+
+                                                    {/* <span><i className="fa-regular fa-eye"></i>{topic.Views}</span> */}
+
+                                                </div>
+
+                                            </div>
+
+                                        ) )}
+                                
+                                    </>
+                                
+                                ) }
 
                             </div>
 
-                        ) )}
+                            <div className="col-md-3">
+                            
+                                <div className={style.box}>
+                                    
+                                    <h4 className={style.title}>Recent Books</h4>
+                                
+                                    <ul>
+                                    
+                                        {topics.length > 0 ? (
+                                        
+                                            recentBooks.map( (topic, index) => ( 
+                                            
+                                                <li className={style.quickLink} key={topic._id}>
+                                                
+                                                    <div className={`${style.cardBox} d-flex align-items-center`}>
+                                                    
+                                                        <div className={style.img}>
+                                                        
+                                                            <a href={`#${topic.title}`}><img src={`http://147.79.101.225:2859/uploads/books/${topic.imageName}`} alt={topic.title} loading='lazy' /></a>
+                                                        
+                                                        </div>
+                                                    
+                                                        <div className={style.cardBody}>
+                                                        
+                                                            <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.cardTitle}><h4>{topic.title}</h4></a>
+                                                        
+                                                            <p className={style.paragraph}>{getDate(topic.createdAt)}</p>
+                                                        
+                                                        </div>
+                                                    
+                                                    </div>
+                                                
+                                                </li>
+                                            
+                                            ) ) ) : ("")}
+                                    
+                                    </ul>
+                                
+                                </div>
+                            
+                                <div className={style.box}>
+                                
+                                    <h4 className={style.title}>Blog Categories</h4>
+                                
+                                    <ul>
+                                    
+                                        {
+                                        
+                                            topics.map( (topic, index) => ( 
+                                            
+                                                <li className={style.quickLink} key={topic._id}>
+                                                
+                                                    <a href={`#${topic.title}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.blogTitle}>{topic.title}</a>
+                                                
+                                                </li>
+                                            
+                                            ) )}
+                                    
+                                    </ul>
+                                
+                                </div>
+                            
+                                <div className={`${style.box} ${style.mostLikedBox} ${style.sticky}`} ref={mostLikedRef}>
+                                
+                                    <h4 className={style.title}>most views</h4>
+                                
+                                    <ul>
+                                    
+                                    {topics
+                                        .sort((a, b) => b.Views - a.Views)
+                                        .map((topic) => (
+                                            
+                                                <li className={style.quickLink} key={topic._id}>
+                                                
+                                                    <a href={`#${topic.title}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.mostLiked}>{topic.title}</a>
+                                                
+                                                </li>
+                                            
+                                            ) )}
+                                    
+                                    </ul>
+                                
+                                </div>
 
-                        <div className={`${style.titleBox} text-center my-5`}>
-                        
-                            <h3 className={style.title}>blogs</h3>
+                            </div>
                         
                         </div>
-
-                        {blogTopics.map( (topic, index) => (
-
-                            <div key={topic._id} className={style.topicSection}>
-
-                                <div id={topic._id} className={style.topicDesign}>
-
-                                    <span className={style.count}>{index + 1}</span>
-
-                                    <h3 className={style.title}>{topic.title}</h3>
-
-                                </div>
-
-                                <div className={style.videoContainer}>
-                                    <video className={style.videoPlayer}  controls>
-                                        <source src={`http://147.79.101.225:2859/uploads/Videos/${topic.video}`} type="video/mp4" />
-                                        Your browser does not support the video tag.
-                                    </video>
-                                </div>
-
-                                {/* <p className={style.paragraph}> */}
-                                    <div className={style.paragraph}
-        dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(topic.description, {
-                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
-                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
-            }),
-        }}
-/>
-{/* </p> */}
-
-                                <div className={`${style.details} d-flex gap-3`}>
-
-                                    <span><i className="fa-regular fa-calendar"></i>{getDate(topic.createdAt)}</span>
-
-                                    {/* <span><i className={`fa-regular fa-heart ${likes[topic._id] ? style.liked : style.notLiked}`} onClick={() => handleLikeClickVideo(topic._id)} style={{ cursor: 'pointer' }}></i> {topic.Likes}</span> */}
-
-                                    {/* <span><i className="fa-regular fa-eye"></i>{topic.Views}</span> */}
-
-                                </div>
-
-                            </div>
-
-                        ) )}
-
-                        {/* <div className={style.topicSection}>
-
-                            <div className={style.topicDesign}>
-
-                                <span className={style.count}>1</span>
-
-                                <h3 className={style.title}>title</h3>
-
-                            </div>
-
-                            <div className={style.videoContainer}>
-                                <video className={style.videoPlayer} controls>
-                                    <source src="../../files/القارئ إسلام صبحي .. (وذا النون إذ ذهب مغاضبا).mp4" type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
-                            </div>
-
-                            <p className={style.paragraph}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ad asperiores vitae quo consequuntur iste explicabo numquam fugit, facere deleniti similique!</p>
-
-                            <div className={`${style.details} d-flex gap-3`}>
-                            
-                                <span><i className="fa-regular fa-calendar"></i>sep 21, 2024</span>
-                            
-                                <span><i className="fa-regular fa-heart"></i> 5</span>
-                            
-                                <span><i className="fa-regular fa-eye"></i> 156 </span>
-                            
-                            </div>
-
-                        </div> */}
-
-                    </div>
-
-                    <div className="col-md-3">
-                    
-                        {/* <div className={style.box}>
-                        
-                            <h4 className={style.title}>Quick Links</h4>
-                        
-                            <ul>
-                            
-                                <li>
-                                    
-                                    <a href="#shahadah "><i className="fa-solid fa-chevron-right"></i>islam Book</a>
-                                
-                                </li>
-                            
-                                <li>
-                                
-                                    <a href="#salah"><i className="fa-solid fa-chevron-right"></i>No god but God Book</a>
-                                
-                                </li>
-                            
-                            </ul>
-                        
-                        </div> */}
-                    
-                    <div className={style.box}>
-                        
-                        <h4 className={style.title}>Recent Books</h4>
-                    
-                        <ul>
-                        
-                            {topics.length > 0 ? (
-                            
-                                recentBooks.map( (topic, index) => ( 
-                                
-                                    <li className={style.quickLink} key={topic._id}>
-                                    
-                                        <div className={`${style.cardBox} d-flex align-items-center`}>
-                                        
-                                            <div className={style.img}>
-                                            
-                                                <a href={`#${topic.title}`}><img src={`http://147.79.101.225:2859/uploads/books/${topic.imageName}`} alt={topic.title} loading='lazy' /></a>
-                                            
-                                            </div>
-                                        
-                                            <div className={style.cardBody}>
-                                            
-                                                <a href={`#${topic._id}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.cardTitle}><h4>{topic.title}</h4></a>
-                                            
-                                                <p className={style.paragraph}>{getDate(topic.createdAt)}</p>
-                                            
-                                            </div>
-                                        
-                                        </div>
-                                    
-                                    </li>
-                                
-                                ) ) ) : ("")}
-                        
-                        </ul>
-                    
-                    </div>
                 
-                    <div className={style.box}>
-                    
-                        <h4 className={style.title}>Blog Categories</h4>
-                    
-                        <ul>
-                        
-                            {
-                            
-                                topics.map( (topic, index) => ( 
-                                
-                                    <li className={style.quickLink} key={topic._id}>
-                                    
-                                        <a href={`#${topic.title}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.blogTitle}>{topic.title}</a>
-                                    
-                                    </li>
-                                
-                                ) )}
-                        
-                        </ul>
-                    
-                    </div>
+                    </>
                 
-                    <div className={`${style.box} ${style.mostLikedBox} ${style.sticky}`} ref={mostLikedRef}>
-                    
-                        <h4 className={style.title}>most Liked</h4>
-                    
-                        <ul>
-                        
-                        {topics
-                            .sort((a, b) => b.Likes - a.Likes)
-                            .map((topic) => (
-                                
-                                    <li className={style.quickLink} key={topic._id}>
-                                    
-                                        <a href={`#${topic.title}`} onClick={(e) => { e.preventDefault(); handleScrollToTopic(topic._id); }} className={style.mostLiked}>{topic.title}</a>
-                                    
-                                    </li>
-                                
-                                ) )}
-                        
-                        </ul>
-                    
-                    </div>
-
-                    </div>
+                ) : (
                 
-                </div>
+                    <p className={`mt-5 ${style.fullEmpty}`}><span>There is no blogs right now! <br></br> Try again in another time</span></p>                
+                ) }
             
             </div>
         
-            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <> <i className="fa-solid fa-caret-up"></i> show</>}</span>
 
 <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
-    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+    <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <> <i className="fa-solid fa-caret-down"></i>hide </>}</span>
             <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';
                     }}

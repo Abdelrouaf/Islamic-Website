@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import loadingImg from '../../images/loading.png'
 import style from "./QuranSurahs.module.scss";
 import { motion } from "framer-motion";
 import { Quran } from "islam.js";
@@ -189,52 +190,6 @@ export default function QuranSurahs() {
 
   const [flag, setFlag] = useState(false);
 
-  // const handleSearch = () => {
-  //     const surah = parseInt(surahIndex, 10);
-  //     const verse = parseInt(verseIndex, 10);
-  //     const endVerse = parseInt(endVerseIndex, 10)
-
-  //     if (isNaN(surah) || surah === '') {
-  //         setVerses([]);
-  //         setVersesTranslation([]);
-  //         setStartVerseIndex(null); // Reset start verse
-  //         setEndVerseIndex(null); // Reset end verse
-  //         return;
-  //     }
-
-  //     if (isNaN(verse) || isNaN(endVerse)) {
-  //         setVerses([]);
-  //         setVersesTranslation([]);
-  //         return;
-  //     }
-
-  //     if (!isNaN(surah) && !isNaN(verse) && !isNaN(endVerse)) {
-  //         const verseRange = [];
-
-  //         for (let verseNo = verse; verseNo <= endVerse; verseNo++) {
-  //             verseRange.push({ chapterNo: surah, verseNo });
-  //         }
-
-  //         const verseData = quran.getVerseRange(surah, verse, endVerse)
-  //         const translationData = quran.getVerseRangeWithTranslation(surah, verse, endVerse)
-
-  //         setSurahSearchIndexType(quran.getChapterByIndex(surah).type);
-  //         setSurahSearchIndexName(quran.getChapterByIndex(surah).name)
-
-  //         if (translationData && translationData.length > 0) {
-  //             const translations = translationData.map(item => item.translation || 'Translation not found');
-  //             setVerses(verseData);
-  //             setVersesTranslation(translations);
-  //         } else {
-  //             setVerses(verseData);
-  //             setVersesTranslation('Translation not found');
-  //         }
-
-  //         setFlag(true)
-  //         audioOnSearchClick()
-  //     }
-  // };
-
   const handleSearch = () => {
     const surah = parseInt(surahIndex, 10);
     const verse = parseInt(verseIndex, 10);
@@ -300,6 +255,8 @@ export default function QuranSurahs() {
   const [audiosSearchEn, setAudiosSearchEn] = useState([]);
   const [audioReadAr, setAudioReadAr] = useState([]);
   const [audioReadEn, setAudioReadEn] = useState([]);
+  const [currentlyPlayingIndex, setCurrentlyPlayingIndex] = useState(null);
+
 
   let quranSearch = {
     verse: verses,
@@ -317,7 +274,7 @@ export default function QuranSurahs() {
   const [progress, setProgress] = useState(0);
   const [play, setPlay] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(12089.187089);
   const audioRef = useRef(null);
 
   const audioOnSearchClick = async () => {
@@ -357,6 +314,7 @@ export default function QuranSurahs() {
     setVersesTranslation([]);
     setAudiosSearchAr([]);
     setAudiosSearchEn([]);
+    setResults([])
     setSurahSearchIndexType("");
     setSurahSearchIndexName("");
     setFlag(false);
@@ -370,7 +328,7 @@ export default function QuranSurahs() {
     setSelectedSurah(surah.id);
     setNameSurahPlay(surah.transliteration);
     setSurahPlayIndex(surah.id);
-    togglePlayStopOnRead(index)
+    // togglePlayStopOnRead(index)
     setOnReadAudio(false)
   };
 
@@ -383,11 +341,22 @@ export default function QuranSurahs() {
   };
 
   const togglePlayStop = () => {
+    if (currentlyPlayingIndex !== null) {
+      const currentlyPlayingAudio = audioReadRef.current[currentlyPlayingIndex];
+      if (currentlyPlayingAudio) {
+        currentlyPlayingAudio.pause();
+        currentlyPlayingAudio.currentTime = 0; 
+      }
+    }
+  
     if (audioRef.current) {
       if (play) {
         audioRef.current.pause();
+        setCurrentlyPlayingIndex(null);
       } else {
         audioRef.current.play();
+        setOnReadAudio(false)
+        setCurrentlyPlayingIndex(2);
       }
       setPlay(!play);
     }
@@ -456,6 +425,19 @@ export default function QuranSurahs() {
   const componentRef = useRef(null);
 
   const handleVerseClick = (verse, index, surah) => {
+  
+    if (currentlyPlayingIndex !== null) {
+      const currentlyPlayingAudio = audioReadRef.current[currentlyPlayingIndex];
+      if (currentlyPlayingAudio) {
+        currentlyPlayingAudio.pause();
+        currentlyPlayingAudio.currentTime = 0; 
+      }
+      audioRef.current.pause();
+    }
+  
+    setOnReadAudio(false);
+    setPlay(false)
+  
     const surahIndex = quran.getChapterByIndex(surah).number;    
 
     setVerseIndexOnRead(surahIndex);
@@ -501,18 +483,34 @@ export default function QuranSurahs() {
 
   const togglePlayStopOnRead = (index) => {
     const audioElement = audioReadRef.current[index];
+    if (!audioElement) return;
+    
+    if (currentlyPlayingIndex !== null) {
+      // const currentlyPlayingAudio = audioReadRef.current[currentlyPlayingIndex];
+      // if (currentlyPlayingAudio) {
+      //   currentlyPlayingAudio.pause();
+      //   currentlyPlayingAudio.currentTime = 0; 
+      // }
+      audioRef.current.pause();
+    }
+    
     if (audioElement) {
-      audioElement.onended = handleAudioEnd;
+      audioElement.onended = () => handleAudioEnd(index);
       if (onReadAudio) {
         audioElement.pause();
+        setCurrentlyPlayingIndex(null);
       } else {
         audioElement.play();
+        setCurrentlyPlayingIndex(index);
       }
       setOnReadAudio(!onReadAudio);
     }
   };
 
-  const handleAudioEnd = () => {
+  const handleAudioEnd = (index) => {
+    if (currentlyPlayingIndex === index) {
+      setCurrentlyPlayingIndex(null);
+    }
     setOnReadAudio(false);
   };
 
@@ -524,6 +522,14 @@ export default function QuranSurahs() {
       ) {
         setHighlightedWord(null);
         setHighlighted(false);
+        setOnReadAudio(false);
+        if (currentlyPlayingIndex !== null) {
+          const currentlyPlayingAudio = audioReadRef.current[currentlyPlayingIndex];
+          if (currentlyPlayingAudio) {
+            currentlyPlayingAudio.pause();
+            currentlyPlayingAudio.currentTime = 0; 
+          }
+        }
       }
     };
 
@@ -537,6 +543,76 @@ export default function QuranSurahs() {
     setHighlightedWord(null);
     setHighlighted(false);
   }, [defaultSurah, topic]);
+
+
+  const [currentlyPlayingAudio, setCurrentlyPlayingAudio] = useState(null); // Tracks language and index
+  const audioRefs = useRef([]); // Store all audio refs (both Arabic and English)
+
+  // Function to pause all audios
+  const pauseAllAudios = () => {
+    console.log("Pausing all audios...");
+    audioRefs.current.forEach((audio, index) => {
+      console.log(`Pausing audio at index ${index}`);
+      if (audio) {
+        audio.pause(); // Pause all audios
+        audio.currentTime = 0; // Reset their time to 0
+      }
+    });
+  };
+
+  // Function to handle Arabic audio play/pause
+  const toggleAudioPlayAr = (index) => {
+    const audioElement = audioRefs.current[index]; // Reference to the Arabic audio
+    
+    if (currentlyPlayingAudio) {
+      // If the clicked audio is different from the currently playing audio, pause all audios and play the clicked one
+      if (currentlyPlayingAudio.language !== "ar" || currentlyPlayingAudio.index !== index) {
+        pauseAllAudios(); // Pause all audios
+        if (audioElement.paused) {
+          audioElement.play(); // Play the clicked Arabic audio if it isn't already playing
+        }
+        setCurrentlyPlayingAudio({ language: "ar", index }); // Set the new currently playing audio
+      } else if (
+        currentlyPlayingAudio.language === "ar" &&
+        currentlyPlayingAudio.index === index
+      ) {
+        // If the same Arabic audio is clicked again, pause it
+        audioElement.pause();
+        setCurrentlyPlayingAudio(null); // Reset the currently playing audio
+      }
+    } else {
+      // If no audio is playing, start the clicked Arabic audio
+      audioElement.play();
+      setCurrentlyPlayingAudio({ language: "ar", index }); // Set the new currently playing audio
+    }
+  };
+  
+  const toggleAudioPlayEn = (index) => {
+    const audioElement = audioRefs.current[audiosSearchAr.length + index]; // Reference to the English audio
+    
+    if (currentlyPlayingAudio) {
+      // If the clicked audio is different from the currently playing audio, pause all audios and play the clicked one
+      if (currentlyPlayingAudio.language !== "en" || currentlyPlayingAudio.index !== index) {
+        pauseAllAudios(); // Pause all audios
+        if (audioElement.paused) {
+          audioElement.play(); // Play the clicked English audio if it isn't already playing
+        }
+        setCurrentlyPlayingAudio({ language: "en", index }); // Set the new currently playing audio
+      } else if (
+        currentlyPlayingAudio.language === "en" &&
+        currentlyPlayingAudio.index === index
+      ) {
+        // If the same English audio is clicked again, pause it
+        audioElement.pause();
+        setCurrentlyPlayingAudio(null); // Reset the currently playing audio
+      }
+    } else {
+      // If no audio is playing, start the clicked English audio
+      audioElement.play();
+      setCurrentlyPlayingAudio({ language: "en", index }); // Set the new currently playing audio
+    }
+  };
+  
 
   const text = "Surah";
 
@@ -614,37 +690,88 @@ export default function QuranSurahs() {
 
   const debounceTimer = useRef(null);
 
+  // const handleVerseSearch = (query) => {
+  //   setSearchQuery(query);
+
+  //   if (debounceTimer.current) clearTimeout(debounceTimer.current);
+
+  //   setLoadingVerse(true);
+
+  //   debounceTimer.current = setTimeout(() => {
+  //     if (!query.trim()) {
+  //       setResults([]);
+  //       setLoadingVerse(false);
+  //       return;
+  //     }
+
+  //     const normalizedQuery = normalizeArabicText(query.trim());
+
+  //     const isArabic = /[\u0600-\u06FF]/.test(query);
+
+  //     const matchedResults = topics.reduce((acc, chapter) => {
+  //       const matchedVerses = chapter.verses.filter((verse) => {
+  //         const normalizedText = normalizeArabicText(verse.text);
+
+  //         if (isArabic) {
+  //           return normalizedText.includes(normalizedQuery);
+  //         } else {
+  //           return verse.translation
+  //             .toLowerCase()
+  //             .includes(query.trim().toLowerCase());
+  //         }
+  //       });
+
+  //       if (matchedVerses.length > 0) {
+  //         acc.push({
+  //           chapterName: chapter.name,
+  //           chapterNameInEnglish: chapter.transliteration,
+  //           transliteration: chapter.transliteration,
+  //           verses: matchedVerses,
+  //           type: chapter.type,
+  //           totalVerse: chapter.total_verses,
+  //         });
+  //       }
+
+  //       return acc;
+  //     }, []);
+
+  //     setResults(matchedResults);
+  //     setLoadingVerse(false);
+  //   }, 300);
+  // };
+
   const handleVerseSearch = (query) => {
+  
+    setFlag(true)
+  
     setSearchQuery(query);
-
+  
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
-
+  
     setLoadingVerse(true);
-
+  
     debounceTimer.current = setTimeout(() => {
       if (!query.trim()) {
         setResults([]);
         setLoadingVerse(false);
         return;
       }
-
+  
       const normalizedQuery = normalizeArabicText(query.trim());
-
       const isArabic = /[\u0600-\u06FF]/.test(query);
-
+  
       const matchedResults = topics.reduce((acc, chapter) => {
         const matchedVerses = chapter.verses.filter((verse) => {
           const normalizedText = normalizeArabicText(verse.text);
-
+  
           if (isArabic) {
+            // Search against normalized comparison only
             return normalizedText.includes(normalizedQuery);
           } else {
-            return verse.translation
-              .toLowerCase()
-              .includes(query.trim().toLowerCase());
+            return verse.translation.toLowerCase().includes(query.trim().toLowerCase());
           }
-        });
-
+        }).map((verse) => ({ id: verse.id, text: verse.text, translate: verse.translation }));
+  
         if (matchedVerses.length > 0) {
           acc.push({
             chapterName: chapter.name,
@@ -655,28 +782,50 @@ export default function QuranSurahs() {
             totalVerse: chapter.total_verses,
           });
         }
-
+  
         return acc;
       }, []);
-
+  
       setResults(matchedResults);
       setLoadingVerse(false);
     }, 300);
   };
+  
+
+  // const highlightText = (text, query) => {
+  //   if (!query) return text;
+
+  //   const normalizedText = normalizeArabicText(text);
+  //   const normalizedQuery = normalizeArabicText(query);
+
+  //   const regex = new RegExp(`(${normalizedQuery})`, "gi");
+  //   return normalizedText.split(regex).map((part, index) =>
+  //     part.toLowerCase() === normalizedQuery.toLowerCase() ? (
+  //       <span
+  //         key={index}
+  //         className={` text-black`}
+  //         style={{ backgroundColor: "bisque", padding: "5px" }}
+  //       >
+  //         {part}
+  //       </span>
+  //     ) : (
+  //       part
+  //     )
+  //   );
+  // };
 
   const highlightText = (text, query) => {
-    if (!query) return text;
-
-    const normalizedText = normalizeArabicText(text);
-    const normalizedQuery = normalizeArabicText(query);
-
-    const regex = new RegExp(`(${normalizedQuery})`, "gi");
-    return normalizedText.split(regex).map((part, index) =>
-      part.toLowerCase() === normalizedQuery.toLowerCase() ? (
+    // if (!query) return text;
+    if (!query || !text) return text || ""; 
+  
+    const regex = new RegExp(normalizeArabicText(query), "gi");
+  
+    return text.split(regex).map((part, index) =>
+      part.match(regex) ? (
         <span
           key={index}
-          className={` text-black`}
-          style={{ backgroundColor: "bisque", padding: "5px" }}
+          className={`text-black`}
+          style={{ backgroundColor: "bisque", padding: "2px" }}
         >
           {part}
         </span>
@@ -685,18 +834,74 @@ export default function QuranSurahs() {
       )
     );
   };
+  
+
+  const convertToArabicIndic = (num) => {
+    const arabicIndicMap = {
+      '0': '٠',
+      '1': '١',
+      '2': '٢',
+      '3': '٣',
+      '4': '٤',
+      '5': '٥',
+      '6': '٦',
+      '7': '٧',
+      '8': '٨',
+      '9': '٩',
+    };
+  
+    return num.toString().split('').map(digit => arabicIndicMap[digit] || digit).join('');
+  };
+
+  // if (loading) {
+  //   return  <div id="page">
+  //   <div id="container">
+  //     <div id="ring" />
+  //     <div id="ring" />
+  //     <div id="ring" />
+  //     <div id="ring" />
+  //     <div id="h3">loading</div>
+  //   </div>
+  // </div>
+  // }
 
   if (loading) {
-    return  <div id="page">
-    <div id="container">
-      <div id="ring" />
-      <div id="ring" />
-      <div id="ring" />
-      <div id="ring" />
-      <div id="h3">loading</div>
+    return <div id='page'>
+    
+        <div>
+        
+            <div className='d-flex align-items-center justify-content-center'>
+            
+                <div className={style.fImage}>
+                
+                    <img src={loadingImg} width={100} alt="loading" />
+                
+                </div>
+            
+                <div className={style.sImage}>
+                
+                <div className={style.hourglassBackground}>
+                    <div className={style.hourglassContainer}>
+                    <div className={style.hourglassCurves} />
+                    <div className={style.hourglassCapTop} />
+                    <div className={style.hourglassGlassTop} />
+                    <div className={style.hourglassSand} />
+                    <div className={style.hourglassSandStream} />
+                    <div className={style.hourglassCapBottom} />
+                    <div className={style.hourglassGlass} />
+                    </div>
+                </div>
+                
+                </div>
+            
+            </div>
+        
+            <h4 style={{display: 'block !important', margin: '0'}}>استثمر دقائق الانتظار في الاستغفار</h4>
+        
+        </div>
+    
     </div>
-  </div>
-  }
+}
 
   return (
     <>
@@ -705,7 +910,7 @@ export default function QuranSurahs() {
       <div
         className={`${style.backgroundTitle} d-flex justify-content-center align-items-center`}
       >
-        <div className={`text-center mb-5`}>
+        {/* <div className={`text-center mb-5`}>
           <motion.span
             initial="hidden"
             animate="visible"
@@ -727,12 +932,12 @@ export default function QuranSurahs() {
               </motion.span>
             ))}
           </motion.h3>
-        </div>
+        </div> */}
       </div>
 
       <div className="container">
         <div className="row gy-2 mt-5">
-          <div className="col-md-4">
+          <div className="col-lg-4">
             <div className={style.box}>
               <h4 className={style.title}>Listen to the Quran.</h4>
 
@@ -963,10 +1168,10 @@ export default function QuranSurahs() {
                           <h4
                             className={`${
                               selectedSurah === surah.id ? style.hover : ""
-                            }`}
+                            } ${style.directionRTL}`}
                           >
-                            {" "}
-                            سورة {surah.name}{" "}
+                            {convertToArabicIndic(surah.id)}{" "}
+                            سورة {surah.name} {" "}
                           </h4>
                         </a>
                         <p className={style.paragraph}>
@@ -980,7 +1185,7 @@ export default function QuranSurahs() {
             </motion.div>
           </div>
 
-          <div className="col-md-8">
+          <div className="col-lg-8">
             <div className={style.selectLang}>
               <select
                 className="form-select"
@@ -1021,11 +1226,13 @@ export default function QuranSurahs() {
                 className={`${style.topicSection} ${style.notranslate}`} translate="no"
               >
                 <div className={style.topicDesign} id={topic.id}>
-                  <h3 className={style.title}>
+                  <h3 className={style.title} style={{position: 'relative'}}>
                     {" "}
                     {defaultLang === "quran.json"
-                      ? ` سورة  ${topic.name}`
-                      : `Surah ${topic.transliteration}`}
+                      ? ` ﴿ سورة  ${topic.name} ﴾ `
+                      : `﴿ Surah ${topic.transliteration} ﴾`}
+                      
+                    <span style={{position: 'absolute', left: '10%', bottom: '15px', fontSize: '14px', color: 'beige', zIndex: '8'}}>({topic.type})</span>
                   </h3>
                   <h4 className={style.basmala}>
                     {" "}
@@ -1039,7 +1246,7 @@ export default function QuranSurahs() {
                     defaultLang === "quran.json"
                       ? style.directionRTL
                       : style.directionLTR
-                  }`}
+                  } `} style={{textAlign: 'justify'}}
                 >
                   {topic.verses.map((verse, index) => (
                     <p
@@ -1059,8 +1266,8 @@ export default function QuranSurahs() {
                       <span className={style.verseNumberIndex}>
                         {" "}
                         {defaultLang === "quran.json"
-                          ? `﴿${verse.id}﴾`
-                          : `﴾${verse.id}﴿`}
+                          ? `﴿ ${convertToArabicIndic(verse.id)} ﴾`
+                          : `﴾ ${verse.id} ﴿`}
                       </span>
                       <audio
                         ref={(el) => (audioReadRef.current[index] = el)}
@@ -1127,8 +1334,8 @@ export default function QuranSurahs() {
                         <span className={style.verseNumberIndex}>
                           {" "}
                           {defaultLang === "quran.json"
-                            ? `﴿${verse.id}﴾`
-                            : `﴾${verse.id}﴿`}{" "}
+                            ? `﴿ ${convertToArabicIndic(verse.id)} ﴾`
+                            : `﴾ ${verse.id} ﴿`}{" "}
                         </span>
                         <audio
                           ref={(el) =>
@@ -1284,26 +1491,6 @@ export default function QuranSurahs() {
             )}
           </div>
 
-          {/* <div className={`${style.searchVerses} mt-3`}>
-
-                        <p className={style.verseInEnglish}>{verseData.translation}</p>
-                    
-                        <p className={style.verseInArabic}> {verses[0] ? `{ ${verseData.verse} }` : ''}</p>
-
-                        <div className="d-flex justify-content-between align-items-center">
-                        
-                            <p className={style.typeSurah}>{surahSearchIndexType}</p>
-
-                            <p className={style.nameSurahInSearchBox}>{ surahSearchIndexName.length <= 0 ? '' : `[سورة ${surahSearchIndexName} ]` }</p>
-
-                            <audio style={{display: 'none'}} ref={searchAudioRef} src={enAudioOnSearchClick} controls></audio>
-
-                            <audio style={{display: 'none'}} ref={searchAudioArRef} src={arAudioOnSearchClick} controls></audio>
-
-                        </div>
-
-                    </div> */}
-
           <div
             className={`${style.searchVerses} ${style.notranslate} mt-3 ${
               quranSearch?.verse?.length > 0 ? "d-block" : "d-none"
@@ -1326,12 +1513,18 @@ export default function QuranSurahs() {
 
                 {showAudios ? (
                   <audio
+                    ref={(el) => (audioRefs.current[index] = el)}
                     style={{ display: "inline" }}
                     src={audiosSearchEn[index + verseIndexNumber - 1]}
                     controls
+                    // onPlay={() => {
+                    //   console.log("Audio started playing for English index:", index);
+                    //   toggleAudioPlayEn(index);
+                    // }}
                   ></audio>
                 ) : (
                   <audio
+                    ref={(el) => (audioRefs.current[index] = el)}
                     style={{ display: "none" }}
                     src={audiosSearchEn[index + verseIndexNumber - 1]}
                     controls
@@ -1343,19 +1536,25 @@ export default function QuranSurahs() {
                     {" "}
                     {quranSearch.verse[index].text}{" "}
                     <span className={style.verseNumberIndex}>
-                      ﴿{index + verseIndexNumber}﴾
+                      ﴿{convertToArabicIndic(index + verseIndexNumber)}﴾
                     </span>
                   </p>
                 </div>
 
                 {showAudios ? (
                   <audio
+                    ref={(el) => (audioRefs.current[index + audiosSearchEn.length] = el)}
                     style={{ display: "inline" }}
                     src={audiosSearchAr[index + verseIndexNumber - 1]}
                     controls
+                    // onPlay={() => {
+                    //   console.log("Audio started playing for Arabic index:", index);
+                    //   toggleAudioPlayAr(index);
+                    // }}
                   ></audio>
                 ) : (
                   <audio
+                    ref={(el) => (audioRefs.current[index + audiosSearchEn.length] = el)}
                     style={{ display: "none" }}
                     src={audiosSearchAr[index + verseIndexNumber - 1]}
                     controls
@@ -1384,7 +1583,7 @@ export default function QuranSurahs() {
           {results.map((result, index) => (
             <div key={index} className={style.notranslate} translate="no">
               {/* <h4>سورة {result.chapterName}</h4> */}
-              <div
+              {/* <div
                 className={`d-flex align-items-center justify-content-center`}
                 style={{ direction: "rtl", color: "teal" }}
               >
@@ -1397,18 +1596,34 @@ export default function QuranSurahs() {
                 <p className={style.typeSurah}> {result.type} </p>
 
                 <p className={style.typeSurah}>[{result.totalVerse}]</p>
-              </div>
+              </div> */}
               {result.verses.map((verse, ind) => (
                 <div key={ind}>
+                
+                <div
+                className={`d-flex align-items-center justify-content-center`}
+                style={{ direction: "rtl", color: "teal", marginTop: '15px' }}
+              >
+                <p className={style.nameSurahInSearchBox}>
+                  {" "}
+                  {`[ سورة ${result.chapterName} Surah ${result.chapterNameInEnglish} ]`}{" "}
+                  -{" "}
+                </p>
+
+                <p className={style.typeSurah}> {result.type} </p>
+
+                <p className={style.typeSurah}>[{verse.id}]</p>
+              </div>
+                
                   <p
                     className={`${style.verseInArabic} ${style.verseSearchStyle}`}
                   >
-                    {highlightText(verse.text, searchQuery)}
+                    {highlightText(verse.text, searchQuery)} ﴿ {convertToArabicIndic(verse.id)} ﴾
                   </p>
                   <p
                     className={`${style.verseInEnglish} ${style.verseSearchStyle}`}
                   >
-                    {highlightText(verse.translation, searchQuery)}
+                    {highlightText(verse.translate, searchQuery)} ﴾ {verse.id} ﴿
                   </p>
                 </div>
               ))}

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import DOMPurify from 'dompurify';
 import shahadh from '../../images/shahadh.png'
 import salah from '../../images/salah.png'
 import sawm from '../../images/sawm.png'
@@ -9,6 +10,7 @@ import shapeTwo from '../../images/shape-2.png'
 import shapeThree from '../../images/shape-3.png'
 import Malcolm from '../../images/malcolmX.png'
 import kilay from '../../images/muhammad_ali.png'
+import ahmedDeedat from '../../images/Da3yia.jpg'
 import IslamBook from '../../images/Islam.jpg'
 import notgodButGodBook from '../../images/not-god-but-God.jpg'
 import mosque from '../../images/mosque.png'
@@ -37,6 +39,39 @@ export default function Home() {
         setZikrScrollVisible(!zikrScrollVisible)
     }
 
+    const [topics, setTopics] = useState([])
+
+    const [loading ,setLoading] = useState(true)
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://147.79.101.225:2859/api/faithBook/');
+            const data = await response.json();
+            setTopics(data.bookBlog || []); 
+
+            const initialLikes2 = {};
+            data.bookBlog.forEach( (topic) => {
+                initialLikes2[topic._id] = topic.Likes
+            } )
+
+        } catch {
+        } finally {
+            setLoading(false)
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const getDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const day = date.getDate();
+        const monthName = date.toLocaleString('default', { month: 'long' });
+        const year = date.getFullYear();
+        return `${monthName} ${day}, ${year}`; // Return formatted date
+    };
+
     return (
     
         <>
@@ -51,7 +86,7 @@ export default function Home() {
             
                 <div className="container">
                 
-                    <div className="text-center mb-5">
+                    <div className="text-center mt-3 mb-5">
                     
                         <span className={style.headTitle}>Services</span>
                     
@@ -73,7 +108,7 @@ export default function Home() {
                                 
                                 </div>
                             
-                                <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p>
+                                {/* <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p> */}
                             
                             </div>
                         
@@ -91,7 +126,7 @@ export default function Home() {
                                 
                                 </div>
                             
-                                <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p>
+                                {/* <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p> */}
                             
                             </div>
                         
@@ -109,7 +144,7 @@ export default function Home() {
                                 
                                 </div>
                             
-                                <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p>
+                                {/* <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p> */}
                             
                             </div>
                         
@@ -127,7 +162,7 @@ export default function Home() {
                                 
                                 </div>
                             
-                                <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p>
+                                {/* <p className={style.paragraph}>Lorem ipsum dolor sit amet.</p> */}
                             
                             </div>
                         
@@ -173,7 +208,7 @@ export default function Home() {
                                 
                                 </div>
                             
-                                <p className={style.description}>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores ex voluptates ipsam numquam sit exercitationem odit maiores dolorem delectus nulla quasi, facere necessitatibus suscipit, asperiores ea ad minima vel, distinctio nam! Quos officia explicabo tempora facilis distinctio sit libero, consequuntur porro commodi ipsam illum repudiandae voluptas laudantium molestiae animi maxime.</p>
+                                {/* <p className={style.description}>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores ex voluptates ipsam numquam sit exercitationem odit maiores dolorem delectus nulla quasi, facere necessitatibus suscipit, asperiores ea ad minima vel, distinctio nam! Quos officia explicabo tempora facilis distinctio sit libero, consequuntur porro commodi ipsam illum repudiandae voluptas laudantium molestiae animi maxime.</p> */}
                             
                                 <a href="monotheism" className={style.readBtn}>Read more</a>
                             
@@ -375,24 +410,12 @@ export default function Home() {
                     
                     </div>
                 
-                    <Splide
-                        options={{
-                            type: 'loop',
-                            drag: 'free',       
-                            freeScroll: true,    
-                            heightRatio: 0.5, 
-                            cover: true,     
-                            lazyLoad: true,
-                            perPage: 3,          
-                            gap: '20px',         
-                            pagination: false,   
-                        }}
-                    >
+                    <div className="row gy-3">
                     
-                        <SplideSlide >
+                        <div className="col-md-6 col-lg-4">
                         
                             <div className={style.card}>
-                            
+                                
                                 <a href="/faith">
                                 
                                     <div className={style.image}>
@@ -405,7 +428,7 @@ export default function Home() {
                                     
                                         <h4 className={style.celName}>Malcolm x</h4>
                                     
-                                        <p className={style.description}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, temporibus.</p>
+                                        <p className={style.description}>Malcolm X ( Brother Shahbaz) was a Muslim -  well-read, reflective, minimalist, passionate, and visionary man who taught black Americans the value of self-reliance, self-respect, and pride. He was said to be incorruptible in his principles and beliefs.</p>
                                     
                                     </div>
                                 
@@ -413,12 +436,12 @@ export default function Home() {
                             
                             </div>
                         
-                        </SplideSlide>
+                        </div>
                     
-                        <SplideSlide >
+                        <div className="col-md-6 col-lg-4">
                         
                             <div className={style.card}>
-                            
+                                
                                 <a href="/faith">
                                 
                                     <div className={style.image}>
@@ -431,7 +454,7 @@ export default function Home() {
                                     
                                         <h4 className={style.celName}>Muhammed Ali</h4>
                                     
-                                        <p className={style.description}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, temporibus.</p>
+                                        <p className={style.description}>Muhammad Ali was one of the greatest boxers in history, the first fighter to win the world heavyweight championship on three separate occasions. In addition, he was known for his social message of black pride and black resistance to white domination and for refusing induction into the U.S. Army during the Vietnam War.</p>
                                     
                                     </div>
                                 
@@ -439,25 +462,25 @@ export default function Home() {
                             
                             </div>
                         
-                        </SplideSlide>
+                        </div>
                     
-                        <SplideSlide >
+                        <div className="col-md-6 col-lg-4">
                         
-                            <div className={`${style.card} h-100`}>
-                            
+                            <div className={`${style.card}`}>
+                                
                                 <a href="/faith">
                                 
                                     <div className={style.image}>
                                     
-                                        <img src={Malcolm} alt="Malcolm" loading='lazy' />
+                                        <img src={ahmedDeedat} alt="Ahmed-Deedat" loading='lazy' />
                                     
                                     </div>
                                 
                                     <div className="p-2">
                                     
-                                        <h4 className={style.celName}>Malcolm x</h4>
+                                        <h4 className={style.celName}>Ahmed Deedat</h4>
                                     
-                                        <p className={style.description}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, temporibus.</p>
+                                        <p className={style.description}>Benefacted writer, polymath and dexterous in every wake of expertise, Deedat has been discussed so much up-to-date circumstances. Being a Muslim missionary, his works and lectures had a unique position among the pastoral Christian biblical scholars. Deedat, as the expert of more than twenty different languages, he could convince the audience through his eloquence and scholarship.</p>
                                     
                                     </div>
                                 
@@ -465,9 +488,11 @@ export default function Home() {
                             
                             </div>
                         
-                        </SplideSlide>
+                        </div>
                     
-                    </Splide>
+                    </div>
+                
+                    { topics.length > 0 && (
                 
                     <div className={style.books}>
                     
@@ -479,77 +504,62 @@ export default function Home() {
                     
                         <ul>
                         
-                            <li>
+                            {topics.slice(-2).map( (topic) => (
                             
-                                <div className="d-block d-md-flex justify-content-between">
+                                <li key={topic._id} id={topic._id}>
                                 
-                                    <div className={style.left}>
+                                    <div className="d-block d-md-flex justify-content-between">
                                     
-                                        <h4 className={style.bookTitle}>Islam</h4>
-                                    
-                                        <span className={style.publisher}>by <span>Karen Armstrong</span></span>
-                                    
-                                        <p className={style.descriptionBook}>No religion in the modern world is as feared and misunderstood as Islam. It haunts the popular imagination as an extreme faith that promotes terrorism, authoritarian government, female oppression, and civil war. In a vital revision of this narrow view of Islam and a distillation of years of thinking and writing about the subject, Karen Armstrong’s short history demonstrates that the world’s fastest-growing faith is a much more complex phenomenon than its modern fundamentalist strain might suggest.</p>
-                                    
-                                        <div className={`mb-5 ${style.btns}`}>
+                                        <div className={style.left}>
                                         
-                                            <a href="faith" className={style.readBtn}>Learn more</a>
+                                            <h4 className={style.bookTitle}>{topic.title}</h4>
+                                        
+                                            <span className={style.publisher}>by <span>{topic.author}</span></span>
+                                        
+                                            <div className={style.descriptionBook}
+                                                dangerouslySetInnerHTML={{
+                                                __html: DOMPurify.sanitize(topic.description, {
+                                                ADD_TAGS: ["img", "video", "iframe", "p", "div", "span", "br"],
+                                                ADD_ATTR: ["src", "controls", "alt", "class", "style", "allow", "allowfullscreen", "frameborder", "scrolling"],
+                                                }),
+                                                }}
+                                            />
+                                        
+                                            <div className={`mb-2 ${style.btns}`}>
+                                            
+                                                <a href={`http://147.79.101.225:2859/uploads/books/${topic.book}`} target='_blank' className={style.downloadBtn} download={`http://147.79.101.225:2859/uploads/Books/${topic.book}`}><i className="fa-solid fa-cloud-arrow-down"></i>Download</a>
+                                            
+                                            </div>
+                                        
+                                        </div>
+                                    
+                                        <div className={style.right}>
+                                        
+                                            <div className={style.image}>
+                                            
+                                                <img src={`http://147.79.101.225:2859/uploads/books/${topic.imageName}`} alt={topic.title} loading='lazy' />
+                                            
+                                            </div>
                                         
                                         </div>
                                     
                                     </div>
                                 
-                                    <div className={style.right}>
-                                    
-                                        <div className={style.image}>
-                                        
-                                            <img src={IslamBook} alt="Islam-Book" loading='lazy' /> 
-                                        
-                                        </div>
-                                    
-                                    </div>
-                                
-                                </div>
+                                </li>
                             
-                            </li>
-                        
-                            <li>
-                            
-                                <div className="d-block d-md-flex justify-content-between">
-                                
-                                    <div className={style.left}>
-                                    
-                                        <h4 className={style.bookTitle}>No god but God</h4>
-                                    
-                                        <span className={style.publisher}>by <span>Reza Aslan</span></span>
-                                    
-                                        <p className={style.descriptionBook}>In No god but God, internationally acclaimed scholar Reza Aslan explains Islam — the origins and evolution of the faith — in all its beauty and complexity. Timely and persuasive, No god but God is an elegantly written account that explains this magnificent yet misunderstood faith.</p>
-                                    
-                                        <div className={`mb-5 ${style.btns}`}>
-                                        
-                                            <a href="faith" className={style.readBtn}>Learn more</a>
-                                        
-                                        </div>
-                                    
-                                    </div>
-                                
-                                    <div className={style.right}>
-                                    
-                                        <div className={style.image}>
-                                        
-                                            <img src={notgodButGodBook} alt="not-god-But-God-Book" loading='lazy' /> 
-                                        
-                                        </div>
-                                    
-                                    </div>
-                                
-                                </div>
-                            
-                            </li>
+                            ) )}
                         
                         </ul>
                     
+                        <div className={`d-flex justify-content-center mt-2 mb-4 ${style.btns}`}>
+                        
+                            <a href="faith" className={style.readBtn}>See More</a>
+                        
+                        </div>
+                    
                     </div>
+                
+                    )}
                 
                 </div>
             
@@ -585,10 +595,10 @@ export default function Home() {
             
             </section>
         
-            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <i className="fa-solid fa-caret-up"></i>}</span>
+            <span className={style.showToggle} onClick={toggleZikrScroll}>{zikrScrollVisible && <> <i className="fa-solid fa-caret-up"></i> show</>}</span>
 
             <div className={`${style.zikrScroll} ${zikrScrollVisible ? 'd-none' : 'd-flex'}`}>
-                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <i className="fa-solid fa-caret-down"></i>}</span>
+                <span className={style.hideToggle} onClick={toggleZikrScroll}>{ !zikrScrollVisible && <> <i className="fa-solid fa-caret-down"></i>hide </>}</span>
                 
                 <div className={style.scrollContent} onMouseEnter={(e) => {
                         e.currentTarget.style.animationPlayState = 'paused';

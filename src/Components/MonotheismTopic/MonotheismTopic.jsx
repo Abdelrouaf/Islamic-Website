@@ -302,7 +302,7 @@ export default function MonotheismTopic() {
                 showToast("Topic deleted successfully!", "success")
                 fetchData();
                 setTimeout(() => {
-                    navigate('/en/islamic/monotheism/create/topic'); // Navigate back after deletion
+                    navigate('/en/dashboard/islamic/monotheism/create/topic'); // Navigate back after deletion
                     window.location.reload();
                 }, 6000);
             } else {

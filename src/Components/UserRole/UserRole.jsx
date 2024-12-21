@@ -208,34 +208,33 @@ export default function UserRole() {
 
                                 { filteredUsers && filteredUsers.map( (user, index) => 
                                 
-                                    // user.isAdmin ? "" : (
-                                    
-                                        <tr key={user._id}>
+                                        user._id !== '67667439754b5e91bae35810' && (
+                                        
+                                            <tr key={user._id}>
 
-                                            <td>{index + 1}</td>
+                                                <td>{index + 1}</td>
 
-                                            <td>{user.name}</td>
+                                                <td>{user.name}</td>
 
-                                            <td>{user.email}</td>
+                                                <td>{user.email}</td>
 
-                                            <td>
+                                                <td>
 
-                                                {user.isAdmin ? 
+                                                    {user.isAdmin ? 
 
-                                                    user._id === '67598b25c4e418116ce1e29d' ? "Can't change" : (<button onClick={ () => makeAdminUser(user._id) } className='btn btn-danger'>Make the admin user</button>) 
+                                                        (user._id === '67598b25c4e418116ce1e29d') || (user._id === '67651078754b5e91bac9df6f') ? "Can't change" : (<button onClick={ () => makeAdminUser(user._id) } className='btn btn-danger'>Make the admin user</button>) 
 
-                                                    
+                                                    : (
 
-                                                : (
+                                                        <button onClick={ () => makeUserAdmin(user._id) } className='btn btn-success'>Make the user admin</button>
 
-                                                    <button onClick={ () => makeUserAdmin(user._id) } className='btn btn-success'>Make the user admin</button>
+                                                    ) }
+                                                
+                                                </td>
 
-                                                ) }
-                                            
-                                            </td>
-
-                                        </tr>
-                                    // ) 
+                                            </tr>
+                                        
+                                        )
                                 
                                 ) }
 
